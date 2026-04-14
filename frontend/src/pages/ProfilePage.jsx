@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { User, Save } from 'lucide-react';
 import { useNutrition } from '../context/NutritionContext';
+import { colors } from '../styles/colors';
 
 const ProfilePage = () => {
   const { profile, updateProfile } = useNutrition();
@@ -37,149 +38,139 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Profil Kesehatan</h1>
+    <div className="min-h-screen pt-24 pb-8" style={{ backgroundColor: colors.bgPrimary }}>
+      <div className="max-w-2xl mx-auto space-y-6 px-4">
+        <h1 className="text-3xl font-bold text-white">Profil Kesehatan</h1>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 space-y-6">
-        <div className="flex items-center gap-3 mb-6">
-          <User className="text-blue-600" size={24} />
-          <h2 className="text-xl font-semibold">Data Pribadi</h2>
-        </div>
+        <form onSubmit={handleSubmit} className="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl p-8 space-y-6" style={{ backgroundColor: colors.bgCard }}>
+          <div className="flex items-center gap-3 mb-6">
+            <User className="text-emerald-400" size={24} />
+            <h2 className="text-xl font-semibold text-white">Data Pribadi</h2>
+          </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Tinggi Badan (cm)
-            </label>
-            <input
-              type="number"
-              name="height"
-              value={formData.height}
-              onChange={handleChange}
-              placeholder="170"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-200 mb-2">Tinggi Badan (cm)</label>
+              <input
+                type="number"
+                name="height"
+                value={formData.height}
+                onChange={handleChange}
+                placeholder="170"
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-200 mb-2">Berat Badan (kg)</label>
+              <input
+                type="number"
+                name="weight"
+                value={formData.weight}
+                onChange={handleChange}
+                placeholder="65"
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                required
+              />
+            </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Berat Badan (kg)
-            </label>
-            <input
-              type="number"
-              name="weight"
-              value={formData.weight}
-              onChange={handleChange}
-              placeholder="65"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-        </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Usia (tahun)
-            </label>
-            <input
-              type="number"
-              name="age"
-              value={formData.age}
-              onChange={handleChange}
-              placeholder="25"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-200 mb-2">Usia (tahun)</label>
+              <input
+                type="number"
+                name="age"
+                value={formData.age}
+                onChange={handleChange}
+                placeholder="25"
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-200 mb-2">Jenis Kelamin</label>
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                required
+              >
+                <option value="">Pilih</option>
+                <option value="male">Laki-laki</option>
+                <option value="female">Perempuan</option>
+              </select>
+            </div>
           </div>
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Jenis Kelamin
-            </label>
+            <label className="block text-sm font-medium text-slate-200 mb-2">Tingkat Aktivitas Fisik</label>
             <select
-              name="gender"
-              value={formData.gender}
+              name="activityLevel"
+              value={formData.activityLevel}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               required
             >
-              <option value="">Pilih</option>
-              <option value="male">Laki-laki</option>
-              <option value="female">Perempuan</option>
+              <option value="">Pilih tingkat aktivitas</option>
+              <option value="sedentary">Jarang berolahraga</option>
+              <option value="light">Olahraga ringan 1-3x/minggu</option>
+              <option value="moderate">Olahraga sedang 3-5x/minggu</option>
+              <option value="active">Olahraga berat 6-7x/minggu</option>
+              <option value="very_active">Atlet profesional</option>
             </select>
           </div>
-        </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Tingkat Aktivitas Fisik
-          </label>
-          <select
-            name="activityLevel"
-            value={formData.activityLevel}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          >
-            <option value="">Pilih tingkat aktivitas</option>
-            <option value="sedentary">Jarang berolahraga</option>
-            <option value="light">Olahraga ringan (1-3x/minggu)</option>
-            <option value="moderate">Olahraga sedang (3-5x/minggu)</option>
-            <option value="active">Olahraga berat (6-7x/minggu)</option>
-            <option value="very_active">Atlet/profesional</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Kondisi Khusus
-          </label>
-          <div className="space-y-2">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                name="conditions"
-                value="pregnant"
-                checked={formData.conditions.includes('pregnant')}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              Ibu Hamil
-            </label>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                name="conditions"
-                value="breastfeeding"
-                checked={formData.conditions.includes('breastfeeding')}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              Menyusui
-            </label>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                name="conditions"
-                value="diabetic"
-                checked={formData.conditions.includes('diabetic')}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              Diabetes
-            </label>
+          <div>
+            <label className="block text-sm font-medium text-slate-200 mb-2">Kondisi Khusus</label>
+            <div className="space-y-2">
+              <label className="flex items-center text-slate-300 hover:text-white cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="conditions"
+                  value="pregnant"
+                  checked={formData.conditions.includes('pregnant')}
+                  onChange={handleChange}
+                  className="mr-3 w-4 h-4 rounded bg-white/10 border border-white/20 text-emerald-500 cursor-pointer"
+                />
+                Ibu Hamil
+              </label>
+              <label className="flex items-center text-slate-300 hover:text-white cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="conditions"
+                  value="breastfeeding"
+                  checked={formData.conditions.includes('breastfeeding')}
+                  onChange={handleChange}
+                  className="mr-3 w-4 h-4 rounded bg-white/10 border border-white/20 text-emerald-500 cursor-pointer"
+                />
+                Menyusui
+              </label>
+              <label className="flex items-center text-slate-300 hover:text-white cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="conditions"
+                  value="diabetic"
+                  checked={formData.conditions.includes('diabetic')}
+                  onChange={handleChange}
+                  className="mr-3 w-4 h-4 rounded bg-white/10 border border-white/20 text-emerald-500 cursor-pointer"
+                />
+                Diabetes
+              </label>
+            </div>
           </div>
-        </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
-        >
-          <Save size={20} />
-          {loading ? 'Menyimpan...' : 'Simpan Profil'}
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-3 px-4 rounded-xl hover:shadow-lg hover:shadow-emerald-500/20 disabled:opacity-50 flex items-center justify-center gap-2 font-semibold transition-all"
+          >
+            <Save size={20} />
+            {loading ? 'Menyimpan...' : 'Simpan Profil'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

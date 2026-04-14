@@ -48,19 +48,6 @@ const RecommendationList = () => {
     }
   ];
 
-  const getPriorityStyles = (priority) => {
-    switch (priority) {
-      case 'high':
-        return 'border-red-200 bg-red-50';
-      case 'medium':
-        return 'border-yellow-200 bg-yellow-50';
-      case 'low':
-        return 'border-green-200 bg-green-50';
-      default:
-        return 'border-gray-200 bg-gray-50';
-    }
-  };
-
   const getPriorityBadge = (priority) => {
     switch (priority) {
       case 'high':
@@ -75,39 +62,39 @@ const RecommendationList = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+    <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-            <Lightbulb className="text-yellow-500" size={24} />
+          <h3 className="text-xl font-bold text-white flex items-center gap-2">
+            <Lightbulb className="text-emerald-400" size={24} />
             Rekomendasi Personal
           </h3>
-          <p className="text-gray-600 text-sm mt-1">Saran untuk nutrisi yang lebih baik</p>
+          <p className="text-slate-300 text-sm mt-1">Saran untuk nutrisi yang lebih baik</p>
         </div>
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-slate-400">
           {mockRecommendations.length} rekomendasi
         </div>
       </div>
 
       <div className="space-y-4">
         {mockRecommendations.map((rec) => (
-          <div key={rec.id} className={`border-2 rounded-xl p-5 transition-all duration-200 hover:shadow-md ${getPriorityStyles(rec.priority)}`}>
+          <div key={rec.id} className={`border-2 rounded-xl p-5 transition-all duration-200 hover:shadow-md border-white/20 bg-white/5 hover:bg-white/10`}>
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
                 <div className={`${rec.bgClass} p-2 rounded-lg`}>
                   <rec.icon className={rec.iconClass} size={20} />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 text-lg">{rec.title}</h4>
+                  <h4 className="font-semibold text-white text-lg">{rec.title}</h4>
                   {getPriorityBadge(rec.priority)}
                 </div>
               </div>
             </div>
 
-            <p className="text-gray-700 mb-4 leading-relaxed">{rec.message}</p>
+            <p className="text-slate-300 mb-4 leading-relaxed">{rec.message}</p>
 
             <div>
-              <h5 className="font-medium text-gray-900 mb-2 text-sm">Makanan Rekomendasi:</h5>
+              <h5 className="font-medium text-white mb-2 text-sm">Makanan Rekomendasi:</h5>
               <div className="flex flex-wrap gap-2">
                 {rec.foods.map((food, index) => (
                   <span
@@ -123,13 +110,13 @@ const RecommendationList = () => {
         ))}
       </div>
 
-      <div className="mt-6 pt-4 border-t border-gray-200">
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4">
+      <div className="mt-6 pt-4 border-t border-white/10">
+        <div className="bg-gradient-to-r from-emerald-500/10 to-emerald-500/5 rounded-lg p-4 border border-emerald-500/20">
           <div className="flex items-center gap-2 mb-2">
-            <Lightbulb className="text-blue-600" size={16} />
-            <span className="font-semibold text-gray-900 text-sm">Tips Nutrisi</span>
+            <Lightbulb className="text-emerald-400" size={16} />
+            <span className="font-semibold text-white text-sm">Tips Nutrisi</span>
           </div>
-          <p className="text-gray-600 text-sm">
+          <p className="text-slate-300 text-sm">
             Konsultasikan dengan ahli gizi untuk rekomendasi yang lebih personal berdasarkan kondisi kesehatan Anda.
           </p>
         </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Sidebar from './components/layout/Sidebar';
+import ProtectedRoute from './components/ProtectedRoute';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -17,18 +18,20 @@ function AppContent() {
   const isLandingPage = location.pathname === '/';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-[#06140f] text-white">
       {!isLandingPage && <Navbar />}
-      <div className={`flex ${isAuthPage || isLandingPage ? '' : 'pt-16'}`}>
+      <div className={`${isAuthPage || isLandingPage ? '' : 'flex pt-16'}`}>
         {!isAuthPage && !isLandingPage && <Sidebar />}
         <main className={`${isAuthPage || isLandingPage ? '' : 'flex-1 ml-64'} min-h-screen`}>
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/input-gizi" element={<InputGizi />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/input-gizi" element={<InputGizi />} />
+              <Route path="/profile" element={<ProfilePage />} />
+            </Route>
           </Routes>
         </main>
       </div>

@@ -1,39 +1,22 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Plus, BarChart3, User, Settings, Activity } from 'lucide-react';
+import { Home, Plus, User, Zap } from 'lucide-react';
 
 const Sidebar = () => {
   const location = useLocation();
 
   const menuItems = [
-    { path: '/dashboard', icon: Home, label: 'Dashboard', color: 'blue' },
-    { path: '/input-gizi', icon: Plus, label: 'Input Gizi', color: 'green' },
-    { path: '/profile', icon: User, label: 'Profil', color: 'purple' },
+    { path: '/dashboard', icon: Home, label: 'Dashboard' },
+    { path: '/input-gizi', icon: Plus, label: 'Input Makanan' },
+    { path: '/profile', icon: User, label: 'Profil' },
   ];
 
-  const getColorClasses = (color, isActive) => {
-    const baseClasses = 'flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium';
-    if (isActive) {
-      switch (color) {
-        case 'blue':
-          return `${baseClasses} bg-blue-100 text-blue-700 border-r-4 border-blue-500`;
-        case 'green':
-          return `${baseClasses} bg-green-100 text-green-700 border-r-4 border-green-500`;
-        case 'purple':
-          return `${baseClasses} bg-purple-100 text-purple-700 border-r-4 border-purple-500`;
-        default:
-          return `${baseClasses} bg-gray-100 text-gray-700 border-r-4 border-gray-500`;
-      }
-    }
-    return `${baseClasses} text-gray-600 hover:bg-gray-50 hover:text-gray-900`;
-  };
-
   return (
-    <div className="fixed left-0 top-16 h-full w-64 bg-white/95 backdrop-blur-sm shadow-xl border-r border-gray-200 overflow-y-auto">
+    <div className="fixed left-0 top-16 h-full w-64 bg-white/5 backdrop-blur-xl border-r border-white/10 overflow-y-auto">
       <div className="p-6">
         <div className="mb-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-2">Menu Utama</h2>
-          <p className="text-sm text-gray-500">Kelola nutrisi Anda</p>
+          <h2 className="text-lg font-bold text-white mb-2">Menu Utama</h2>
+          <p className="text-sm text-slate-400">Kelola nutrisi Anda</p>
         </div>
 
         <nav className="space-y-2">
@@ -43,7 +26,11 @@ const Sidebar = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={getColorClasses(item.color, isActive)}
+                className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
+                  isActive
+                    ? 'bg-gradient-to-r from-emerald-500/20 to-blue-500/20 text-emerald-300 border-l-4 border-emerald-500'
+                    : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                }`}
               >
                 <item.icon size={20} />
                 <span>{item.label}</span>
@@ -52,14 +39,14 @@ const Sidebar = () => {
           })}
         </nav>
 
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-4">
+        <div className="mt-8 pt-6 border-t border-white/10">
+          <div className="bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-xl p-4 border border-white/10">
             <div className="flex items-center space-x-2 mb-2">
-              <Activity className="text-green-600" size={18} />
-              <span className="font-semibold text-gray-900">Tips Kesehatan</span>
+              <Zap className="text-emerald-400" size={18} />
+              <span className="font-semibold text-white text-sm">Tips Kesehatan</span>
             </div>
-            <p className="text-sm text-gray-600">
-              Konsumsi sayuran hijau setiap hari untuk kesehatan optimal!
+            <p className="text-sm text-slate-300">
+              Konsumsi sayuran hijau dan air putih setiap hari untuk hasil optimal!
             </p>
           </div>
         </div>
