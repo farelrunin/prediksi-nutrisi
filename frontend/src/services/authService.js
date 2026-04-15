@@ -37,7 +37,8 @@ export const authService = {
       });
       return response.data;
     } catch (error) {
-      throw new Error('Failed to update profile');
+      const msg = error.response?.data?.detail || error.message || 'Failed to update profile';
+      throw new Error(msg);
     }
   }
 };
