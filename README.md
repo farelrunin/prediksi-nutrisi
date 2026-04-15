@@ -1,22 +1,49 @@
-﻿# Prediksi Nutrisi Pintar untuk Hidup yang Lebih Sehat
+# NutriAI 🥗
 
-Proyek Capstone untuk mencegah stunting melalui prediksi nutrisi.
+![Landing Page](./frontend/src/assets/landing-page.png)
+*Landing page NutriAI*
 
-## Struktur Proyek
+![Dashboard](./frontend/src/assets/dashboard.png)
+*Dashboard ringkasan asupan nutrisi*
 
+## Tentang Project
+Aplikasi capstone NutriAI untuk membantu pengguna memantau asupan nutrisi dan mendapatkan rekomendasi makanan serta analisis risiko kesehatan.
+
+## Fitur Utama
+- Autentikasi user (register/login)
+- Input makanan harian dengan data kalori, protein, karbohidrat, dan lemak
+- Dashboard nutrisi dengan ringkasan asupan harian
+- Prediction API untuk analisis risiko kesehatan
+- Protected route dengan JWT authentication
+
+## Struktur Project
 ```
 capstone/
+├── backend/           # FastAPI server
+│   ├── main.py
+│   ├── auth.py
+│   ├── database.py
+│   ├── models.py
+│   ├── schemas.py
+│   └── routers/
 ├── frontend/          # React + Vite app
 │   ├── src/
 │   ├── public/
 │   └── package.json
-├── backend/           # FastAPI server
-│   └── main.py
-├── docs/              # Dokumentasi
+├── docs/              # Dokumentasi tambahan
 └── README.md
 ```
 
-## Setup
+## Instalasi & Menjalankan Project
+
+### Backend
+```bash
+cd backend
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
 
 ### Frontend
 ```bash
@@ -25,43 +52,64 @@ npm install
 npm run dev
 ```
 
-### Backend
-```bash
-cd backend
-pip install fastapi uvicorn pydantic
-python main.py
-```
+Akses frontend: `http://localhost:5173`
 
-## Kontrak Data dengan Tim AI
+## Endpoint API
 
-### Input dari Frontend:
+### POST /auth/register
+Request body:
 ```json
 {
-  "food_name": "nasi",
-  "quantity": 100,
-  "age": 5,
-  "condition": "anak"
+  "name": "Farel",
+  "email": "farel@example.com",
+  "password": "password123"
 }
 ```
 
-### Output dari AI:
+### POST /auth/login
+Request body:
 ```json
 {
-  "risk_level": "Low",
-  "score": 0.15,
-  "suggestion": "Tambah serat"
+  "email": "farel@example.com",
+  "password": "password123"
 }
 ```
 
-## Checklist Minggu 1
+### POST /food/
+Body:
+```json
+{
+  "meal_type": "breakfast",
+  "food_name": "Nasi Goreng",
+  "quantity": 200,
+  "unit": "gram",
+  "calories": 250,
+  "protein": 8,
+  "carbs": 35,
+  "fat": 8
+}
+```
 
-- [x] Inisialisasi Git: Repo di GitHub sudah dibuat
-- [x] UI Sederhana: Landing Page dan Form Input makanan
-- [x] Koneksi Awal: API dari React ke FastAPI dengan CORS
+### POST /predict/
+Body:
+```json
+{
+  "quantity": 180,
+  "age": 25,
+  "weight": 65,
+  "height": 170
+}
+```
+
+## Bukti Pendukung
+- Link GitHub repository
+- Screenshot tampilan landing page dan dashboard
+- Dokumentasi API di `docs/api.md`
 
 ## Tim
-
 - Frontend: Farel Indra Syahputra
-- Backend:  Farel Indra Syahputra
-- AI: Jason
-- DS: Nisaq
+- Backend: Farel Indra Syahputra
+
+---
+
+**Catatan:** `README.md` berada di root repo sehingga GitHub akan menampilkan dokumentasi utama project.
