@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogIn, Mail, Lock, Apple } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { colors } from '../styles/colors';
 
 const LoginPage = () => {
@@ -20,7 +20,8 @@ const LoginPage = () => {
       await login(formData.email, formData.password);
       navigate('/dashboard');
     } catch (error) {
-      alert('Login gagal');
+      console.error('Login error:', error);
+      alert(error.message || 'Login gagal');
     }
     setLoading(false);
   };

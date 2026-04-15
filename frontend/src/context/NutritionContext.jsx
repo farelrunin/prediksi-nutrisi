@@ -1,14 +1,5 @@
-﻿import React, { createContext, useContext, useState } from 'react';
-
-const NutritionContext = createContext();
-
-export const useNutrition = () => {
-  const context = useContext(NutritionContext);
-  if (!context) {
-    throw new Error('useNutrition must be used within a NutritionProvider');
-  }
-  return context;
-};
+﻿import React, { useState } from 'react';
+import { NutritionContext } from './NutritionContextProvider';
 
 const normalizeNumber = (value) => {
   const number = Number(value);

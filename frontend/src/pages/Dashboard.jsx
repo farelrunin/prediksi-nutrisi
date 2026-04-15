@@ -3,12 +3,14 @@ import RiskScoreCard from '../components/dashboard/RiskScoreCard';
 import NutritionChart from '../components/dashboard/NutritionChart';
 import RecommendationList from '../components/dashboard/RecommendationList';
 import FoodForm from '../components/FoodForm';
-import { useNutrition } from '../context/NutritionContext';
+import { useNutrition } from '../context/useNutrition';
+import { useAuth } from '../context/useAuth';
 import { TrendingUp, Target, Calendar, Award, List } from 'lucide-react';
 import { colors } from '../styles/colors';
 
 const Dashboard = () => {
   const { nutritionData, getRiskScore, addFoodEntry } = useNutrition();
+  const { user } = useAuth();
   const riskScore = getRiskScore();
 
   const todayEntries = nutritionData.history.filter((item) =>
@@ -61,7 +63,7 @@ const Dashboard = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h1 className="text-3xl font-bold text-white mb-2">Dashboard Nutrisi</h1>
-              <p className="text-slate-300">Pantau pola makan dan asupan gizi harian Anda.</p>
+              <p className="text-slate-300">Pantau pola makan dan asupan gizi harian Anda{user ? `, ${user.name}` : ''}.</p>
             </div>
             <div className="mt-4 lg:mt-0">
               <div className="text-sm text-slate-400">

@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { useNutrition } from '../context/NutritionContext';
+import { useNutrition } from '../context/useNutrition';
 import FoodForm from '../components/FoodForm';
 import { colors } from '../styles/colors';
 

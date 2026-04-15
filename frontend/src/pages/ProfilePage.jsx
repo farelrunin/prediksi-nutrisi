@@ -1,18 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Save } from 'lucide-react';
-import { useNutrition } from '../context/NutritionContext';
+import { useAuth } from '../context/useAuth';
+import { authService } from '../services/authService';
 import { colors } from '../styles/colors';
 
 const ProfilePage = () => {
-  const { profile, updateProfile } = useNutrition();
-  const [formData, setFormData] = useState(profile);
+  const { user, setUser } = useAuth();
+  const [formData, setFormData] = useState({
+    height: '',
+    weight: '',
+    age: '',
+    gender: '',
+    activityLevel: '',
+    conditions: []
+  });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user && user.profile) {
+      setFormData(user.profile);
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      updateProfile(formData);
+      const updatedUser = await authService.updateProfile(formData);
+      setUser(updatedUser);
       alert('Profil berhasil diperbarui!');
     } catch (error) {
       alert('Gagal memperbarui profil');

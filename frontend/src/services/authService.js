@@ -12,7 +12,8 @@ export const authService = {
       });
       return response.data;
     } catch (error) {
-      throw new Error('Login failed');
+      const msg = error.response?.data?.detail || error.message || 'Login gagal';
+      throw new Error(msg);
     }
   },
 
@@ -21,21 +22,22 @@ export const authService = {
       const response = await axios.post(`${API_BASE_URL}/auth/register`, userData);
       return response.data;
     } catch (error) {
-      throw new Error('Registration failed');
+      const msg = error.response?.data?.detail || error.message || 'Registrasi gagal';
+      throw new Error(msg);
     }
   },
 
-  async getProfile() {
+  async updateProfile(profileData) {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_BASE_URL}/auth/profile`, {
+      const response = await axios.put(`${API_BASE_URL}/auth/profile`, profileData, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
       return response.data;
     } catch (error) {
-      throw new Error('Failed to get profile');
+      throw new Error('Failed to update profile');
     }
   }
 };

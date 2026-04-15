@@ -1,44 +1,55 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-
-const AuthContext = createContext();
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+import React, { useState, useEffect } from 'react';
+import { authService } from '../services/authService';
+import { AuthContext } from './AuthContextProvider';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in (e.g., from localStorage or token)
-    const token = localStorage.getItem('token');
-    if (token) {
-      // Validate token and set user
-      // For now, mock user
-      setUser({ id: 1, name: 'User', email: 'user@example.com' });
-    }
-    setLoading(false);
+    const loadUserFromToken = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const profile = await authService.getProfile();
+        setUser(profile);
+      } catch {
+        localStorage.removeItem('token');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUserFromToken();
   }, []);
 
   const login = async (email, password) => {
-    // Implement login logic
-    // Call authService.login
-    setUser({ id: 1, name: 'User', email });
-    localStorage.setItem('token', 'mock-token');
+    try {
+      const data = await authService.login(email, password);
+      localStorage.setItem('token', data.token);
+      setUser({ name: data.name, email });
+      return data;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    }
   };
 
   const register = async (userData) => {
-    // Implement register logic
-    // Call authService.register
-    setUser({ id: 1, ...userData });
-    localStorage.setItem('token', 'mock-token');
+    try {
+      const data = await authService.register(userData);
+      localStorage.setItem('token', data.token);
+      setUser({ name: data.name, email: userData.email });
+      return data;
+    } catch (error) {
+      console.error('Register error:', error);
+      throw error;
+    }
   };
-
   const logout = () => {
     setUser(null);
     localStorage.removeItem('token');
@@ -46,6 +57,7 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     user,
+    setUser,
     loading,
     login,
     register,

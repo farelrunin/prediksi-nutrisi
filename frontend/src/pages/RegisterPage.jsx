@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserPlus, Mail, Lock, User, Apple } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { colors } from '../styles/colors';
 
 const RegisterPage = () => {
@@ -28,9 +28,10 @@ const RegisterPage = () => {
         email: formData.email,
         password: formData.password
       });
-      navigate('/dashboard');
+      navigate('/login'); // ← diubah dari '/dashboard'
     } catch (error) {
-      alert('Registrasi gagal');
+      console.error('Register error:', error);
+      alert(error.message || 'Registrasi gagal');
     }
     setLoading(false);
   };

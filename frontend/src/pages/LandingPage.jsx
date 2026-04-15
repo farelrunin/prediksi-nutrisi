@@ -1,20 +1,18 @@
 ﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShieldCheck, Sparkles, TrendingUp, Apple } from 'lucide-react';
+import { useAuth } from '../context/useAuth';
 
 const LandingPage = () => {
+  const { user } = useAuth();
   return (
     <div className="relative overflow-hidden min-h-screen bg-[#06140f] text-white">
 
-      {/* BACKGROUND EFFECT */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(34,197,94,0.25),_transparent_25%),radial-gradient(circle_at_top_right,_rgba(34,197,94,0.15),_transparent_20%)]" />
 
-      {/* HERO */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 py-20 lg:px-8">
-        
         <div className="flex flex-col-reverse gap-16 lg:flex-row lg:items-center lg:justify-between">
 
-          {/* LEFT */}
           <div className="w-full lg:w-1/2 max-w-xl">
             <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-2 text-sm text-emerald-300 ring-1 ring-white/10">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -34,7 +32,6 @@ const LandingPage = () => {
               dan lihat risiko kesehatan secara visual dengan antarmuka modern.
             </p>
 
-            {/* BUTTON */}
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <Link
                 to="/register"
@@ -51,7 +48,6 @@ const LandingPage = () => {
               </Link>
             </div>
 
-            {/* STATS */}
             <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-4">
               {[
                 { value: '16+', label: 'Tahun Pengalaman' },
@@ -67,15 +63,12 @@ const LandingPage = () => {
             </div>
           </div>
 
-          {/* RIGHT (CARD) */}
           <div className="w-full lg:w-1/2 flex justify-center">
             <div className="relative w-full max-w-md">
 
-              {/* GLOW */}
               <div className="absolute -left-10 top-10 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl" />
               <div className="absolute -right-10 bottom-4 h-56 w-56 rounded-full bg-cyan-400/10 blur-3xl" />
 
-              {/* CARD */}
               <div className="relative rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-xl">
                 
                 <div className="flex justify-between text-sm text-slate-300">
@@ -90,7 +83,8 @@ const LandingPage = () => {
                 <div className="mt-8 flex justify-between text-sm">
                   <div>
                     <p className="text-slate-400 text-xs">NAME</p>
-                    <p className="font-semibold">REHAN RAHMAN</p>
+                    {/* ← diubah: ambil dari user, fallback ke 'Guest' kalau belum login */}
+                    <p className="font-semibold">{user ? user.name.toUpperCase() : 'GUEST'}</p>
                   </div>
                   <div>
                     <p className="text-slate-400 text-xs">EXP</p>
@@ -105,7 +99,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* FEATURES */}
       <section className="border-t border-white/10 py-16 bg-[#071a14]/80">
         <div className="max-w-7xl mx-auto px-6">
 
