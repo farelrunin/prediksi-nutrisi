@@ -101,4 +101,4 @@ Proyek ini dilengkapi dengan halaman [Kebijakan Privasi](/privacy) dan [Ketentua
 ---
 
 ## 👨‍💻 Tim Pengembang
-Dibuat dengan ❤️ oleh **Farel Indra Syahputra** untuk pengembangan teknologi nutrisi masa depan.
+Dibuat oleh **Farel Indra Syahputra** untuk pengembangan teknologi nutrisi masa depan.
