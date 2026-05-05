@@ -53,12 +53,48 @@ class FoodEntryResponse(FoodEntryCreate):
         orm_mode = True
 
 class NutritionInput(BaseModel):
-    food_name: str
-    quantity: float
-    age: int
-    condition: str
+    food_name: Optional[str] = None
+    quantity: Optional[float] = None
+    age: Optional[int] = None
+    condition: Optional[str] = None
+    story: Optional[str] = None  # New field for natural language input
 
 class PredictionResponse(BaseModel):
     risk_level: str
     score: float
     suggestion: str
+    calories: Optional[float] = None
+    protein: Optional[float] = None
+    carbs: Optional[float] = None
+    fat: Optional[float] = None
+    foods: Optional[List[dict]] = None
+    parsed_data: Optional[dict] = None  # Additional data from NLP parsing
+
+class FoodResponse(BaseModel):
+    id: int
+    source_food_id: Optional[str] = None
+    food_name_en: str
+    food_name_id: str
+    calories: Optional[float] = None
+    protein: Optional[float] = None
+    carbohydrates: Optional[float] = None
+    total_fat: Optional[float] = None
+    dietary_fiber: Optional[float] = None
+    total_sugars: Optional[float] = None
+    sodium: Optional[float] = None
+    calcium: Optional[float] = None
+    iron: Optional[float] = None
+    potassium: Optional[float] = None
+
+    class Config:
+        orm_mode = True
+
+class CategoryResponse(BaseModel):
+    id: int
+    name: str
+    section: str
+    description: Optional[str] = None
+    item_count: int
+
+    class Config:
+        orm_mode = True

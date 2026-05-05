@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Plus, User, Zap } from 'lucide-react';
+import { Home, Plus, User, Zap, List } from 'lucide-react';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -8,6 +8,7 @@ const Sidebar = () => {
   const menuItems = [
     { path: '/dashboard', icon: Home, label: 'Dashboard' },
     { path: '/input-gizi', icon: Plus, label: 'Input Makanan' },
+    { path: '/riwayat-asupan', icon: List, label: 'Riwayat Asupan' },
     { path: '/profile', icon: User, label: 'Profil' },
   ];
 

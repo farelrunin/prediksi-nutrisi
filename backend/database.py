@@ -4,7 +4,8 @@ from sqlalchemy.pool import QueuePool
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
+load_dotenv(dotenv_path)
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 engine = create_engine(

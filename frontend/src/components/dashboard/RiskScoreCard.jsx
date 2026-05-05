@@ -15,28 +15,28 @@ const RiskScoreCard = ({ riskScore }) => {
     if (score < 0.3) return {
       level: 'Rendah',
       icon: CheckCircle,
-      bgColor: 'from-green-400 to-green-600',
-      textColor: 'text-green-700',
-      iconBgClass: 'bg-green-100',
-      iconTextClass: 'text-green-600',
+      bgColor: 'from-green-500 to-green-700',
+      textColor: 'text-green-400',
+      iconBgClass: 'bg-green-500/10',
+      iconTextClass: 'text-green-400',
       description: 'Asupan nutrisi Anda dalam kondisi baik. Pertahankan pola makan sehat!'
     };
     if (score < 0.7) return {
       level: 'Sedang',
       icon: AlertCircle,
-      bgColor: 'from-yellow-400 to-yellow-600',
-      textColor: 'text-yellow-700',
-      iconBgClass: 'bg-yellow-100',
-      iconTextClass: 'text-yellow-600',
+      bgColor: 'from-yellow-500 to-yellow-700',
+      textColor: 'text-yellow-400',
+      iconBgClass: 'bg-yellow-500/10',
+      iconTextClass: 'text-yellow-400',
       description: 'Perhatikan asupan nutrisi Anda. Ada beberapa nutrisi yang perlu ditingkatkan.'
     };
     return {
       level: 'Tinggi',
       icon: AlertTriangle,
-      bgColor: 'from-red-400 to-red-600',
-      textColor: 'text-red-700',
-      iconBgClass: 'bg-red-100',
-      iconTextClass: 'text-red-600',
+      bgColor: 'from-red-500 to-red-700',
+      textColor: 'text-red-400',
+      iconBgClass: 'bg-red-500/10',
+      iconTextClass: 'text-red-400',
       description: 'Risiko malnutrisi tinggi. Segera konsultasikan dengan ahli gizi.'
     };
   };

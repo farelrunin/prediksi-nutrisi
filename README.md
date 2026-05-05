@@ -1,115 +1,81 @@
 # NutriAI 🥗
 
-![Landing Page](./frontend/src/assets/landing-page.png)
-*Landing page NutriAI*
+**NutriAI** adalah aplikasi cerdas berbasis web yang dirancang untuk membantu pengguna melacak asupan nutrisi harian mereka, memprediksi risiko malnutrisi menggunakan teknologi NLP, dan memberikan rekomendasi diet berbasis Artificial Intelligence. 
 
-![Dashboard](./frontend/src/assets/dashboard.png)
-*Dashboard ringkasan asupan nutrisi*
-
-## Tentang Project
-Aplikasi capstone NutriAI untuk membantu pengguna memantau asupan nutrisi dan mendapatkan rekomendasi makanan serta analisis risiko kesehatan.
-
-## Fitur Utama
-- Autentikasi user (register/login)
-- Input makanan harian dengan data kalori, protein, karbohidrat, dan lemak
-- Dashboard nutrisi dengan ringkasan asupan harian
-- Prediction API untuk analisis risiko kesehatan
-- Protected route dengan JWT authentication
-
-## Struktur Project
-```
-capstone/
-├── backend/           # FastAPI server
-│   ├── main.py
-│   ├── auth.py
-│   ├── database.py
-│   ├── models.py
-│   ├── schemas.py
-│   └── routers/
-├── frontend/          # React + Vite app
-│   ├── src/
-│   ├── public/
-│   └── package.json
-├── docs/              # Dokumentasi tambahan
-└── README.md
-```
-
-## Instalasi & Menjalankan Project
-
-### Backend
-```bash
-cd backend
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
-
-### Frontend
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Akses frontend: `http://localhost:5173`
-
-## Endpoint API
-
-### POST /auth/register
-Request body:
-```json
-{
-  "name": "Farel",
-  "email": "farel@example.com",
-  "password": "password123"
-}
-```
-
-### POST /auth/login
-Request body:
-```json
-{
-  "email": "farel@example.com",
-  "password": "password123"
-}
-```
-
-### POST /food/
-Body:
-```json
-{
-  "meal_type": "breakfast",
-  "food_name": "Nasi Goreng",
-  "quantity": 200,
-  "unit": "gram",
-  "calories": 250,
-  "protein": 8,
-  "carbs": 35,
-  "fat": 8
-}
-```
-
-### POST /predict/
-Body:
-```json
-{
-  "quantity": 180,
-  "age": 25,
-  "weight": 65,
-  "height": 170
-}
-```
-
-## Bukti Pendukung
-- Link GitHub repository
-- Screenshot tampilan landing page dan dashboard
-- Dokumentasi API di `docs/api.md`
-
-## Tim
-- Frontend: Farel Indra Syahputra
-- Backend: Farel Indra Syahputra
+## 🌟 Fitur Utama
+- **Autentikasi User**: Sistem pendaftaran dan login aman yang menggunakan token JWT.
+- **Input Nutrisi via NLP**: Pengguna cukup menceritakan makanan mereka (misalnya: *"Pagi ini saya makan nasi padang dan minum es teh"*), lalu sistem akan secara otomatis mengekstrak porsi, makanan, dan mengkalkulasi jumlah nutrisi.
+- **Dashboard Nutrisi Interaktif**: Menyajikan ringkasan kalori, protein, karbohidrat, dan lemak harian melalui grafik visual.
+- **Analisis AI**: Mengukur risiko gizi berdasarkan asupan kalori dan memberikan rekomendasi pola makan yang dipersonalisasi.
+- **Desain Modern**: Antarmuka *Dark Theme* elegan yang memadukan teknik *Glassmorphism* dan warna yang memanjakan mata.
 
 ---
 
-**Catatan:** `README.md` berada di root repo sehingga GitHub akan menampilkan dokumentasi utama project.
+## 🛠️ Tech Stack
+- **Frontend**: React + Vite, TailwindCSS (Vanilla CSS styling), Lucide React (Icons).
+- **Backend**: FastAPI (Python), SQLAlchemy (ORM).
+- **Database**: SQLite (Development) / MySQL.
+- **Fitur AI**: Custom Rule-Based NLP Parser untuk ekstraksi entitas makanan bahasa Indonesia.
+
+---
+
+## 🚀 Panduan Instalasi (Cara Clone & Menjalankan Sistem)
+
+Ikuti langkah-langkah di bawah ini untuk menjalankan proyek ini secara lokal di komputermu.
+
+### 1. Clone Repository
+```bash
+git clone https://github.com/farelrunin/prediksi-nutrisi.git
+cd prediksi-nutrisi
+```
+
+### 2. Setup Backend (FastAPI)
+1. Buka terminal baru dan masuk ke folder `backend`.
+```bash
+cd backend
+```
+2. Buat Virtual Environment (Opsional tapi disarankan).
+```bash
+python -m venv venv
+venv\Scripts\activate      # Untuk Windows
+source venv/bin/activate   # Untuk Mac/Linux
+```
+3. Install semua *dependencies*.
+```bash
+pip install -r requirements.txt
+```
+4. Jalankan server FastAPI.
+```bash
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+*Backend akan berjalan di `http://localhost:8000`*
+
+### 3. Setup Frontend (React + Vite)
+1. Buka tab terminal baru (biarkan terminal backend tetap berjalan), lalu masuk ke folder `frontend`.
+```bash
+cd frontend
+```
+2. Install modul Node.js.
+```bash
+npm install
+```
+3. Tambahkan aset gambar untuk *Landing Page*.
+   Pastikan Anda menaruh gambar dengan nama `bg-food.jpg` di dalam folder `frontend/public/` agar tampilan background beranda muncul dengan sempurna.
+4. Jalankan server React (Vite).
+```bash
+npm run dev
+```
+*Frontend akan berjalan dan bisa diakses di `http://localhost:5173`*
+
+---
+
+## 📸 Struktur Halaman
+- **`/` (Landing Page)**: Halaman depan untuk perkenalan aplikasi.
+- **`/login` & `/register`**: Halaman masuk dan daftar dengan tampilan antarmuka transparan (*glassmorphism*).
+- **`/dashboard`**: Laporan ringkasan nutrisi harian.
+- **`/nutri-check`**: Halaman untuk input makanan dengan fitur cerita alami (NLP).
+- **`/kategori`**: Menampilkan ratusan database makanan yang dikelompokkan otomatis.
+
+## 🤝 Tim Pengembang
+Proyek ini dibuat untuk tugas pengembangan sistem dan AI.
+- **Farel Indra Syahputra** 

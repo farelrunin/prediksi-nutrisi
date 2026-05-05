@@ -56,6 +56,11 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
     return TokenResponse(token=token, name=user_obj.name)
 
 
+@router.get("/profile", response_model=UserResponse)
+def get_profile(user: User = Depends(get_current_user)):
+    return user
+
+
 @router.put("/profile", response_model=UserResponse)
 def update_profile(
     profile_data: ProfileUpdate,

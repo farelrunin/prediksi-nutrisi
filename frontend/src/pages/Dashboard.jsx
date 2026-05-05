@@ -1,4 +1,4 @@
-﻿import React from 'react';
+﻿import React, { useState } from 'react';
 import RiskScoreCard from '../components/dashboard/RiskScoreCard';
 import NutritionChart from '../components/dashboard/NutritionChart';
 import RecommendationList from '../components/dashboard/RecommendationList';
@@ -7,6 +7,8 @@ import { useNutrition } from '../context/useNutrition';
 import { useAuth } from '../context/useAuth';
 import { TrendingUp, Target, Calendar, Award, List } from 'lucide-react';
 import { colors } from '../styles/colors';
+
+void useState;
 
 const Dashboard = () => {
   const { nutritionData, getRiskScore, addFoodEntry } = useNutrition();
@@ -21,7 +23,7 @@ const Dashboard = () => {
     {
       icon: Target,
       label: 'Target Kalori',
-      value: `${nutritionData.dailyIntake.calories}/${nutritionData.targets.calories}`,
+      value: Number(nutritionData.dailyIntake.calories).toFixed(1) + '/' + nutritionData.targets.calories,
       bgClass: 'bg-blue-100',
       iconClass: 'text-blue-600',
       barClass: 'bg-blue-500',
@@ -116,7 +118,7 @@ const Dashboard = () => {
                 ].map((item, index) => (
                   <div key={index} className="text-center">
                     <div className="text-2xl font-bold text-white mb-1">
-                      {item.current}/{item.target} {item.unit}
+{Number(item.current.toFixed(1))}/{Number(item.target.toFixed(0))} {item.unit}
                     </div>
                     <div className="text-sm text-slate-300 mb-3">{item.label}</div>
                     <div className="w-full bg-white/10 rounded-full h-3">

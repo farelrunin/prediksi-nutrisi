@@ -13,7 +13,7 @@ export const aiService = {
         }
       });
       return response.data;
-    } catch (error) {
+    } catch {
       throw new Error('Failed to get risk prediction');
     }
   },
@@ -27,7 +27,7 @@ export const aiService = {
         }
       });
       return response.data;
-    } catch (error) {
+    } catch {
       throw new Error('Failed to get recommendations');
     }
   },
@@ -41,7 +41,7 @@ export const aiService = {
         }
       });
       return response.data;
-    } catch (error) {
+    } catch {
       throw new Error('Failed to analyze trends');
     }
   }

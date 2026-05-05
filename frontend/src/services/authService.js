@@ -40,5 +40,23 @@ export const authService = {
       const msg = error.response?.data?.detail || error.message || 'Failed to update profile';
       throw new Error(msg);
     }
+  },
+
+  async getProfile() {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No token found');
+      }
+      const response = await axios.get(`${API_BASE_URL}/auth/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      const msg = error.response?.data?.detail || error.message || 'Failed to get profile';
+      throw new Error(msg);
+    }
   }
 };

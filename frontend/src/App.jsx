@@ -1,40 +1,39 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
-import Sidebar from './components/layout/Sidebar';
 import ProtectedRoute from './components/ProtectedRoute';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import Dashboard from './pages/Dashboard';
+import DashboardPage from './pages/DashboardPage';
+import HistoryPage from './pages/HistoryPage';
 import InputGizi from './pages/InputGizi';
 import ProfilePage from './pages/ProfilePage';
+import KategoriPage from './pages/KategoriPage';
 import { AuthProvider } from './context/AuthContext';
-import { NutritionProvider } from './context/NutritionContext';
+import { NutritionProvider } from './context/NutritionStore';
 
 function AppContent() {
-  const location = useLocation();
-  const isAuthPage = ['/login', '/register'].includes(location.pathname);
-  const isLandingPage = location.pathname === '/';
-
   return (
     <div className="min-h-screen bg-[#06140f] text-white">
-      {!isLandingPage && <Navbar />}
-      <div className={`${isAuthPage || isLandingPage ? '' : 'flex pt-16'}`}>
-        {!isAuthPage && !isLandingPage && <Sidebar />}
-        <main className={`${isAuthPage || isLandingPage ? '' : 'flex-1 ml-64'} min-h-screen`}>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route element={<ProtectedRoute />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/input-gizi" element={<InputGizi />} />
-              <Route path="/profile" element={<ProfilePage />} />
-            </Route>
-          </Routes>
-        </main>
-      </div>
+      <Navbar />
+      <main className="min-h-screen pt-16">
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/kategori" element={<KategoriPage />} />
+          
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/nutri-check" element={<InputGizi />} />
+            <Route path="/history" element={<HistoryPage />} />
+            <Route path="/profil" element={<ProfilePage />} />
+          </Route>
+        </Routes>
+      </main>
     </div>
   );
 }

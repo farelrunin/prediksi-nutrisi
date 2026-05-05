@@ -18,16 +18,66 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-const NutritionChart = () => {
-  const chartData = [
-    { day: 'Sen', calories: 1800, protein: 80, carbs: 220, fat: 60 },
-    { day: 'Sel', calories: 1950, protein: 85, carbs: 240, fat: 65 },
-    { day: 'Rab', calories: 1700, protein: 75, carbs: 200, fat: 55 },
-    { day: 'Kam', calories: 2100, protein: 90, carbs: 260, fat: 70 },
-    { day: 'Jum', calories: 1850, protein: 82, carbs: 230, fat: 62 },
-    { day: 'Sab', calories: 2000, protein: 88, carbs: 250, fat: 68 },
-    { day: 'Min', calories: 1900, protein: 83, carbs: 235, fat: 63 },
-  ];
+const dayFormatter = new Intl.DateTimeFormat('id-ID', { weekday: 'short' });
+
+const normalizeNumber = (value) => {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : 0;
+};
+
+const getDateKey = (dateValue) => {
+  const date = new Date(dateValue);
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+  return `${date.getFullYear()}-${month}-${day}`;
+};
+
+const buildChartData = (entries = []) => {
+  const grouped = new Map();
+  const today = new Date();
+
+  for (let offset = 6; offset >= 0; offset -= 1) {
+    const date = new Date(today);
+    date.setDate(today.getDate() - offset);
+    const key = getDateKey(date);
+    grouped.set(key, {
+      key,
+      day: dayFormatter.format(date),
+      calories: 0,
+      protein: 0,
+      carbs: 0,
+      fat: 0
+    });
+  }
+
+  entries.forEach((entry) => {
+    const entryDate = new Date(entry.timestamp ?? entry.created_at);
+    const key = getDateKey(entryDate);
+    const current = grouped.get(key);
+    if (!current) {
+      return;
+    }
+
+    current.calories += normalizeNumber(entry.calories);
+    current.protein += normalizeNumber(entry.protein);
+    current.carbs += normalizeNumber(entry.carbs);
+    current.fat += normalizeNumber(entry.fat);
+  });
+
+  return Array.from(grouped.values()).map((item) => ({
+    ...item,
+    calories: Math.round(item.calories),
+    protein: Math.round(item.protein * 10) / 10,
+    carbs: Math.round(item.carbs * 10) / 10,
+    fat: Math.round(item.fat * 10) / 10
+  }));
+};
+
+const NutritionChart = ({ data = [] }) => {
+  const chartData = buildChartData(data);
+  const hasHistory = data.length > 0;
+  const averageCalories = chartData.reduce((sum, item) => sum + item.calories, 0) / chartData.length;
+  const averageProtein = chartData.reduce((sum, item) => sum + item.protein, 0) / chartData.length;
 
   return (
     <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg p-6">
@@ -46,59 +96,65 @@ const NutritionChart = () => {
       </div>
 
       <div className="h-80">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.07)" />
-            <XAxis
-              dataKey="day"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12, fill: '#94a3b8' }}
-            />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12, fill: '#94a3b8' }}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend
-              wrapperStyle={{ paddingTop: '20px' }}
-              iconType="circle"
-              formatter={(value) => <span style={{ color: '#cbd5e1' }}>{value}</span>}
-            />
-            <Line
-              type="monotone"
-              dataKey="calories"
-              stroke="#3b82f6"
-              strokeWidth={3}
-              name="Kalori"
-              dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
-              activeDot={{ r: 6, stroke: '#3b82f6', strokeWidth: 2 }}
-            />
-            <Line
-              type="monotone"
-              dataKey="protein"
-              stroke="#10b981"
-              strokeWidth={3}
-              name="Protein (g)"
-              dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
-              activeDot={{ r: 6, stroke: '#10b981', strokeWidth: 2 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+        {hasHistory ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.07)" />
+              <XAxis
+                dataKey="day"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 12, fill: '#94a3b8' }}
+              />
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 12, fill: '#94a3b8' }}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend
+                wrapperStyle={{ paddingTop: '20px' }}
+                iconType="circle"
+                formatter={(value) => <span style={{ color: '#cbd5e1' }}>{value}</span>}
+              />
+              <Line
+                type="monotone"
+                dataKey="calories"
+                stroke="#3b82f6"
+                strokeWidth={3}
+                name="Kalori"
+                dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
+                activeDot={{ r: 6, stroke: '#3b82f6', strokeWidth: 2 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="protein"
+                stroke="#10b981"
+                strokeWidth={3}
+                name="Protein (g)"
+                dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
+                activeDot={{ r: 6, stroke: '#10b981', strokeWidth: 2 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-white/10 bg-slate-950/20 px-6 text-center text-slate-400">
+            Belum ada riwayat asupan. Tambahkan makanan dulu supaya tren 7 hari terakhir bisa muncul.
+          </div>
+        )}
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-4">
         <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
           <div className="text-sm text-blue-400 font-medium mb-1">Rata-rata Kalori</div>
           <div className="text-2xl font-bold text-blue-300">
-            {Math.round(chartData.reduce((sum, item) => sum + item.calories, 0) / chartData.length)} kcal
+            {Math.round(averageCalories || 0)} kcal
           </div>
         </div>
         <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4">
           <div className="text-sm text-emerald-400 font-medium mb-1">Rata-rata Protein</div>
           <div className="text-2xl font-bold text-emerald-300">
-            {Math.round(chartData.reduce((sum, item) => sum + item.protein, 0) / chartData.length)}g
+            {Math.round(averageProtein || 0)}g
           </div>
         </div>
       </div>

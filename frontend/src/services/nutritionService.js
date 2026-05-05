@@ -7,27 +7,37 @@ export const nutritionService = {
   async addFoodEntry(foodData) {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(`${API_BASE_URL}/nutrition/food-entry`, foodData, {
+      const response = await axios.post(`${API_BASE_URL}/food/`, foodData, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
       return response.data;
-    } catch (error) {
+    } catch {
       throw new Error('Failed to add food entry');
+    }
+  },
+
+  async predictNutrition(data) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/predict/`, data);
+      return response.data;
+    } catch (error) {
+      const msg = error.response?.data?.detail || error.message || 'Failed to predict nutrition';
+      throw new Error(msg);
     }
   },
 
   async getNutritionHistory() {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_BASE_URL}/nutrition/history`, {
+      const response = await axios.get(`${API_BASE_URL}/food/`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
       return response.data;
-    } catch (error) {
+    } catch {
       throw new Error('Failed to get nutrition history');
     }
   },
@@ -41,7 +51,7 @@ export const nutritionService = {
         }
       });
       return response.data;
-    } catch (error) {
+    } catch {
       throw new Error('Failed to get daily intake');
     }
   },
@@ -55,7 +65,7 @@ export const nutritionService = {
         }
       });
       return response.data;
-    } catch (error) {
+    } catch {
       throw new Error('Failed to update profile');
     }
   }

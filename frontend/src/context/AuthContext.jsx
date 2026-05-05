@@ -17,8 +17,10 @@ export const AuthProvider = ({ children }) => {
       try {
         const profile = await authService.getProfile();
         setUser(profile);
-      } catch {
+      } catch (error) {
+        console.error('Error loading profile:', error);
         localStorage.removeItem('token');
+        setUser(null);
       } finally {
         setLoading(false);
       }

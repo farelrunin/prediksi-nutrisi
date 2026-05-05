@@ -1,5 +1,6 @@
 ﻿import React, { useState } from 'react';
 import { NutritionContext } from './NutritionContextProvider';
+import { nutritionService } from '../services/nutritionService';
 
 const normalizeNumber = (value) => {
   const number = Number(value);
@@ -81,7 +82,22 @@ export const NutritionProvider = ({ children }) => {
   });
 
   const addFoodEntry = async (foodData) => {
-    const nutrition = estimateNutrition(foodData);
+    let nutrition;
+
+    if (foodData.story) {
+      // Handle story input - use AI prediction
+      const prediction = await predictNutrition({ story: foodData.story });
+      nutrition = {
+        calories: prediction.calories ?? prediction.parsed_data?.total_nutrition?.calories ?? 0,
+        protein: prediction.protein ?? prediction.parsed_data?.total_nutrition?.protein ?? 0,
+        carbs: prediction.carbs ?? prediction.parsed_data?.total_nutrition?.carbs ?? 0,
+        fat: prediction.fat ?? prediction.parsed_data?.total_nutrition?.fat ?? 0
+      };
+    } else {
+      // Handle form input - use estimation
+      nutrition = estimateNutrition(foodData);
+    }
+
     const newEntry = {
       ...foodData,
       ...nutrition,
@@ -118,10 +134,21 @@ export const NutritionProvider = ({ children }) => {
     setProfile(newProfile);
   };
 
+  const predictNutrition = async (data) => {
+    try {
+      const result = await nutritionService.predictNutrition(data);
+      return result;
+    } catch (error) {
+      console.error('Prediction error:', error);
+      throw error;
+    }
+  };
+
   const value = {
     nutritionData,
     profile,
     addFoodEntry,
+    predictNutrition,
     getRiskScore,
     updateProfile
   };
