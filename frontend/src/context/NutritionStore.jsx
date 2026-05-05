@@ -78,7 +78,9 @@ const estimateNutrition = ({ foodName, quantity, unit }) => {
 };
 
 const normalizeStoredEntry = (entry) => {
-  const timestamp = entry.created_at ?? entry.timestamp ?? new Date().toISOString();
+  let rawTimestamp = entry.created_at ?? entry.timestamp ?? new Date().toISOString();
+  // Tambahkan 'Z' jika belum ada agar browser menganggapnya UTC dan konversi ke WIB
+  const timestamp = rawTimestamp.endsWith('Z') ? rawTimestamp : rawTimestamp + 'Z';
 
   return {
     id: entry.id,
@@ -195,6 +197,19 @@ export const NutritionProvider = ({ children }) => {
     }
   };
 
+  const refreshRecommendations = async () => {
+    if (nutritionData.history.length === 0) return;
+    try {
+      const recommendations = await nutritionService.getAiRecommendations(
+        nutritionData.history,
+        profile
+      );
+      setNutritionData(prev => ({ ...prev, recommendations }));
+    } catch (error) {
+      console.error("Gagal memuat rekomendasi AI:", error);
+    }
+  };
+
   useEffect(() => {
     if (authLoading) {
       return;
@@ -204,6 +219,7 @@ export const NutritionProvider = ({ children }) => {
       setNutritionData((prev) => ({
         ...prev,
         history: [],
+        recommendations: [],
         dailyIntake: { ...EMPTY_DAILY_INTAKE }
       }));
       setHistoryError('');
@@ -211,7 +227,9 @@ export const NutritionProvider = ({ children }) => {
       return;
     }
 
-    refreshHistory();
+    refreshHistory().then(() => {
+      refreshRecommendations();
+    });
   }, [authLoading, user]);
 
   const addFoodEntry = async (foodData) => {
@@ -253,6 +271,16 @@ export const NutritionProvider = ({ children }) => {
     return normalizedEntry;
   };
 
+  const deleteFoodEntry = async (id) => {
+    try {
+      await nutritionService.deleteFoodEntry(id);
+      await refreshHistory();
+    } catch (error) {
+      console.error("Gagal menghapus di Store:", error);
+      throw error;
+    }
+  };
+
   const getRiskScore = () => {
     if (nutritionData.history.length === 0) {
       return null;
@@ -279,6 +307,7 @@ export const NutritionProvider = ({ children }) => {
         historyLoading,
         historyError,
         addFoodEntry,
+        deleteFoodEntry,
         predictNutrition,
         getRiskScore,
         refreshHistory,

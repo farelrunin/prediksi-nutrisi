@@ -12,256 +12,148 @@ const Navbar = () => {
   const handleLogout = () => {
     logout();
     setIsMobileMenuOpen(false);
-    
-    // Show logout notification
-    const notification = document.createElement('div');
-    notification.innerHTML = 'Berhasil logout';
-    notification.style.cssText = `
-      position: fixed;
-      top: 80px;
-      right: 20px;
-      background: linear-gradient(to right, rgb(34, 197, 94), rgb(16, 185, 129));
-      color: white;
-      padding: 12px 24px;
-      border-radius: 9999px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      z-index: 9999;
-      font-size: 14px;
-      font-weight: 500;
-      animation: slideIn 0.3s ease-out;
-    `;
-    document.body.appendChild(notification);
-    setTimeout(() => {
-      notification.style.opacity = '0';
-      notification.style.transform = 'translateX(400px)';
-      notification.style.transition = 'all 0.3s ease-out';
-      setTimeout(() => notification.remove(), 300);
-    }, 2500);
-    
     navigate('/', { replace: true });
   };
 
   const handleHomeClick = (event) => {
     event.preventDefault();
     setIsMobileMenuOpen(false);
-
     if (location.pathname === '/') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
+    } else {
+      navigate('/');
     }
-
-    navigate('/');
   };
 
-  // Menu for unauthenticated users
   const publicMenuItems = [
     { label: 'Home', to: '/', scrollTop: true },
     { label: 'Fitur', href: '#fitur' },
-    { label: 'Cara Kerja', href: '#cara-kerja' },
-    { label: 'Tentang', href: '#tentang' },
+    { label: 'Mulai', to: '/register' },
   ];
 
-  // Menu for authenticated users
   const authenticatedMenuItems = [
     { label: 'Home', to: '/' },
     { label: 'Dashboard', to: '/dashboard' },
     { label: 'Nutri Check', to: '/nutri-check' },
     { label: 'History', to: '/history' },
     { label: 'Kategori', to: '/kategori' },
-    { label: 'Profil', to: '/profil' },
   ];
 
   const currentMenuItems = user ? authenticatedMenuItems : publicMenuItems;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#05110d]/95 backdrop-blur-xl border-b border-white/10 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-            <div className="bg-gradient-to-r from-emerald-500 to-blue-600 p-2 rounded-lg">
-              <Apple className="text-white" size={24} />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
-                NutrisiAI
-              </h1>
-              <p className="text-xs text-slate-400 hidden sm:block">Prediksi Gizi Cerdas</p>
-            </div>
-          </Link>
+    <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-[95%] max-w-7xl mx-auto transition-all duration-500">
+      <div className="bg-[var(--bg-card)]/70 backdrop-blur-2xl border border-[var(--border-card)] rounded-[2.5rem] px-8 py-3 shadow-2xl flex justify-between items-center relative overflow-hidden group">
+        
+        {/* Subtle Gradient Accent */}
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-green)]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+        
+        {/* Logo */}
+        <Link to="/" onClick={handleHomeClick} className="flex items-center gap-3">
+          <div className="bg-gradient-to-br from-[var(--primary-green)] to-[var(--accent-blue)] p-2 rounded-2xl shadow-lg shadow-emerald-500/20">
+            <Apple className="text-white" size={20} />
+          </div>
+          <span className="text-xl font-extrabold tracking-tighter text-[var(--text-main)]">
+            Nutri<span className="text-[var(--primary-green)]">AI</span>
+          </span>
+        </Link>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-6">
-            {currentMenuItems.map((item) => (
-              item.href ? (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="text-sm font-medium text-slate-300 hover:text-white transition-colors"
-                >
-                  {item.label}
-                </a>
-              ) : item.scrollTop ? (
-                <button
-                  key={item.label}
-                  type="button"
-                  onClick={handleHomeClick}
-                  className="text-sm font-medium text-slate-300 hover:text-white transition-colors"
-                >
-                  {item.label}
-                </button>
-              ) : (
+        {/* Desktop Menu */}
+        <div className="hidden lg:flex items-center gap-1">
+          {currentMenuItems.map((item) => (
+            item.href ? (
+              <a
+                key={item.label}
+                href={item.href}
+                className="px-6 py-2.5 rounded-2xl text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all"
+              >
+                {item.label}
+              </a>
+            ) : (
+              <NavLink
+                key={item.label}
+                to={item.to}
+                className={({ isActive }) =>
+                  `px-6 py-2.5 rounded-2xl text-[11px] font-bold uppercase tracking-wider transition-all ${
+                    isActive 
+                      ? 'bg-[var(--primary-green)] text-white shadow-lg shadow-emerald-500/20' 
+                      : 'text-[var(--text-muted)] hover:text-[var(--primary-green)] hover:bg-slate-50'
+                  }`
+                }
+              >
+                {item.label}
+              </NavLink>
+            )
+          ))}
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-4">
+          {user ? (
+            <div className="flex items-center gap-4">
+              <Link to="/profil" className="hidden md:flex items-center gap-3 bg-white border border-[var(--border-card)] px-5 py-2.5 rounded-2xl hover:border-[var(--primary-green)]/30 transition-all shadow-sm">
+                <div className="w-6 h-6 rounded-lg bg-[var(--primary-green)]/10 flex items-center justify-center text-[var(--primary-green)]">
+                  <User size={14} />
+                </div>
+                <span className="text-xs font-bold text-[var(--text-main)] truncate max-w-[100px]">
+                  {user.name?.split(' ')[0] || 'User'}
+                </span>
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="p-3.5 rounded-2xl bg-rose-50 text-[var(--danger)] hover:bg-[var(--danger)] hover:text-white transition-all shadow-sm active:scale-95"
+              >
+                <LogOut size={16} />
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link to="/login" className="px-6 py-2.5 text-[11px] font-bold uppercase tracking-widest text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">
+                Masuk
+              </Link>
+              <Link to="/register" className="bg-[var(--text-main)] text-white px-8 py-3 rounded-2xl text-[11px] font-bold uppercase tracking-widest shadow-xl hover:scale-105 active:scale-100 transition-all">
+                Daftar
+              </Link>
+            </div>
+          )}
+
+          {/* Mobile Toggle */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="lg:hidden p-3.5 rounded-2xl bg-white border border-[var(--border-card)] text-[var(--text-main)] shadow-sm"
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+
+        {/* Mobile Dropdown */}
+        {isMobileMenuOpen && (
+          <div className="absolute top-[calc(100%+1rem)] left-0 right-0 lg:hidden bg-white/95 backdrop-blur-2xl border border-[var(--border-card)] rounded-[2.5rem] p-6 shadow-3xl animate-in slide-in-from-top-4 duration-300">
+            <div className="flex flex-col gap-2">
+              {currentMenuItems.map((item) => (
                 <NavLink
                   key={item.label}
                   to={item.to}
+                  onClick={() => setIsMobileMenuOpen(false)}
                   className={({ isActive }) =>
-                    `text-sm font-medium transition-colors ${
+                    `px-6 py-4 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all ${
                       isActive 
-                        ? 'text-emerald-400' 
-                        : 'text-slate-300 hover:text-white'
+                        ? 'bg-[var(--primary-green)] text-white' 
+                        : 'text-[var(--text-muted)] hover:bg-slate-50'
                     }`
                   }
                 >
                   {item.label}
                 </NavLink>
-              )
-            ))}
-          </div>
-
-          {/* Desktop User Section */}
-          <div className="flex items-center gap-3">
-            <div className="hidden md:flex items-center gap-3">
-              {user ? (
-                <>
-                  <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200">
-                    <User size={18} className="text-emerald-400" />
-                    <span>{user.name || user.email}</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleLogout}
-                    className="flex items-center gap-2 text-slate-300 hover:text-white px-4 py-2 rounded-full border border-white/10 text-sm font-medium transition"
-                  >
-                    <LogOut size={18} />
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link
-                    to="/login"
-                    className="text-slate-300 hover:text-white px-4 py-2 rounded-full border border-white/10 text-sm font-medium transition"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="bg-emerald-500 hover:bg-emerald-400 text-black px-4 py-2 rounded-full text-sm font-semibold transition-shadow shadow-lg shadow-emerald-500/20"
-                  >
-                    Daftar
-                  </Link>
-                </>
-              )}
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-xl text-slate-300 hover:bg-white/10 transition-colors"
-              aria-label="Toggle menu"
-              type="button"
-            >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-white/10 bg-[#06140f]/95 backdrop-blur-xl">
-            <div className="px-4 py-3 space-y-2">
-              {/* Mobile Menu Items */}
-              {currentMenuItems.map((item) => (
-                item.href ? (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="block rounded-xl px-3 py-2 text-sm font-medium text-slate-300 hover:bg-white/10 hover:text-white transition-colors"
-                  >
-                    {item.label}
-                  </a>
-                ) : item.scrollTop ? (
-                  <button
-                    key={item.label}
-                    type="button"
-                    onClick={(event) => {
-                      handleHomeClick(event);
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="block rounded-xl px-3 py-2 text-sm font-medium text-slate-300 hover:bg-white/10 hover:text-white transition-colors text-left w-full"
-                  >
-                    {item.label}
-                  </button>
-                ) : (
-                  <NavLink
-                    key={item.label}
-                    to={item.to}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={({ isActive }) =>
-                      `block rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
-                        isActive
-                          ? 'bg-emerald-500/20 text-emerald-400'
-                          : 'text-slate-300 hover:bg-white/10 hover:text-white'
-                      }`
-                    }
-                  >
-                    {item.label}
-                  </NavLink>
-                )
               ))}
-
-              {/* Mobile User Section */}
-              {user ? (
-                <>
-                  <div className="border-t border-white/10 mt-3 pt-3">
-                    <div className="flex items-center space-x-2 px-3 py-2 text-slate-200">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-emerald-500 to-blue-600 flex items-center justify-center">
-                        <User size={16} className="text-white" />
-                      </div>
-                      <span className="font-medium text-sm">{user.name || user.email}</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        handleLogout();
-                      }}
-                      className="flex items-center space-x-2 w-full px-3 py-2 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition-colors text-left text-sm font-medium mt-2"
-                    >
-                      <LogOut size={18} />
-                      <span>Logout</span>
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="border-t border-white/10 mt-3 pt-3 space-y-2">
-                    <Link
-                      to="/login"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block px-3 py-2 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition-colors text-sm font-medium"
-                    >
-                      Masuk
-                    </Link>
-                    <Link
-                      to="/register"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-medium text-sm"
-                    >
-                      Daftar
-                    </Link>
-                  </div>
-                </>
+              {user && (
+                <NavLink
+                  to="/profil"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="px-6 py-4 rounded-2xl text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] hover:bg-slate-50 border-t border-slate-100 mt-2"
+                >
+                  Profil Saya
+                </NavLink>
               )}
             </div>
           </div>

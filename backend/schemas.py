@@ -13,6 +13,9 @@ class UserLogin(BaseModel):
     email: str
     password: str
 
+class GoogleLoginRequest(BaseModel):
+    access_token: str
+
 class UserResponse(BaseModel):
     id: int
     name: str
@@ -25,6 +28,7 @@ class UserResponse(BaseModel):
 class TokenResponse(BaseModel):
     token: str
     name: str
+    email: str
 
 class ProfileUpdate(BaseModel):
     height: Optional[float] = None
@@ -63,6 +67,7 @@ class PredictionResponse(BaseModel):
     risk_level: str
     score: float
     suggestion: str
+    ai_advice: Optional[str] = None
     calories: Optional[float] = None
     protein: Optional[float] = None
     carbs: Optional[float] = None

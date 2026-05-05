@@ -1,6 +1,11 @@
 export const colors = {
-  bgPrimary: '#0a1a14',
-  bgSecondary: '#112318',
-  bgCard: '#1a2e22',
-  accent: '#16a34a',
+  bgPrimary: 'var(--bg-primary)',
+  bgSecondary: 'var(--bg-secondary)',
+  bgCard: 'var(--bg-card)',
+  borderCard: 'var(--border-card)',
+  primary: 'var(--primary-green)',
+  secondary: 'var(--secondary-green)',
+  accent: 'var(--accent-blue)',
+  textMain: 'var(--text-main)',
+  textMuted: 'var(--text-muted)',
 };

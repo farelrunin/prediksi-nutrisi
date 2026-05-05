@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogIn, Mail, Lock, Apple } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
-import { colors } from '../styles/colors';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const LoginPage = () => {
-  const { login, user } = useAuth();
+  const { login, googleLogin, user } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
@@ -14,7 +14,6 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
 
-  // Redirect ke landing page setelah user state terupdate
   useEffect(() => {
     if (loginSuccess && user) {
       navigate('/');
@@ -34,6 +33,21 @@ const LoginPage = () => {
     setLoading(false);
   };
 
+  const loginWithGoogle = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setLoading(true);
+      try {
+        await googleLogin(tokenResponse.access_token);
+        setLoginSuccess(true);
+      } catch (error) {
+        console.error('Google Login error:', error);
+        alert(error.message || 'Google Login gagal');
+      }
+      setLoading(false);
+    },
+    onError: (error) => console.log('Login Failed:', error)
+  });
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -42,79 +56,106 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/bg-food.jpg')" }}>
-      {/* Dark overlay to make text readable, but keep it light enough to show the beautiful background */}
-      <div className="absolute inset-0 bg-black/40"></div>
+    <div className="min-h-screen flex items-center justify-center bg-transparent px-6 py-12 relative overflow-hidden">
       
-      <div className="relative z-10 w-full max-w-md px-6">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2 drop-shadow-md">Welcome Back!</h1>
-          <p className="text-orange-200 text-sm font-medium drop-shadow">Login to track your nutrition risk.</p>
+      {/* Background with user image */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="/bg-food.jpg" 
+          alt="Healthy Food" 
+          className="w-full h-full object-cover" 
+        />
+        <div className="absolute inset-0 bg-black/10" />
+      </div>
+
+      <div className="relative z-10 w-full max-w-md">
+        
+        {/* Logo/Brand */}
+        <div className="text-center mb-10">
+          <div className="bg-gradient-to-br from-[var(--primary-green)] to-[var(--accent-blue)] w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl">
+            <Apple className="text-white" size={32} />
+          </div>
+          <h1 className="text-4xl font-extrabold tracking-tighter text-white mb-2">
+            Selamat <span className="text-[var(--primary-green)]">Datang</span>
+          </h1>
+          <p className="text-xs font-bold uppercase tracking-widest text-white/70">NutriAI Assistant</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <div className="relative">
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="farelrunin@gmail.com"
-                className="w-full px-5 py-4 bg-[#13301f]/60 backdrop-blur-md text-white placeholder-green-200/70 rounded-full focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                required
-              />
+        {/* Form Card */}
+        <div 
+          className="backdrop-blur-2xl border border-white/40 rounded-[32px] p-10 shadow-[0_32px_100px_rgba(0,0,0,0.15)] bg-white/30"
+        >
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-[11px] font-bold uppercase tracking-widest text-slate-600 ml-2">Email Address</label>
+                <div className="relative">
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500">
+                    <Mail size={18} />
+                  </div>
+                  <input
+                    type="email" name="email" value={formData.email} onChange={handleChange} required
+                    placeholder="nama@email.com"
+                    className="w-full pl-14 pr-6 py-5 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between items-center px-2">
+                  <label className="text-[11px] font-bold uppercase tracking-widest text-slate-600">Password</label>
+                  <Link to="/forgot-password" size={24} className="text-[11px] font-bold uppercase tracking-widest text-[var(--primary-green)] hover:underline">Lupa?</Link>
+                </div>
+                <div className="relative">
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500">
+                    <Lock size={18} />
+                  </div>
+                  <input
+                    type="password" name="password" value={formData.password} onChange={handleChange} required
+                    placeholder="••••••••"
+                    className="w-full pl-14 pr-6 py-5 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
+                  />
+                </div>
+              </div>
             </div>
+
+            <button
+              type="submit" disabled={loading}
+              className="w-full group relative flex items-center justify-center gap-3 bg-[var(--primary-green)] px-10 py-5 rounded-2xl font-bold text-white text-lg shadow-xl shadow-emerald-500/20 hover:scale-[1.02] active:scale-100 transition-all disabled:opacity-50"
+            >
+              <span>{loading ? 'Masuk...' : 'Masuk'}</span>
+              <LogIn size={20} />
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="my-10 flex items-center gap-4">
+            <div className="h-[1px] flex-1 bg-white/50" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Atau Lanjut Dengan</span>
+            <div className="h-[1px] flex-1 bg-white/50" />
           </div>
 
-          <div>
-            <div className="relative">
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="••••••••••••"
-                className="w-full px-5 py-4 bg-[#13301f]/60 backdrop-blur-md text-white placeholder-green-200/70 rounded-full focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                required
-              />
-            </div>
-            <div className="mt-2 text-left pl-2">
-              <Link to="#" className="text-green-100 hover:text-white text-sm">Lupa password?</Link>
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[#c2e0c6] hover:bg-[#b0d2b4] text-[#13301f] py-4 rounded-full font-bold shadow-lg transition-all duration-200 disabled:opacity-70 mt-2"
+          {/* Social Login */}
+          <button 
+            type="button" onClick={() => loginWithGoogle()} disabled={loading}
+            className="w-full flex items-center justify-center gap-4 bg-white/60 backdrop-blur-md border border-white/50 py-5 rounded-2xl text-sm font-bold text-slate-700 hover:bg-white/80 transition-all shadow-sm"
           >
-            {loading ? 'Logging in...' : 'Login'}
+            <svg className="w-6 h-6" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+            </svg>
+            Google
           </button>
-        </form>
-
-        <div className="mt-8 flex items-center justify-center">
-          <div className="h-px bg-white/30 flex-1"></div>
-          <span className="px-4 text-white/80 text-sm">or continue with</span>
-          <div className="h-px bg-white/30 flex-1"></div>
         </div>
 
-        <button className="mt-6 w-full bg-white text-gray-700 py-3.5 rounded-full font-semibold shadow flex items-center justify-center gap-3 hover:bg-gray-50 transition">
-          <svg className="w-5 h-5" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-          </svg>
-          Google
-        </button>
-
-        <div className="text-center mt-8">
-          <p className="text-slate-200 text-sm">
-            <input type="checkbox" className="mr-2 accent-green-500 rounded" />
-            Don't have an account?{' '}
-            <Link to="/register" className="text-white hover:text-green-200 font-semibold underline">
-              Sign Up
+        {/* Footer Link */}
+        <div className="text-center mt-10">
+          <p className="text-sm font-semibold text-white/80">
+            Belum punya akun?{' '}
+            <Link to="/register" className="text-[var(--primary-green)] hover:underline font-bold underline-offset-4">
+              Daftar Sekarang
             </Link>
           </p>
         </div>

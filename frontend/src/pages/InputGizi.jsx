@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useNutrition } from '../context/useNutrition';
 import FoodForm from '../components/FoodForm';
 import { colors } from '../styles/colors';
@@ -7,16 +7,17 @@ const InputGizi = () => {
   const { addFoodEntry } = useNutrition();
 
   return (
-    <div className="min-h-screen py-10" style={{ backgroundColor: colors.bgPrimary }}>
-      <div className="max-w-4xl mx-auto space-y-6 px-4">
-        <div className="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 p-8 shadow-2xl" style={{ backgroundColor: colors.bgCard }}>
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-white">Input Asupan Makanan</h1>
-            <p className="mt-2 text-slate-300">
-              Tambahkan makanan yang Anda konsumsi hari ini agar sistem dapat membangun pola asupan dan rekomendasi nutrisi.
-            </p>
-          </div>
-          <FoodForm onAddFood={addFoodEntry} submitLabel="Tambah Asupan" />
+    <div className="min-h-screen pt-32 pb-16 bg-[var(--bg-primary)] px-4">
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-12 text-center">
+          <h1 className="text-4xl font-black tracking-tight text-[var(--text-main)] mb-4">Nutri Check</h1>
+          <p className="text-[var(--text-muted)] font-medium max-w-lg mx-auto">
+            Ceritakan apa yang Anda makan hari ini, dan biarkan AI kami menganalisis nutrisinya untuk Anda.
+          </p>
+        </div>
+
+        <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-black/40">
+          <FoodForm onAddFood={addFoodEntry} submitLabel="Analisis Nutrisi" />
         </div>
       </div>
     </div>

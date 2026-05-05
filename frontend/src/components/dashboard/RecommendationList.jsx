@@ -1,124 +1,109 @@
 import React from 'react';
-import { Lightbulb, CheckCircle, AlertTriangle, Target } from 'lucide-react';
+import { Lightbulb, CheckCircle, AlertTriangle, Target, Zap, Waves } from 'lucide-react';
+import { useNutrition } from '../../context/useNutrition';
+
+const getIcon = (type) => {
+  switch (type?.toLowerCase()) {
+    case 'protein': return Target;
+    case 'fiber': return Waves;
+    case 'iron': return AlertTriangle;
+    case 'energy': return Zap;
+    case 'calcium': return CheckCircle;
+    default: return Lightbulb;
+  }
+};
+
+const getStyle = (priority) => {
+  switch (priority) {
+    case 'high': return { bg: 'bg-rose-500/10', text: 'text-rose-400', border: 'border-rose-500/20' };
+    case 'medium': return { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/20' };
+    case 'low': return { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/20' };
+    default: return { bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/20' };
+  }
+};
 
 const RecommendationList = () => {
-  // Mock recommendations
-  const mockRecommendations = [
-    {
-      id: 1,
-      type: 'protein',
-      priority: 'high',
-      title: 'Tingkatkan Asupan Protein',
-      message: 'Asupan protein Anda masih di bawah target harian. Tambahkan sumber protein sehat untuk mendukung pertumbuhan dan pemulihan.',
-      foods: ['Telur', 'Ayam tanpa kulit', 'Ikan salmon', 'Tahu', 'Tempe', 'Kacang-kacangan'],
-      icon: Target,
-      bgClass: 'bg-blue-500/10',
-      iconClass: 'text-blue-400',
-      tagBgClass: 'bg-blue-500/10',
-      tagTextClass: 'text-blue-400',
-      tagHoverClass: 'hover:bg-blue-500/20'
-    },
-    {
-      id: 2,
-      type: 'iron',
-      priority: 'medium',
-      title: 'Perbanyak Makanan Berserat Besi',
-      message: 'Konsumsi makanan tinggi zat besi untuk mencegah anemia dan menjaga energi tubuh.',
-      foods: ['Bayam', 'Hati ayam', 'Kacang merah', 'Quinoa', 'Daging sapi tanpa lemak'],
-      icon: AlertTriangle,
-      bgClass: 'bg-orange-500/10',
-      iconClass: 'text-orange-400',
-      tagBgClass: 'bg-orange-500/10',
-      tagTextClass: 'text-orange-400',
-      tagHoverClass: 'hover:bg-orange-500/20'
-    },
-    {
-      id: 3,
-      type: 'calcium',
-      priority: 'low',
-      title: 'Jaga Kesehatan Tulang',
-      message: 'Pastikan asupan kalsium cukup untuk menjaga kepadatan tulang dan kesehatan gigi.',
-      foods: ['Susu rendah lemak', 'Yogurt plain', 'Keju', 'Sawi hijau', 'Almond'],
-      icon: CheckCircle,
-      bgClass: 'bg-emerald-500/10',
-      iconClass: 'text-emerald-400',
-      tagBgClass: 'bg-emerald-500/10',
-      tagTextClass: 'text-emerald-400',
-      tagHoverClass: 'hover:bg-emerald-500/20'
-    }
-  ];
+  const { nutritionData } = useNutrition();
+  const recommendations = nutritionData.recommendations || [];
 
-  const getPriorityBadge = (priority) => {
-    switch (priority) {
-      case 'high':
-        return <span className="px-2 py-1 bg-red-500/10 text-red-400 border border-red-500/20 text-xs font-medium rounded-full">Prioritas Tinggi</span>;
-      case 'medium':
-        return <span className="px-2 py-1 bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 text-xs font-medium rounded-full">Prioritas Sedang</span>;
-      case 'low':
-        return <span className="px-2 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-medium rounded-full">Prioritas Rendah</span>;
-      default:
-        return null;
-    }
-  };
+  if (recommendations.length === 0) {
+    return (
+      <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-8 text-center">
+        <Lightbulb className="mx-auto mb-4 text-emerald-500/30" size={48} />
+        <h3 className="text-xl font-bold text-white mb-2">Belum Ada Rekomendasi</h3>
+        <p className="text-slate-400">Catat beberapa makanan agar Gemini bisa memberikan saran personal untukmu.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-6">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8">
         <div>
           <h3 className="text-xl font-bold text-white flex items-center gap-2">
             <Lightbulb className="text-emerald-400" size={24} />
-            Rekomendasi Personal
+            Rekomendasi Personal Gemini
           </h3>
-          <p className="text-slate-300 text-sm mt-1">Saran untuk nutrisi yang lebih baik</p>
+          <p className="text-slate-400 text-sm mt-1 italic">Analisis cerdas berdasarkan riwayat makan Anda</p>
         </div>
-        <div className="text-sm text-slate-400">
-          {mockRecommendations.length} rekomendasi
+        <div className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-bold text-emerald-400 border border-emerald-500/30 uppercase tracking-tighter">
+          {recommendations.length} Saran Aktif
         </div>
       </div>
 
-      <div className="space-y-4">
-        {mockRecommendations.map((rec) => (
-          <div key={rec.id} className={`border-2 rounded-xl p-5 transition-all duration-200 hover:shadow-md border-white/20 bg-white/5 hover:bg-white/10`}>
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex items-center gap-3">
-                <div className={`${rec.bgClass} p-2 rounded-lg`}>
-                  <rec.icon className={rec.iconClass} size={20} />
+      <div className="grid gap-6">
+        {recommendations.map((rec, index) => {
+          const style = getStyle(rec.priority);
+          const IconComp = getIcon(rec.type);
+          
+          return (
+            <div key={index} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 transition-all hover:bg-white/10 hover:border-white/20">
+              <div className={`absolute top-0 right-0 h-24 w-24 -mr-8 -mt-8 opacity-5 ${style.text}`}>
+                <IconComp size={100} />
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className={`rounded-xl ${style.bg} p-3 ${style.text}`}>
+                  <IconComp size={24} />
                 </div>
-                <div>
-                  <h4 className="font-semibold text-white text-lg">{rec.title}</h4>
-                  {getPriorityBadge(rec.priority)}
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h4 className="font-bold text-white text-lg">{rec.title}</h4>
+                    <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-widest border ${style.bg} ${style.text} ${style.border}`}>
+                      {rec.priority}
+                    </span>
+                  </div>
+                  <p className="text-slate-300 text-sm leading-relaxed mb-4">
+                    {rec.message}
+                  </p>
+                  
+                  {rec.foods && (
+                    <div className="flex flex-wrap gap-2">
+                      {rec.foods.map((food, fIdx) => (
+                        <span key={fIdx} className="rounded-lg bg-slate-950/40 px-3 py-1 text-xs font-medium text-slate-300 border border-white/5 hover:border-emerald-500/30 transition-colors">
+                          {food}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-
-            <p className="text-slate-300 mb-4 leading-relaxed">{rec.message}</p>
-
-            <div>
-              <h5 className="font-medium text-white mb-2 text-sm">Makanan Rekomendasi:</h5>
-              <div className="flex flex-wrap gap-2">
-                {rec.foods.map((food, index) => (
-                  <span
-                    key={index}
-                    className={`${rec.tagBgClass} ${rec.tagTextClass} rounded-full px-3 py-1 text-sm font-medium ${rec.tagHoverClass} transition-colors cursor-pointer`}
-                  >
-                    {food}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      <div className="mt-6 pt-4 border-t border-white/10">
-        <div className="bg-gradient-to-r from-emerald-500/10 to-emerald-500/5 rounded-lg p-4 border border-emerald-500/20">
-          <div className="flex items-center gap-2 mb-2">
-            <Lightbulb className="text-emerald-400" size={16} />
-            <span className="font-semibold text-white text-sm">Tips Nutrisi</span>
+      <div className="mt-8 rounded-2xl bg-emerald-500/10 p-5 border border-emerald-500/20">
+        <div className="flex items-start gap-4">
+          <div className="bg-emerald-500/20 p-2 rounded-lg text-emerald-400">
+            <CheckCircle size={20} />
           </div>
-          <p className="text-slate-300 text-sm">
-            Konsultasikan dengan ahli gizi untuk rekomendasi yang lebih personal berdasarkan kondisi kesehatan Anda.
-          </p>
+          <div>
+            <h5 className="font-bold text-white text-sm mb-1">Kenapa Rekomendasi Ini Penting?</h5>
+            <p className="text-slate-400 text-xs leading-relaxed">
+              Gemini membandingkan profil kesehatanmu dengan tren nutrisi dari riwayat makan harianmu untuk memberikan saran yang membantu mencapai target kesehatan jangka panjang.
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -17,6 +17,18 @@ export const authService = {
     }
   },
 
+  async googleLogin(accessToken) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/auth/google`, {
+        access_token: accessToken
+      });
+      return response.data;
+    } catch (error) {
+      const msg = error.response?.data?.detail || error.message || 'Login Google gagal';
+      throw new Error(msg);
+    }
+  },
+
   async register(userData) {
     try {
       const response = await axios.post(`${API_BASE_URL}/auth/register`, userData);

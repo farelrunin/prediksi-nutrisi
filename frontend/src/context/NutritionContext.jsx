@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { NutritionContext } from './NutritionContextProvider';
 import { nutritionService } from '../services/nutritionService';
 
@@ -56,77 +56,123 @@ const estimateNutrition = ({ foodName, quantity, unit }) => {
 
 export const NutritionProvider = ({ children }) => {
   const [nutritionData, setNutritionData] = useState({
-    dailyIntake: {
-      calories: 0,
-      protein: 0,
-      carbs: 0,
-      fat: 0
-    },
-    targets: {
-      calories: 2000,
-      protein: 100,
-      carbs: 250,
-      fat: 70
-    },
+    dailyIntake: { calories: 0, protein: 0, carbs: 0, fat: 0 },
+    targets: { calories: 2000, protein: 100, carbs: 250, fat: 70 },
     history: [],
     recommendations: []
   });
 
   const [profile, setProfile] = useState({
-    height: '',
-    weight: '',
-    age: '',
-    gender: '',
-    activityLevel: '',
-    conditions: []
+    height: '', weight: '', age: '', gender: '', activityLevel: '', conditions: []
   });
 
-  const addFoodEntry = async (foodData) => {
-    let nutrition;
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyError, setHistoryError] = useState(null);
 
-    if (foodData.story) {
-      // Handle story input - use AI prediction
-      const prediction = await predictNutrition({ story: foodData.story });
-      nutrition = {
-        calories: prediction.calories ?? prediction.parsed_data?.total_nutrition?.calories ?? 0,
-        protein: prediction.protein ?? prediction.parsed_data?.total_nutrition?.protein ?? 0,
-        carbs: prediction.carbs ?? prediction.parsed_data?.total_nutrition?.carbs ?? 0,
-        fat: prediction.fat ?? prediction.parsed_data?.total_nutrition?.fat ?? 0
-      };
-    } else {
-      // Handle form input - use estimation
-      nutrition = estimateNutrition(foodData);
+  // Load history from backend on mount
+  React.useEffect(() => {
+    fetchHistory();
+  }, []);
+
+  const fetchHistory = async () => {
+    setHistoryLoading(true);
+    try {
+      const data = await nutritionService.getNutritionHistory();
+      // Ensure each entry has a local-time compatible timestamp
+      const historyWithLocalTime = data.map(entry => ({
+        ...entry,
+        timestamp: entry.created_at.endsWith('Z') ? entry.created_at : entry.created_at + 'Z'
+      }));
+      
+      setNutritionData(prev => ({
+        ...prev,
+        history: historyWithLocalTime,
+        dailyIntake: calculateDailyIntake(historyWithLocalTime)
+      }));
+    } catch (error) {
+      setHistoryError("Gagal mengambil riwayat asupan");
+    } finally {
+      setHistoryLoading(false);
     }
+  };
 
-    const newEntry = {
-      ...foodData,
-      ...nutrition,
-      timestamp: new Date().toISOString()
-    };
+  const calculateDailyIntake = (history) => {
+    const today = new Date().toISOString().split('T')[0];
+    const todaysEntries = history.filter(e => e.timestamp.startsWith(today));
+    
+    return todaysEntries.reduce((acc, curr) => ({
+      calories: acc.calories + curr.calories,
+      protein: acc.protein + curr.protein,
+      carbs: acc.carbs + curr.carbs,
+      fat: acc.fat + curr.fat
+    }), { calories: 0, protein: 0, carbs: 0, fat: 0 });
+  };
 
-    setNutritionData((prev) => ({
-      ...prev,
-      history: [...prev.history, newEntry],
-      dailyIntake: {
-        calories: prev.dailyIntake.calories + nutrition.calories,
-        protein: prev.dailyIntake.protein + nutrition.protein,
-        carbs: prev.dailyIntake.carbs + nutrition.carbs,
-        fat: prev.dailyIntake.fat + nutrition.fat
+  const addFoodEntry = async (foodData) => {
+    try {
+      let nutrition;
+      let aiAdvice = null;
+
+      if (foodData.story) {
+        const prediction = await predictNutrition({ story: foodData.story });
+        nutrition = {
+          food_name: prediction.foods ? prediction.foods[0]?.name : "Makanan dari cerita",
+          calories: prediction.calories ?? 0,
+          protein: prediction.protein ?? 0,
+          carbs: prediction.carbs ?? 0,
+          fat: prediction.fat ?? 0,
+          meal_type: foodData.mealType || 'breakfast',
+          quantity: foodData.quantity || 1,
+          unit: foodData.unit || 'porsi'
+        };
+        aiAdvice = prediction.ai_advice;
+      } else {
+        nutrition = {
+          ...foodData,
+          ...estimateNutrition(foodData),
+          food_name: foodData.foodName
+        };
       }
-    }));
+
+      const response = await nutritionService.addFoodEntry(nutrition);
+      await fetchHistory(); // Refresh from server
+      return response;
+    } catch (error) {
+      console.error("Gagal menambah makanan:", error);
+      throw error;
+    }
+  };
+
+  const deleteFoodEntry = async (id) => {
+    console.log("Mencoba menghapus entri dengan ID:", id);
+    if (!id) {
+      console.error("ID tidak ditemukan!");
+      throw new Error("ID tidak valid");
+    }
+    
+    try {
+      await nutritionService.deleteFoodEntry(id);
+      console.log("Berhasil menghapus dari server, menyegarkan riwayat...");
+      await fetchHistory();
+    } catch (error) {
+      console.error("Gagal menghapus di Context:", error);
+      throw error;
+    }
+  };
+
+  const updateFoodEntry = async (id, updatedData) => {
+    try {
+      await nutritionService.updateFoodEntry(id, updatedData);
+      await fetchHistory();
+    } catch (error) {
+      console.error("Gagal memperbarui:", error);
+    }
   };
 
   const getRiskScore = () => {
-    if (nutritionData.history.length === 0) {
-      return null;
-    }
-
+    if (nutritionData.history.length === 0) return 0;
     const caloriesRatio = Math.min(nutritionData.dailyIntake.calories / nutritionData.targets.calories, 1);
-    const proteinRatio = Math.min(nutritionData.dailyIntake.protein / nutritionData.targets.protein, 1);
-    const carbsRatio = Math.min(nutritionData.dailyIntake.carbs / nutritionData.targets.carbs, 1);
-    const fatRatio = Math.min(nutritionData.dailyIntake.fat / nutritionData.targets.fat, 1);
-
-    const score = 1 - (caloriesRatio + proteinRatio + carbsRatio + fatRatio) / 4;
+    const score = 1 - caloriesRatio;
     return Math.max(0, Math.min(1, score));
   };
 
@@ -135,19 +181,18 @@ export const NutritionProvider = ({ children }) => {
   };
 
   const predictNutrition = async (data) => {
-    try {
-      const result = await nutritionService.predictNutrition(data);
-      return result;
-    } catch (error) {
-      console.error('Prediction error:', error);
-      throw error;
-    }
+    const result = await nutritionService.predictNutrition(data);
+    return result;
   };
 
   const value = {
     nutritionData,
+    historyLoading,
+    historyError,
     profile,
     addFoodEntry,
+    deleteFoodEntry,
+    updateFoodEntry,
     predictNutrition,
     getRiskScore,
     updateProfile

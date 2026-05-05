@@ -5,204 +5,177 @@ import { useAuth } from '../context/useAuth';
 
 const LandingPage = () => {
   const { user } = useAuth();
-  const ctaLabel = user ? 'Prediksi Sekarang' : 'Mulai Sekarang';
-  const ctaLink = user ? '/dashboard' : '/register';
+  const ctaLabel = user ? 'Prediksi Sekarang' : 'Daftar Sekarang';
+  const ctaLink = user ? '/nutri-check' : '/register';
 
   return (
-    <div className="relative overflow-hidden min-h-screen bg-[#06140f] text-white">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(34,197,94,0.16),_transparent_25%),radial-gradient(circle_at_bottom_right,_rgba(56,189,248,0.12),_transparent_30%)]" />
+    <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-main)] overflow-x-hidden">
+      {/* Background with user image */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/bg-food.jpg"
+          alt="Healthy Food"
+          className="w-full h-full object-cover opacity-60"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-primary)]/80 via-[var(--bg-primary)]/40 to-[var(--bg-primary)]" />
+      </div>
 
-      <section id="hero" className="relative z-10 min-h-screen flex items-center bg-cover bg-center" style={{ backgroundImage: "url('/bg-food.jpg')" }}>
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm sm:backdrop-blur-none"></div>
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl text-white drop-shadow-lg">
-              Mudah catat gizi, dapatkan rekomendasi makanan yang relevan.
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center pt-20 px-6 lg:px-8">
+        <div className="relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center">
+          <div className="max-w-2xl animate-in fade-in slide-in-from-left duration-1000">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/5 border border-slate-900/10 mb-8">
+              <Sparkles size={16} className="text-slate-900" />
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-900">AI-Powered Nutrition Assistant</span>
+            </div>
+            <h1 className="text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tight mb-8">
+              Makan Enak, <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-green)] to-[var(--accent-blue)]">Gizi Terjaga.</span>
             </h1>
-            <p className="mt-6 text-lg leading-8 text-slate-200 drop-shadow-md">
-              NutrisiAI membantu Anda mengatur asupan sehari-hari dengan cepat, menjaga konsistensi, dan membuat keputusan pola makan lebih mudah.
+            <p className="text-lg text-[var(--text-main)] leading-relaxed mb-10 max-w-lg font-medium opacity-80">
+              NutriAI membantu Anda memantau asupan harian dengan cerdas. Dapatkan analisis mendalam dan rekomendasi menu yang personal hanya dalam hitungan detik.
             </p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+            <div className="flex flex-col sm:flex-row gap-5">
               <Link
                 to={ctaLink}
-                className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-8 py-3 text-sm font-semibold text-black shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400"
+                className="group relative flex items-center justify-center rounded-2xl bg-[var(--primary-green)] px-10 py-5 text-base font-bold text-white shadow-2xl shadow-emerald-500/20 transition-all hover:scale-105 active:scale-100"
               >
                 {ctaLabel}
               </Link>
               <a
-                href="#cara-kerja"
-                className="inline-flex items-center justify-center rounded-full border border-white/30 bg-black/30 backdrop-blur-md px-8 py-3 text-sm font-medium text-white transition hover:bg-white/10"
-              >
-                Pelajari Lebih Lanjut
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="fitur" className="relative z-10 border-t border-white/10 bg-[#061814]/80 py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="max-w-2xl text-center mx-auto">
-            <p className="text-sm text-emerald-300 uppercase tracking-widest">Kenapa pakai aplikasi ini?</p>
-            <h2 className="mt-4 text-3xl font-semibold text-white">Sederhana, cepat, dan fokus pada gizi.</h2>
-          </div>
-
-          <div className="mt-12 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                icon: ShieldCheck,
-                title: 'Mudah mencatat data',
-                description: 'Catat asupan harian tanpa repot dan simpan riwayat secara otomatis.',
-              },
-              {
-                icon: TrendingUp,
-                title: 'Analisis lebih cepat',
-                description: 'Dapatkan ringkasan gizi dan rekomendasi dengan tampilan yang jelas.',
-              },
-              {
-                icon: Sparkles,
-                title: 'Tampilan yang ringan',
-                description: 'Desain minimal membuat informasi lebih mudah dipahami dalam sekejap.',
-              },
-            ].map((item) => (
-              <div key={item.title} className="rounded-3xl border border-white/10 bg-white/5 p-8">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-300">
-                  <item.icon size={22} />
-                </div>
-                <h3 className="mt-6 text-xl font-semibold">{item.title}</h3>
-                <p className="mt-3 text-slate-300 text-sm leading-6">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="tentang" className="relative z-10 py-20 lg:py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-            <div className="space-y-6">
-              <p className="text-sm text-emerald-300 uppercase tracking-widest">Apa itu NutrisiAI?</p>
-              <h2 className="text-3xl font-semibold text-white">Aplikasi sederhana untuk bantu jaga pola makan.</h2>
-              <p className="max-w-xl text-lg leading-8 text-slate-300">
-                NutrisiAI menyelesaikan kebingungan memilih menu sehat dengan memberikan gambaran gizi yang mudah dibaca, rekomendasi cepat, dan ringkasan yang bisa diikuti setiap hari.
-              </p>
-            </div>
-
-            <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/20">
-              <div className="rounded-3xl bg-[#061d17] p-6">
-                <div className="mb-6 flex items-center justify-between text-sm text-slate-400">
-                  <span>Ringkasan harian</span>
-                  <span className="rounded-full border border-white/10 px-3 py-1">Simple</span>
-                </div>
-                <div className="space-y-5">
-                  <div className="rounded-3xl bg-[#081d19] p-4">
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Kalori</p>
-                    <p className="mt-3 text-2xl font-semibold text-white">1.520 kkal</p>
-                  </div>
-                  <div className="rounded-3xl bg-[#081d19] p-4">
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Protein</p>
-                    <p className="mt-3 text-2xl font-semibold text-white">65 g</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="cara-kerja" className="relative z-10 border-t border-white/10 bg-[#061814]/80 py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="max-w-2xl text-center mx-auto">
-            <p className="text-sm text-emerald-300 uppercase tracking-widest">Cara Kerja</p>
-            <h2 className="mt-4 text-3xl font-semibold text-white">Gunakan dalam 3 langkah sederhana</h2>
-          </div>
-
-          <div className="mt-12 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                step: '01',
-                title: 'Input data',
-                description: 'Masukkan makanan dan jumlah yang Anda konsumsi setiap hari.',
-              },
-              {
-                step: '02',
-                title: 'Sistem menganalisis',
-                description: 'Aplikasi menghitung gizi dan memberikan ringkasan yang jelas.',
-              },
-              {
-                step: '03',
-                title: 'Lihat hasil',
-                description: 'Terima rekomendasi dan gunakan informasi untuk rencana makan yang lebih baik.',
-              },
-            ].map((item) => (
-              <div key={item.title} className="rounded-3xl border border-white/10 bg-white/5 p-8">
-                <div className="inline-flex items-center justify-center rounded-2xl bg-emerald-500/15 px-4 py-2 text-sm font-semibold text-emerald-200">
-                  {item.step}
-                </div>
-                <h3 className="mt-6 text-xl font-semibold text-white">{item.title}</h3>
-                <p className="mt-3 text-slate-300 text-sm leading-6">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="relative z-10 py-20 lg:py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-10 text-center shadow-2xl shadow-black/20">
-            <p className="text-sm text-emerald-300 uppercase tracking-widest">Siap mulai?</p>
-            <h2 className="mt-4 text-3xl font-semibold text-white">Buat pola makan lebih teratur dengan lebih sedikit kebingungan.</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-slate-300">NutrisiAI dirancang untuk membuat pencatatan gizi jadi cepat dan bisa dipahami oleh siapa saja.</p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row sm:justify-center">
-              <Link
-                to="/register"
-                className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-8 py-3 text-sm font-semibold text-black shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400"
-              >
-                Daftar Sekarang
-              </Link>
-              <a
                 href="#fitur"
-                className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-8 py-3 text-sm font-medium text-slate-100 transition hover:bg-white/10"
+                className="flex items-center justify-center rounded-2xl border border-[var(--border-card)] bg-white/20 backdrop-blur-md px-10 py-5 text-base font-bold text-[var(--text-main)] transition-all hover:bg-white/40"
               >
                 Lihat Fitur
               </a>
             </div>
           </div>
+
+          {/* Feature Image / Visual Placeholder (Removed Daily Insight as requested) */}
+          <div className="hidden lg:block relative animate-in fade-in slide-in-from-right duration-1000">
+            {/* You can add a subtle illustrative image or just leave it empty for a minimalist look */}
+          </div>
         </div>
       </section>
 
-      <footer id="contact" className="relative z-10 border-t border-white/10 bg-[#05100a] py-12">
+      {/* Features Section */}
+      <section id="fitur" className="py-32 relative z-10 bg-[var(--bg-secondary)]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid gap-8 md:grid-cols-3">
-            <div>
-              <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-r from-emerald-500 to-blue-600 text-white">
-                  <Apple size={20} />
+          <div className="text-center max-w-2xl mx-auto mb-20">
+            <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-[var(--primary-green)] mb-4">Fitur Utama</h2>
+            <p className="text-4xl lg:text-5xl font-extrabold tracking-tight mb-6">Cerdas, Cepat, <br /> dan Terukur.</p>
+            <p className="text-[var(--text-muted)] text-lg font-medium">Teknologi AI kami dirancang untuk memudahkan hidup sehat Anda.</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-10">
+            {[
+              {
+                icon: ShieldCheck,
+                title: 'Data Terjamin',
+                desc: 'Seluruh riwayat makanan Anda tersimpan aman dan terorganisir dengan rapi.'
+              },
+              {
+                icon: TrendingUp,
+                title: 'Analisis Mendalam',
+                desc: 'Pantau grafik perkembangan nutrisi Anda setiap hari secara otomatis.'
+              },
+              {
+                icon: Sparkles,
+                title: 'Rekomendasi AI',
+                desc: 'Dapatkan saran makanan dari Gemini AI berdasarkan kebutuhan tubuh Anda.'
+              }
+            ].map((f, i) => (
+              <div key={i} className="group p-12 rounded-[2.5rem] bg-[var(--bg-card)] border border-[var(--border-card)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
+                <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-[var(--bg-primary)] text-[var(--primary-green)] mb-8 group-hover:scale-110 transition-transform">
+                  <f.icon size={32} />
                 </div>
-                <div>
-                  <p className="text-base font-semibold">NutrisiAI</p>
-                  <p className="text-sm text-slate-400">Landing page yang ringan dan jelas.</p>
+                <h3 className="text-2xl font-bold mb-4">{f.title}</h3>
+                <p className="text-[var(--text-muted)] text-base leading-relaxed font-medium">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Cara Kerja Section */}
+      <section id="cara-kerja" className="py-32 relative z-10 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            <div className="space-y-12">
+              <div className="space-y-4">
+                <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-[var(--primary-green)]">Cara Kerja</h2>
+                <p className="text-4xl lg:text-5xl font-extrabold tracking-tight">Hanya 3 Langkah <br /> Menuju Hidup Sehat.</p>
+              </div>
+
+              <div className="space-y-10">
+                {[
+                  { step: '01', title: 'User story', desc: 'ketik apa yang Anda makan hari ini.' },
+                  { step: '02', title: 'Analisis AI', desc: 'Mesin AI kami akan menghitung kalori, protein, karbohidrat, dan lemak secara instan.' },
+                  { step: '03', title: 'Dapatkan Rekomendasi', desc: 'Terima saran personal untuk menjaga keseimbangan nutrisi harian Anda.' }
+                ].map((s) => (
+                  <div key={s.step} className="flex gap-8 group">
+                    <span className="text-4xl font-black text-[var(--primary-green)]/20 group-hover:text-[var(--primary-green)] transition-colors duration-300">{s.step}</span>
+                    <div className="space-y-2">
+                      <h4 className="text-xl font-bold">{s.title}</h4>
+                      <p className="text-[var(--text-muted)] font-medium leading-relaxed">{s.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="absolute -inset-4 bg-gradient-to-tr from-[var(--primary-green)]/20 to-[var(--accent-blue)]/20 rounded-[3rem] blur-2xl" />
+              <div className="relative rounded-[3rem] overflow-hidden border border-white/20 shadow-2xl">
+                <img src="/bg-food.jpg" alt="Health App" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-12">
+                  <p className="text-white text-xl font-bold italic">"Kesehatan dimulai dari apa yang Anda Makan."</p>
                 </div>
               </div>
             </div>
-            <div>
-              <h4 className="font-semibold text-white mb-4">Menu</h4>
-              <ul className="space-y-3 text-sm text-slate-400">
-                <li><a href="#hero" className="hover:text-white">Home</a></li>
-                <li><a href="#fitur" className="hover:text-white">Fitur</a></li>
-                <li><a href="#tentang" className="hover:text-white">Tentang</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-white mb-4">Kontak</h4>
-              <ul className="space-y-3 text-sm text-slate-400">
-                <li>support@nutrisiai.com</li>
-                <li>+62 123 456 7890</li>
-              </ul>
-            </div>
           </div>
-          <div className="mt-10 border-t border-white/10 pt-6 text-center text-sm text-slate-500">
-            <p>&copy; 2024 NutrisiAI. All rights reserved.</p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-24 relative z-20 bg-[var(--bg-primary)] border-t border-[var(--border-card)]">
+        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-16">
+          <div className="col-span-2 space-y-8">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-[var(--primary-green)] rounded-xl shadow-lg shadow-emerald-500/20">
+                <Apple className="text-white" size={24} />
+              </div>
+              <h2 className="text-2xl font-extrabold tracking-tighter">NutriAI</h2>
+            </div>
+            <p className="text-[var(--text-muted)] text-base max-w-sm leading-relaxed font-medium">
+              Membangun masa depan yang lebih sehat melalui teknologi kecerdasan buatan. Kami membantu Anda mencintai tubuh Anda melalui nutrisi yang tepat.
+            </p>
+          </div>
+          <div>
+            <h4 className="text-sm font-bold uppercase tracking-widest mb-8 text-[var(--text-main)]">Navigasi</h4>
+            <ul className="space-y-5 text-base font-semibold text-[var(--text-muted)]">
+              <li><a href="#fitur" className="hover:text-[var(--primary-green)] transition-colors">Fitur</a></li>
+              <li><a href="#cara-kerja" className="hover:text-[var(--primary-green)] transition-colors">Cara Kerja</a></li>
+              <li><Link to="/login" className="hover:text-[var(--primary-green)] transition-colors">Masuk</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-sm font-bold uppercase tracking-widest mb-8 text-[var(--text-main)]">Kontak</h4>
+            <ul className="space-y-5 text-base font-semibold text-[var(--text-muted)]">
+              <li className="flex items-center gap-2 hover:text-[var(--text-main)] transition-colors cursor-default">
+                <span>farelrunin@gmail.com</span>
+              </li>
+              <li className="flex items-center gap-2 cursor-default">
+                <span>Yogyakarta, Indonesia</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-6 mt-24 pt-12 border-t border-[var(--border-card)] flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-sm font-bold text-slate-400">&copy; 2024 NutriAI. All rights reserved.</p>
+          <div className="flex gap-10 text-sm font-bold text-slate-400">
+            <Link to="/privacy" className="hover:text-[var(--primary-green)] transition-colors">Privacy</Link>
+            <Link to="/terms" className="hover:text-[var(--primary-green)] transition-colors">Terms</Link>
           </div>
         </div>
       </footer>

@@ -16,7 +16,6 @@ const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
-  // Redirect ke landing page setelah user state terupdate
   useEffect(() => {
     if (registrationSuccess && user) {
       navigate('/');
@@ -52,87 +51,110 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/bg-food.jpg')" }}>
-      {/* Dark overlay to make text readable */}
-      <div className="absolute inset-0 bg-black/40"></div>
+    <div className="min-h-screen flex items-center justify-center bg-transparent px-6 py-12 relative overflow-hidden">
       
-      <div className="relative z-10 w-full max-w-md px-6 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2 drop-shadow-md">Join Us!</h1>
-          <p className="text-orange-200 text-sm font-medium drop-shadow">Create an account to track your nutrition risk.</p>
+      {/* Background with user image */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="/bg-food.jpg" 
+          alt="Healthy Food" 
+          className="w-full h-full object-cover" 
+        />
+        <div className="absolute inset-0 bg-black/10" />
+      </div>
+
+      <div className="relative z-10 w-full max-w-md">
+        
+        {/* Logo/Brand */}
+        <div className="text-center mb-10">
+          <div className="bg-gradient-to-br from-[var(--primary-green)] to-[var(--accent-blue)] w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl">
+            <Apple className="text-white" size={32} />
+          </div>
+          <h1 className="text-4xl font-extrabold tracking-tighter text-white mb-2">
+            Mulai <span className="text-[var(--primary-green)]">Sekarang</span>
+          </h1>
+          <p className="text-xs font-bold uppercase tracking-widest text-white/70">NutriAI Assistant</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <div className="relative">
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Full Name"
-                className="w-full px-5 py-4 bg-[#13301f]/60 backdrop-blur-md text-white placeholder-green-200/70 rounded-full focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                required
-              />
+        {/* Form Card */}
+        <div 
+          className="backdrop-blur-2xl border border-white/40 rounded-[32px] p-10 shadow-[0_32px_100px_rgba(0,0,0,0.15)] bg-white/30"
+        >
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-[11px] font-bold uppercase tracking-widest text-slate-600 ml-2">Nama Lengkap</label>
+                <div className="relative">
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500">
+                    <User size={18} />
+                  </div>
+                  <input
+                    type="text" name="name" value={formData.name} onChange={handleChange} required
+                    placeholder="Nama Lengkap"
+                    className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[11px] font-bold uppercase tracking-widest text-slate-600 ml-2">Email Address</label>
+                <div className="relative">
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500">
+                    <Mail size={18} />
+                  </div>
+                  <input
+                    type="email" name="email" value={formData.email} onChange={handleChange} required
+                    placeholder="nama@email.com"
+                    className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[11px] font-bold uppercase tracking-widest text-slate-600 ml-2">Password</label>
+                <div className="relative">
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500">
+                    <Lock size={18} />
+                  </div>
+                  <input
+                    type="password" name="password" value={formData.password} onChange={handleChange} required
+                    placeholder="••••••••"
+                    className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[11px] font-bold uppercase tracking-widest text-slate-600 ml-2">Konfirmasi Password</label>
+                <div className="relative">
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500">
+                    <Lock size={18} />
+                  </div>
+                  <input
+                    type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required
+                    placeholder="••••••••"
+                    className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
+                  />
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div>
-            <div className="relative">
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Email Address"
-                className="w-full px-5 py-4 bg-[#13301f]/60 backdrop-blur-md text-white placeholder-green-200/70 rounded-full focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                required
-              />
-            </div>
-          </div>
+            <button
+              type="submit" disabled={loading}
+              className="w-full group relative flex items-center justify-center gap-3 bg-[var(--primary-green)] px-10 py-5 rounded-2xl font-bold text-white text-lg shadow-xl shadow-emerald-500/20 hover:scale-[1.02] active:scale-100 transition-all disabled:opacity-50 mt-4"
+            >
+              <span>{loading ? 'Mendaftar...' : 'Daftar'}</span>
+              <UserPlus size={20} />
+            </button>
+          </form>
+        </div>
 
-          <div>
-            <div className="relative">
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Password"
-                className="w-full px-5 py-4 bg-[#13301f]/60 backdrop-blur-md text-white placeholder-green-200/70 rounded-full focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <div className="relative">
-              <input
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                placeholder="Confirm Password"
-                className="w-full px-5 py-4 bg-[#13301f]/60 backdrop-blur-md text-white placeholder-green-200/70 rounded-full focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                required
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[#c2e0c6] hover:bg-[#b0d2b4] text-[#13301f] py-4 rounded-full font-bold shadow-lg transition-all duration-200 disabled:opacity-70 mt-4"
-          >
-            {loading ? 'Registering...' : 'Sign Up'}
-          </button>
-        </form>
-
-        <div className="text-center mt-8">
-          <p className="text-slate-200 text-sm">
-            Already have an account?{' '}
-            <Link to="/login" className="text-white hover:text-green-200 font-semibold underline">
-              Login
+        {/* Footer Link */}
+        <div className="text-center mt-10">
+          <p className="text-sm font-semibold text-white/80">
+            Sudah punya akun?{' '}
+            <Link to="/login" className="text-[var(--primary-green)] hover:underline font-bold underline-offset-4">
+              Masuk Sekarang
             </Link>
           </p>
         </div>

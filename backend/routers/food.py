@@ -56,3 +56,43 @@ def get_food_entries(
     user: User = Depends(get_current_user)
 ):
     return db.query(FoodEntry).filter(FoodEntry.user_id == user.id).order_by(FoodEntry.created_at.desc()).all()
+
+
+@router.put("/{entry_id}", response_model=FoodEntryResponse)
+def update_food_entry(
+    entry_id: int,
+    food: FoodEntryCreate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user)
+):
+    entry = db.query(FoodEntry).filter(FoodEntry.id == entry_id, FoodEntry.user_id == user.id).first()
+    if not entry:
+        raise HTTPException(status_code=404, detail="Entri tidak ditemukan")
+    
+    entry.meal_type = food.meal_type
+    entry.food_name = food.food_name
+    entry.quantity = food.quantity
+    entry.unit = food.unit
+    entry.calories = food.calories
+    entry.protein = food.protein
+    entry.carbs = food.carbs
+    entry.fat = food.fat
+    
+    db.commit()
+    db.refresh(entry)
+    return entry
+
+
+@router.delete("/{entry_id}")
+def delete_food_entry(
+    entry_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user)
+):
+    entry = db.query(FoodEntry).filter(FoodEntry.id == entry_id, FoodEntry.user_id == user.id).first()
+    if not entry:
+        raise HTTPException(status_code=404, detail="Entri tidak ditemukan")
+    
+    db.delete(entry)
+    db.commit()
+    return {"message": "Entri berhasil dihapus"}

@@ -5,25 +5,31 @@ import ProtectedRoute from './components/ProtectedRoute';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ForgotPasswordPage from './pages/ForgotPassword';
 import DashboardPage from './pages/DashboardPage';
 import HistoryPage from './pages/HistoryPage';
 import InputGizi from './pages/InputGizi';
 import ProfilePage from './pages/ProfilePage';
 import KategoriPage from './pages/KategoriPage';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 import { AuthProvider } from './context/AuthContext';
 import { NutritionProvider } from './context/NutritionStore';
 
 function AppContent() {
   return (
-    <div className="min-h-screen bg-[#06140f] text-white">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-main)]">
       <Navbar />
-      <main className="min-h-screen pt-16">
+      <main className="min-h-screen">
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/kategori" element={<KategoriPage />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
           
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>

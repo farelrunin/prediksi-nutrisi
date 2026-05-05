@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models import User
 from auth import hash_password, verify_password, create_token, decode_token
-from schemas import UserCreate, UserLogin, TokenResponse, UserResponse, ProfileUpdate
+import requests
+from schemas import UserCreate, UserLogin, TokenResponse, UserResponse, ProfileUpdate, GoogleLoginRequest
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 security = HTTPBearer()
@@ -43,7 +44,44 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     db.refresh(user_obj)
 
     token = create_token({"sub": str(user_obj.id)})
-    return TokenResponse(token=token, name=user_obj.name)
+    return TokenResponse(token=token, name=user_obj.name, email=user_obj.email)
+
+
+@router.post("/google", response_model=TokenResponse)
+def google_login(data: GoogleLoginRequest, db: Session = Depends(get_db)):
+    # Verify token with Google
+    response = requests.get(
+        f"https://www.googleapis.com/oauth2/v3/userinfo?access_token={data.access_token}"
+    )
+    
+    if response.status_code != 200:
+        raise HTTPException(status_code=400, detail="Token Google tidak valid")
+        
+    google_user = response.json()
+    email = google_user.get("email")
+    name = google_user.get("name", "Google User")
+    
+    if not email:
+        raise HTTPException(status_code=400, detail="Email Google tidak ditemukan")
+        
+    # Check if user exists
+    user_obj = db.query(User).filter(User.email == email).first()
+    
+    if not user_obj:
+        # Create new user for Google login
+        import uuid
+        user_obj = User(
+            name=name,
+            email=email,
+            hashed_password=hash_password(str(uuid.uuid4())),
+            profile={}
+        )
+        db.add(user_obj)
+        db.commit()
+        db.refresh(user_obj)
+        
+    token = create_token({"sub": str(user_obj.id)})
+    return TokenResponse(token=token, name=user_obj.name, email=user_obj.email)
 
 
 @router.post("/login", response_model=TokenResponse)
@@ -53,7 +91,7 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Email atau password salah")
 
     token = create_token({"sub": str(user_obj.id)})
-    return TokenResponse(token=token, name=user_obj.name)
+    return TokenResponse(token=token, name=user_obj.name, email=user_obj.email)
 
 
 @router.get("/profile", response_model=UserResponse)

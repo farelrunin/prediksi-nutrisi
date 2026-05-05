@@ -1,7 +1,7 @@
 import React from 'react';
 import { AlertTriangle, CheckCircle, AlertCircle, TrendingUp } from 'lucide-react';
 
-const RiskScoreCard = ({ riskScore }) => {
+const RiskScoreCard = ({ riskScore, aiAdvice }) => {
   if (riskScore === null) {
     return (
       <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-6 text-slate-300">
@@ -65,6 +65,17 @@ const RiskScoreCard = ({ riskScore }) => {
       </div>
 
       <div className="bg-white/5 p-6">
+        {aiAdvice && (
+          <div className="mb-6 rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4">
+            <div className="flex items-center gap-2 mb-2 text-emerald-400 font-bold text-xs uppercase tracking-wider">
+              <TrendingUp size={14} />
+              <span>Gemini AI Advice</span>
+            </div>
+            <p className="text-white text-sm italic leading-relaxed">
+              "{aiAdvice}"
+            </p>
+          </div>
+        )}
         <div className="flex items-start space-x-3">
           <div className={`${iconBgClass} p-2 rounded-lg mt-1`}>
             <TrendingUp className={iconTextClass} size={16} />

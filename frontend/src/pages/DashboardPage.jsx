@@ -1,132 +1,94 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { TrendingUp, Target, Calendar, Award, List, Trash2 } from 'lucide-react';
+import { TrendingUp, Target, Calendar, Award, List, ChevronRight } from 'lucide-react';
 import RiskScoreCard from '../components/dashboard/RiskScoreCard';
 import NutritionChart from '../components/dashboard/NutritionChart';
 import RecommendationList from '../components/dashboard/RecommendationList';
-import FoodForm from '../components/FoodForm';
 import { useNutrition } from '../context/useNutrition';
 import { useAuth } from '../context/useAuth';
-import { colors } from '../styles/colors';
 
 const DashboardPage = () => {
-  const { nutritionData, getRiskScore, addFoodEntry, historyLoading, deleteFoodEntry } = useNutrition();
+  const { nutritionData, getRiskScore, historyLoading } = useNutrition();
   const { user } = useAuth();
   const riskScore = getRiskScore();
 
   const todayEntries = nutritionData.history.filter((item) =>
     new Date(item.timestamp).toDateString() === new Date().toDateString()
   );
-  const recentEntries = nutritionData.history.slice(0, 5);
 
   const quickStats = [
-    {
-      icon: Target,
-      label: 'Target Kalori',
-      value: Number(nutritionData.dailyIntake.calories).toFixed(1) + '/' + nutritionData.targets.calories,
-      bgClass: 'bg-[#4ade80]/10',
-      iconClass: 'text-[#4ade80]',
-      barClass: 'bg-[#4ade80]',
-      progress: Math.min((nutritionData.dailyIntake.calories / nutritionData.targets.calories) * 100, 100)
-    },
-    {
-      icon: TrendingUp,
-      label: 'Protein Hari Ini',
-      value: Number(nutritionData.dailyIntake.protein).toFixed(1) + 'g',
-      bgClass: 'bg-[#4ade80]/10',
-      iconClass: 'text-[#4ade80]',
-      barClass: 'bg-[#4ade80]',
-      progress: Math.min((nutritionData.dailyIntake.protein / nutritionData.targets.protein) * 100, 100)
-    },
-    {
-      icon: Calendar,
-      label: 'Entri Hari Ini',
-      value: todayEntries.length,
-      bgClass: 'bg-[#4ade80]/10',
-      iconClass: 'text-[#4ade80]',
-      barClass: 'bg-[#4ade80]',
-      progress: todayEntries.length > 0 ? 100 : 10
-    },
-    {
-      icon: Award,
-      label: 'Streak Sehat',
-      value: `${Math.min(nutritionData.history.length, 7)} hari`,
-      bgClass: 'bg-[#4ade80]/10',
-      iconClass: 'text-[#4ade80]',
-      barClass: 'bg-[#4ade80]',
-      progress: nutritionData.history.length > 0 ? Math.min((nutritionData.history.length / 7) * 100, 100) : 0
-    }
+    { icon: Target, label: 'Kalori', value: Math.round(nutritionData.dailyIntake.calories), target: nutritionData.targets.calories, unit: 'kcal', color: 'text-[var(--primary-green)]' },
+    { icon: TrendingUp, label: 'Protein', value: Math.round(nutritionData.dailyIntake.protein), target: nutritionData.targets.protein, unit: 'g', color: 'text-[var(--accent-blue)]' },
+    { icon: Calendar, label: 'Entri', value: todayEntries.length, target: 10, unit: 'item', color: 'text-[var(--warning)]' },
+    { icon: Award, label: 'Streak', value: Math.min(nutritionData.history.length, 7), target: 7, unit: 'hari', color: 'text-[var(--primary-green)]' }
   ];
 
   return (
-    <div className="min-h-screen p-6" style={{ backgroundColor: colors.bgSecondary }}>
-      <div className="mx-auto max-w-7xl space-y-8">
-        <div className="rounded-2xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-xl">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <h1 className="mb-2 text-3xl font-bold text-white">Dashboard Nutrisi</h1>
-              <p className="text-slate-300">
-                Pantau pola makan dan asupan gizi harian Anda{user ? `, ${user.name}` : ''}.
-              </p>
-            </div>
-            <div className="mt-4 lg:mt-0">
-              <div className="text-sm text-slate-400">
-                {new Date().toLocaleDateString('id-ID', {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </div>
-            </div>
+    <div className="min-h-screen pb-24 pt-32 px-4 md:px-8 bg-[var(--bg-primary)]">
+      <div className="mx-auto max-w-7xl">
+        
+        {/* Header */}
+        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <h1 className="text-4xl font-extrabold tracking-tight text-[var(--text-main)]">
+              Dashboard
+            </h1>
+            <p className="mt-2 text-[var(--text-muted)] font-medium">Selamat datang kembali, {user?.name || 'User'}.</p>
+          </div>
+          <div className="bg-white border border-[var(--border-card)] px-6 py-3 rounded-2xl text-xs font-bold text-[var(--text-muted)] shadow-sm">
+            {new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {quickStats.map((stat) => (
-            <div key={stat.label} className="rounded-2xl border border-white/20 bg-white/10 p-6 shadow-lg backdrop-blur-xl">
-              <div className="mb-4 flex items-center justify-between">
-                <div className={`${stat.bgClass} rounded-xl p-3`}>
-                  <stat.icon className={stat.iconClass} size={24} />
+        {/* Quick Stats Grid */}
+        <div className="mb-12 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
+          {quickStats.map((stat, idx) => (
+            <div key={idx} className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2rem] p-8 shadow-sm transition-all hover:scale-[1.02] hover:shadow-xl group">
+              <div className="flex items-center gap-3 mb-4">
+                <div className={`p-2.5 rounded-2xl bg-[var(--bg-secondary)] ${stat.color} group-hover:scale-110 transition-transform`}>
+                  <stat.icon size={20} />
                 </div>
-                <span className="text-2xl font-bold text-white">{stat.value}</span>
+                <span className="text-xs font-bold text-[var(--text-muted)]">{stat.label}</span>
               </div>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-300">{stat.label}</span>
-                  <span className="font-medium text-white">{Math.round(stat.progress)}%</span>
-                </div>
-                <div className="h-2 w-full rounded-full bg-white/10">
-                  <div
-                    className={`${stat.barClass} h-2 rounded-full transition-all duration-500`}
-                    style={{ width: `${stat.progress}%` }}
-                  ></div>
-                </div>
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-extrabold text-[var(--text-main)]">{stat.value}</span>
+                <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">{stat.unit}</span>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 gap-8 xl:grid-cols-[1.18fr_0.82fr]">
-          <div className="space-y-8">
-            <div className="rounded-2xl border border-white/20 bg-white/10 p-6 shadow-lg backdrop-blur-xl">
-              <h3 className="mb-6 text-xl font-bold text-white">Ringkasan Asupan Harian</h3>
-              <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          
+          {/* LEFT COLUMN */}
+          <div className="lg:col-span-8 space-y-12">
+            
+            {/* Daily Nutrition Summary */}
+            <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-10 shadow-xl">
+              <div className="mb-10 flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-[var(--text-main)]">Nutrisi Hari Ini</h2>
+                <Link to="/nutri-check" className="flex items-center gap-2 rounded-xl bg-[var(--primary-green)] px-5 py-3 text-sm font-bold text-white hover:scale-105 transition-transform shadow-lg shadow-emerald-500/20">
+                  Input Makan <ChevronRight size={16} />
+                </Link>
+              </div>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
                 {[
-                  { label: 'Kalori', current: nutritionData.dailyIntake.calories, target: nutritionData.targets.calories, unit: 'kcal' },
-                  { label: 'Protein', current: nutritionData.dailyIntake.protein, target: nutritionData.targets.protein, unit: 'g' },
-                  { label: 'Karbohidrat', current: nutritionData.dailyIntake.carbs, target: nutritionData.targets.carbs, unit: 'g' },
-                  { label: 'Lemak', current: nutritionData.dailyIntake.fat, target: nutritionData.targets.fat, unit: 'g' }
-                ].map((item) => (
-                  <div key={item.label} className="text-center">
-                    <div className="mb-1 text-2xl font-bold text-white">
-{Number(item.current.toFixed(1))}/{Number(item.target.toFixed(0))} {item.unit}
+                  { label: 'Kalori', cur: nutritionData.dailyIntake.calories, tar: nutritionData.targets.calories, unit: 'kcal', color: 'from-[var(--primary-green)] to-[var(--secondary-green)]' },
+                  { label: 'Protein', cur: nutritionData.dailyIntake.protein, tar: nutritionData.targets.protein, unit: 'g', color: 'from-[var(--accent-blue)] to-blue-600' },
+                  { label: 'Karbo', cur: nutritionData.dailyIntake.carbs, tar: nutritionData.targets.carbs, unit: 'g', color: 'from-[var(--warning)] to-orange-500' },
+                  { label: 'Lemak', cur: nutritionData.dailyIntake.fat, tar: nutritionData.targets.fat, unit: 'g', color: 'from-[var(--danger)] to-rose-600' }
+                ].map((m) => (
+                  <div key={m.label} className="space-y-4">
+                    <div className="flex justify-between items-end">
+                      <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">{m.label}</span>
+                      <span className="text-[11px] font-bold text-[var(--text-main)]">{Math.round(m.cur)}/{m.tar}</span>
                     </div>
-                    <div className="mb-3 text-sm text-slate-300">{item.label}</div>
-                    <div className="h-3 w-full rounded-full bg-white/10">
-                      <div
-                        className="h-3 rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-500"
-                        style={{ width: `${Math.min((item.current / item.target) * 100, 100)}%` }}
+                    <div className="h-2.5 w-full bg-[var(--bg-secondary)] rounded-full overflow-hidden p-[1px]">
+                      <div 
+                        className={`h-full bg-gradient-to-r ${m.color} rounded-full transition-all duration-1000 shadow-sm`}
+                        style={{ width: `${Math.min((m.cur / m.tar) * 100, 100)}%` }}
                       ></div>
                     </div>
                   </div>
@@ -134,121 +96,51 @@ const DashboardPage = () => {
               </div>
             </div>
 
+            {/* Weekly Trend Chart */}
             <NutritionChart data={nutritionData.history} />
           </div>
 
-          <div className="space-y-8">
-            <RiskScoreCard riskScore={riskScore} />
+          {/* RIGHT COLUMN */}
+          <div className="lg:col-span-4 space-y-12">
+            
+            <RiskScoreCard 
+              riskScore={riskScore} 
+              aiAdvice={nutritionData.lastAiAdvice} 
+            />
 
-            <div className="rounded-2xl border border-white/20 bg-white/10 p-6 shadow-lg backdrop-blur-xl">
-              <div className="mb-6 flex items-center justify-between">
-                <div>
-                  <h3 className="flex items-center gap-2 text-xl font-bold text-white">
-                    <List size={22} className="text-emerald-400" />
-                    Tambah Pola Asupan
-                  </h3>
-                  <p className="text-sm text-slate-300">Tambah entri makanan untuk membangun data pola makan.</p>
-                </div>
+            <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-10 shadow-xl">
+              <div className="mb-8 flex items-center justify-between">
+                <h2 className="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Aktivitas Terakhir</h2>
+                <Link to="/history" className="text-[11px] font-bold text-[var(--primary-green)] hover:underline uppercase tracking-widest">Riwayat →</Link>
               </div>
 
-              <FoodForm onAddFood={addFoodEntry} submitLabel="Tambah Asupan" />
-
-              <div className="mt-6 rounded-3xl border border-dashed border-white/20 bg-white/5 p-5">
-                <div className="mb-4 flex items-center justify-between">
-                  <h4 className="text-lg font-semibold text-white">Entri Hari Ini</h4>
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm text-slate-400">{todayEntries.length} item</span>
-                    <Link to="/riwayat-asupan" className="text-sm font-medium text-emerald-300 hover:text-emerald-200">
-                      Lihat semua
-                    </Link>
-                  </div>
-                </div>
+              <div className="space-y-5">
                 {historyLoading ? (
-                  <p className="text-slate-300">Memuat riwayat asupan...</p>
+                  <div className="text-center py-10 animate-pulse text-[var(--text-muted)] font-bold text-xs uppercase tracking-widest">Memuat...</div>
                 ) : todayEntries.length === 0 ? (
-                  <p className="text-slate-300">Belum ada input hari ini. Tambahkan makanan untuk mulai merekam pola asupan.</p>
-                ) : (
-                  <div className="space-y-3">
-                    {todayEntries.map((entry) => (
-                      <div
-                        key={`${entry.id ?? entry.timestamp}-${entry.foodName}`}
-                        className="rounded-3xl border border-white/20 bg-white/10 p-4 shadow-sm backdrop-blur-xl"
-                      >
-                        <div className="flex items-center justify-between gap-4">
-                          <div>
-                            <p className="font-semibold text-white">{entry.foodName}</p>
-                            <p className="text-sm text-slate-400">{entry.mealType} • {entry.quantity} {entry.unit}</p>
-                          </div>
-                          <div className="flex items-center gap-4">
-                            <div className="text-right text-sm text-slate-400">
-                              <p>{new Date(entry.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</p>
-                              <p className="font-semibold text-white">{entry.calories} kcal</p>
-                            </div>
-                            {deleteFoodEntry && (
-                              <button
-                                onClick={() => deleteFoodEntry(entry.id)}
-                                className="rounded-full p-2 text-slate-400 transition-colors hover:bg-red-500/10 hover:text-red-400"
-                                title="Hapus entri"
-                              >
-                                <Trash2 size={18} />
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                  <div className="text-center py-16 border-2 border-dashed border-slate-100 rounded-3xl bg-slate-50/50">
+                    <p className="text-xs font-bold text-slate-400">Data Kosong</p>
                   </div>
-                )}
-              </div>
-
-              <div className="mt-6 rounded-3xl border border-white/20 bg-white/5 p-5">
-                <div className="mb-4 flex items-center justify-between">
-                  <h4 className="text-lg font-semibold text-white">Riwayat Terbaru</h4>
-                  <span className="text-sm text-slate-400">{nutritionData.history.length} total entri</span>
-                </div>
-                {historyLoading ? (
-                  <p className="text-slate-300">Memuat riwayat asupan...</p>
-                ) : recentEntries.length === 0 ? (
-                  <p className="text-slate-300">Riwayat akan muncul di sini setelah Anda menambahkan makanan.</p>
                 ) : (
-                  <div className="space-y-3">
-                    {recentEntries.map((entry) => (
-                      <div
-                        key={`${entry.id ?? entry.timestamp}-${entry.foodName}-recent`}
-                        className="rounded-3xl border border-white/10 bg-slate-950/20 p-4"
-                      >
-                        <div className="flex items-start justify-between gap-4">
-                          <div>
-                            <p className="font-semibold text-white">{entry.foodName}</p>
-                            <p className="text-sm text-slate-400">{entry.mealType} • {entry.quantity} {entry.unit}</p>
-                          </div>
-                          <div className="flex items-start gap-4">
-                            <div className="text-right text-sm text-slate-400">
-                              <p>{new Date(entry.timestamp).toLocaleDateString('id-ID')}</p>
-                              <p>{new Date(entry.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</p>
-                              <p className="font-semibold text-white">{entry.calories} kcal</p>
-                            </div>
-                            {deleteFoodEntry && (
-                              <button
-                                onClick={() => deleteFoodEntry(entry.id)}
-                                className="mt-1 rounded-full p-1.5 text-slate-400 transition-colors hover:bg-red-500/10 hover:text-red-400"
-                                title="Hapus entri"
-                              >
-                                <Trash2 size={18} />
-                              </button>
-                            )}
-                          </div>
-                        </div>
+                  todayEntries.slice(0, 4).map((e, i) => (
+                    <div key={i} className="flex items-center justify-between p-5 bg-[var(--bg-secondary)] border border-transparent rounded-[1.5rem] transition-all hover:border-[var(--primary-green)]/30 group">
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-[var(--text-main)] group-hover:text-[var(--primary-green)] transition-colors">{e.foodName}</p>
+                        <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider mt-1">{e.mealType}</p>
                       </div>
-                    ))}
-                  </div>
+                      <span className="text-xs font-bold text-[var(--primary-green)] bg-white px-3 py-1.5 rounded-lg shadow-sm border border-[var(--border-card)]">{e.calories} kcal</span>
+                    </div>
+                  ))
                 )}
               </div>
             </div>
           </div>
         </div>
 
-        <RecommendationList />
+        {/* Recommendations Section */}
+        <div className="mt-24">
+          <RecommendationList />
+        </div>
       </div>
     </div>
   );
