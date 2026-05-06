@@ -110,6 +110,7 @@ def update_profile(
     user: User = Depends(get_current_user)
 ):
     # Update core user fields
+    if profile_data.name is not None: user.name = profile_data.name
     if profile_data.phone is not None: user.phone = profile_data.phone
     if profile_data.birth_date is not None: user.birth_date = profile_data.birth_date
     if profile_data.gender is not None: user.gender = profile_data.gender

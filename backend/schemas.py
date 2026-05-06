@@ -44,6 +44,7 @@ class TokenResponse(BaseModel):
     email: str
 
 class ProfileUpdate(BaseModel):
+    name: Optional[str] = None
     height: Optional[float] = None
     weight: Optional[float] = None
     age: Optional[int] = None

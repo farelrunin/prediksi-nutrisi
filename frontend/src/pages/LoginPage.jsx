@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogIn, Mail, Lock, Apple, Eye, EyeOff } from 'lucide-react';
-import { useAuth } from '../context/useAuth';
-import { useGoogleLogin } from '@react-oauth/google';
+import { useNotification } from '../context/NotificationContext';
 
 const LoginPage = () => {
   const { login, googleLogin, user } = useAuth();
+  const { notify } = useNotification();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
@@ -17,9 +17,14 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (loginSuccess && user) {
+      notify({ 
+        type: 'success', 
+        title: 'Login Berhasil', 
+        message: `Selamat datang kembali, ${user.name}!` 
+      });
       navigate('/');
     }
-  }, [user, loginSuccess, navigate]);
+  }, [user, loginSuccess, navigate, notify]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,7 +34,11 @@ const LoginPage = () => {
       setLoginSuccess(true);
     } catch (error) {
       console.error('Login error:', error);
-      alert(error.message || 'Login gagal');
+      notify({ 
+        type: 'error', 
+        title: 'Login Gagal', 
+        message: error.message || 'Email atau password salah' 
+      });
     }
     setLoading(false);
   };
@@ -42,7 +51,7 @@ const LoginPage = () => {
         setLoginSuccess(true);
       } catch (error) {
         console.error('Google Login error:', error);
-        alert(error.message || 'Google Login gagal');
+        notify({ type: 'error', title: 'Login Google Gagal', message: error.message || 'Terjadi kesalahan saat login dengan Google.' });
       }
       setLoading(false);
     },

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserPlus, Mail, Lock, User, Apple, Eye, EyeOff } from 'lucide-react';
-import { useAuth } from '../context/useAuth';
-import { colors } from '../styles/colors';
+import { useNotification } from '../context/NotificationContext';
 
 const RegisterPage = () => {
   const { register, user } = useAuth();
+  const { notify } = useNotification();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -20,14 +20,23 @@ const RegisterPage = () => {
 
   useEffect(() => {
     if (registrationSuccess && user) {
+      notify({
+        type: 'success',
+        title: 'Registrasi Berhasil',
+        message: 'Selamat datang di NutriAI!'
+      });
       navigate('/');
     }
-  }, [user, registrationSuccess, navigate]);
+  }, [user, registrationSuccess, navigate, notify]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert('Password tidak cocok');
+      notify({
+        type: 'warning',
+        title: 'Validasi Password',
+        message: 'Password tidak cocok, silakan cek kembali.'
+      });
       return;
     }
     setLoading(true);
@@ -40,7 +49,11 @@ const RegisterPage = () => {
       setRegistrationSuccess(true);
     } catch (error) {
       console.error('Register error:', error);
-      alert(error.message || 'Registrasi gagal');
+      notify({
+        type: 'error',
+        title: 'Registrasi Gagal',
+        message: error.message || 'Gagal mendaftar, silakan coba lagi.'
+      });
     }
     setLoading(false);
   };

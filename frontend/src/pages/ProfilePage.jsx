@@ -14,9 +14,12 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
 import { authService } from '../services/authService';
+import { useNotification } from '../context/NotificationContext';
+import ConfirmModal from '../components/shared/ConfirmModal';
 
 const ProfilePage = () => {
   const { user, setUser } = useAuth();
+  const { notify } = useNotification();
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
@@ -54,6 +57,8 @@ const ProfilePage = () => {
     healthNotes: '',
     preferences: [],
   });
+
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
 
   // Sync with user context and fetch from backend
   useEffect(() => {
@@ -207,7 +212,7 @@ const ProfilePage = () => {
       img.src = tempImage;
     } catch (e) {
       console.error(e);
-      alert('Gagal memproses gambar. Silakan coba lagi.');
+      notify({ type: 'error', title: 'Pemrosesan Gagal', message: 'Gagal memproses gambar. Silakan coba lagi.' });
     }
   };
 
@@ -242,7 +247,11 @@ const ProfilePage = () => {
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
-      alert('Mohon lengkapi data yang wajib diisi: ' + Object.values(newErrors).join(', '));
+      notify({ 
+        type: 'warning', 
+        title: 'Data Belum Lengkap', 
+        message: 'Mohon lengkapi data yang wajib diisi: ' + Object.values(newErrors).join(', ') 
+      });
       return false;
     }
     return true;
@@ -286,43 +295,47 @@ const ProfilePage = () => {
       localStorage.setItem('nutrisiAI_profile', JSON.stringify(formData));
 
       setSuccess(true);
+      notify({ type: 'success', title: 'Berhasil', message: 'Profil Anda telah diperbarui.' });
       setTimeout(() => setSuccess(false), 3000);
     } catch (error) {
       console.error('Error saving profile:', error);
       setErrors({ global: error.message || 'Gagal menyimpan profil. Silakan coba lagi.' });
-      alert('Gagal menyimpan profil: ' + (error.message || 'Terjadi kesalahan server'));
+      notify({ type: 'error', title: 'Gagal Simpan', message: error.message || 'Terjadi kesalahan server saat menyimpan profil.' });
     } finally {
       setLoading(false);
     }
   };
 
-  // Handle reset
   const handleReset = () => {
-    if (window.confirm('Apakah Anda yakin ingin mereset form?')) {
-      setFormData({
-        fullName: user?.name || '',
-        email: user?.email || '',
-        phone: '',
-        dateOfBirth: '',
-        gender: '',
-        age: '',
-        height: '',
-        weight: '',
-        targetCalories: '',
-        targetProtein: '',
-        targetCarbs: '',
-        targetFat: '',
-        nutritionGoal: '',
-        activityLevel: '',
-        exerciseFrequency: '',
-        sleepHours: '',
-        allergies: '',
-        restrictions: '',
-        healthNotes: '',
-        preferences: [],
-      });
-      setErrors({});
-    }
+    setIsResetModalOpen(true);
+  };
+
+  const confirmReset = () => {
+    setFormData({
+      fullName: user?.name || '',
+      email: user?.email || '',
+      phone: '',
+      dateOfBirth: '',
+      gender: '',
+      age: '',
+      height: '',
+      weight: '',
+      targetCalories: '',
+      targetProtein: '',
+      targetCarbs: '',
+      targetFat: '',
+      nutritionGoal: '',
+      activityLevel: '',
+      exerciseFrequency: '',
+      sleepHours: '',
+      allergies: '',
+      restrictions: '',
+      healthNotes: '',
+      preferences: [],
+    });
+    setErrors({});
+    setIsResetModalOpen(false);
+    notify({ type: 'info', title: 'Form Reset', message: 'Seluruh isian formulir telah dibersihkan.' });
   };
 
   // Get initials for avatar
@@ -649,6 +662,15 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
+      {/* Reset Confirmation Modal */}
+      <ConfirmModal
+        isOpen={isResetModalOpen}
+        onClose={() => setIsResetModalOpen(false)}
+        onConfirm={confirmReset}
+        title="Reset Formulir?"
+        message="Semua perubahan yang belum disimpan akan hilang."
+        itemName="Formulir Profil"
+      />
     </div>
   );
 };

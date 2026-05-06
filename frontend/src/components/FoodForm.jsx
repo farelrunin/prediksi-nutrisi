@@ -31,7 +31,10 @@ const formatFoodPortion = (food) => {
   return '1 porsi';
 };
 
+import { useNotification } from '../context/NotificationContext';
+
 const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
+  const { notify } = useNotification();
   const [story, setStory] = useState('');
   const [loading, setLoading] = useState(false);
   const [predictionResult, setPredictionResult] = useState(null);
@@ -104,9 +107,10 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
       setStory('');
       setPredictionResult(null);
       setPredictionError('');
+      notify({ type: 'success', title: 'Data Tersimpan', message: 'Nutrisi Anda berhasil dicatat!' });
     } catch (error) {
       console.error('Error adding food:', error);
-      alert(`Gagal menambahkan data makanan: ${error.message || 'Coba lagi.'}`);
+      notify({ type: 'error', title: 'Gagal Simpan', message: `Gagal menambahkan data: ${error.message || 'Coba lagi.'}` });
     }
 
     setLoading(false);

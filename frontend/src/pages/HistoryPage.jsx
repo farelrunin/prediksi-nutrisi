@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { List, CalendarDays, Clock3, UtensilsCrossed, Trash2 } from 'lucide-react';
 import { useNutrition } from '../context/useNutrition';
+import { useNotification } from '../context/NotificationContext';
 import { colors } from '../styles/colors';
 import ConfirmModal from '../components/shared/ConfirmModal';
 
@@ -38,6 +39,7 @@ const groupEntriesByDay = (entries) => entries.reduce((groups, entry) => {
 
 const HistoryPage = () => {
   const { nutritionData, historyLoading, historyError, deleteFoodEntry } = useNutrition();
+  const { notify } = useNotification();
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -53,8 +55,9 @@ const HistoryPage = () => {
       setIsDeleting(true);
       try {
         await deleteFoodEntry(deleteModal.item.id);
+        notify({ type: 'success', title: 'Berhasil', message: 'Data nutrisi berhasil dihapus.' });
       } catch (error) {
-        alert(`Gagal menghapus: ${error.message}`);
+        notify({ type: 'error', title: 'Gagal Menghapus', message: error.message });
       } finally {
         setIsDeleting(false);
       }
