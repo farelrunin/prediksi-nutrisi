@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LogIn, Mail, Lock, Apple } from 'lucide-react';
+import { LogIn, Mail, Lock, Apple, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
 import { useGoogleLogin } from '@react-oauth/google';
 
@@ -13,6 +13,7 @@ const LoginPage = () => {
   });
   const [loading, setLoading] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (loginSuccess && user) {
@@ -95,6 +96,7 @@ const LoginPage = () => {
                   </div>
                   <input
                     type="email" name="email" value={formData.email} onChange={handleChange} required
+                    maxLength="100"
                     placeholder="nama@email.com"
                     className="w-full pl-14 pr-6 py-5 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
                   />
@@ -111,10 +113,18 @@ const LoginPage = () => {
                     <Lock size={18} />
                   </div>
                   <input
-                    type="password" name="password" value={formData.password} onChange={handleChange} required
-                    placeholder="••••••••"
-                    className="w-full pl-14 pr-6 py-5 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
+                    type={showPassword ? "text" : "password"} name="password" value={formData.password} onChange={handleChange} required
+                    minLength="8" maxLength="100"
+                    placeholder="Minimal 8 karakter"
+                    className="w-full pl-14 pr-14 py-5 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-[var(--primary-green)] transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
                 </div>
               </div>
             </div>

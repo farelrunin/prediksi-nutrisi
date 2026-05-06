@@ -92,23 +92,55 @@ def get_ai_recommendations(history_data: list, profile_data: dict):
 
 def parse_natural_language_food(text):
     """
-    Menggunakan Gemini untuk mengekstrak nama makanan dan kuantitas dari teks bebas.
-    Contoh: 'Tadi pagi saya makan 2 piring nasi goreng' -> {'food': 'nasi goreng', 'quantity': 2, 'unit': 'piring'}
+    Menggunakan Gemini untuk mengekstrak seluruh makanan, porsi, dan estimasi makronutrien dari teks bebas.
     """
     if not model:
         return None
 
     prompt = f"""
-    Ekstrak informasi makanan dari teks berikut: "{text}"
-    Berikan jawaban HANYA dalam format JSON mentah seperti ini: 
-    {{"food_name": "nama makanan", "quantity": angka, "unit": "satuan"}}
-    Jika tidak ada informasi jumlah, gunakan quantity: 1 dan unit: "porsi".
-    Jika teks tidak mengandung nama makanan, kembalikan JSON kosong {{}}.
+    Anda adalah sistem ekstraksi data nutrisi cerdas. Pengguna menceritakan apa yang mereka makan:
+    "{text}"
+
+    Tugas Anda adalah mengekstrak semua item makanan dan minumannya. 
+    Lakukan estimasi realistis berdasarkan standar nutrisi umum Indonesia.
+    Abaikan curhatan/cerita yang tidak terkait makanan.
+    Bumbu mi instan yang dituang semua berarti tinggi sodium/lemak, sesuaikan kalori/lemaknya.
+    Es teh manis jumbo berarti tinggi gula/karbohidrat.
+
+    Berikan HANYA JSON MURNI (tanpa markdown, tanpa prefix/suffix). 
+    Format JSON yang WAJIB dipatuhi:
+    {{
+        "parsed_foods": [
+            {{
+                "name": "Nama makanan yang ramah (misal: Mi Instan Goreng)",
+                "normalized_name": "mi instan",
+                "quantity": 1.0,
+                "unit": "bungkus",
+                "portion": "1 bungkus",
+                "estimated_grams": 85.0,
+                "nutrition": {{
+                    "calories": 400.0,
+                    "protein": 8.0,
+                    "carbs": 55.0,
+                    "fat": 15.0,
+                    "unit": "per porsi"
+                }}
+            }}
+        ],
+        "total_nutrition": {{
+            "calories": 400.0,
+            "protein": 8.0,
+            "carbs": 55.0,
+            "fat": 15.0,
+            "quantity_grams": 85.0
+        }},
+        "original_story": "{text}"
+    }}
+    Hitung total_nutrition dengan benar (jumlah semua nutrisi di parsed_foods). Jika tidak ada makanan, biarkan list kosong dan total 0.
     """
 
     try:
         response = model.generate_content(prompt)
-        # Bersihkan output dari markdown code blocks jika ada
         clean_text = response.text.replace('```json', '').replace('```', '').strip()
         import json
         return json.loads(clean_text)

@@ -356,6 +356,7 @@ const ProfilePage = () => {
                     <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Nama Lengkap</label>
                     <input
                       type="text" name="fullName" value={formData.fullName} onChange={handleChange}
+                      maxLength="100"
                       className="w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-transparent text-[var(--text-main)] font-semibold focus:border-[var(--primary-green)] outline-none transition-all"
                     />
                   </div>
@@ -398,15 +399,16 @@ const ProfilePage = () => {
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                   {[
-                    { label: 'Tinggi (cm)', name: 'height', val: formData.height },
-                    { label: 'Berat (kg)', name: 'weight', val: formData.weight },
-                    { label: 'Usia', name: 'age', val: formData.age },
-                    { label: 'Tidur (jam)', name: 'sleepHours', val: formData.sleepHours }
+                    { label: 'Tinggi (cm)', name: 'height', val: formData.height, min: 50, max: 300 },
+                    { label: 'Berat (kg)', name: 'weight', val: formData.weight, min: 10, max: 500 },
+                    { label: 'Usia', name: 'age', val: formData.age, min: 1, max: 120 },
+                    { label: 'Tidur (jam)', name: 'sleepHours', val: formData.sleepHours, min: 0, max: 24 }
                   ].map((field) => (
                     <div key={field.name} className="space-y-2">
                       <label className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] ml-1">{field.label}</label>
                       <input
                         type="number" name={field.name} value={field.val} onChange={handleChange}
+                        min={field.min} max={field.max}
                         className="w-full px-4 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-transparent text-[var(--text-main)] font-extrabold text-center focus:border-[var(--primary-green)] outline-none transition-all"
                       />
                     </div>
@@ -425,15 +427,16 @@ const ProfilePage = () => {
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
                   {[
-                    { label: 'Kalori', name: 'targetCalories', val: formData.targetCalories, color: 'focus:border-[var(--primary-green)]' },
-                    { label: 'Protein (g)', name: 'targetProtein', val: formData.targetProtein, color: 'focus:border-[var(--accent-blue)]' },
-                    { label: 'Karbo (g)', name: 'targetCarbs', val: formData.targetCarbs, color: 'focus:border-[var(--warning)]' },
-                    { label: 'Lemak (g)', name: 'targetFat', val: formData.targetFat, color: 'focus:border-[var(--danger)]' }
+                    { label: 'Kalori', name: 'targetCalories', val: formData.targetCalories, color: 'focus:border-[var(--primary-green)]', min: 0, max: 10000 },
+                    { label: 'Protein (g)', name: 'targetProtein', val: formData.targetProtein, color: 'focus:border-[var(--accent-blue)]', min: 0, max: 1000 },
+                    { label: 'Karbo (g)', name: 'targetCarbs', val: formData.targetCarbs, color: 'focus:border-[var(--warning)]', min: 0, max: 1000 },
+                    { label: 'Lemak (g)', name: 'targetFat', val: formData.targetFat, color: 'focus:border-[var(--danger)]', min: 0, max: 1000 }
                   ].map((field) => (
                     <div key={field.name} className="space-y-2">
                       <label className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] ml-1">{field.label}</label>
                       <input
                         type="number" name={field.name} value={field.val} onChange={handleChange}
+                        min={field.min} max={field.max}
                         className={`w-full px-4 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-transparent text-[var(--text-main)] font-extrabold text-center outline-none transition-all ${field.color}`}
                       />
                     </div>

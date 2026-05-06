@@ -1,4 +1,4 @@
-# NutriAI 🥗 — Premium AI Nutrition Dashboard
+# NutriAI — Premium AI Nutrition Dashboard
 
 **NutriAI** adalah platform kesehatan digital cerdas yang dirancang untuk memantau asupan nutrisi harian dengan pendekatan yang modern dan personal. Menggunakan teknologi **Generative AI (Gemini)** dan **NLP (Natural Language Processing)**, NutriAI memungkinkan pengguna untuk mencatat pola makan hanya dengan bercerita secara alami.
 
@@ -100,5 +100,32 @@ Proyek ini dilengkapi dengan halaman [Kebijakan Privasi](/privacy) dan [Ketentua
 
 ---
 
+---
+
 ## 👨‍💻 Tim Pengembang
 Dibuat oleh **Farel Indra Syahputra** untuk pengembangan teknologi nutrisi masa depan.
+
+---
+
+## 🔒 Security Implementation Checklist & Roadmap
+
+Berikut adalah status keamanan sistem NutriAI saat ini:
+
+### ✅ Keamanan yang Sudah Diperketat (Hardened)
+- [x] **Backend Pydantic Validation**: Semua input API (Register, Login, Profile) divalidasi menggunakan skema Pydantic yang ketat (`EmailStr`, `min_length`, `max_length`).
+- [x] **Frontend HTML5 Constraints**: Penambahan atribut `minLength`, `maxLength`, serta `min/max` pada input numerik untuk mencegah data tidak logis (misal: usia 999 tahun).
+- [x] **Password Security**: Minimal 8 karakter diwajibkan di sisi client dan server untuk mencegah password lemah.
+- [x] **Secure NLP Pipeline**: Penambahan `maxLength="1000"` pada input cerita makanan untuk mencegah serangan *Large String Injection* yang bisa membebani AI.
+- [x] **Database Sanitation**: Menggunakan ORM SQLAlchemy yang secara otomatis melakukan parameterisasi query untuk mencegah *SQL Injection*.
+- [x] **Input Error Handling**: Pesan error dari server kini difilter dan diparsing agar tidak membocorkan detail teknis sistem ke pengguna (mencegah *Information Leakage*).
+
+### 🚀 Kelebihan Sistem Saat Ini
+- **Resilient**: Sistem tidak mudah *crash* jika diberi input teks yang sangat besar atau format yang salah.
+- **User-Friendly Security**: Fitur "Show Password" membantu keamanan pengguna dalam mencegah kesalahan ketik sandi tanpa mengurangi proteksi.
+- **API Integrity**: Server akan menolak permintaan ilegal meskipun pengguna mencoba memintas (bypass) validasi antarmuka.
+
+### ⚠️ Area Rawan (Future Roadmap)
+- [ ] **Rate Limiting**: Saat ini belum ada pembatasan jumlah percobaan login per menit (rawan serangan *Brute Force*).
+- [ ] **File Upload Security**: Belum ada validasi tipe file (magic bytes) yang ketat untuk unggahan foto profil (saat ini hanya bergantung pada ekstensi).
+- [ ] **Account Lockout**: Belum ada sistem blokir akun sementara jika salah password berkali-kali.
+- [ ] **2FA (Two-Factor Authentication)**: Belum tersedia untuk keamanan ekstra akun pengguna.

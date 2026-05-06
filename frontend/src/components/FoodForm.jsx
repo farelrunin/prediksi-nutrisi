@@ -129,6 +129,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
             placeholder="Contoh: Tadi pagi sarapan bubur ayam, siang makan nasi padang lauk rendang, lalu sore minum jus jeruk..."
             className="min-h-[180px] w-full resize-none rounded-[2rem] border border-[var(--border-card)] bg-[var(--bg-primary)] px-8 py-6 text-[var(--text-main)] placeholder-slate-600 outline-none transition-all focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/10 text-lg leading-relaxed shadow-inner"
             required
+            maxLength="1000"
           />
           <div className="mt-4 flex items-center gap-2 text-[var(--text-muted)]">
             <Brain size={14} className="text-[var(--primary-green)]" />
@@ -194,8 +195,8 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
 
             {predictionResult.ai_advice && (
               <div className="mb-10 rounded-3xl border border-[var(--border-card)] bg-[var(--bg-card)] p-6 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-4 text-[var(--primary-green)]/5 group-hover:scale-110 transition-transform duration-500">
-                  <MessageSquare size={80} />
+                <div className="absolute -top-4 -right-4 p-4 text-[var(--primary-green)] opacity-10 group-hover:scale-110 transition-transform duration-500 pointer-events-none">
+                  <MessageSquare size={100} strokeWidth={1} />
                 </div>
                 <div className="flex items-center gap-2 mb-3 text-[var(--primary-green)] font-black text-[10px] uppercase tracking-[0.3em] relative z-10">
                   <Sparkles size={12} className="animate-pulse" />

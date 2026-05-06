@@ -12,8 +12,7 @@ export const authService = {
       });
       return response.data;
     } catch (error) {
-      const msg = error.response?.data?.detail || error.message || 'Login gagal';
-      throw new Error(msg);
+      throw new Error(this.parseError(error));
     }
   },
 
@@ -24,8 +23,7 @@ export const authService = {
       });
       return response.data;
     } catch (error) {
-      const msg = error.response?.data?.detail || error.message || 'Login Google gagal';
-      throw new Error(msg);
+      throw new Error(this.parseError(error, 'Login Google gagal'));
     }
   },
 
@@ -34,8 +32,7 @@ export const authService = {
       const response = await axios.post(`${API_BASE_URL}/auth/register`, userData);
       return response.data;
     } catch (error) {
-      const msg = error.response?.data?.detail || error.message || 'Registrasi gagal';
-      throw new Error(msg);
+      throw new Error(this.parseError(error, 'Registrasi gagal'));
     }
   },
 
@@ -49,8 +46,7 @@ export const authService = {
       });
       return response.data;
     } catch (error) {
-      const msg = error.response?.data?.detail || error.message || 'Failed to update profile';
-      throw new Error(msg);
+      throw new Error(this.parseError(error, 'Gagal update profil'));
     }
   },
 
@@ -67,8 +63,19 @@ export const authService = {
       });
       return response.data;
     } catch (error) {
-      const msg = error.response?.data?.detail || error.message || 'Failed to get profile';
-      throw new Error(msg);
+      throw new Error(this.parseError(error, 'Gagal memuat profil'));
     }
+  },
+
+  parseError(error, defaultMsg = 'Terjadi kesalahan') {
+    const detail = error.response?.data?.detail;
+    if (Array.isArray(detail)) {
+      // Pydantic validation error array
+      return detail.map(err => {
+        const field = err.loc[err.loc.length - 1];
+        return `${field}: ${err.msg}`;
+      }).join(', ');
+    }
+    return detail || error.message || defaultMsg;
   }
-};
+};

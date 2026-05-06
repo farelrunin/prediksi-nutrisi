@@ -1,17 +1,17 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, EmailStr
 from datetime import datetime
 from typing import Optional, List
 
 class UserBase(BaseModel):
-    name: str
-    email: str
+    name: str = Field(..., min_length=2, max_length=100)
+    email: EmailStr
 
 class UserCreate(UserBase):
-    password: str
+    password: str = Field(..., min_length=8, max_length=100)
 
 class UserLogin(BaseModel):
-    email: str
-    password: str
+    email: EmailStr
+    password: str = Field(..., min_length=8, max_length=100)
 
 class GoogleLoginRequest(BaseModel):
     access_token: str

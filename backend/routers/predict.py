@@ -56,9 +56,19 @@ def predict_nutrition(
 
     # If story is provided, use NLP parsing
     if data.story:
-        parsed_result = parse_food_story(data.story)
+        # Use Gemini for powerful extraction instead of fragile rule-based parser
+        parsed_result = gemini_service.parse_natural_language_food(data.story)
+        
+        # Fallback to empty if Gemini fails
+        if not parsed_result:
+            parsed_result = {
+                "parsed_foods": [],
+                "total_nutrition": {"calories": 0.0, "protein": 0.0, "carbs": 0.0, "fat": 0.0, "quantity_grams": 0.0},
+                "original_story": data.story
+            }
+            
         parsed_data = parsed_result
-        total_quantity = parsed_result["total_nutrition"]["quantity_grams"]
+        total_quantity = parsed_result["total_nutrition"].get("quantity_grams", 100)
     else:
         # Use traditional structured input
         total_quantity = data.quantity or 100
