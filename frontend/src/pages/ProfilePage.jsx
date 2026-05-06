@@ -11,10 +11,12 @@ import {
   Camera,
   Zap,
   Target,
+  Heart,
+  Sun,
 } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
 import { authService } from '../services/authService';
-import { useNotification } from '../context/NotificationContext';
+import { useNotification } from '../context/useNotification';
 import ConfirmModal from '../components/shared/ConfirmModal';
 
 const ProfilePage = () => {
@@ -56,6 +58,8 @@ const ProfilePage = () => {
     restrictions: '',
     healthNotes: '',
     preferences: [],
+    is_pregnant: false,
+    is_breastfeeding: false,
   });
 
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
@@ -90,6 +94,8 @@ const ProfilePage = () => {
           restrictions: p.restrictions || '',
           healthNotes: p.healthNotes || '',
           preferences: p.preferences || [],
+          is_pregnant: backendProfile.is_pregnant || false,
+          is_breastfeeding: backendProfile.is_breastfeeding || false,
         });
         
         if (backendProfile.avatar_url) {
@@ -281,6 +287,8 @@ const ProfilePage = () => {
         target_carbs: formData.targetCarbs ? parseFloat(formData.targetCarbs) : null,
         target_fat: formData.targetFat ? parseFloat(formData.targetFat) : null,
         sleep_hours: formData.sleepHours ? parseFloat(formData.sleepHours) : null,
+        is_pregnant: formData.is_pregnant,
+        is_breastfeeding: formData.is_breastfeeding,
       };
 
       // Try to save to backend if available
@@ -597,6 +605,46 @@ const ProfilePage = () => {
                     </div>
                   ))}
                 </div>
+
+                {/* Special Conditions (Pregnancy/Breastfeeding) */}
+                {formData.gender === 'female' && (
+                  <div className="mt-10 pt-8 border-t border-slate-100">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1 block mb-6">Kondisi Khusus (Opsional)</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className={`p-6 rounded-[2rem] border transition-all cursor-pointer flex items-center justify-between ${formData.is_pregnant ? 'border-[var(--primary-green)] bg-emerald-50' : 'border-[var(--border-card)] bg-[var(--bg-secondary)]'}`}
+                           onClick={() => setFormData(prev => ({ ...prev, is_pregnant: !prev.is_pregnant, is_breastfeeding: false }))}>
+                        <div className="flex items-center gap-4">
+                          <div className={`p-3 rounded-xl ${formData.is_pregnant ? 'bg-[var(--primary-green)] text-white' : 'bg-white text-slate-400'}`}>
+                            <Heart className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <p className="font-bold text-[var(--text-main)]">Sedang Hamil</p>
+                            <p className="text-[10px] font-medium text-[var(--text-muted)]">Target nutrisi akan disesuaikan</p>
+                          </div>
+                        </div>
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${formData.is_pregnant ? 'border-[var(--primary-green)] bg-[var(--primary-green)]' : 'border-slate-300'}`}>
+                          {formData.is_pregnant && <div className="w-2 h-2 bg-white rounded-full" />}
+                        </div>
+                      </div>
+
+                      <div className={`p-6 rounded-[2rem] border transition-all cursor-pointer flex items-center justify-between ${formData.is_breastfeeding ? 'border-[var(--accent-blue)] bg-blue-50' : 'border-[var(--border-card)] bg-[var(--bg-secondary)]'}`}
+                           onClick={() => setFormData(prev => ({ ...prev, is_breastfeeding: !prev.is_breastfeeding, is_pregnant: false }))}>
+                        <div className="flex items-center gap-4">
+                          <div className={`p-3 rounded-xl ${formData.is_breastfeeding ? 'bg-[var(--accent-blue)] text-white' : 'bg-white text-slate-400'}`}>
+                            <Sun className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <p className="font-bold text-[var(--text-main)]">Sedang Menyusui</p>
+                            <p className="text-[10px] font-medium text-[var(--text-muted)]">Target nutrisi akan disesuaikan</p>
+                          </div>
+                        </div>
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${formData.is_breastfeeding ? 'border-[var(--accent-blue)] bg-[var(--accent-blue)]' : 'border-slate-300'}`}>
+                          {formData.is_breastfeeding && <div className="w-2 h-2 bg-white rounded-full" />}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Seksi: Target Nutrisi */}

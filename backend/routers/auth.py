@@ -135,6 +135,57 @@ def update_profile(
     db.refresh(user)
     return user
 
+@router.get("/akg", response_model=dict)
+def get_user_akg(
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user)
+):
+    from models import AkgReference
+    import re
+
+    # Calculate age from birth_date if available
+    age = user.height or 25 # Fallback to 25 if not set, or use age field
+    if user.birth_date:
+        try:
+            from datetime import datetime
+            birth = datetime.strptime(user.birth_date, "%Y-%m-%d")
+            age = (datetime.utcnow() - birth).days // 365
+        except:
+            pass
+    
+    # Base query
+    query = db.query(AkgReference)
+    
+    # Filter by category
+    if user.is_pregnant:
+        query = query.filter(AkgReference.age_category == "pregnant")
+        # Could further filter by pregnancy_month if we had exact matches, 
+        # but let's take the first one or average
+    elif user.is_breastfeeding:
+        query = query.filter(AkgReference.age_category == "breastfeeding")
+    else:
+        gender_map = {"male": "male", "female": "female"}
+        cat = gender_map.get(user.gender, "male")
+        query = query.filter(AkgReference.age_category == cat)
+        query = query.filter(AkgReference.min_age <= age, AkgReference.max_age >= age)
+
+    akg = query.first()
+    
+    if not akg:
+        # Fallback to general adult male if not found
+        akg = db.query(AkgReference).filter(AkgReference.age_group == "19-29 years", AkgReference.age_category == "male").first()
+
+    return {
+        "calories": akg.calories,
+        "protein": akg.protein,
+        "carbohydrates": akg.carbohydrates,
+        "total_fat": akg.total_fat,
+        "dietary_fiber": akg.dietary_fiber,
+        "iron": akg.iron,
+        "calcium": akg.calcium,
+        "vitamin_c": akg.vitamin_c,
+    }
+
 @router.post("/avatar", response_model=UserResponse)
 async def upload_avatar(
     file: UploadFile = File(...),

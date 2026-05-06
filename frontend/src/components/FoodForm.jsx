@@ -31,7 +31,7 @@ const formatFoodPortion = (food) => {
   return '1 porsi';
 };
 
-import { useNotification } from '../context/NotificationContext';
+import { useNotification } from '../context/useNotification';
 
 const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
   const { notify } = useNotification();

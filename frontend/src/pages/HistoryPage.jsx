@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { List, CalendarDays, Clock3, UtensilsCrossed, Trash2 } from 'lucide-react';
 import { useNutrition } from '../context/useNutrition';
-import { useNotification } from '../context/NotificationContext';
+import { useNotification } from '../context/useNotification';
 import { colors } from '../styles/colors';
 import ConfirmModal from '../components/shared/ConfirmModal';
 

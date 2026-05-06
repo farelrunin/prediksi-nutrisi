@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserPlus, Mail, Lock, User, Apple, Eye, EyeOff } from 'lucide-react';
-import { useNotification } from '../context/NotificationContext';
+import { useAuth } from '../context/useAuth';
+import { useNotification } from '../context/useNotification';
 
 const RegisterPage = () => {
   const { register, user } = useAuth();
@@ -19,14 +20,16 @@ const RegisterPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
-    if (registrationSuccess && user) {
+    let mounted = true;
+    if (registrationSuccess && user && mounted) {
       notify({
         type: 'success',
-        title: 'Registrasi Berhasil',
-        message: 'Selamat datang di NutriAI!'
+        title: 'Akun Terdaftar',
+        message: 'Selamat datang di NutriAI! Profil Anda telah berhasil dibuat.'
       });
-      navigate('/');
+      navigate('/profil', { replace: true });
     }
+    return () => { mounted = false; };
   }, [user, registrationSuccess, navigate, notify]);
 
   const handleSubmit = async (e) => {

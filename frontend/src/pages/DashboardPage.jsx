@@ -6,6 +6,7 @@ import NutritionChart from '../components/dashboard/NutritionChart';
 import RecommendationList from '../components/dashboard/RecommendationList';
 import { useNutrition } from '../context/useNutrition';
 import { useAuth } from '../context/useAuth';
+import MagicCard from '../components/shared/MagicCard';
 
 const DashboardPage = () => {
   const { nutritionData, getRiskScore, historyLoading } = useNutrition();
@@ -17,10 +18,10 @@ const DashboardPage = () => {
   );
 
   const quickStats = [
-    { icon: Target, label: 'Kalori', value: Math.round(nutritionData.dailyIntake.calories), target: nutritionData.targets.calories, unit: 'kcal', color: 'text-[var(--primary-green)]' },
-    { icon: TrendingUp, label: 'Protein', value: Math.round(nutritionData.dailyIntake.protein), target: nutritionData.targets.protein, unit: 'g', color: 'text-[var(--accent-blue)]' },
-    { icon: Calendar, label: 'Entri', value: todayEntries.length, target: 10, unit: 'item', color: 'text-[var(--warning)]' },
-    { icon: Award, label: 'Streak', value: Math.min(nutritionData.history.length, 7), target: 7, unit: 'hari', color: 'text-[var(--primary-green)]' }
+    { icon: Target, label: 'Kalori', value: Math.round(nutritionData.dailyIntake.calories), target: nutritionData.targets.calories, unit: 'kcal', color: 'text-[var(--primary-green)]', glow: 'rgba(34, 197, 94, 0.12)' },
+    { icon: TrendingUp, label: 'Protein', value: Math.round(nutritionData.dailyIntake.protein), target: nutritionData.targets.protein, unit: 'g', color: 'text-[var(--accent-blue)]', glow: 'rgba(59, 130, 246, 0.12)' },
+    { icon: Calendar, label: 'Entri', value: todayEntries.length, target: 10, unit: 'item', color: 'text-[var(--warning)]', glow: 'rgba(245, 158, 11, 0.12)' },
+    { icon: Award, label: 'Streak', value: Math.min(nutritionData.history.length, 7), target: 7, unit: 'hari', color: 'text-[var(--primary-green)]', glow: 'rgba(34, 197, 94, 0.12)' }
   ];
 
   return (
@@ -43,7 +44,11 @@ const DashboardPage = () => {
         {/* Quick Stats Grid */}
         <div className="mb-12 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
           {quickStats.map((stat, idx) => (
-            <div key={idx} className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2rem] p-8 shadow-sm transition-all hover:scale-[1.02] hover:shadow-xl group">
+            <MagicCard 
+              key={idx} 
+              glowColor={stat.glow}
+              className="bg-white/10 rounded-[2.5rem] p-8 shadow-sm transition-all hover:scale-[1.02] hover:shadow-xl group"
+            >
               <div className="flex items-center gap-3 mb-4">
                 <div className={`p-2.5 rounded-2xl bg-[var(--bg-secondary)] ${stat.color} group-hover:scale-110 transition-transform`}>
                   <stat.icon size={20} />
@@ -54,7 +59,7 @@ const DashboardPage = () => {
                 <span className="text-3xl font-extrabold text-[var(--text-main)]">{stat.value}</span>
                 <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">{stat.unit}</span>
               </div>
-            </div>
+            </MagicCard>
           ))}
         </div>
 
@@ -65,7 +70,7 @@ const DashboardPage = () => {
           <div className="lg:col-span-8 space-y-12">
             
             {/* Daily Nutrition Summary */}
-            <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-10 shadow-xl">
+            <MagicCard className="bg-white/10 rounded-[2.5rem] p-10 shadow-xl">
               <div className="mb-10 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-[var(--text-main)]">Nutrisi Hari Ini</h2>
                 <Link to="/nutri-check" className="flex items-center gap-2 rounded-xl bg-[var(--primary-green)] px-5 py-3 text-sm font-bold text-white hover:scale-105 transition-transform shadow-lg shadow-emerald-500/20">
@@ -94,10 +99,12 @@ const DashboardPage = () => {
                   </div>
                 ))}
               </div>
-            </div>
+            </MagicCard>
 
             {/* Weekly Trend Chart */}
-            <NutritionChart data={nutritionData.history} />
+            <MagicCard className="bg-white/10 rounded-[2.5rem] p-4 shadow-xl overflow-visible">
+              <NutritionChart data={nutritionData.history} />
+            </MagicCard>
           </div>
 
           {/* RIGHT COLUMN */}
@@ -108,7 +115,7 @@ const DashboardPage = () => {
               aiAdvice={nutritionData.lastAiAdvice} 
             />
 
-            <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-10 shadow-xl">
+            <MagicCard className="bg-white/10 rounded-[2.5rem] p-10 shadow-xl">
               <div className="mb-8 flex items-center justify-between">
                 <h2 className="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Aktivitas Terakhir</h2>
                 <Link to="/history" className="text-[11px] font-bold text-[var(--primary-green)] hover:underline uppercase tracking-widest">Riwayat →</Link>
@@ -133,7 +140,7 @@ const DashboardPage = () => {
                   ))
                 )}
               </div>
-            </div>
+            </MagicCard>
           </div>
         </div>
 

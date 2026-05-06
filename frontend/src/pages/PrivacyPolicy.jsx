@@ -70,7 +70,7 @@ const PrivacyPolicy = () => {
           </div>
 
           <div className="mt-16 pt-8 border-t border-slate-100 text-sm text-[var(--text-muted)] text-center">
-            Terakhir diperbarui: 6 Mei 2024
+            Terakhir diperbarui: 6 Mei 2026
           </div>
         </div>
       </div>

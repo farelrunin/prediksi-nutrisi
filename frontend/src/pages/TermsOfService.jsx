@@ -6,8 +6,8 @@ const TermsOfService = () => {
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] pt-32 pb-24 px-6">
       <div className="max-w-4xl mx-auto">
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           className="inline-flex items-center gap-2 text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-colors mb-12"
         >
           <ArrowLeft size={16} /> Kembali ke Beranda
@@ -66,7 +66,7 @@ const TermsOfService = () => {
           </div>
 
           <div className="mt-16 pt-8 border-t border-slate-100 text-sm text-[var(--text-muted)] text-center">
-            Terakhir diperbarui: 6 Mei 2024
+            Terakhir diperbarui: 6 Mei 2026
           </div>
         </div>
       </div>

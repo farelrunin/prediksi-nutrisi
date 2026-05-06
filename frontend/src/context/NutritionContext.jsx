@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { NutritionContext } from './NutritionContextProvider';
 import { nutritionService } from '../services/nutritionService';
+import { authService } from '../services/authService';
 
 const normalizeNumber = (value) => {
   const number = Number(value);
@@ -72,7 +73,27 @@ export const NutritionProvider = ({ children }) => {
   // Load history from backend on mount
   React.useEffect(() => {
     fetchHistory();
+    fetchTargets();
   }, []);
+
+  const fetchTargets = async () => {
+    try {
+      const akg = await authService.getAkg();
+      if (akg) {
+        setNutritionData(prev => ({
+          ...prev,
+          targets: {
+            calories: akg.calories || 2000,
+            protein: akg.protein || 100,
+            carbs: akg.carbohydrates || 250,
+            fat: akg.total_fat || 70
+          }
+        }));
+      }
+    } catch (error) {
+      console.error("Gagal mengambil target AKG:", error);
+    }
+  };
 
   const fetchHistory = async () => {
     setHistoryLoading(true);

@@ -10,7 +10,6 @@ const LandingPage = () => {
 
   return (
     <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-main)] overflow-x-hidden">
-      {/* Background with user image */}
       {/* Background Image - Clean & Sharp */}
       <div className="absolute inset-0 z-0">
         <img
@@ -24,11 +23,11 @@ const LandingPage = () => {
       <section className="relative min-h-screen flex items-center pt-24 px-6 lg:px-8">
         <div className="relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative max-w-2xl animate-in fade-in slide-in-from-left duration-1000">
-            {/* Organic "Cloud/Graffiti" Blur Effect - Tightened and shifted */}
-            <div className="absolute -inset-4 z-0 overflow-visible pointer-events-none opacity-70">
-              <div className="absolute top-4 left-0 w-[60%] h-[40%] bg-white rounded-full blur-[60px]" />
-              <div className="absolute bottom-10 left-4 w-[50%] h-[40%] bg-white/80 rounded-full blur-[70px]" />
-              <div className="absolute top-1/2 left-[40%] -translate-x-1/2 -translate-y-1/2 w-[70%] h-[60%] bg-white/60 rounded-full blur-[80px]" />
+            {/* Organic Blur Effect */}
+            <div className="absolute -inset-4 z-0 overflow-visible pointer-events-none opacity-60">
+              <div className="absolute top-4 left-0 w-[55%] h-[35%] bg-white rounded-full blur-[40px]" />
+              <div className="absolute bottom-10 left-4 w-[45%] h-[35%] bg-white/70 rounded-full blur-[50px]" />
+              <div className="absolute top-1/2 left-[40%] -translate-x-1/2 -translate-y-1/2 w-[65%] h-[55%] bg-white/60 rounded-full blur-[60px]" />
             </div>
 
             <div className="relative z-10">
@@ -59,11 +58,6 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
-
-          {/* Feature Image / Visual Placeholder (Removed Daily Insight as requested) */}
-          <div className="hidden lg:block relative animate-in fade-in slide-in-from-right duration-1000">
-            {/* You can add a subtle illustrative image or just leave it empty for a minimalist look */}
-          </div>
         </div>
       </section>
 
@@ -78,21 +72,9 @@ const LandingPage = () => {
 
           <div className="grid md:grid-cols-3 gap-10">
             {[
-              {
-                icon: ShieldCheck,
-                title: 'Data Terjamin',
-                desc: 'Seluruh riwayat makanan Anda tersimpan aman dan terorganisir dengan rapi.'
-              },
-              {
-                icon: TrendingUp,
-                title: 'Analisis Mendalam',
-                desc: 'Pantau grafik perkembangan nutrisi Anda setiap hari secara otomatis.'
-              },
-              {
-                icon: Sparkles,
-                title: 'Rekomendasi AI',
-                desc: 'Dapatkan saran makanan dari Gemini AI berdasarkan kebutuhan tubuh Anda.'
-              }
+              { icon: ShieldCheck, title: 'Data Terjamin', desc: 'Seluruh riwayat makanan Anda tersimpan aman dan terorganisir dengan rapi.' },
+              { icon: TrendingUp, title: 'Analisis Mendalam', desc: 'Pantau grafik perkembangan nutrisi Anda setiap hari secara otomatis.' },
+              { icon: Sparkles, title: 'Rekomendasi AI', desc: 'Dapatkan saran makanan dari Gemini AI berdasarkan kebutuhan tubuh Anda.' }
             ].map((f, i) => (
               <div key={i} className="group p-12 rounded-[2.5rem] bg-[var(--bg-card)] border border-[var(--border-card)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
                 <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-[var(--bg-primary)] text-[var(--primary-green)] mb-8 group-hover:scale-110 transition-transform">
@@ -118,7 +100,7 @@ const LandingPage = () => {
 
               <div className="space-y-10">
                 {[
-                  { step: '01', title: 'User story', desc: 'ketik apa yang Anda makan hari ini.' },
+                  { step: '01', title: 'User story', desc: 'Ketik apa yang Anda makan hari ini.' },
                   { step: '02', title: 'Analisis AI', desc: 'Mesin AI kami akan menghitung kalori, protein, karbohidrat, dan lemak secara instan.' },
                   { step: '03', title: 'Dapatkan Rekomendasi', desc: 'Terima saran personal untuk menjaga keseimbangan nutrisi harian Anda.' }
                 ].map((s) => (
@@ -146,45 +128,81 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-24 relative z-20 bg-[var(--bg-primary)] border-t border-[var(--border-card)]">
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-16">
-          <div className="col-span-2 space-y-8">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-[var(--primary-green)] rounded-xl shadow-lg shadow-emerald-500/20">
-                <Apple className="text-white" size={24} />
-              </div>
-              <h2 className="text-2xl font-extrabold tracking-tighter">NutriAI</h2>
-            </div>
-            <p className="text-[var(--text-muted)] text-base max-w-sm leading-relaxed font-medium">
-              Membangun masa depan yang lebih sehat melalui teknologi kecerdasan buatan. Kami membantu Anda mencintai tubuh Anda melalui nutrisi yang tepat.
-            </p>
-          </div>
-          <div>
-            <h4 className="text-sm font-bold uppercase tracking-widest mb-8 text-[var(--text-main)]">Navigasi</h4>
-            <ul className="space-y-5 text-base font-semibold text-[var(--text-muted)]">
-              <li><a href="#fitur" className="hover:text-[var(--primary-green)] transition-colors">Fitur</a></li>
-              <li><a href="#cara-kerja" className="hover:text-[var(--primary-green)] transition-colors">Cara Kerja</a></li>
-              <li><Link to="/login" className="hover:text-[var(--primary-green)] transition-colors">Masuk</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-sm font-bold uppercase tracking-widest mb-8 text-[var(--text-main)]">Kontak</h4>
-            <ul className="space-y-5 text-base font-semibold text-[var(--text-muted)]">
-              <li className="flex items-center gap-2 hover:text-[var(--text-main)] transition-colors cursor-default">
-                <span>farelrunin@gmail.com</span>
-              </li>
-              <li className="flex items-center gap-2 cursor-default">
-                <span>Yogyakarta, Indonesia</span>
-              </li>
-            </ul>
-          </div>
+      {/* Footer Section */}
+      <footer className="relative pt-24 pb-12 overflow-hidden">
+        {/* Background Image Layer */}
+        <div className="absolute inset-0 -z-10">
+          <img
+            src="/bg-food.jpg"
+            alt="Footer Background"
+            className="w-full h-full object-cover opacity-50"
+          />
+          <div className="absolute inset-0 bg-white/95 backdrop-blur-2xl"></div>
         </div>
-        <div className="max-w-7xl mx-auto px-6 mt-24 pt-12 border-t border-[var(--border-card)] flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-sm font-bold text-slate-400">&copy; 2024 NutriAI. All rights reserved.</p>
-          <div className="flex gap-10 text-sm font-bold text-slate-400">
-            <Link to="/privacy" className="hover:text-[var(--primary-green)] transition-colors">Privacy</Link>
-            <Link to="/terms" className="hover:text-[var(--primary-green)] transition-colors">Terms</Link>
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+          <div className="grid md:grid-cols-4 gap-16 mb-16">
+            <div className="md:col-span-2 space-y-8">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-[var(--primary-green)] rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                  <span className="text-white font-black text-2xl">N</span>
+                </div>
+                <span className="text-3xl font-black tracking-tighter text-slate-950">NutriAI</span>
+              </div>
+              <p className="text-slate-950 text-lg font-bold leading-relaxed max-w-md">
+                Membangun masa depan yang lebih sehat melalui teknologi kecerdasan buatan. 
+                Kami membantu Anda mencintai tubuh Anda melalui nutrisi yang tepat.
+              </p>
+              <div className="flex gap-4">
+                {['Twitter', 'Instagram', 'LinkedIn'].map((social) => (
+                  <a key={social} href="#" className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-950 hover:bg-[var(--primary-green)] hover:text-white hover:border-[var(--primary-green)] transition-all shadow-sm">
+                    <span className="sr-only">{social}</span>
+                    <div className="w-5 h-5 bg-current opacity-20 rounded-full" />
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-slate-950 font-black uppercase tracking-[0.2em] text-xs mb-8 text-left">Navigasi</h4>
+              <ul className="space-y-4">
+                {[
+                  { name: 'Home', link: '/' },
+                  { name: 'Fitur Utama', link: '#fitur' },
+                  { name: 'Cara Kerja', link: '#cara-kerja' },
+                  { name: 'Kategori Makanan', link: '/kategori' }
+                ].map((item) => (
+                  <li key={item.name}>
+                    <Link to={item.link} className="text-slate-950 font-bold hover:text-[var(--primary-green)] transition-colors flex items-center gap-2 group">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[var(--primary-green)] opacity-0 group-hover:opacity-100 transition-all" />
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-slate-950 font-black uppercase tracking-[0.2em] text-xs mb-8 text-left">Dukungan</h4>
+              <ul className="space-y-4">
+                <li><Link to="/privacy" className="text-slate-950 font-bold hover:text-[var(--primary-green)] transition-colors">Kebijakan Privasi</Link></li>
+                <li><Link to="/terms" className="text-slate-950 font-bold hover:text-[var(--primary-green)] transition-colors">Syarat & Ketentuan</Link></li>
+                <li className="pt-4 border-t border-slate-200">
+                  <span className="block text-slate-950 text-[10px] font-black uppercase tracking-widest mb-2">Kontak Bantuan:</span>
+                  <a href="mailto:farelrunin@gmail.com" className="text-slate-950 font-black hover:text-[var(--primary-green)] transition-colors break-all">farelrunin@gmail.com</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-20 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p className="text-slate-950 font-bold text-sm">
+              &copy; 2026 NutriAI. All rights reserved.
+            </p>
+            <div className="flex gap-8">
+              <Link to="/privacy" className="text-slate-950 font-bold text-sm hover:text-[var(--primary-green)] transition-colors">Privacy</Link>
+              <Link to="/terms" className="text-slate-950 font-bold text-sm hover:text-[var(--primary-green)] transition-colors">Terms</Link>
+            </div>
           </div>
         </div>
       </footer>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Apple, User, LogOut, Menu, X } from 'lucide-react';
 import { useAuth } from '../../context/useAuth';
@@ -8,6 +8,11 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // Magic Indicator State
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const menuRefs = useRef([]);
 
   const handleLogout = () => {
     logout();
@@ -28,6 +33,8 @@ const Navbar = () => {
   const publicMenuItems = [
     { label: 'Home', to: '/', scrollTop: true },
     { label: 'Fitur', href: '#fitur' },
+    { label: 'Cara Kerja', href: '#cara-kerja' },
+    { label: 'Kategori', to: '/kategori' },
     { label: 'Mulai', to: '/register' },
   ];
 
@@ -40,6 +47,30 @@ const Navbar = () => {
   ];
 
   const currentMenuItems = user ? authenticatedMenuItems : publicMenuItems;
+
+  // Update indicator position
+  const updateIndicator = (index) => {
+    const el = menuRefs.current[index];
+    if (el) {
+      setIndicatorStyle({
+        left: el.offsetLeft,
+        width: el.offsetWidth,
+        opacity: 1
+      });
+    }
+  };
+
+  // Set initial position based on active route
+  useEffect(() => {
+    const activeIndex = currentMenuItems.findIndex(item => 
+      location.pathname === item.to || (item.href && location.hash === item.href)
+    );
+    if (activeIndex !== -1) {
+      updateIndicator(activeIndex);
+    } else if (location.pathname === '/' || location.pathname === '') {
+      updateIndicator(0); // Default to Home
+    }
+  }, [location.pathname, location.hash, user]);
 
   return (
     <nav className="fixed top-8 left-1/2 -translate-x-1/2 z-[100] w-[90%] max-w-7xl mx-auto transition-all duration-500">
@@ -58,32 +89,61 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center gap-1">
-          {currentMenuItems.map((item) => (
-            item.href ? (
-              <a
-                key={item.label}
-                href={item.href}
-                className="px-6 py-2.5 rounded-2xl text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all"
-              >
-                {item.label}
-              </a>
-            ) : (
+        {/* Desktop Menu with Magic Sliding Indicator */}
+        <div 
+          className="hidden lg:flex items-center gap-1 relative bg-white/5 px-2 py-1.5 rounded-full border border-white/10 shadow-inner"
+          onMouseLeave={() => {
+            const activeIndex = currentMenuItems.findIndex(item => 
+              location.pathname === item.to || (item.href && location.hash === item.href)
+            );
+            updateIndicator(activeIndex !== -1 ? activeIndex : 0);
+            setHoveredIndex(null);
+          }}
+        >
+          {/* THE MAGIC SLIDING PILL */}
+          <div 
+            className="absolute h-[75%] bg-[var(--primary-green)] rounded-full transition-all duration-500 ease-out z-0"
+            style={{
+              left: `${indicatorStyle.left}px`,
+              width: `${indicatorStyle.width}px`,
+              opacity: indicatorStyle.opacity,
+              boxShadow: '0 0 25px var(--primary-green), 0 0 5px var(--primary-green)',
+              top: '50%',
+              transform: 'translateY(-50%)'
+            }}
+          />
+
+          {currentMenuItems.map((item, index) => (
+            <div
+              key={item.label}
+              ref={el => menuRefs.current[index] = el}
+              onMouseEnter={() => {
+                updateIndicator(index);
+                setHoveredIndex(index);
+              }}
+              className="relative"
+            >
               <NavLink
-                key={item.label}
-                to={item.to}
-                className={({ isActive }) =>
-                  `px-6 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${
-                    isActive 
-                      ? 'bg-[var(--primary-green)] text-white shadow-xl shadow-emerald-500/40' 
-                      : 'text-[var(--text-main)] hover:text-[var(--primary-green)]'
-                  }`
-                }
+                to={item.to || (item.href ? '/' : '')}
+                onClick={(e) => {
+                  if (item.href) {
+                    e.preventDefault();
+                    const target = document.querySelector(item.href);
+                    if (target) {
+                      const navbarHeight = 100;
+                      const elementPosition = target.getBoundingClientRect().top;
+                      const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+                      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                    }
+                  }
+                }}
+                className={({ isActive }) => {
+                  return `relative z-10 px-6 py-2.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-500 block text-[var(--text-main)]`;
+                }}
               >
                 {item.label}
               </NavLink>
-            )
+            </div>
           ))}
         </div>
 
@@ -112,7 +172,7 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <Link to="/login" className="px-6 py-2.5 text-[11px] font-bold uppercase tracking-widest text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">
+              <Link to="/login" className="px-6 py-2.5 text-[11px] font-bold uppercase tracking-widest text-[var(--text-main)] hover:text-[var(--primary-green)] transition-all">
                 Masuk
               </Link>
               <Link to="/register" className="bg-[var(--text-main)] text-white px-8 py-3 rounded-2xl text-[11px] font-bold uppercase tracking-widest shadow-xl hover:scale-105 active:scale-100 transition-all">
@@ -167,4 +227,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navbar;
