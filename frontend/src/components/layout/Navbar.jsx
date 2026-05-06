@@ -42,8 +42,8 @@ const Navbar = () => {
   const currentMenuItems = user ? authenticatedMenuItems : publicMenuItems;
 
   return (
-    <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-[95%] max-w-7xl mx-auto transition-all duration-500">
-      <div className="bg-[var(--bg-card)]/70 backdrop-blur-2xl border border-[var(--border-card)] rounded-[2.5rem] px-8 py-3 shadow-2xl flex justify-between items-center relative overflow-hidden group">
+    <nav className="fixed top-8 left-1/2 -translate-x-1/2 z-[100] w-[90%] max-w-7xl mx-auto transition-all duration-500">
+      <div className="bg-white/40 backdrop-blur-[40px] border border-white/60 rounded-full px-8 py-3 shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex justify-between items-center relative overflow-hidden group">
         
         {/* Subtle Gradient Accent */}
         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-green)]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -74,10 +74,10 @@ const Navbar = () => {
                 key={item.label}
                 to={item.to}
                 className={({ isActive }) =>
-                  `px-6 py-2.5 rounded-2xl text-[11px] font-bold uppercase tracking-wider transition-all ${
+                  `px-6 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${
                     isActive 
-                      ? 'bg-[var(--primary-green)] text-white shadow-lg shadow-emerald-500/20' 
-                      : 'text-[var(--text-muted)] hover:text-[var(--primary-green)] hover:bg-slate-50'
+                      ? 'bg-[var(--primary-green)] text-white shadow-xl shadow-emerald-500/40' 
+                      : 'text-[var(--text-main)] hover:text-[var(--primary-green)]'
                   }`
                 }
               >
@@ -92,8 +92,12 @@ const Navbar = () => {
           {user ? (
             <div className="flex items-center gap-4">
               <Link to="/profil" className="hidden md:flex items-center gap-3 bg-white border border-[var(--border-card)] px-5 py-2.5 rounded-2xl hover:border-[var(--primary-green)]/30 transition-all shadow-sm">
-                <div className="w-6 h-6 rounded-lg bg-[var(--primary-green)]/10 flex items-center justify-center text-[var(--primary-green)]">
-                  <User size={14} />
+                <div className="w-8 h-8 rounded-full overflow-hidden bg-[var(--primary-green)]/10 flex items-center justify-center text-[var(--primary-green)] border border-slate-100">
+                  {user.avatar_url ? (
+                    <img src={user.avatar_url} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <User size={16} />
+                  )}
                 </div>
                 <span className="text-xs font-bold text-[var(--text-main)] truncate max-w-[100px]">
                   {user.name?.split(' ')[0] || 'User'}

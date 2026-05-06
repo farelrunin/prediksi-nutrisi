@@ -50,6 +50,24 @@ export const authService = {
     }
   },
 
+  async uploadAvatar(file) {
+    try {
+      const token = localStorage.getItem('token');
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await axios.post(`${API_BASE_URL}/auth/avatar`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(this.parseError(error, 'Gagal upload foto profil'));
+    }
+  },
+
   async getProfile() {
     try {
       const token = localStorage.getItem('token');

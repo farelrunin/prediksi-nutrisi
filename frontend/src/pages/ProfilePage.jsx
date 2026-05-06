@@ -16,13 +16,21 @@ import { useAuth } from '../context/useAuth';
 import { authService } from '../services/authService';
 
 const ProfilePage = () => {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+
+  // Custom Cropper states
+  const [isCropping, setIsCropping] = useState(false);
+  const [tempImage, setTempImage] = useState(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [scale, setScale] = useState(1);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -60,20 +68,19 @@ const ProfilePage = () => {
         setFormData({
           fullName: backendProfile.name || user.name || '',
           email: backendProfile.email || user.email || '',
-          phone: p.phone || '',
-          dateOfBirth: p.dateOfBirth || '',
-          gender: p.gender || '',
-          age: p.age || '',
-          height: p.height || '',
-          weight: p.weight || '',
-          targetCalories: p.targetCalories || '',
-          targetProtein: p.targetProtein || '',
-          targetCarbs: p.targetCarbs || '',
-          targetFat: p.targetFat || '',
-          nutritionGoal: p.nutritionGoal || '',
-          activityLevel: p.activityLevel || '',
-          exerciseFrequency: p.exerciseFrequency || '',
-          sleepHours: p.sleepHours || '',
+          phone: backendProfile.phone || p.phone || '',
+          dateOfBirth: backendProfile.birth_date || p.dateOfBirth || '',
+          gender: backendProfile.gender || p.gender || '',
+          age: backendProfile.age || p.age || '',
+          height: backendProfile.height || p.height || '',
+          weight: backendProfile.weight || p.weight || '',
+          activityLevel: backendProfile.activity_level || p.activityLevel || '',
+          nutritionGoal: backendProfile.nutrition_goal || p.nutritionGoal || '',
+          targetCalories: backendProfile.target_calories || '',
+          targetProtein: backendProfile.target_protein || '',
+          targetCarbs: backendProfile.target_carbs || '',
+          targetFat: backendProfile.target_fat || '',
+          sleepHours: backendProfile.sleep_hours || '',
           allergies: p.allergies || '',
           restrictions: p.restrictions || '',
           healthNotes: p.healthNotes || '',
@@ -155,36 +162,90 @@ const ProfilePage = () => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (event) => {
-        const imageData = event.target?.result;
-        setPreviewImage(imageData);
-        setProfileImage(file);
-        localStorage.setItem('nutrisiAI_avatar', imageData);
+      reader.onload = () => {
+        setTempImage(reader.result);
+        setIsCropping(true);
       };
       reader.readAsDataURL(file);
     }
   };
+
+  const handleCropSave = async () => {
+    try {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      img.onload = () => {
+        const size = 400; // Match the UI container size
+        canvas.width = size;
+        canvas.height = size;
+        
+        // Clear background
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, size, size);
+
+        // We want to capture exactly what's inside the 400x400 box
+        // The image is scaled and then translated
+        // Position x/y in state is relative to the center
+        const drawWidth = img.width * scale;
+        const drawHeight = img.height * scale;
+        
+        const x = (size / 2) + position.x - (drawWidth / 2);
+        const y = (size / 2) + position.y - (drawHeight / 2);
+
+        ctx.drawImage(img, x, y, drawWidth, drawHeight);
+        
+        canvas.toBlob((blob) => {
+          const croppedFile = new File([blob], "avatar.jpg", { type: "image/jpeg" });
+          const previewUrl = URL.createObjectURL(blob);
+          setPreviewImage(previewUrl);
+          setProfileImage(croppedFile);
+          setIsCropping(false);
+        }, 'image/jpeg', 0.9);
+      };
+      img.src = tempImage;
+    } catch (e) {
+      console.error(e);
+      alert('Gagal memproses gambar. Silakan coba lagi.');
+    }
+  };
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setDragStart({ x: e.clientX - position.x, y: e.clientY - position.y });
+  };
+
+  const handleMouseMove = (e) => {
+    if (isDragging) {
+      setPosition({
+        x: e.clientX - dragStart.x,
+        y: e.clientY - dragStart.y
+      });
+    }
+  };
+
+  const handleMouseUp = () => setIsDragging(false);
 
   // Validate form
   const validateForm = () => {
     const newErrors = {};
 
     if (!formData.fullName.trim()) newErrors.fullName = 'Nama wajib diisi';
-    if (!formData.email.trim()) newErrors.email = 'Email wajib diisi';
     if (!formData.gender) newErrors.gender = 'Jenis kelamin wajib dipilih';
-    if (!formData.height || formData.height <= 0) {
+    if (formData.height && formData.height <= 0) {
       newErrors.height = 'Tinggi badan harus lebih dari 0';
     }
-    if (!formData.weight || formData.weight <= 0) {
+    if (formData.weight && formData.weight <= 0) {
       newErrors.weight = 'Berat badan harus lebih dari 0';
     }
-    if (!formData.targetCalories || formData.targetCalories <= 0) {
-      newErrors.targetCalories = 'Target kalori harus lebih dari 0';
-    }
-    if (!formData.nutritionGoal) newErrors.nutritionGoal = 'Tujuan nutrisi wajib dipilih';
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    if (Object.keys(newErrors).length > 0) {
+      alert('Mohon lengkapi data yang wajib diisi: ' + Object.values(newErrors).join(', '));
+      return false;
+    }
+    return true;
   };
 
   // Handle submit
@@ -195,21 +256,41 @@ const ProfilePage = () => {
 
     setLoading(true);
     try {
-      // Save to localStorage
-      localStorage.setItem('nutrisiAI_profile', JSON.stringify(formData));
+      // Prepare data for backend (map camelCase to snake_case)
+      const backendData = {
+        name: formData.fullName,
+        phone: formData.phone,
+        birth_date: formData.dateOfBirth,
+        gender: formData.gender,
+        age: formData.age,
+        height: formData.height,
+        weight: formData.weight,
+        activity_level: formData.activityLevel,
+        nutrition_goal: formData.nutritionGoal,
+        target_calories: formData.targetCalories ? parseFloat(formData.targetCalories) : null,
+        target_protein: formData.targetProtein ? parseFloat(formData.targetProtein) : null,
+        target_carbs: formData.targetCarbs ? parseFloat(formData.targetCarbs) : null,
+        target_fat: formData.targetFat ? parseFloat(formData.targetFat) : null,
+        sleep_hours: formData.sleepHours ? parseFloat(formData.sleepHours) : null,
+      };
 
       // Try to save to backend if available
-      try {
-        await authService.updateProfile(formData);
-      } catch (err) {
-        console.warn('Backend not available, saved to localStorage');
+      if (profileImage) {
+        await authService.uploadAvatar(profileImage);
       }
+      
+      const updatedUser = await authService.updateProfile(backendData);
+      setUser(updatedUser);
+
+      // Save to localStorage as backup
+      localStorage.setItem('nutrisiAI_profile', JSON.stringify(formData));
 
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (error) {
       console.error('Error saving profile:', error);
-      alert('Gagal menyimpan profil. Silakan coba lagi.');
+      setErrors({ global: error.message || 'Gagal menyimpan profil. Silakan coba lagi.' });
+      alert('Gagal menyimpan profil: ' + (error.message || 'Terjadi kesalahan server'));
     } finally {
       setLoading(false);
     }
@@ -257,6 +338,93 @@ const ProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] pb-24 pt-32 px-4 md:px-8">
+      {/* Custom Cropper Modal */}
+      {isCropping && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
+          <div className="bg-white rounded-[3rem] w-full max-w-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+              <div>
+                <h3 className="text-xl font-bold text-slate-900">Atur Posisi Foto</h3>
+                <p className="text-xs font-medium text-slate-500 mt-1">Geser foto untuk menyesuaikan posisi.</p>
+              </div>
+              <button onClick={() => setIsCropping(false)} className="p-3 rounded-2xl bg-white text-slate-400 hover:text-rose-500 transition-colors shadow-sm">
+                <RotateCcw size={20} />
+              </button>
+            </div>
+            
+            <div className="bg-slate-200 flex justify-center">
+              <div 
+                className="relative w-[400px] h-[400px] overflow-hidden cursor-move touch-none bg-slate-100"
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+              >
+                {/* Circular Overlay Guide - NOW PERFECT CIRCLE */}
+                <div className="absolute inset-0 z-10 pointer-events-none">
+                  <div className="w-full h-full shadow-[0_0_0_9999px_rgba(0,0,0,0.6)] rounded-full border-2 border-white/50" />
+                </div>
+                
+                {/* Crosshair Guide */}
+                <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center opacity-30">
+                  <div className="w-full h-[1px] bg-white absolute" />
+                  <div className="h-full w-[1px] bg-white absolute" />
+                </div>
+                <img
+                  src={tempImage}
+                  alt="Crop preview"
+                  className="absolute transition-transform duration-75 select-none pointer-events-none"
+                  style={{
+                    transform: `translate(calc(200px + ${position.x}px - 50%), calc(200px + ${position.y}px - 50%)) scale(${scale})`,
+                    maxWidth: 'none',
+                  }}
+                  onLoad={(e) => {
+                    // Initial scale to fit
+                    const img = e.target;
+                    const minScale = 400 / Math.min(img.naturalWidth, img.naturalHeight);
+                    setScale(minScale);
+                    setPosition({ x: 0, y: 0 });
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="p-8 space-y-6">
+              <div className="space-y-4">
+                <div className="flex justify-between text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  <span>Ukuran</span>
+                  <span>{Math.round(scale * 100)}%</span>
+                </div>
+                <input
+                  type="range"
+                  value={scale}
+                  min={0.1}
+                  max={3}
+                  step={0.01}
+                  onChange={(e) => setScale(parseFloat(e.target.value))}
+                  className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-[var(--primary-green)]"
+                />
+              </div>
+
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setIsCropping(false)}
+                  className="flex-1 px-8 py-4 rounded-2xl font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 transition-all"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={handleCropSave}
+                  className="flex-1 px-8 py-4 rounded-2xl font-bold text-white bg-[var(--primary-green)] shadow-lg shadow-emerald-500/40 hover:scale-[1.02] active:scale-100 transition-all"
+                >
+                  Gunakan Foto Ini
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
@@ -297,10 +465,10 @@ const ProfilePage = () => {
                   <img
                     src={previewImage}
                     alt="Profile"
-                    className="w-full h-full rounded-[2.5rem] object-cover border-4 border-white shadow-xl group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full rounded-full object-cover border-4 border-white shadow-xl group-hover:scale-105 transition-transform duration-500"
                   />
                 ) : (
-                  <div className="w-full h-full rounded-[2.5rem] bg-gradient-to-br from-[var(--primary-green)] to-[var(--accent-blue)] flex items-center justify-center border-4 border-white shadow-xl">
+                  <div className="w-full h-full rounded-full bg-gradient-to-br from-[var(--primary-green)] to-[var(--accent-blue)] flex items-center justify-center border-4 border-white shadow-xl">
                     <span className="text-5xl font-bold text-white">{getInitials()}</span>
                   </div>
                 )}
@@ -357,8 +525,9 @@ const ProfilePage = () => {
                     <input
                       type="text" name="fullName" value={formData.fullName} onChange={handleChange}
                       maxLength="100"
-                      className="w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-transparent text-[var(--text-main)] font-semibold focus:border-[var(--primary-green)] outline-none transition-all"
+                      className={`w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border text-[var(--text-main)] font-semibold outline-none transition-all ${errors.fullName ? 'border-rose-500 bg-rose-50' : 'border-transparent focus:border-[var(--primary-green)]'}`}
                     />
+                    {errors.fullName && <p className="text-[10px] font-bold text-rose-500 ml-2 animate-pulse">{errors.fullName}</p>}
                   </div>
                   <div className="space-y-2">
                     <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Email</label>
@@ -371,12 +540,13 @@ const ProfilePage = () => {
                     <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Jenis Kelamin</label>
                     <select
                       name="gender" value={formData.gender} onChange={handleChange}
-                      className="w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-transparent text-[var(--text-main)] font-semibold focus:border-[var(--primary-green)] outline-none transition-all appearance-none"
+                      className={`w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border text-[var(--text-main)] font-semibold outline-none transition-all appearance-none ${errors.gender ? 'border-rose-500 bg-rose-50' : 'border-transparent focus:border-[var(--primary-green)]'}`}
                     >
                       <option value="">Pilih...</option>
                       <option value="male">Laki-laki</option>
                       <option value="female">Perempuan</option>
                     </select>
+                    {errors.gender && <p className="text-[10px] font-bold text-rose-500 ml-2 animate-pulse">{errors.gender}</p>}
                   </div>
                   <div className="space-y-2">
                     <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Tanggal Lahir</label>
@@ -455,6 +625,7 @@ const ProfilePage = () => {
                     <option value="gain">Menaikkan Berat Badan</option>
                     <option value="build_muscle">Membentuk Massa Otot</option>
                   </select>
+                  {errors.nutritionGoal && <p className="text-[10px] font-bold text-rose-500 ml-2 animate-pulse">{errors.nutritionGoal}</p>}
                 </div>
               </div>
 

@@ -11,7 +11,8 @@ import {
   BeakerIcon,
   SunIcon,
   SparklesIcon,
-  ShoppingBagIcon
+  ShoppingBagIcon,
+  MagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
 
 const getCategoryIcon = (name) => {
@@ -34,10 +35,35 @@ export default function KategoriPage() {
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [foodsByCategory, setFoodsByCategory] = useState({});
   const [loadingFoods, setLoadingFoods] = useState(null);
+  
+  // Search state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      if (searchQuery.trim().length >= 2) {
+        setIsSearching(true);
+        try {
+          const results = await categoryService.searchFoods(searchQuery);
+          setSearchResults(results);
+        } catch (err) {
+          console.error("Search error:", err);
+        } finally {
+          setIsSearching(false);
+        }
+      } else {
+        setSearchResults([]);
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery]);
 
   const fetchCategories = async () => {
     try {
@@ -96,9 +122,27 @@ export default function KategoriPage() {
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 text-center">
           <h1 className="text-4xl lg:text-5xl font-extrabold text-[var(--text-main)] mb-6">Kategori <span className="text-[var(--primary-green)]">Makanan</span></h1>
-          <p className="text-[var(--text-muted)] font-medium max-w-xl mx-auto">
+          <p className="text-[var(--text-muted)] font-medium max-w-xl mx-auto mb-10">
             Jelajahi berbagai jenis makanan berdasarkan grup nutrisi dan preferensi Anda.
           </p>
+          
+          <div className="max-w-2xl mx-auto relative animate-in zoom-in-95 duration-500">
+            <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none text-[var(--primary-green)]">
+              <MagnifyingGlassIcon className="h-6 w-6" />
+            </div>
+            <input
+              type="text"
+              placeholder="Cari nutrisi makanan (contoh: ayam, pisang, mi)..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-16 pr-6 py-5 rounded-full bg-white border border-[var(--border-card)] text-[var(--text-main)] font-bold shadow-2xl shadow-emerald-500/10 focus:outline-none focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/10 transition-all text-lg placeholder-slate-400"
+            />
+            {isSearching && (
+              <div className="absolute inset-y-0 right-6 flex items-center">
+                <div className="h-5 w-5 rounded-full border-2 border-[var(--primary-green)]/30 border-t-[var(--primary-green)] animate-spin"></div>
+              </div>
+            )}
+          </div>
         </div>
 
         {error && (
@@ -107,7 +151,64 @@ export default function KategoriPage() {
           </div>
         )}
 
-        {Object.entries(groupedBySection).map(([section, sectionCategories]) => (
+        {searchQuery.trim().length >= 2 ? (
+          <div className="bg-white rounded-[2.5rem] p-8 border border-[var(--border-card)] shadow-xl animate-in fade-in slide-in-from-bottom-10 duration-500 mb-20">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 pb-6 border-b border-[var(--border-card)]">
+              <h2 className="text-xl font-bold text-[var(--text-main)] uppercase tracking-widest flex items-center gap-3">
+                <div className="p-2 bg-[var(--primary-green)]/10 rounded-lg text-[var(--primary-green)]">
+                  <MagnifyingGlassIcon className="h-5 w-5" />
+                </div>
+                Hasil Pencarian
+              </h2>
+              <div className="text-xs font-black text-[var(--primary-green)] uppercase tracking-widest bg-[var(--primary-green)]/10 px-4 py-2 rounded-full">
+                {searchResults.length} Item Ditemukan
+              </div>
+            </div>
+            
+            {searchResults.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {searchResults.map((food) => (
+                  <div key={food.id} className="p-6 rounded-3xl border border-[var(--border-card)] bg-[var(--bg-secondary)] flex flex-col justify-between hover:border-[var(--primary-green)]/50 transition-all hover:shadow-lg group">
+                    <div className="mb-6">
+                      <div className="font-extrabold text-[var(--text-main)] text-xl leading-tight group-hover:text-[var(--primary-green)] transition-colors">{food.food_name_id || food.food_name_en}</div>
+                      <div className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mt-1 opacity-70">{food.food_name_en}</div>
+                    </div>
+                    <div className="grid grid-cols-4 gap-2 text-center bg-white rounded-2xl p-3 border border-slate-100 shadow-sm">
+                      <div>
+                        <div className="text-sm font-black text-[var(--primary-green)]">{food.calories || 0}</div>
+                        <div className="text-[8px] font-black text-[var(--text-muted)] tracking-[0.2em] uppercase mt-0.5">Kkal</div>
+                      </div>
+                      <div>
+                        <div className="text-sm font-black text-[var(--accent-blue)]">{food.protein || 0}g</div>
+                        <div className="text-[8px] font-black text-[var(--text-muted)] tracking-[0.2em] uppercase mt-0.5">Pro</div>
+                      </div>
+                      <div>
+                        <div className="text-sm font-black text-[var(--warning)]">{food.carbohydrates || 0}g</div>
+                        <div className="text-[8px] font-black text-[var(--text-muted)] tracking-[0.2em] uppercase mt-0.5">Karbo</div>
+                      </div>
+                      <div>
+                        <div className="text-sm font-black text-[var(--danger)]">{food.total_fat || 0}g</div>
+                        <div className="text-[8px] font-black text-[var(--text-muted)] tracking-[0.2em] uppercase mt-0.5">Lemak</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              !isSearching && (
+                <div className="text-center py-24 text-[var(--text-muted)] bg-[var(--bg-secondary)] rounded-3xl border border-[var(--border-card)] border-dashed">
+                  <div className="w-20 h-20 bg-[var(--primary-green)]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <MagnifyingGlassIcon className="h-10 w-10 text-[var(--primary-green)]" />
+                  </div>
+                  <p className="text-xl font-extrabold text-[var(--text-main)]">Tidak ada makanan ditemukan</p>
+                  <p className="text-sm mt-2 font-medium">Coba gunakan kata kunci lain untuk "{searchQuery}"</p>
+                </div>
+              )
+            )}
+          </div>
+        ) : (
+          Object.entries(groupedBySection).map(([section, sectionCategories]) => (
+
           <div key={section} className="mb-20">
             <div className="flex items-center gap-4 mb-10">
               <h2 className="text-xl font-bold text-[var(--text-main)] uppercase tracking-widest bg-white border border-[var(--border-card)] px-6 py-2 rounded-xl shadow-sm">
@@ -190,7 +291,7 @@ export default function KategoriPage() {
               })}
             </div>
           </div>
-        ))}
+        )))}
       </div>
     </div>
   );

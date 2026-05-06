@@ -30,3 +30,18 @@ def get_foods_by_category(category_id: int, db: Session = Depends(get_db)):
     
     foods = db.query(Food).filter(Food.category_id == category_id).order_by(Food.food_name_en).all()
     return foods
+
+@router.get("/search/foods", response_model=List[FoodResponse])
+def search_foods(q: str, db: Session = Depends(get_db)):
+    if not q or len(q) < 2:
+        return []
+    
+    search_term = f"%{q}%"
+    foods = db.query(Food).filter(
+        (Food.food_name_en.ilike(search_term)) | 
+        (Food.food_name_id.ilike(search_term)) |
+        (Food.alternate_names.ilike(search_term))
+    ).order_by(Food.food_name_id).limit(50).all()
+    
+    return foods
+

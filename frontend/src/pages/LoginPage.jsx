@@ -57,7 +57,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-transparent px-6 py-12 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center pt-32 pb-12 bg-transparent px-6 relative overflow-hidden">
       
       {/* Background with user image */}
       <div className="absolute inset-0 z-0">
@@ -73,10 +73,10 @@ const LoginPage = () => {
         
         {/* Logo/Brand */}
         <div className="text-center mb-10">
-          <div className="bg-gradient-to-br from-[var(--primary-green)] to-[var(--accent-blue)] w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl">
-            <Apple className="text-white" size={32} />
+          <div className="bg-gradient-to-br from-[var(--primary-green)] to-[var(--accent-blue)] w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-2xl">
+            <Apple className="text-white" size={28} />
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tighter text-white mb-2">
+          <h1 className="text-3xl font-extrabold tracking-tighter text-white mb-1">
             Selamat <span className="text-[var(--primary-green)]">Datang</span>
           </h1>
           <p className="text-xs font-bold uppercase tracking-widest text-white/70">NutriAI Assistant</p>

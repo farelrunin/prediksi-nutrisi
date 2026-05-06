@@ -11,43 +11,52 @@ const LandingPage = () => {
   return (
     <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-main)] overflow-x-hidden">
       {/* Background with user image */}
+      {/* Background Image - Clean & Sharp */}
       <div className="absolute inset-0 z-0">
         <img
           src="/bg-food.jpg"
           alt="Healthy Food"
-          className="w-full h-full object-cover opacity-60"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-primary)]/80 via-[var(--bg-primary)]/40 to-[var(--bg-primary)]" />
       </div>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center pt-20 px-6 lg:px-8">
+      <section className="relative min-h-screen flex items-center pt-24 px-6 lg:px-8">
         <div className="relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center">
-          <div className="max-w-2xl animate-in fade-in slide-in-from-left duration-1000">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/5 border border-slate-900/10 mb-8">
-              <Sparkles size={16} className="text-slate-900" />
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-900">AI-Powered Nutrition Assistant</span>
+          <div className="relative max-w-2xl animate-in fade-in slide-in-from-left duration-1000">
+            {/* Organic "Cloud/Graffiti" Blur Effect - Tightened and shifted */}
+            <div className="absolute -inset-4 z-0 overflow-visible pointer-events-none opacity-70">
+              <div className="absolute top-4 left-0 w-[60%] h-[40%] bg-white rounded-full blur-[60px]" />
+              <div className="absolute bottom-10 left-4 w-[50%] h-[40%] bg-white/80 rounded-full blur-[70px]" />
+              <div className="absolute top-1/2 left-[40%] -translate-x-1/2 -translate-y-1/2 w-[70%] h-[60%] bg-white/60 rounded-full blur-[80px]" />
             </div>
-            <h1 className="text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tight mb-8">
-              Makan Enak, <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-green)] to-[var(--accent-blue)]">Gizi Terjaga.</span>
-            </h1>
-            <p className="text-lg text-[var(--text-main)] leading-relaxed mb-10 max-w-lg font-medium opacity-80">
-              NutriAI membantu Anda memantau asupan harian dengan cerdas. Dapatkan analisis mendalam dan rekomendasi menu yang personal hanya dalam hitungan detik.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-5">
-              <Link
-                to={ctaLink}
-                className="group relative flex items-center justify-center rounded-2xl bg-[var(--primary-green)] px-10 py-5 text-base font-bold text-white shadow-2xl shadow-emerald-500/20 transition-all hover:scale-105 active:scale-100"
-              >
-                {ctaLabel}
-              </Link>
-              <a
-                href="#fitur"
-                className="flex items-center justify-center rounded-2xl border border-[var(--border-card)] bg-white/20 backdrop-blur-md px-10 py-5 text-base font-bold text-[var(--text-main)] transition-all hover:bg-white/40"
-              >
-                Lihat Fitur
-              </a>
+
+            <div className="relative z-10">
+              <div className="inline-flex items-center gap-2 mb-6 ml-1">
+                <Sparkles size={16} className="text-slate-900" />
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-900">AI-Powered Nutrition Assistant</span>
+              </div>
+              <h1 className="text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight mb-8">
+                Makan Enak, <br />
+                <span className="text-[var(--primary-green)] drop-shadow-[0_0_15px_rgba(255,255,255,1)]">Gizi Terjaga.</span>
+              </h1>
+              <p className="text-lg text-[var(--text-main)] leading-relaxed mb-10 max-w-lg font-bold opacity-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
+                NutriAI membantu Anda memantau asupan harian dengan cerdas. Dapatkan analisis mendalam dan rekomendasi menu yang personal hanya dalam hitungan detik.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-5">
+                <Link
+                  to={ctaLink}
+                  className="group relative flex items-center justify-center rounded-2xl bg-[var(--primary-green)] px-10 py-5 text-base font-bold text-white shadow-2xl shadow-emerald-500/40 transition-all hover:scale-105 active:scale-100"
+                >
+                  {ctaLabel}
+                </Link>
+                <a
+                  href="#fitur"
+                  className="flex items-center justify-center rounded-2xl border border-white bg-white/40 backdrop-blur-sm px-10 py-5 text-base font-bold text-[var(--text-main)] transition-all hover:bg-white/60 shadow-xl"
+                >
+                  Lihat Fitur
+                </a>
+              </div>
             </div>
           </div>
 

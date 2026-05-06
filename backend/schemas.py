@@ -20,6 +20,19 @@ class UserResponse(BaseModel):
     id: int
     name: str
     email: str
+    phone: Optional[str] = None
+    birth_date: Optional[str] = None
+    gender: Optional[str] = None
+    height: Optional[float] = None
+    weight: Optional[float] = None
+    activity_level: Optional[str] = None
+    nutrition_goal: Optional[str] = None
+    target_calories: Optional[float] = None
+    target_protein: Optional[float] = None
+    target_carbs: Optional[float] = None
+    target_fat: Optional[float] = None
+    sleep_hours: Optional[float] = None
+    avatar_url: Optional[str] = None
     profile: Optional[dict] = None
 
     class Config:
@@ -35,8 +48,18 @@ class ProfileUpdate(BaseModel):
     weight: Optional[float] = None
     age: Optional[int] = None
     gender: Optional[str] = None
-    activityLevel: Optional[str] = None
+    phone: Optional[str] = None
+    birth_date: Optional[str] = None
+    activity_level: Optional[str] = None
+    nutrition_goal: Optional[str] = None
+    is_pregnant: Optional[bool] = None
+    is_breastfeeding: Optional[bool] = None
     conditions: Optional[List[str]] = None
+    target_calories: Optional[float] = None
+    target_protein: Optional[float] = None
+    target_carbs: Optional[float] = None
+    target_fat: Optional[float] = None
+    sleep_hours: Optional[float] = None
 
 class FoodEntryCreate(BaseModel):
     meal_type: str

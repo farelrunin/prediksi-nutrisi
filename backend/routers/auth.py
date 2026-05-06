@@ -5,6 +5,10 @@ from database import get_db
 from models import User
 from auth import hash_password, verify_password, create_token, decode_token
 import requests
+import os
+import uuid
+import shutil
+from fastapi import File, UploadFile
 from schemas import UserCreate, UserLogin, TokenResponse, UserResponse, ProfileUpdate, GoogleLoginRequest
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -105,10 +109,53 @@ def update_profile(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user)
 ):
-    # Update profile data
+    # Update core user fields
+    if profile_data.phone is not None: user.phone = profile_data.phone
+    if profile_data.birth_date is not None: user.birth_date = profile_data.birth_date
+    if profile_data.gender is not None: user.gender = profile_data.gender
+    if profile_data.height is not None: user.height = profile_data.height
+    if profile_data.weight is not None: user.weight = profile_data.weight
+    if profile_data.activity_level is not None: user.activity_level = profile_data.activity_level
+    if profile_data.nutrition_goal is not None: user.nutrition_goal = profile_data.nutrition_goal
+    if profile_data.target_calories is not None: user.target_calories = profile_data.target_calories
+    if profile_data.target_protein is not None: user.target_protein = profile_data.target_protein
+    if profile_data.target_carbs is not None: user.target_carbs = profile_data.target_carbs
+    if profile_data.target_fat is not None: user.target_fat = profile_data.target_fat
+    if profile_data.sleep_hours is not None: user.sleep_hours = profile_data.sleep_hours
+    if profile_data.is_pregnant is not None: user.is_pregnant = profile_data.is_pregnant
+    if profile_data.is_breastfeeding is not None: user.is_breastfeeding = profile_data.is_breastfeeding
+
+    # Also update the catch-all profile JSON if needed
     current_profile = user.profile or {}
     updated_profile = {**current_profile, **profile_data.dict(exclude_unset=True)}
     user.profile = updated_profile
+    
+    db.commit()
+    db.refresh(user)
+    return user
+
+@router.post("/avatar", response_model=UserResponse)
+async def upload_avatar(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user)
+):
+    # Ensure directory exists
+    os.makedirs("static/avatars", exist_ok=True)
+    
+    # Generate unique filename
+    ext = os.path.splitext(file.filename)[1]
+    filename = f"{user.id}_{uuid.uuid4().hex}{ext}"
+    filepath = os.path.join("static/avatars", filename)
+    
+    # Save file
+    with open(filepath, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+        
+    # Update DB
+    # We use full URL for frontend convenience
+    # Adjust 'http://localhost:8000' if needed
+    user.avatar_url = f"http://localhost:8000/static/avatars/{filename}"
     db.commit()
     db.refresh(user)
     return user

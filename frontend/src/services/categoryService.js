@@ -32,4 +32,16 @@ export const categoryService = {
       throw error;
     }
   },
+
+  searchFoods: async (query) => {
+    try {
+      const response = await axios.get(`${API_URL}/search/foods`, {
+        params: { q: query }
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Error searching foods for query ${query}:`, error);
+      throw error;
+    }
+  }
 };
