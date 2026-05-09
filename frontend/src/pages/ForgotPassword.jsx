@@ -49,9 +49,18 @@ const ForgotPasswordPage = () => {
         >
           {!submitted ? (
             <form onSubmit={handleSubmit} className="space-y-8">
-              <p className="text-sm text-slate-600 font-medium text-center">
-                Masukkan email Anda dan kami akan mengirimkan instruksi untuk mengatur ulang password.
-              </p>
+              <div className="space-y-4">
+                <p className="text-sm text-slate-600 font-medium text-center">
+                  Masukkan email Anda dan kami akan mengirimkan instruksi untuk mengatur ulang password.
+                </p>
+                
+                {/* Information Note for Google Users */}
+                <div className="bg-blue-50 border border-blue-100 p-4 rounded-2xl">
+                  <p className="text-[10px] text-blue-600 font-bold leading-relaxed text-center uppercase tracking-wider">
+                    Catatan: Jika Anda mendaftar menggunakan Google, Anda tidak perlu mengatur ulang password di sini.
+                  </p>
+                </div>
+              </div>
               
               <div className="space-y-2">
                 <label className="text-[11px] font-bold uppercase tracking-widest text-slate-600 ml-2">Email Address</label>
@@ -80,9 +89,16 @@ const ForgotPasswordPage = () => {
                 <Mail size={40} />
               </div>
               <h3 className="text-2xl font-bold text-slate-900">Email Terkirim!</h3>
-              <p className="text-sm text-slate-600 font-medium leading-relaxed">
-                Silakan periksa email <strong>{email}</strong> untuk instruksi selanjutnya.
-              </p>
+              <div className="space-y-4">
+                <p className="text-sm text-slate-600 font-medium leading-relaxed">
+                  Silakan periksa email <strong>{email}</strong> untuk instruksi selanjutnya.
+                </p>
+                <div className="bg-amber-50 border border-amber-100 p-4 rounded-2xl">
+                  <p className="text-[10px] text-amber-600 font-black uppercase tracking-widest leading-normal">
+                    Mode Pengembangan:<br/>Email disimulasikan. Dalam sistem nyata, link reset akan aktif selama 24 jam.
+                  </p>
+                </div>
+              </div>
               <button 
                 onClick={() => setSubmitted(false)}
                 className="text-sm font-bold text-[var(--primary-green)] hover:underline"
@@ -91,6 +107,7 @@ const ForgotPasswordPage = () => {
               </button>
             </div>
           )}
+
 
           <div className="mt-8 pt-8 border-t border-white/50">
             <Link to="/login" className="flex items-center justify-center gap-2 text-sm font-bold text-slate-600 hover:text-slate-900 transition-colors">

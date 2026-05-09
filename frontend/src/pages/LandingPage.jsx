@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShieldCheck, Sparkles, TrendingUp, Apple } from 'lucide-react';
+import { ShieldCheck, Sparkles, TrendingUp, Apple, Globe, Camera, Briefcase } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
 
 const LandingPage = () => {
@@ -10,51 +10,48 @@ const LandingPage = () => {
 
   return (
     <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-main)] overflow-x-hidden">
-      {/* Background Image - Clean & Sharp */}
-      <div className="absolute inset-0 z-0">
+      {/* Background Image - Clean & Sharp (Matching Login Style) */}
+      <div className="fixed inset-0 z-0">
         <img
           src="/bg-food.jpg"
           alt="Healthy Food"
           className="w-full h-full object-cover"
         />
+        <div className="absolute inset-0 bg-black/5" />
       </div>
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center pt-24 px-6 lg:px-8">
         <div className="relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative max-w-2xl animate-in fade-in slide-in-from-left duration-1000">
-            {/* Organic Blur Effect */}
-            <div className="absolute -inset-4 z-0 overflow-visible pointer-events-none opacity-60">
-              <div className="absolute top-4 left-0 w-[55%] h-[35%] bg-white rounded-full blur-[40px]" />
-              <div className="absolute bottom-10 left-4 w-[45%] h-[35%] bg-white/70 rounded-full blur-[50px]" />
-              <div className="absolute top-1/2 left-[40%] -translate-x-1/2 -translate-y-1/2 w-[65%] h-[55%] bg-white/60 rounded-full blur-[60px]" />
-            </div>
-
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 mb-6 ml-1">
-                <Sparkles size={16} className="text-slate-900" />
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-900">AI-Powered Nutrition Assistant</span>
-              </div>
-              <h1 className="text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight mb-8">
-                Makan Enak, <br />
-                <span className="text-[var(--primary-green)] drop-shadow-[0_0_15px_rgba(255,255,255,1)]">Gizi Terjaga.</span>
-              </h1>
-              <p className="text-lg text-[var(--text-main)] leading-relaxed mb-10 max-w-lg font-bold opacity-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
-                NutriAI membantu Anda memantau asupan harian dengan cerdas. Dapatkan analisis mendalam dan rekomendasi menu yang personal hanya dalam hitungan detik.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-5">
-                <Link
-                  to={ctaLink}
-                  className="group relative flex items-center justify-center rounded-2xl bg-[var(--primary-green)] px-10 py-5 text-base font-bold text-white shadow-2xl shadow-emerald-500/40 transition-all hover:scale-105 active:scale-100"
-                >
-                  {ctaLabel}
-                </Link>
-                <a
-                  href="#fitur"
-                  className="flex items-center justify-center rounded-2xl border border-white bg-white/40 backdrop-blur-sm px-10 py-5 text-base font-bold text-[var(--text-main)] transition-all hover:bg-white/60 shadow-xl"
-                >
-                  Lihat Fitur
-                </a>
+            {/* Clean Container for Text */}
+            <div className="relative z-10 p-8 lg:p-12 rounded-[2.5rem] bg-white/10 border border-white/20 shadow-2xl overflow-hidden group">
+              <div className="relative z-10">
+                <div className="inline-flex items-center gap-2 mb-6 ml-1">
+                  <Sparkles size={16} className="text-slate-900" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-900">AI-Powered Nutrition Assistant</span>
+                </div>
+                <h1 className="text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight mb-8">
+                  Makan Enak, <br />
+                  <span className="text-[var(--primary-green)] drop-shadow-[0_0_15px_rgba(255,255,255,1)]">Gizi Terjaga.</span>
+                </h1>
+                <p className="text-lg text-[var(--text-main)] leading-relaxed mb-10 max-w-lg font-bold opacity-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
+                  NutriAI membantu Anda memantau asupan harian dengan cerdas. Dapatkan analisis mendalam dan rekomendasi menu yang personal hanya dalam hitungan detik.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-5">
+                  <Link
+                    to={ctaLink}
+                    className="group relative flex items-center justify-center rounded-2xl bg-[var(--primary-green)] px-10 py-5 text-base font-bold text-white shadow-2xl shadow-emerald-500/40 transition-all hover:scale-105 active:scale-100"
+                  >
+                    {ctaLabel}
+                  </Link>
+                  <a
+                    href="#fitur"
+                    className="flex items-center justify-center rounded-2xl border border-white bg-white/40 backdrop-blur-sm px-10 py-5 text-base font-bold text-[var(--text-main)] transition-all hover:bg-white/60 shadow-xl"
+                  >
+                    Lihat Fitur
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -76,7 +73,7 @@ const LandingPage = () => {
               { icon: TrendingUp, title: 'Analisis Mendalam', desc: 'Pantau grafik perkembangan nutrisi Anda setiap hari secara otomatis.' },
               { icon: Sparkles, title: 'Rekomendasi AI', desc: 'Dapatkan saran makanan dari Gemini AI berdasarkan kebutuhan tubuh Anda.' }
             ].map((f, i) => (
-              <div key={i} className="group p-12 rounded-[2.5rem] bg-[var(--bg-card)] border border-[var(--border-card)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
+              <div key={i} className="glow-card group p-12 rounded-[2.5rem] bg-[var(--bg-card)] border border-[var(--border-card)] duration-500">
                 <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-[var(--bg-primary)] text-[var(--primary-green)] mb-8 group-hover:scale-110 transition-transform">
                   <f.icon size={32} />
                 </div>
@@ -130,14 +127,14 @@ const LandingPage = () => {
 
       {/* Footer Section */}
       <footer className="relative pt-24 pb-12 overflow-hidden">
-        {/* Background Image Layer */}
+        {/* Background Image Layer - Cleaned */}
         <div className="absolute inset-0 -z-10">
           <img
             src="/bg-food.jpg"
             alt="Footer Background"
-            className="w-full h-full object-cover opacity-50"
+            className="w-full h-full object-cover opacity-30"
           />
-          <div className="absolute inset-0 bg-white/95 backdrop-blur-2xl"></div>
+          <div className="absolute inset-0 bg-white/80"></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
@@ -154,10 +151,16 @@ const LandingPage = () => {
                 Kami membantu Anda mencintai tubuh Anda melalui nutrisi yang tepat.
               </p>
               <div className="flex gap-4">
-                {['Twitter', 'Instagram', 'LinkedIn'].map((social) => (
-                  <a key={social} href="#" className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-950 hover:bg-[var(--primary-green)] hover:text-white hover:border-[var(--primary-green)] transition-all shadow-sm">
-                    <span className="sr-only">{social}</span>
-                    <div className="w-5 h-5 bg-current opacity-20 rounded-full" />
+                {[
+                  { name: 'Twitter', icon: <Globe size={20} /> },
+                  { name: 'Instagram', icon: <Camera size={20} /> },
+                  { name: 'LinkedIn', icon: <Briefcase size={20} /> }
+                ].map((social) => (
+                  <a key={social.name} href="#" className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-950 hover:bg-[var(--primary-green)] hover:text-white hover:border-[var(--primary-green)] transition-all shadow-sm group">
+                    <span className="sr-only">{social.name}</span>
+                    <div className="transition-transform group-hover:scale-110">
+                      {social.icon}
+                    </div>
                   </a>
                 ))}
               </div>

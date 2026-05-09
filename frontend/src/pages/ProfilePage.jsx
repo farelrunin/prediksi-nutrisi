@@ -157,16 +157,66 @@ const ProfilePage = () => {
           : prev.preferences.filter((p) => p !== value),
       }));
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+      setFormData((prev) => {
+        const newData = { ...prev, [name]: value };
+        
+        // Auto-calculate targets when nutritionGoal changes
+        if (name === 'nutritionGoal' && value) {
+          const weight = parseFloat(prev.weight) || 70; // Fallback to 70kg if not set
+          
+          let targets = {};
+          switch(value) {
+            case 'lose':
+              targets = {
+                targetCalories: Math.round(weight * 25),
+                targetProtein: Math.round(weight * 1.6),
+                targetCarbs: Math.round(weight * 2.0),
+                targetFat: Math.round(weight * 0.7)
+              };
+              break;
+            case 'gain':
+              targets = {
+                targetCalories: Math.round(weight * 35),
+                targetProtein: Math.round(weight * 1.8),
+                targetCarbs: Math.round(weight * 4.5),
+                targetFat: Math.round(weight * 1.0)
+              };
+              break;
+            case 'build_muscle':
+              targets = {
+                targetCalories: Math.round(weight * 32),
+                targetProtein: Math.round(weight * 2.2),
+                targetCarbs: Math.round(weight * 3.5),
+                targetFat: Math.round(weight * 0.8)
+              };
+              break;
+            case 'maintain':
+            default:
+              targets = {
+                targetCalories: Math.round(weight * 30),
+                targetProtein: Math.round(weight * 1.2),
+                targetCarbs: Math.round(weight * 3.5),
+                targetFat: Math.round(weight * 0.9)
+              };
+              break;
+          }
+          Object.assign(newData, targets);
+          notify({ 
+            type: 'info', 
+            title: 'Target Diperbarui', 
+            message: `Target nutrisi disesuaikan otomatis untuk tujuan: ${value === 'lose' ? 'Menurunkan BB' : value === 'gain' ? 'Menaikkan BB' : value === 'build_muscle' ? 'Membentuk Otot' : 'Menjaga BB'}.` 
+          });
+        }
+        
+        return newData;
+      });
     }
     // Clear error for this field
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
+
 
   // Handle image upload
   const handleImageUpload = (e) => {

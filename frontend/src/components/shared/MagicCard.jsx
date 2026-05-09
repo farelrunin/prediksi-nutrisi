@@ -28,7 +28,7 @@ const MagicCard = ({ children, className = '', glowColor = 'rgba(34, 197, 94, 0.
     >
       {/* Border Glow Layer (The "Magic" border) */}
       <div
-        className="pointer-events-none absolute -inset-px z-0 transition-opacity duration-500"
+        className="pointer-events-none absolute -inset-px z-0 transition-opacity duration-500 rounded-[inherit]"
         style={{
           opacity,
           background: `radial-gradient(400px circle at ${position.x}px ${position.y}px, ${glowColor.replace('0.15', '0.4')}, transparent 60%)`,
@@ -37,7 +37,7 @@ const MagicCard = ({ children, className = '', glowColor = 'rgba(34, 197, 94, 0.
       
       {/* Background Spotlight Layer (Inner Glow) */}
       <div
-        className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-500"
+        className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-500 rounded-[inherit]"
         style={{
           opacity: opacity * 0.5,
           background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, ${glowColor.replace('0.15', '0.3')}, transparent 50%)`,

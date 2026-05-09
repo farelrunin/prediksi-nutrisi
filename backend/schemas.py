@@ -32,8 +32,11 @@ class UserResponse(BaseModel):
     target_carbs: Optional[float] = None
     target_fat: Optional[float] = None
     sleep_hours: Optional[float] = None
+    is_pregnant: Optional[bool] = False
+    is_breastfeeding: Optional[bool] = False
     avatar_url: Optional[str] = None
     profile: Optional[dict] = None
+
 
     class Config:
         orm_mode = True
