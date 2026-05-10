@@ -30,9 +30,11 @@ app.use("/categories", categoryRouter);
 // Health Check
 app.get("/", (req, res) => res.json({ message: "NutriAI Express API is running (Modular Mode)" }));
 
-app.listen(PORT, async () => {
-  await connectDB();
-  console.log(`🚀 Server Express (Modular) running on http://localhost:${PORT}`);
+// Connect to Database
+connectDB();
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server Express (Local) running on http://localhost:${PORT}`);
 });
 
 module.exports = app;
