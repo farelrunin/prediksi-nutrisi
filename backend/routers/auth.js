@@ -44,11 +44,12 @@ router.post("/login", async (req, res) => {
 router.post("/google", async (req, res) => {
   try {
     const { access_token } = req.body;
-    const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`);
+    const axios = require("axios");
+    const response = await axios.get(`https://www.googleapis.com/oauth2/v3/userinfo`, {
+      headers: { Authorization: `Bearer ${access_token}` }
+    });
     
-    if (!response.ok) return res.status(400).json({ detail: "Token Google tidak valid" });
-    
-    const googleUser = await response.json();
+    const googleUser = response.data;
     const email = googleUser.email;
     const name = googleUser.name || "Google User";
 
