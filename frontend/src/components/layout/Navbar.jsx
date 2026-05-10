@@ -37,6 +37,7 @@ const Navbar = () => {
     { label: 'Fitur', href: '#fitur' },
     { label: 'Cara Kerja', href: '#cara-kerja' },
     { label: 'Kategori', to: '/kategori' },
+    { label: 'Panduan', to: '/panduan' },
     { label: 'Mulai', to: '/register' },
   ];
 
@@ -45,6 +46,7 @@ const Navbar = () => {
     { label: 'Dashboard', to: '/dashboard' },
     { label: 'Nutri Check', to: '/nutri-check' },
     { label: 'History', to: '/history' },
+    { label: 'Panduan', to: '/panduan' },
     { label: 'Kategori', to: '/kategori' },
   ];
 

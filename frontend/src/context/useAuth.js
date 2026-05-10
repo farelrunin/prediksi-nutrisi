@@ -3,8 +3,6 @@ import { AuthContext } from './AuthContextProvider';
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+  // Jangan lempar error agar tidak membuat layar putih saat inisialisasi
+  return context || {};
 };

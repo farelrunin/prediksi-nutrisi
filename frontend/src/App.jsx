@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
@@ -11,6 +12,7 @@ import HistoryPage from './pages/HistoryPage';
 import InputGizi from './pages/InputGizi';
 import ProfilePage from './pages/ProfilePage';
 import KategoriPage from './pages/KategoriPage';
+import PanduanPage from './pages/PanduanPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import { AuthProvider } from './context/AuthContext';
@@ -30,6 +32,7 @@ function AppContent() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/kategori" element={<KategoriPage />} />
+          <Route path="/panduan" element={<PanduanPage />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           
@@ -42,6 +45,7 @@ function AppContent() {
           </Route>
         </Routes>
       </main>
+      <Footer />
     </div>
   );
 }
