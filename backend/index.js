@@ -30,3 +30,5 @@ app.listen(PORT, async () => {
   await connectDB();
   console.log(`🚀 Server Express (Modular) running on http://localhost:${PORT}`);
 });
+
+module.exports = app;

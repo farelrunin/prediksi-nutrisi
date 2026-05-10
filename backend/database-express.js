@@ -7,6 +7,11 @@ const dbUrl = process.env.DATABASE_URL.replace("mysql+pymysql://", "mysql://");
 const sequelize = new Sequelize(dbUrl, {
   dialect: "mysql",
   logging: false,
+  dialectOptions: {
+    ssl: {
+      rejectUnauthorized: false
+    }
+  },
   pool: {
     max: 5,
     min: 0,

@@ -1,7 +1,8 @@
 // authService.js
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'; // Adjust to your backend URL
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+console.log('🔗 NutriAI API Base URL:', API_BASE_URL);
 
 export const authService = {
   async login(email, password) {
