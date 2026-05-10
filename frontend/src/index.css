@@ -20,6 +20,18 @@
   --text-muted: #64748B;
   --warning: #F59E0B;
   --danger: #EF4444;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg-primary: #050A07; /* Super Dark Forest Green */
+  --bg-secondary: #0A140F;
+  --bg-card: #0D1B13;
+  --border-card: #1B2D24;
+  --text-main: #E2E8F0;
+  --text-muted: #94A3B8;
+  --glass-bg: rgba(13, 27, 19, 0.7);
 }
 
 * {
@@ -78,9 +90,9 @@ a {
 
 /* Glassmorphism utility */
 .glass-card {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--glass-bg);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--border-card);
 }
 /* Border Glow Effect - Sharp & Green themed */
 .glow-card {

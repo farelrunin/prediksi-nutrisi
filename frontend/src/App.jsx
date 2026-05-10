@@ -16,6 +16,7 @@ import TermsOfService from './pages/TermsOfService';
 import { AuthProvider } from './context/AuthContext';
 import { NutritionProvider } from './context/NutritionStore';
 import { NotificationProvider } from './context/NotificationContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 function AppContent() {
   return (
@@ -48,13 +49,15 @@ function AppContent() {
 function App() {
   return (
     <NotificationProvider>
-      <AuthProvider>
-        <NutritionProvider>
-          <Router>
-            <AppContent />
-          </Router>
-        </NutritionProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <NutritionProvider>
+            <Router>
+              <AppContent />
+            </Router>
+          </NutritionProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </NotificationProvider>
   );
 }

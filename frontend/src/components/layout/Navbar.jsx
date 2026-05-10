@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Apple, User, LogOut, Menu, X } from 'lucide-react';
+import { Apple, User, LogOut, Menu, X, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../../context/useAuth';
+import { useTheme } from '../../context/ThemeContext';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -148,7 +150,16 @@ const Navbar = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
+          {/* Theme Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            className="p-3 md:p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-[var(--border-card)] text-[var(--text-main)] hover:border-[var(--primary-green)]/30 transition-all shadow-sm active:scale-95"
+            title={theme === 'light' ? 'Ganti ke Dark Mode' : 'Ganti ke Light Mode'}
+          >
+            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+          </button>
+
           {user ? (
             <div className="flex items-center gap-4">
               <Link to="/profil" className="hidden md:flex items-center gap-3 bg-white border border-[var(--border-card)] px-5 py-2.5 rounded-2xl hover:border-[var(--primary-green)]/30 transition-all shadow-sm">

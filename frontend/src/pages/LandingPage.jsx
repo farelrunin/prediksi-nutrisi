@@ -15,9 +15,9 @@ const LandingPage = () => {
         <img
           src="/bg-food.jpg"
           alt="Healthy Food"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover brightness-[0.7] saturate-[1.2]"
         />
-        <div className="absolute inset-0 bg-black/5" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-primary)]/40 to-[var(--bg-primary)]" />
       </div>
 
       {/* Hero Section */}
@@ -28,8 +28,8 @@ const LandingPage = () => {
             <div className="relative z-10 p-8 lg:p-12 rounded-[2.5rem] bg-white/10 border border-white/20 shadow-2xl overflow-hidden group">
               <div className="relative z-10">
                 <div className="inline-flex items-center gap-2 mb-6 ml-1">
-                  <Sparkles size={16} className="text-slate-900" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-900">AI-Powered Nutrition Assistant</span>
+                  <Sparkles size={16} className="text-[var(--primary-green)]" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-main)]/60">AI-Powered Nutrition Assistant</span>
                 </div>
                 <h1 className="text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight mb-8">
                   Makan Enak, <br />
@@ -47,7 +47,7 @@ const LandingPage = () => {
                   </Link>
                   <a
                     href="#fitur"
-                    className="flex items-center justify-center rounded-2xl border border-white bg-white/40 backdrop-blur-sm px-10 py-5 text-base font-bold text-[var(--text-main)] transition-all hover:bg-white/60 shadow-xl"
+                    className="flex items-center justify-center rounded-2xl border border-[var(--border-card)] bg-[var(--bg-card)]/40 backdrop-blur-sm px-10 py-5 text-base font-bold text-[var(--text-main)] transition-all hover:bg-[var(--bg-card)]/60 shadow-xl"
                   >
                     Lihat Fitur
                   </a>
@@ -86,7 +86,7 @@ const LandingPage = () => {
       </section>
 
       {/* Cara Kerja Section */}
-      <section id="cara-kerja" className="py-32 relative z-10 bg-white">
+      <section id="cara-kerja" className="py-32 relative z-10 bg-[var(--bg-primary)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-20 items-center">
             <div className="space-y-12">
@@ -114,7 +114,7 @@ const LandingPage = () => {
 
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-to-tr from-[var(--primary-green)]/20 to-[var(--accent-blue)]/20 rounded-[3rem] blur-2xl" />
-              <div className="relative rounded-[3rem] overflow-hidden border border-white/20 shadow-2xl">
+              <div className="relative rounded-[3rem] overflow-hidden border border-[var(--border-card)] shadow-2xl">
                 <img src="/bg-food.jpg" alt="Health App" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-12">
                   <p className="text-white text-xl font-bold italic">"Kesehatan dimulai dari apa yang Anda Makan."</p>
@@ -132,9 +132,9 @@ const LandingPage = () => {
           <img
             src="/bg-food.jpg"
             alt="Footer Background"
-            className="w-full h-full object-cover opacity-30"
+            className="w-full h-full object-cover opacity-10"
           />
-          <div className="absolute inset-0 bg-white/80"></div>
+          <div className="absolute inset-0 bg-[var(--bg-primary)]"></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
@@ -144,9 +144,9 @@ const LandingPage = () => {
                 <div className="w-12 h-12 bg-[var(--primary-green)] rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
                   <span className="text-white font-black text-2xl">N</span>
                 </div>
-                <span className="text-3xl font-black tracking-tighter text-slate-950">NutriAI</span>
+                <span className="text-3xl font-black tracking-tighter text-[var(--text-main)]">NutriAI</span>
               </div>
-              <p className="text-slate-950 text-lg font-bold leading-relaxed max-w-md">
+              <p className="text-[var(--text-main)] text-lg font-bold leading-relaxed max-w-md">
                 Membangun masa depan yang lebih sehat melalui teknologi kecerdasan buatan. 
                 Kami membantu Anda mencintai tubuh Anda melalui nutrisi yang tepat.
               </p>
@@ -156,7 +156,7 @@ const LandingPage = () => {
                   { name: 'Instagram', icon: <Camera size={20} /> },
                   { name: 'LinkedIn', icon: <Briefcase size={20} /> }
                 ].map((social) => (
-                  <a key={social.name} href="#" className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-950 hover:bg-[var(--primary-green)] hover:text-white hover:border-[var(--primary-green)] transition-all shadow-sm group">
+                  <a key={social.name} href="#" className="w-12 h-12 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-card)] flex items-center justify-center text-[var(--text-main)] hover:bg-[var(--primary-green)] hover:text-white hover:border-[var(--primary-green)] transition-all shadow-sm group">
                     <span className="sr-only">{social.name}</span>
                     <div className="transition-transform group-hover:scale-110">
                       {social.icon}
@@ -198,13 +198,13 @@ const LandingPage = () => {
             </div>
           </div>
 
-          <div className="mt-20 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-slate-950 font-bold text-sm">
+          <div className="mt-20 pt-8 border-t border-[var(--border-card)] flex flex-col md:flex-row justify-between items-center gap-6">
+            <p className="text-[var(--text-main)] font-bold text-sm">
               &copy; 2026 NutriAI. All rights reserved.
             </p>
             <div className="flex gap-8">
-              <Link to="/privacy" className="text-slate-950 font-bold text-sm hover:text-[var(--primary-green)] transition-colors">Privacy</Link>
-              <Link to="/terms" className="text-slate-950 font-bold text-sm hover:text-[var(--primary-green)] transition-colors">Terms</Link>
+              <Link to="/privacy" className="text-[var(--text-main)] font-bold text-sm hover:text-[var(--primary-green)] transition-colors">Privacy</Link>
+              <Link to="/terms" className="text-[var(--text-main)] font-bold text-sm hover:text-[var(--primary-green)] transition-colors">Terms</Link>
             </div>
           </div>
         </div>

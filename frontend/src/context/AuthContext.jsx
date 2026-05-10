@@ -19,8 +19,11 @@ export const AuthProvider = ({ children }) => {
         setUser(profile);
       } catch (error) {
         console.error('Error loading profile:', error);
-        localStorage.removeItem('token');
-        setUser(null);
+        // Jangan hapus token jika hanya error jaringan/server restart
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          localStorage.removeItem('token');
+          setUser(null);
+        }
       } finally {
         setLoading(false);
       }

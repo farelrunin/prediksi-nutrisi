@@ -189,22 +189,43 @@ export const NutritionProvider = ({ children }) => {
       const normalizedHistory = history.map(normalizeStoredEntry);
 
       setNutritionData((prev) => buildNutritionState(normalizedHistory, prev));
+      return normalizedHistory; // Kembalikan data agar bisa dipakai langsung
     } catch (error) {
       console.error('Load history error:', error);
       setHistoryError(error.message || 'Gagal memuat riwayat asupan.');
+      return [];
     } finally {
       setHistoryLoading(false);
     }
   };
 
-  const refreshRecommendations = async () => {
-    if (nutritionData.history.length === 0) return;
+  const refreshRecommendations = async (currentHistory = null) => {
+    const historyToUse = currentHistory || nutritionData.history;
+    
+    // Jika riwayat kosong, bersihkan rekomendasi
+    if (!historyToUse || historyToUse.length === 0) {
+      setNutritionData(prev => ({ ...prev, recommendations: [] }));
+      return;
+    }
+    
     try {
+      const recentHistory = historyToUse.slice(0, 5);
       const recommendations = await nutritionService.getAiRecommendations(
-        nutritionData.history,
+        recentHistory,
         profile
       );
-      setNutritionData(prev => ({ ...prev, recommendations }));
+      
+      const finalRecommendations = recommendations.length > 0 ? recommendations : [
+        {
+          priority: "high",
+          title: "Analisis Nutrisi Sedang Berjalan",
+          message: "Data Anda sedang dianalisis secara mendalam. Tetap pantau asupan air putih dan nutrisi harian Anda.",
+          foods: ["Air Putih", "Sayuran Hijau"],
+          type: "energy"
+        }
+      ];
+      
+      setNutritionData(prev => ({ ...prev, recommendations: finalRecommendations }));
     } catch (error) {
       console.error("Gagal memuat rekomendasi AI:", error);
     }
@@ -227,8 +248,21 @@ export const NutritionProvider = ({ children }) => {
       return;
     }
 
-    refreshHistory().then(() => {
-      refreshRecommendations();
+    if (user) {
+      setProfile({
+        height: user.height || '',
+        weight: user.weight || '',
+        age: user.age || '',
+        gender: user.gender || '',
+        activityLevel: user.activity_level || '',
+        conditions: user.is_pregnant ? ['Ibu Hamil'] : (user.is_breastfeeding ? ['Ibu Menyusui'] : [])
+      });
+    }
+
+    refreshHistory().then((history) => {
+      if (history && history.length > 0) {
+        refreshRecommendations(history);
+      }
     });
   }, [authLoading, user]);
 
@@ -248,7 +282,14 @@ export const NutritionProvider = ({ children }) => {
       );
 
       const normalizedEntries = savedEntries.map(normalizeStoredEntry);
-      setNutritionData((prev) => buildNutritionState([...prev.history, ...normalizedEntries], prev));
+      const updatedHistory = [...nutritionData.history, ...normalizedEntries];
+      setNutritionData((prev) => buildNutritionState(updatedHistory, prev));
+      
+      // Update rekomendasi AI segera setelah input gizi ekstrem terdeteksi
+      setTimeout(() => {
+        refreshRecommendations(updatedHistory);
+      }, 500);
+
       return normalizedEntries;
     }
 
@@ -264,17 +305,23 @@ export const NutritionProvider = ({ children }) => {
       fat: nutrition.fat
     };
 
-    const savedEntry = await nutritionService.addFoodEntry(payload);
-    const normalizedEntry = normalizeStoredEntry(savedEntry);
+      const savedEntry = await nutritionService.addFoodEntry(payload);
+      const normalized = normalizeStoredEntry(savedEntry);
+      setNutritionData((prev) => buildNutritionState([...prev.history, normalized], prev));
+      
+      // Update rekomendasi AI segera
+      setTimeout(() => {
+        refreshRecommendations();
+      }, 500);
 
-    setNutritionData((prev) => buildNutritionState([...prev.history, normalizedEntry], prev));
-    return normalizedEntry;
+      return normalized;
   };
 
   const deleteFoodEntry = async (id) => {
     try {
       await nutritionService.deleteFoodEntry(id);
-      await refreshHistory();
+      const newHistory = await refreshHistory();
+      refreshRecommendations(newHistory);
     } catch (error) {
       console.error("Gagal menghapus di Store:", error);
       throw error;
@@ -286,13 +333,30 @@ export const NutritionProvider = ({ children }) => {
       return null;
     }
 
-    const caloriesRatio = Math.min(nutritionData.dailyIntake.calories / nutritionData.targets.calories, 1);
-    const proteinRatio = Math.min(nutritionData.dailyIntake.protein / nutritionData.targets.protein, 1);
-    const carbsRatio = Math.min(nutritionData.dailyIntake.carbs / nutritionData.targets.carbs, 1);
-    const fatRatio = Math.min(nutritionData.dailyIntake.fat / nutritionData.targets.fat, 1);
+    // Ratio asupan terhadap target (1.0 berarti pas)
+    const calRatio = nutritionData.dailyIntake.calories / nutritionData.targets.calories;
+    const protRatio = nutritionData.dailyIntake.protein / nutritionData.targets.protein;
+    const carbRatio = nutritionData.dailyIntake.carbs / nutritionData.targets.carbs;
+    const fatRatio = nutritionData.dailyIntake.fat / nutritionData.targets.fat;
 
-    const score = 1 - (caloriesRatio + proteinRatio + carbsRatio + fatRatio) / 4;
-    return Math.max(0, Math.min(1, score));
+    // Logika Kurang Gizi (Malnutrisi)
+    const underScore = (
+      Math.max(0, 1 - calRatio) +
+      Math.max(0, 1 - protRatio) +
+      Math.max(0, 1 - carbRatio) +
+      Math.max(0, 1 - fatRatio)
+    ) / 4;
+
+    // Logika Kelebihan Ekstrem (Over-intake/Toxicity)
+    // Jika kalori > 1.5x target atau protein/lemak > 2x target, ini bahaya
+    const overScore = (
+      (calRatio > 1.5 ? (calRatio - 1.5) / 2 : 0) +
+      (protRatio > 2.0 ? (protRatio - 2.0) / 2 : 0) +
+      (fatRatio > 2.0 ? (fatRatio - 2.0) / 2 : 0)
+    );
+
+    const totalRisk = Math.max(underScore, overScore);
+    return Math.max(0, Math.min(1, totalRisk));
   };
 
   const updateProfile = (newProfile) => {

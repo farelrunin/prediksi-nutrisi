@@ -30,8 +30,8 @@ const RecommendationList = () => {
     return (
       <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-8 text-center">
         <Lightbulb className="mx-auto mb-4 text-emerald-500/30" size={48} />
-        <h3 className="text-xl font-bold text-white mb-2">Belum Ada Rekomendasi</h3>
-        <p className="text-slate-400">Catat beberapa makanan agar Gemini bisa memberikan saran personal untukmu.</p>
+        <h3 className="text-xl font-bold text-[var(--text-main)] mb-2">Belum Ada Rekomendasi</h3>
+        <p className="text-[var(--text-muted)]">Catat beberapa makanan agar Gemini bisa memberikan saran personal untukmu.</p>
       </div>
     );
   }
@@ -44,7 +44,7 @@ const RecommendationList = () => {
             <Lightbulb className="text-emerald-400" size={24} />
             Rekomendasi Personal Gemini
           </h3>
-          <p className="text-slate-400 text-sm mt-1 italic">Analisis cerdas berdasarkan riwayat makan Anda</p>
+          <p className="text-[var(--text-muted)] text-sm mt-1 italic">Analisis cerdas berdasarkan riwayat makan Anda</p>
         </div>
         <div className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-bold text-emerald-400 border border-emerald-500/30 uppercase tracking-tighter">
           {recommendations.length} Saran Aktif
@@ -57,7 +57,7 @@ const RecommendationList = () => {
           const IconComp = getIcon(rec.type);
           
           return (
-            <div key={index} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 transition-all hover:bg-white/10 hover:border-white/20">
+            <div key={index} className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white/40 p-6 transition-all hover:bg-white/60 hover:border-emerald-500/30">
               <div className={`absolute top-0 right-0 h-24 w-24 -mr-8 -mt-8 opacity-5 ${style.text}`}>
                 <IconComp size={100} />
               </div>
@@ -68,19 +68,19 @@ const RecommendationList = () => {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h4 className="font-bold text-white text-lg">{rec.title}</h4>
+                    <h4 className="font-bold text-[var(--text-main)] text-lg">{rec.title}</h4>
                     <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-widest border ${style.bg} ${style.text} ${style.border}`}>
                       {rec.priority}
                     </span>
                   </div>
-                  <p className="text-slate-300 text-sm leading-relaxed mb-4">
+                  <p className="text-[var(--text-main)]/90 text-sm leading-relaxed mb-4">
                     {rec.message}
                   </p>
                   
                   {rec.foods && (
                     <div className="flex flex-wrap gap-2">
                       {rec.foods.map((food, fIdx) => (
-                        <span key={fIdx} className="rounded-lg bg-slate-950/40 px-3 py-1 text-xs font-medium text-slate-300 border border-white/5 hover:border-emerald-500/30 transition-colors">
+                        <span key={fIdx} className="rounded-lg bg-slate-950/60 px-3 py-1 text-xs font-semibold text-white border border-white/10 hover:border-emerald-500/30 transition-colors">
                           {food}
                         </span>
                       ))}
@@ -99,8 +99,8 @@ const RecommendationList = () => {
             <CheckCircle size={20} />
           </div>
           <div>
-            <h5 className="font-bold text-white text-sm mb-1">Kenapa Rekomendasi Ini Penting?</h5>
-            <p className="text-slate-400 text-xs leading-relaxed">
+            <h5 className="font-bold text-[var(--text-main)] text-sm mb-1">Kenapa Rekomendasi Ini Penting?</h5>
+            <p className="text-[var(--text-muted)] text-xs leading-relaxed">
               Gemini membandingkan profil kesehatanmu dengan tren nutrisi dari riwayat makan harianmu untuk memberikan saran yang membantu mencapai target kesehatan jangka panjang.
             </p>
           </div>

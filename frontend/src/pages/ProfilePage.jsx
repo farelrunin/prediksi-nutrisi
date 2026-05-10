@@ -160,6 +160,12 @@ const ProfilePage = () => {
       setFormData((prev) => {
         const newData = { ...prev, [name]: value };
         
+        // Fix: Reset pregnancy/breastfeeding if gender is male
+        if (name === 'gender' && value === 'male') {
+          newData.is_pregnant = false;
+          newData.is_breastfeeding = false;
+        }
+        
         // Auto-calculate targets when nutritionGoal changes
         if (name === 'nutritionGoal' && value) {
           const weight = parseFloat(prev.weight) || 70; // Fallback to 70kg if not set

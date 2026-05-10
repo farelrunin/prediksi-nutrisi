@@ -37,14 +37,14 @@ const DashboardPage = () => {
             <div className="mt-2 flex flex-wrap items-center gap-3">
               <p className="text-[var(--text-muted)] font-medium">Selamat datang kembali, {user?.name || 'User'}.</p>
               
-              {user?.is_pregnant && (
+              {user?.gender === 'female' && user?.is_pregnant && (
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-50 border border-rose-100 rounded-full animate-in zoom-in duration-500">
                   <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
                   <span className="text-[10px] font-black uppercase tracking-widest text-rose-600">Mode Ibu Hamil Aktif</span>
                 </div>
               )}
 
-              {user?.is_breastfeeding && (
+              {user?.gender === 'female' && user?.is_breastfeeding && (
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-sky-50 border border-sky-100 rounded-full animate-in zoom-in duration-500">
                   <div className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
                   <span className="text-[10px] font-black uppercase tracking-widest text-sky-600">Mode Ibu Menyusui Aktif</span>
