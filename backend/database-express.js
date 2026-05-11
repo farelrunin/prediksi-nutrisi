@@ -1,8 +1,15 @@
 const { Sequelize } = require("sequelize");
 require("dotenv").config();
 
-// Convert MySQL URL from Python format (mysql+pymysql) to Node format (mysql)
-const dbUrl = process.env.DATABASE_URL.replace("mysql+pymysql://", "mysql://");
+if (!process.env.DATABASE_URL) {
+  console.error("❌ DATABASE_URL is not set! Please set it in environment variables.");
+}
+
+// Convert MySQL URL to Node format and remove incompatible ssl-mode param
+let dbUrl = (process.env.DATABASE_URL || "mysql://localhost/nutriai_db")
+  .replace("mysql+pymysql://", "mysql://")
+  .replace("?ssl-mode=REQUIRED", "")
+  .replace("&ssl-mode=REQUIRED", "");
 
 const sequelize = new Sequelize(dbUrl, {
   dialect: "mysql",
