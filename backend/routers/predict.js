@@ -1,10 +1,48 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const { User } = require("../models-express");
+const { User, Food } = require("../models-express");
+const { Op } = require("sequelize");
 const geminiService = require("../services/geminiService");
 
 const SECRET_KEY = process.env.SECRET_KEY;
+
+// Helper: Database Fallback Search
+async function searchFoodDatabase(story) {
+  try {
+    // Cari kata kunci utama dari input (pisahkan spasi)
+    const keywords = story.split(' ').filter(word => word.length > 2);
+    
+    const matches = await Food.findAll({
+      where: {
+        [Op.or]: [
+          { food_name_id: { [Op.like]: `%${story}%` } },
+          { food_name_en: { [Op.like]: `%${story}%` } },
+          ...keywords.map(k => ({ food_name_id: { [Op.like]: `%${k}%` } }))
+        ]
+      },
+      limit: 3
+    });
+
+    if (matches.length > 0) {
+      const bestMatch = matches[0];
+      return {
+        parsed_foods: [{ name: bestMatch.food_name_id, quantity: 1, unit: 'porsi' }],
+        total_nutrition: {
+          calories: bestMatch.calories || 0,
+          protein: bestMatch.protein || 0,
+          carbs: bestMatch.carbohydrates || 0,
+          fat: bestMatch.total_fat || 0,
+          quantity_grams: 100
+        },
+        is_fallback: true
+      };
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
 
 // Analisis Cerita Makanan
 router.post("/", async (req, res) => {
@@ -29,8 +67,16 @@ router.post("/", async (req, res) => {
     } catch (e) {}
   }
 
-  const parsedData = await geminiService.parseNaturalLanguageFood(story);
-  if (!parsedData) return res.status(500).json({ detail: "AI Gagal menganalisis" });
+  // 1. Coba AI Dulu
+  let parsedData = await geminiService.parseNaturalLanguageFood(story);
+  
+  // 2. Jika AI Gagal, Coba Cari di Database Lokal (Ban Serep)
+  if (!parsedData) {
+    console.log("⚠️ AI Gagal, Menggunakan Database Fallback...");
+    parsedData = await searchFoodDatabase(story);
+  }
+
+  if (!parsedData) return res.status(500).json({ detail: "Sistem gagal mengenali makanan. Silakan coba input manual." });
 
   const foodInfo = {
     food_name: parsedData.parsed_foods.map(f => f.name).join(", "),
@@ -40,7 +86,11 @@ router.post("/", async (req, res) => {
     fat: parsedData.total_nutrition.fat
   };
 
-  const aiAdvice = await geminiService.getAiAdvice(foodInfo, userProfile);
+  // Coba dapatkan advice AI, kalau gagal pakai default advice
+  let aiAdvice = await geminiService.getAiAdvice(foodInfo, userProfile);
+  if (!aiAdvice) {
+    aiAdvice = `Berdasarkan database kami, ${foodInfo.food_name} mengandung sekitar ${foodInfo.calories} kalori. Pastikan porsi Anda sesuai dengan kebutuhan harian. (Analisis Database Lokal)`;
+  }
   
   let riskLevel = "Low";
   const dangerKeywords = ["PERINGATAN", "BAHAYA", "FATAL", "EKSTREM", "DARURAT"];
@@ -56,7 +106,8 @@ router.post("/", async (req, res) => {
     ...parsedData.total_nutrition,
     quantity_grams: parsedData.total_nutrition.quantity_grams || 0,
     foods: parsedData.parsed_foods,
-    parsed_data: parsedData
+    parsed_data: parsedData,
+    is_fallback: parsedData.is_fallback || false
   });
 });
 
