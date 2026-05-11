@@ -60,16 +60,11 @@ const Navbar = () => {
       return;
     }
     
-    const parent = parentRef.current;
     const child = menuRefs.current[index];
-    
-    if (parent && child) {
-      const parentRect = parent.getBoundingClientRect();
-      const childRect = child.getBoundingClientRect();
-      
+    if (child) {
       setIndicatorStyle({
-        left: childRect.left - parentRect.left,
-        width: childRect.width,
+        left: child.offsetLeft,
+        width: child.offsetWidth,
         opacity: 1
       });
     }
@@ -130,7 +125,7 @@ const Navbar = () => {
         >
           {/* THE MAGIC SLIDING PILL (MzCode Style) */}
           <div 
-            className="absolute h-[75%] bg-gradient-to-r from-[var(--primary-green)] to-[var(--accent-blue)] rounded-full transition-all duration-500 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] z-0"
+            className="absolute h-[75%] bg-gradient-to-r from-[var(--primary-green)] to-[var(--accent-blue)] rounded-full transition-all duration-500 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] z-0 pointer-events-none"
             style={{
               left: `${indicatorStyle.left}px`,
               width: `${indicatorStyle.width}px`,
