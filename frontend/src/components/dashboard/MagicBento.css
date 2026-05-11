@@ -125,6 +125,7 @@
   }
 }
 
+@media (max-width: 639px) {
   .magic-bento-card {
     min-height: 150px;
     padding: 1.25em;
