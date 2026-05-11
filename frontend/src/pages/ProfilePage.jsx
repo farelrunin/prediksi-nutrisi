@@ -13,6 +13,7 @@ import {
   Target,
   Heart,
   Sun,
+  RotateCcw,
 } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
 import { authService } from '../services/authService';
