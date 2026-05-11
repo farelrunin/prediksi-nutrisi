@@ -70,11 +70,9 @@ app.get("/", async (req, res) => {
   }
 });
 
-// Hanya jalankan app.listen di lokal (bukan di Vercel)
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-  });
-}
+// Jalankan server
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
 
 module.exports = app;
