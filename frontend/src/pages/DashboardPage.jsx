@@ -26,7 +26,7 @@ const DashboardPage = () => {
   ];
 
   return (
-    <div className="min-h-screen pb-24 pt-32 px-4 md:px-8 bg-[var(--bg-primary)]">
+    <div className="min-h-screen pb-24 pt-24 md:pt-32 px-4 md:px-8 bg-[var(--bg-primary)]">
       <div className="mx-auto max-w-7xl">
         
         {/* Header */}
@@ -78,7 +78,7 @@ const DashboardPage = () => {
                 </Link>
               </div>
               
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
                 {[
                   { label: 'Calories', cur: nutritionData.dailyIntake.calories, tar: nutritionData.targets.calories, unit: 'kcal', color: 'from-[var(--primary-green)] to-[var(--secondary-green)]' },
                   { label: 'Protein', cur: nutritionData.dailyIntake.protein, tar: nutritionData.targets.protein, unit: 'g', color: 'from-[var(--accent-blue)] to-blue-600' },
@@ -102,7 +102,7 @@ const DashboardPage = () => {
             </MagicCard>
 
             {/* Weekly Trend Chart */}
-            <MagicCard className="bg-[var(--bg-card)] rounded-[2.5rem] p-10 shadow-xl border border-[var(--border-card)] overflow-visible">
+            <MagicCard className="bg-[var(--bg-card)] rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 shadow-xl border border-[var(--border-card)] overflow-visible">
               <NutritionChart data={nutritionData.history} />
             </MagicCard>
           </div>

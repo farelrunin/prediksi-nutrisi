@@ -37,17 +37,17 @@ const RecommendationList = () => {
   }
 
   return (
-    <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[2.5rem] shadow-xl border border-[var(--border-card)] p-10">
-      <div className="flex items-center justify-between mb-8">
+    <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[2.5rem] shadow-xl border border-[var(--border-card)] p-6 md:p-10">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h3 className="text-xl font-bold text-[var(--text-main)] flex items-center gap-2">
             <Lightbulb className="text-emerald-400" size={24} />
-            Gemini's Personal Recommendations
+            Gemini's Recommendations
           </h3>
-          <p className="text-[var(--text-muted)] text-sm mt-1 italic">Intelligent analysis based on your food history</p>
+          <p className="text-[var(--text-muted)] text-sm mt-1 italic">Intelligent analysis based on history</p>
         </div>
-        <div className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-bold text-emerald-400 border border-emerald-500/30 uppercase tracking-tighter">
-          {recommendations.length} Active Suggestions
+        <div className="w-fit rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-bold text-emerald-400 border border-emerald-500/30 uppercase tracking-tighter">
+          {recommendations.length} Suggestions
         </div>
       </div>
 

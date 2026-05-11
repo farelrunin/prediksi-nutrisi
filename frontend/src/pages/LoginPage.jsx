@@ -104,7 +104,7 @@ const LoginPage = () => {
 
         {/* Form Card */}
         <div 
-          className="bg-[var(--bg-card)]/80 border border-[var(--border-card)] rounded-[32px] p-10 shadow-2xl"
+          className="bg-[var(--bg-card)]/80 border border-[var(--border-card)] rounded-[2.5rem] p-6 md:p-10 shadow-2xl"
         >
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="space-y-6">
@@ -136,7 +136,7 @@ const LoginPage = () => {
                     type={showPassword ? "text" : "password"} name="password" value={formData.password} onChange={handleChange} required
                     minLength="8" maxLength="100"
                     placeholder="Min. 8 characters"
-                    className="w-full pl-14 pr-14 py-5 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
+                    className="w-full pl-14 pr-14 py-5 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-card)] text-[var(--text-main)] font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-[var(--text-muted)]"
                   />
                   <button
                     type="button"

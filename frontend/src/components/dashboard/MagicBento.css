@@ -111,11 +111,19 @@
   color: var(--text-muted);
 }
 
-@media (max-width: 639px) {
+@media (max-width: 480px) {
+  .card-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1em;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 639px) {
   .card-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 1em;
   }
+}
 
   .magic-bento-card {
     min-height: 150px;

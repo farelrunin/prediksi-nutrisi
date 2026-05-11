@@ -34,13 +34,13 @@ const LandingPage = () => {
         <div className="relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative max-w-2xl animate-in fade-in slide-in-from-left duration-1000">
             {/* Clean Container for Text */}
-            <div className="relative z-10 p-10 lg:p-14 rounded-[3.5rem] bg-[var(--bg-card)]/80 border border-[var(--border-card)] shadow-2xl overflow-hidden group">
+            <div className="relative z-10 p-8 md:p-10 lg:p-14 rounded-[2.5rem] md:rounded-[3.5rem] bg-[var(--bg-card)]/80 border border-[var(--border-card)] shadow-2xl overflow-hidden group">
               <div className="relative z-10">
                 <div className="inline-flex items-center gap-2 mb-6 ml-1">
                   <Sparkles size={16} className="text-[var(--primary-green)]" />
                   <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">AI-Powered Nutrition Assistant</span>
                 </div>
-                <h1 className="text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight mb-8 text-[var(--text-main)]">
+                <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight mb-8 text-[var(--text-main)]">
                   Eat Well, <br />
                   <span className="text-[var(--primary-green)]">Stay Healthy.</span>
                 </h1>
@@ -72,7 +72,8 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-20">
             <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-[var(--primary-green)] mb-4">Core Features</h2>
-            <p className="text-4xl lg:text-5xl font-extrabold tracking-tight mb-6">Smart, Fast, <br /> and Measured.</p>
+            <p className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-6">
+              Smart, Fast, <br /> and Measured.</p>
             <p className="text-[var(--text-muted)] text-lg font-medium">Our AI technology is designed to simplify your healthy life.</p>
           </div>
 
