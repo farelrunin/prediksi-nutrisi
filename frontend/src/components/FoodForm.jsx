@@ -85,8 +85,17 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
     try {
       if (isManualMode) {
         // Submit manual data
-        await onAddFood(manualData);
-        setManualData({ foodName: '', quantity: 1, unit: 'porsi', mealType: 'breakfast' });
+        const manualFinalData = {
+          food_name: manualData.foodName,
+          meal_type: manualData.mealType,
+          quantity: Number(manualData.quantity),
+          unit: manualData.unit,
+          calories: 0, // Manual mode usually needs user to input these, but for now we set to 0 or handled by context
+          protein: 0,
+          carbs: 0,
+          fat: 0
+        };
+        await onAddFood(manualFinalData);
         notify({ type: 'success', title: 'Data Tersimpan', message: 'Makanan berhasil ditambahkan secara manual!' });
       } else {
         const trimmedStory = story.trim();
@@ -96,11 +105,18 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
           nutritionData = await predictNutrition({ story: trimmedStory });
         }
 
-        await onAddFood({
-          story: trimmedStory,
-          mealType: 'mixed',
-          ...nutritionData
-        });
+        const finalData = {
+          food_name: nutritionData.food_name || (nutritionData.foods && nutritionData.foods.length > 0 ? nutritionData.foods.map(f => f.name).join(', ') : trimmedStory),
+          meal_type: 'lunch', // Default atau bisa disesuaikan
+          calories: Number(nutritionData.calories || 0),
+          protein: Number(nutritionData.protein || 0),
+          carbs: Number(nutritionData.carbs || 0),
+          fat: Number(nutritionData.fat || 0),
+          quantity: 1,
+          unit: 'porsi'
+        };
+
+        await onAddFood(finalData);
 
         setStory('');
         setPredictionResult(null);
