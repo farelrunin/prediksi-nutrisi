@@ -36,8 +36,9 @@ app.use("/food", foodRouter);
 app.use("/predict", predictRouter);
 app.use("/categories", categoryRouter);
 
-// Import Models & Database
+// Import Models, Database & Seeder
 const { sequelize, connectDB } = require("./database-express");
+const { seedData } = require("./seeders");
 require("./models-express");
 
 // Connect to Database & Sync
@@ -46,6 +47,9 @@ require("./models-express");
     await connectDB();
     await sequelize.sync({ alter: true });
     console.log("✅ Database synchronized (Production)");
+    
+    // ISI DATA OTOMATIS (SEEDING)
+    await seedData();
   } catch (err) {
     console.error("❌ DB Initialization failed:", err.message);
   }
