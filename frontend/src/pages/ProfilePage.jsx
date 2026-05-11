@@ -671,7 +671,7 @@ const ProfilePage = () => {
                         type="number" name={field.name} value={field.val} onChange={handleChange}
                         min={field.min} max={field.max}
                         readOnly={field.readOnly}
-                        className={`w-full px-4 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-transparent text-[var(--text-main)] font-extrabold text-center focus:border-[var(--primary-green)] outline-none transition-all ${field.readOnly ? 'opacity-70 cursor-not-allowed bg-slate-50' : ''}`}
+                        className={`w-full px-4 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-transparent text-[var(--text-main)] font-extrabold text-center focus:border-[var(--primary-green)] outline-none transition-all ${field.readOnly ? 'opacity-40 cursor-not-allowed' : ''}`}
                       />
                     </div>
                   ))}
