@@ -50,45 +50,29 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
   });
   const { predictNutrition } = useNutrition();
 
-  useEffect(() => {
-    if (isManualMode) return; // Jangan predict jika di mode manual
+  const handleAnalyzeAI = async () => {
     const trimmedStory = story.trim();
-    if (trimmedStory.length <= 10) {
-      setPredictionResult(null);
-      setPredictionError('');
-      setPredicting(false);
-      return undefined;
+    if (trimmedStory.length < 10) {
+      notify({ type: 'warning', title: 'Cerita Terlalu Pendek', message: 'Tuliskan minimal 10 karakter agar AI bisa menganalisis.' });
+      return;
     }
-    
-    const currentRequestId = requestIdRef.current + 1;
-    requestIdRef.current = currentRequestId;
+
     setPredicting(true);
     setPredictionError('');
+    setPredictionResult(null);
 
-    const timeoutId = window.setTimeout(async () => {
-      try {
-        const result = await predictNutrition({ story: trimmedStory });
-        if (requestIdRef.current === currentRequestId) {
-          setPredictionResult(result);
-          setPredictionError('');
-        }
-      } catch (error) {
-        console.error('Prediction error:', error);
-        if (requestIdRef.current === currentRequestId) {
-          setPredictionResult(null);
-          setPredictionError(error.message || 'Gagal menganalisis cerita makanan.');
-        }
-      } finally {
-        if (requestIdRef.current === currentRequestId) {
-          setPredicting(false);
-        }
-      }
-    }, 1500);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
-  }, [predictNutrition, story, isManualMode]);
+    try {
+      const result = await predictNutrition({ story: trimmedStory });
+      setPredictionResult(result);
+      notify({ type: 'success', title: 'Analisis Selesai', message: 'AI berhasil mengekstrak nutrisi dari cerita Anda!' });
+    } catch (error) {
+      console.error('Prediction error:', error);
+      setPredictionError(error.message || 'Gagal menganalisis cerita makanan.');
+      notify({ type: 'error', title: 'Gagal Analisis', message: 'AI sedang sibuk atau kuota habis. Coba lagi nanti.' });
+    } finally {
+      setPredicting(false);
+    }
+  };
 
   const handleStoryChange = (value) => {
     setStory(value);
@@ -172,11 +156,27 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
                 required={!isManualMode}
                 maxLength="1000"
               />
-              <div className="mt-4 flex items-center gap-2 text-[var(--text-muted)]">
-                <Brain size={14} className="text-[var(--primary-green)]" />
-                <p className="text-[10px] font-bold uppercase tracking-widest">
-                  AI akan menganalisis makanan, porsi, dan estimasi nutrisi Anda.
-                </p>
+              <div className="mt-4 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-2 text-[var(--text-muted)]">
+                  <Brain size={14} className="text-[var(--primary-green)]" />
+                  <p className="text-[10px] font-bold uppercase tracking-widest">
+                    AI akan menganalisis makanan, porsi, dan estimasi nutrisi Anda.
+                  </p>
+                </div>
+                
+                <button
+                  type="button"
+                  onClick={handleAnalyzeAI}
+                  disabled={predicting || story.trim().length < 10}
+                  className="flex items-center gap-2 bg-white border border-[var(--primary-green)]/30 text-[var(--primary-green)] px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[var(--primary-green)] hover:text-white transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed group"
+                >
+                  {predicting ? (
+                    <div className="h-3 w-3 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <Sparkles size={14} className="group-hover:rotate-12 transition-transform" />
+                  )}
+                  {predicting ? 'Menganalisis...' : 'Analisis dengan AI'}
+                </button>
               </div>
             </div>
 
