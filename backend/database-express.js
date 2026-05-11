@@ -13,6 +13,7 @@ let dbUrl = (process.env.DATABASE_URL || "mysql://localhost/nutriai_db")
 
 const sequelize = new Sequelize(dbUrl, {
   dialect: "mysql",
+  dialectModule: require('mysql2'),
   logging: false,
   dialectOptions: {
     ssl: {
