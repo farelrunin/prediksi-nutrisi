@@ -6,11 +6,10 @@ import { useTheme } from '../../context/ThemeContext';
 
 const publicMenuItems = [
   { label: 'Home', to: '/', scrollTop: true },
-  { label: 'Fitur', href: '#fitur' },
-  { label: 'Cara Kerja', href: '#cara-kerja' },
+  { label: 'Fitur', to: '/#fitur', hash: '#fitur' },
+  { label: 'Cara Kerja', to: '/#cara-kerja', hash: '#cara-kerja' },
   { label: 'Kategori', to: '/kategori' },
   { label: 'Panduan', to: '/panduan' },
-  { label: 'Mulai', to: '/register' },
 ];
 
 const authenticatedMenuItems = [
@@ -137,10 +136,10 @@ const Navbar = () => {
           />
 
           {currentMenuItems.map((item, index) => {
-            const isInternal = item.to;
-            const isActive = isInternal 
-              ? location.pathname === item.to 
-              : location.hash === item.href;
+            const isInternal = item.to && !item.hash;
+            const isActive = item.hash 
+              ? location.hash === item.hash
+              : location.pathname === item.to;
 
             return (
               <div
@@ -153,16 +152,23 @@ const Navbar = () => {
                 className="relative"
               >
                 <NavLink
-                  to={item.to || (item.href ? '/' : '')}
+                  to={item.to || '/'}
                   onClick={(e) => {
-                    if (item.href) {
-                      e.preventDefault();
-                      const target = document.querySelector(item.href);
-                      if (target) {
-                        const navbarHeight = 100;
-                        const elementPosition = target.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
-                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                    if (item.hash) {
+                      if (location.pathname !== '/') {
+                        // Let the default navigation happen to /#hash
+                        setIsMobileMenuOpen(false);
+                      } else {
+                        // Smooth scroll on home page
+                        e.preventDefault();
+                        setIsMobileMenuOpen(false);
+                        const target = document.querySelector(item.hash);
+                        if (target) {
+                          const navbarHeight = 100;
+                          const elementPosition = target.getBoundingClientRect().top;
+                          const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+                          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                        }
                       }
                     }
                   }}
