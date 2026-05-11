@@ -22,8 +22,8 @@ const LoginPage = () => {
     if (loginSuccess && user && mounted) {
       notify({ 
         type: 'success', 
-        title: 'Login Berhasil', 
-        message: `Selamat datang kembali, ${user.name}!` 
+        title: 'Login Successful', 
+        message: `Welcome back, ${user.name}!` 
       });
       navigate('/', { replace: true });
     }
@@ -40,8 +40,8 @@ const LoginPage = () => {
       console.error('Login error:', error);
       notify({ 
         type: 'error', 
-        title: 'Login Gagal', 
-        message: error.message || 'Email atau password salah' 
+        title: 'Login Failed', 
+        message: error.message || 'Incorrect email or password' 
       });
     }
     setLoading(false);
@@ -55,7 +55,7 @@ const LoginPage = () => {
         setLoginSuccess(true);
       } catch (error) {
         console.error('Google Login error:', error);
-        notify({ type: 'error', title: 'Login Google Gagal', message: error.message || 'Terjadi kesalahan saat login dengan Google.' });
+        notify({ type: 'error', title: 'Google Login Failed', message: error.message || 'An error occurred while logging in with Google.' });
       }
       setLoading(false);
     },
@@ -90,7 +90,7 @@ const LoginPage = () => {
             <Apple className="text-white" size={28} />
           </div>
           <h1 className="text-3xl font-extrabold tracking-tighter text-white mb-1">
-            Selamat <span className="text-[var(--primary-green)]">Datang</span>
+            Welcome <span className="text-[var(--primary-green)]">Back</span>
           </h1>
           <p className="text-xs font-bold uppercase tracking-widest text-white/70">NutriAI Assistant</p>
         </div>
@@ -110,7 +110,7 @@ const LoginPage = () => {
                   <input
                     type="email" name="email" value={formData.email} onChange={handleChange} required
                     maxLength="100"
-                    placeholder="nama@email.com"
+                    placeholder="name@email.com"
                     className="w-full pl-14 pr-6 py-5 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
                   />
                 </div>
@@ -119,7 +119,7 @@ const LoginPage = () => {
               <div className="space-y-2">
                 <div className="flex justify-between items-center px-2">
                   <label className="text-[11px] font-bold uppercase tracking-widest text-slate-600">Password</label>
-                  <Link to="/forgot-password" size={24} className="text-[11px] font-bold uppercase tracking-widest text-[var(--primary-green)] hover:underline">Lupa?</Link>
+                  <Link to="/forgot-password" size={24} className="text-[11px] font-bold uppercase tracking-widest text-[var(--primary-green)] hover:underline">Forgot?</Link>
                 </div>
                 <div className="relative">
                   <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500">
@@ -128,7 +128,7 @@ const LoginPage = () => {
                   <input
                     type={showPassword ? "text" : "password"} name="password" value={formData.password} onChange={handleChange} required
                     minLength="8" maxLength="100"
-                    placeholder="Minimal 8 karakter"
+                    placeholder="Min. 8 characters"
                     className="w-full pl-14 pr-14 py-5 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
                   />
                   <button
@@ -146,7 +146,7 @@ const LoginPage = () => {
               type="submit" disabled={loading}
               className="w-full group relative flex items-center justify-center gap-3 bg-[var(--primary-green)] px-10 py-5 rounded-2xl font-bold text-white text-lg shadow-xl shadow-emerald-500/20 hover:scale-[1.02] active:scale-100 transition-all disabled:opacity-50"
             >
-              <span>{loading ? 'Masuk...' : 'Masuk'}</span>
+              <span>{loading ? 'Logging in...' : 'Login'}</span>
               <LogIn size={20} />
             </button>
           </form>
@@ -154,7 +154,7 @@ const LoginPage = () => {
           {/* Divider */}
           <div className="my-10 flex items-center gap-4">
             <div className="h-[1px] flex-1 bg-white/50" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Atau Lanjut Dengan</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Or Continue With</span>
             <div className="h-[1px] flex-1 bg-white/50" />
           </div>
 
@@ -176,9 +176,9 @@ const LoginPage = () => {
         {/* Footer Link */}
         <div className="text-center mt-10">
           <p className="text-sm font-semibold text-white/80">
-            Belum punya akun?{' '}
+            Don't have an account?{' '}
             <Link to="/register" className="text-[var(--primary-green)] hover:underline font-bold underline-offset-4">
-              Daftar Sekarang
+              Sign Up Now
             </Link>
           </p>
         </div>

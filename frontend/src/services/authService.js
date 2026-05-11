@@ -24,7 +24,7 @@ export const authService = {
       });
       return response.data;
     } catch (error) {
-      throw new Error(this.parseError(error, 'Login Google gagal'));
+      throw new Error(this.parseError(error, 'Google Login failed'));
     }
   },
 
@@ -38,7 +38,7 @@ export const authService = {
       });
       return response.data;
     } catch (error) {
-      throw new Error(this.parseError(error, 'Gagal mengambil data AKG'));
+      throw new Error(this.parseError(error, 'Failed to fetch targets'));
     }
   },
 
@@ -47,7 +47,7 @@ export const authService = {
       const response = await axios.post(`${API_BASE_URL}/auth/register`, userData);
       return response.data;
     } catch (error) {
-      throw new Error(this.parseError(error, 'Registrasi gagal'));
+      throw new Error(this.parseError(error, 'Registration failed'));
     }
   },
 
@@ -61,7 +61,7 @@ export const authService = {
       });
       return response.data;
     } catch (error) {
-      throw new Error(this.parseError(error, 'Gagal update profil'));
+      throw new Error(this.parseError(error, 'Failed to update profile'));
     }
   },
 
@@ -77,7 +77,7 @@ export const authService = {
       });
       return response.data;
     } catch (error) {
-      throw new Error(this.parseError(error, 'Gagal upload foto profil'));
+      throw new Error(this.parseError(error, 'Failed to upload profile photo'));
     }
   },
 
@@ -94,7 +94,7 @@ export const authService = {
       });
       return response.data;
     } catch (error) {
-      throw new Error(this.parseError(error, 'Gagal memuat profil'));
+      throw new Error(this.parseError(error, 'Failed to load profile'));
     }
   },
 

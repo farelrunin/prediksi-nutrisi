@@ -30,8 +30,8 @@ const RecommendationList = () => {
     return (
       <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-8 text-center">
         <Lightbulb className="mx-auto mb-4 text-emerald-500/30" size={48} />
-        <h3 className="text-xl font-bold text-[var(--text-main)] mb-2">Belum Ada Rekomendasi</h3>
-        <p className="text-[var(--text-muted)]">Catat beberapa makanan agar Gemini bisa memberikan saran personal untukmu.</p>
+        <h3 className="text-xl font-bold text-[var(--text-main)] mb-2">No Recommendations Yet</h3>
+        <p className="text-[var(--text-muted)]">Log some food so Gemini can provide personalized advice for you.</p>
       </div>
     );
   }
@@ -42,12 +42,12 @@ const RecommendationList = () => {
         <div>
           <h3 className="text-xl font-bold text-white flex items-center gap-2">
             <Lightbulb className="text-emerald-400" size={24} />
-            Rekomendasi Personal Gemini
+            Gemini's Personal Recommendations
           </h3>
-          <p className="text-[var(--text-muted)] text-sm mt-1 italic">Analisis cerdas berdasarkan riwayat makan Anda</p>
+          <p className="text-[var(--text-muted)] text-sm mt-1 italic">Intelligent analysis based on your food history</p>
         </div>
         <div className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-bold text-emerald-400 border border-emerald-500/30 uppercase tracking-tighter">
-          {recommendations.length} Saran Aktif
+          {recommendations.length} Active Suggestions
         </div>
       </div>
 
@@ -99,9 +99,9 @@ const RecommendationList = () => {
             <CheckCircle size={20} />
           </div>
           <div>
-            <h5 className="font-bold text-[var(--text-main)] text-sm mb-1">Kenapa Rekomendasi Ini Penting?</h5>
+            <h5 className="font-bold text-[var(--text-main)] text-sm mb-1">Why is this recommendation important?</h5>
             <p className="text-[var(--text-muted)] text-xs leading-relaxed">
-              Gemini membandingkan profil kesehatanmu dengan tren nutrisi dari riwayat makan harianmu untuk memberikan saran yang membantu mencapai target kesehatan jangka panjang.
+              Gemini compares your health profile with nutrition trends from your daily food history to provide advice that helps achieve long-term health goals.
             </p>
           </div>
         </div>

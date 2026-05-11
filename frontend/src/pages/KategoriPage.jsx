@@ -72,7 +72,7 @@ export default function KategoriPage() {
       const data = await categoryService.getAllCategories();
       setCategories(data);
     } catch (err) {
-      setError('Gagal memuat kategori. Silakan coba lagi.');
+      setError('Failed to load categories. Please try again.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -111,7 +111,7 @@ export default function KategoriPage() {
       <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)]">
         <div className="relative z-10 flex flex-col items-center justify-center space-y-4">
           <div className="h-12 w-12 rounded-full border-4 border-[var(--primary-green)]/20 border-t-[var(--primary-green)] animate-spin"></div>
-          <p className="text-[var(--text-muted)] font-black uppercase tracking-widest text-xs">Memuat Kategori...</p>
+          <p className="text-[var(--text-muted)] font-black uppercase tracking-widest text-xs">Loading Categories...</p>
         </div>
       </div>
     );
@@ -123,9 +123,9 @@ export default function KategoriPage() {
       <div className="relative z-10 pt-32 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16 text-center">
-            <h1 className="text-4xl lg:text-5xl font-extrabold text-[var(--text-main)] mb-6">Kategori <span className="text-[var(--primary-green)]">Makanan</span></h1>
+            <h1 className="text-4xl lg:text-5xl font-extrabold text-[var(--text-main)] mb-6">Food <span className="text-[var(--primary-green)]">Categories</span></h1>
             <p className="text-[var(--text-muted)] font-medium max-w-xl mx-auto mb-10">
-              Jelajahi berbagai jenis makanan berdasarkan grup nutrisi dan preferensi Anda.
+              Explore various types of food based on nutrition groups and your preferences.
             </p>
             
             <div className="max-w-2xl mx-auto relative animate-in zoom-in-95 duration-500">
@@ -134,7 +134,7 @@ export default function KategoriPage() {
               </div>
               <input
                 type="text"
-                placeholder="Cari nutrisi makanan (contoh: ayam, pisang, mi)..."
+                placeholder="Search food nutrition (e.g., chicken, banana, noodles)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-16 pr-6 py-5 rounded-full bg-[var(--bg-card)] border border-[var(--border-card)] text-[var(--text-main)] font-bold shadow-2xl shadow-emerald-500/10 focus:outline-none focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/10 transition-all text-lg placeholder-slate-400"
@@ -160,10 +160,10 @@ export default function KategoriPage() {
                   <div className="p-2 bg-[var(--primary-green)]/10 rounded-lg text-[var(--primary-green)]">
                     <MagnifyingGlassIcon className="h-5 w-5" />
                   </div>
-                  Hasil Pencarian
+                  Search Results
                 </h2>
                 <div className="text-xs font-black text-[var(--primary-green)] uppercase tracking-widest bg-[var(--primary-green)]/10 px-4 py-2 rounded-full">
-                  {searchResults.length} Item Ditemukan
+                  {searchResults.length} Items Found
                 </div>
               </div>
               
@@ -178,19 +178,19 @@ export default function KategoriPage() {
                       <div className="grid grid-cols-4 gap-2 text-center bg-[var(--bg-primary)] rounded-2xl p-3 border border-[var(--border-card)] shadow-sm">
                         <div>
                           <div className="text-sm font-black text-[var(--primary-green)]">{food.calories || 0}</div>
-                          <div className="text-[8px] font-black text-[var(--text-muted)] tracking-[0.2em] uppercase mt-0.5">Kkal</div>
+                          <div className="text-[8px] font-black text-[var(--text-muted)] tracking-[0.2em] uppercase mt-0.5">kcal</div>
                         </div>
                         <div>
                           <div className="text-sm font-black text-[var(--accent-blue)]">{food.protein || 0}g</div>
-                          <div className="text-[8px] font-black text-[var(--text-muted)] tracking-[0.2em] uppercase mt-0.5">Pro</div>
+                          <div className="text-[8px] font-black text-[var(--text-muted)] tracking-[0.2em] uppercase mt-0.5">Prot</div>
                         </div>
                         <div>
                           <div className="text-sm font-black text-[var(--warning)]">{food.carbohydrates || 0}g</div>
-                          <div className="text-[8px] font-black text-[var(--text-muted)] tracking-[0.2em] uppercase mt-0.5">Karbo</div>
+                          <div className="text-[8px] font-black text-[var(--text-muted)] tracking-[0.2em] uppercase mt-0.5">Carbs</div>
                         </div>
                         <div>
                           <div className="text-sm font-black text-[var(--danger)]">{food.total_fat || 0}g</div>
-                          <div className="text-[8px] font-black text-[var(--text-muted)] tracking-[0.2em] uppercase mt-0.5">Lemak</div>
+                          <div className="text-[8px] font-black text-[var(--text-muted)] tracking-[0.2em] uppercase mt-0.5">Fat</div>
                         </div>
                       </div>
                     </div>
@@ -202,8 +202,8 @@ export default function KategoriPage() {
                     <div className="w-20 h-20 bg-[var(--primary-green)]/10 rounded-full flex items-center justify-center mx-auto mb-6">
                       <MagnifyingGlassIcon className="h-10 w-10 text-[var(--primary-green)]" />
                     </div>
-                    <p className="text-xl font-extrabold text-[var(--text-main)]">Tidak ada makanan ditemukan</p>
-                    <p className="text-sm mt-2 font-medium">Coba gunakan kata kunci lain untuk "{searchQuery}"</p>
+                    <p className="text-xl font-extrabold text-[var(--text-main)]">No food found</p>
+                    <p className="text-sm mt-2 font-medium">Try using other keywords for "{searchQuery}"</p>
                   </div>
                 )
               )}
@@ -239,7 +239,7 @@ export default function KategoriPage() {
                             </div>
                             <div>
                               <h3 className="text-lg font-bold text-[var(--text-main)] leading-tight">{category.name}</h3>
-                              <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mt-1">{category.item_count} Item Tersedia</p>
+                              <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mt-1">{category.item_count} Items Available</p>
                             </div>
                           </div>
                           <div className={`p-2 rounded-xl border border-[var(--border-card)] ${isExpanded ? 'bg-[var(--primary-green)]/10' : ''}`}>
@@ -262,7 +262,7 @@ export default function KategoriPage() {
                             {loadingFoods === category.id ? (
                               <div className="p-10 text-center flex flex-col items-center gap-3">
                                 <div className="h-6 w-6 rounded-full border-2 border-[var(--primary-green)]/20 border-t-[var(--primary-green)] animate-spin"></div>
-                                <span className="text-[10px] font-black uppercase tracking-widest text-[var(--primary-green)]">Memuat...</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-[var(--primary-green)]">Loading...</span>
                               </div>
                             ) : foodsByCategory[category.id]?.length > 0 ? (
                               <div className="max-h-96 overflow-y-auto custom-scrollbar">
@@ -282,7 +282,7 @@ export default function KategoriPage() {
                               </div>
                             ) : (
                               <div className="p-10 text-center text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">
-                                Data belum tersedia
+                                Data not available yet
                               </div>
                             )}
                           </div>

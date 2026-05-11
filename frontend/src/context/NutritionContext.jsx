@@ -91,7 +91,7 @@ export const NutritionProvider = ({ children }) => {
         }));
       }
     } catch (error) {
-      console.error("Gagal mengambil target AKG:", error);
+      console.error("Failed to fetch AKG targets:", error);
     }
   };
 
@@ -111,7 +111,7 @@ export const NutritionProvider = ({ children }) => {
         dailyIntake: calculateDailyIntake(historyWithLocalTime)
       }));
     } catch (error) {
-      setHistoryError("Gagal mengambil riwayat asupan");
+      setHistoryError("Failed to fetch intake history");
     } finally {
       setHistoryLoading(false);
     }
@@ -137,14 +137,14 @@ export const NutritionProvider = ({ children }) => {
       if (foodData.story) {
         const prediction = await predictNutrition({ story: foodData.story });
         nutrition = {
-          food_name: prediction.foods ? prediction.foods[0]?.name : "Makanan dari cerita",
+          food_name: prediction.foods ? prediction.foods[0]?.name : "Food from story",
           calories: prediction.calories ?? 0,
           protein: prediction.protein ?? 0,
           carbs: prediction.carbs ?? 0,
           fat: prediction.fat ?? 0,
           meal_type: foodData.mealType || 'breakfast',
           quantity: foodData.quantity || 1,
-          unit: foodData.unit || 'porsi'
+          unit: foodData.unit || 'serving'
         };
         aiAdvice = prediction.ai_advice;
       } else {
@@ -159,7 +159,7 @@ export const NutritionProvider = ({ children }) => {
       await fetchHistory(); // Refresh from server
       return response;
     } catch (error) {
-      console.error("Gagal menambah makanan:", error);
+      console.error("Failed to add food:", error);
       throw error;
     }
   };
@@ -167,16 +167,16 @@ export const NutritionProvider = ({ children }) => {
   const deleteFoodEntry = async (id) => {
     console.log("Mencoba menghapus entri dengan ID:", id);
     if (!id) {
-      console.error("ID tidak ditemukan!");
-      throw new Error("ID tidak valid");
+      console.error("ID not found!");
+      throw new Error("Invalid ID");
     }
     
     try {
       await nutritionService.deleteFoodEntry(id);
-      console.log("Berhasil menghapus dari server, menyegarkan riwayat...");
+      console.log("Successfully deleted from server, refreshing history...");
       await fetchHistory();
     } catch (error) {
-      console.error("Gagal menghapus di Context:", error);
+      console.error("Failed to delete in Context:", error);
       throw error;
     }
   };
@@ -186,7 +186,7 @@ export const NutritionProvider = ({ children }) => {
       await nutritionService.updateFoodEntry(id, updatedData);
       await fetchHistory();
     } catch (error) {
-      console.error("Gagal memperbarui:", error);
+      console.error("Failed to update:", error);
     }
   };
 

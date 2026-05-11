@@ -33,7 +33,7 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, itemName, is
 
           <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
           <p className="text-slate-400 leading-relaxed">
-            {message} <span className="font-semibold text-white">"{itemName}"</span>? Tindakan ini tidak dapat dibatalkan.
+            {message} <span className="font-semibold text-white">"{itemName}"</span>? This action cannot be undone.
           </p>
 
           <div className="mt-8 flex gap-3">
@@ -41,7 +41,7 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, itemName, is
               onClick={onClose}
               className="flex-1 rounded-2xl border border-white/10 bg-white/5 py-3 text-sm font-semibold text-white transition-all hover:bg-white/10"
             >
-              Batal
+              Cancel
             </button>
             <button
               onClick={onConfirm}
@@ -51,10 +51,10 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, itemName, is
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  <span>Proses...</span>
+                  <span>Processing...</span>
                 </div>
               ) : (
-                "Ya, Hapus"
+                "Yes, Delete"
               )}
             </button>
           </div>

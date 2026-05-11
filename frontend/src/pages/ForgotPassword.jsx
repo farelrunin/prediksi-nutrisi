@@ -38,9 +38,9 @@ const ForgotPasswordPage = () => {
             <Apple className="text-white" size={28} />
           </div>
           <h1 className="text-3xl font-extrabold tracking-tighter text-white mb-1">
-            Lupa <span className="text-[var(--primary-green)]">Password?</span>
+            Forgot <span className="text-[var(--primary-green)]">Password?</span>
           </h1>
-          <p className="text-xs font-bold uppercase tracking-widest text-white/70">Pulihkan akun Anda</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-white/70">Recover your account</p>
         </div>
 
         {/* Form Card */}
@@ -51,13 +51,13 @@ const ForgotPasswordPage = () => {
             <form onSubmit={handleSubmit} className="space-y-8">
               <div className="space-y-4">
                 <p className="text-sm text-slate-600 font-medium text-center">
-                  Masukkan email Anda dan kami akan mengirimkan instruksi untuk mengatur ulang password.
+                  Enter your email and we will send instructions to reset your password.
                 </p>
                 
                 {/* Information Note for Google Users */}
                 <div className="bg-blue-50 border border-blue-100 p-4 rounded-2xl">
                   <p className="text-[10px] text-blue-600 font-bold leading-relaxed text-center uppercase tracking-wider">
-                    Catatan: Jika Anda mendaftar menggunakan Google, Anda tidak perlu mengatur ulang password di sini.
+                    Note: If you registered using Google, you do not need to reset your password here.
                   </p>
                 </div>
               </div>
@@ -70,7 +70,7 @@ const ForgotPasswordPage = () => {
                   </div>
                   <input
                     type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
-                    placeholder="nama@email.com"
+                    placeholder="name@email.com"
                     className="w-full pl-14 pr-6 py-5 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
                   />
                 </div>
@@ -80,7 +80,7 @@ const ForgotPasswordPage = () => {
                 type="submit" disabled={loading}
                 className="w-full group relative flex items-center justify-center gap-3 bg-[var(--primary-green)] px-10 py-5 rounded-2xl font-bold text-white text-lg shadow-xl shadow-emerald-500/20 hover:scale-[1.02] active:scale-100 transition-all disabled:opacity-50"
               >
-                <span>{loading ? 'Mengirim...' : 'Kirim Instruksi'}</span>
+                <span>{loading ? 'Sending...' : 'Send Instructions'}</span>
               </button>
             </form>
           ) : (
@@ -88,14 +88,14 @@ const ForgotPasswordPage = () => {
               <div className="w-20 h-20 bg-emerald-50 text-[var(--primary-green)] rounded-full flex items-center justify-center mx-auto shadow-inner">
                 <Mail size={40} />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900">Email Terkirim!</h3>
+              <h3 className="text-2xl font-bold text-slate-900">Email Sent!</h3>
               <div className="space-y-4">
                 <p className="text-sm text-slate-600 font-medium leading-relaxed">
-                  Silakan periksa email <strong>{email}</strong> untuk instruksi selanjutnya.
+                  Please check your email <strong>{email}</strong> for further instructions.
                 </p>
                 <div className="bg-amber-50 border border-amber-100 p-4 rounded-2xl">
                   <p className="text-[10px] text-amber-600 font-black uppercase tracking-widest leading-normal">
-                    Mode Pengembangan:<br/>Email disimulasikan. Dalam sistem nyata, link reset akan aktif selama 24 jam.
+                    Development Mode:<br/>Email simulated. In a real system, the reset link will be active for 24 hours.
                   </p>
                 </div>
               </div>
@@ -103,7 +103,7 @@ const ForgotPasswordPage = () => {
                 onClick={() => setSubmitted(false)}
                 className="text-sm font-bold text-[var(--primary-green)] hover:underline"
               >
-                Coba email lain
+                Try another email
               </button>
             </div>
           )}
@@ -112,7 +112,7 @@ const ForgotPasswordPage = () => {
           <div className="mt-8 pt-8 border-t border-white/50">
             <Link to="/login" className="flex items-center justify-center gap-2 text-sm font-bold text-slate-600 hover:text-slate-900 transition-colors">
               <ArrowLeft size={16} />
-              Kembali ke Login
+              Back to Login
             </Link>
           </div>
         </div>

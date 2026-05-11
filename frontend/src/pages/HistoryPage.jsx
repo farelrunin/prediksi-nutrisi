@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { List, CalendarDays, Clock3, UtensilsCrossed, Trash2 } from 'lucide-react';
+import { List, CalendarDays, Clock3, UtensilsCrossed, Trash2, X } from 'lucide-react';
 import { useNutrition } from '../context/useNutrition';
 import { useNotification } from '../context/useNotification';
 import { colors } from '../styles/colors';
 import ConfirmModal from '../components/shared/ConfirmModal';
 
-const formatDayLabel = (dateValue) => new Date(dateValue).toLocaleDateString('id-ID', {
+const formatDayLabel = (dateValue) => new Date(dateValue).toLocaleDateString('en-US', {
   weekday: 'long',
   day: 'numeric',
   month: 'long',
@@ -26,7 +26,7 @@ const groupEntriesByDay = (entries) => entries.reduce((groups, entry) => {
   }
 
   // Group by session (exact same timestamp or within the same minute)
-  const time = new Date(entry.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+  const time = new Date(entry.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
   const sessionKey = `${entry.mealType}-${time}`;
   
   if (!groups[dateKey][sessionKey]) {
@@ -41,6 +41,7 @@ const HistoryPage = () => {
   const { nutritionData, historyLoading, historyError, deleteFoodEntry } = useNutrition();
   const { notify } = useNotification();
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
+  const [selectedEntry, setSelectedEntry] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const groupedData = groupEntriesByDay(nutritionData.history);
@@ -55,9 +56,9 @@ const HistoryPage = () => {
       setIsDeleting(true);
       try {
         await deleteFoodEntry(deleteModal.item.id);
-        notify({ type: 'success', title: 'Berhasil', message: 'Data nutrisi berhasil dihapus.' });
+        notify({ type: 'success', title: 'Success', message: 'Nutrition data deleted successfully.' });
       } catch (error) {
-        notify({ type: 'error', title: 'Gagal Menghapus', message: error.message });
+        notify({ type: 'error', title: 'Delete Failed', message: error.message });
       } finally {
         setIsDeleting(false);
       }
@@ -73,13 +74,13 @@ const HistoryPage = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
             <h1 className="text-4xl font-black tracking-tight text-[var(--text-main)]">
-              Jurnal <span className="text-[var(--primary-green)]">Nutrisi</span>
+              Nutrition <span className="text-[var(--primary-green)]">Journal</span>
             </h1>
-            <p className="mt-2 text-[var(--text-muted)] font-medium">Histori lengkap perjalanan nutrisi harian Anda.</p>
+            <p className="mt-2 text-[var(--text-muted)] font-medium">Complete history of your daily nutrition journey.</p>
           </div>
           <div className="bg-[var(--bg-card)] border border-[var(--border-card)] px-8 py-4 rounded-3xl shadow-xl flex items-center gap-4">
             <div className="text-center">
-              <div className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Total Entri</div>
+              <div className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Total Entries</div>
               <div className="text-xl font-black text-[var(--text-main)]">{nutritionData.history.length}</div>
             </div>
           </div>
@@ -88,16 +89,16 @@ const HistoryPage = () => {
         {historyLoading ? (
           <div className="flex h-96 flex-col items-center justify-center space-y-4">
             <div className="h-12 w-12 rounded-full border-4 border-[var(--primary-green)]/20 border-t-[var(--primary-green)] animate-spin" />
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary-green)]">Memuat Jurnal...</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary-green)]">Loading Journal...</p>
           </div>
         ) : sortedDays.length === 0 ? (
           <div className="rounded-[3rem] border-2 border-dashed border-[var(--border-card)] p-32 text-center bg-[var(--bg-card)]/30">
             <div className="w-20 h-20 bg-[var(--bg-card)] rounded-3xl flex items-center justify-center mx-auto mb-8 border border-[var(--border-card)]">
               <UtensilsCrossed className="text-[var(--primary-green)]/30" size={40} />
             </div>
-            <h2 className="text-2xl font-black text-[var(--text-main)]">Jurnal Anda Kosong</h2>
+            <h2 className="text-2xl font-black text-[var(--text-main)]">Your Journal is Empty</h2>
             <p className="mt-4 text-[var(--text-muted)] max-w-md mx-auto font-medium">
-              Ayo catat makanan Anda hari ini untuk mulai memantau nutrisi!
+              Let's record your food today to start monitoring your nutrition!
             </p>
           </div>
         ) : (
@@ -123,7 +124,7 @@ const HistoryPage = () => {
                   <div className="hidden md:flex gap-8 text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
                     <span className="text-[var(--primary-green)]">{Math.round(dayTotals.calories)} kcal</span>
                     <span>{Math.round(dayTotals.protein)}g Prot</span>
-                    <span>{Math.round(dayTotals.carbs)}g Karb</span>
+                    <span>{Math.round(dayTotals.carbs)}g Carbs</span>
                   </div>
                 </div>
 
@@ -139,7 +140,7 @@ const HistoryPage = () => {
                           <div className="flex items-center gap-3">
                             <Clock3 size={16} className="text-[var(--primary-green)]" />
                             <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
-                              {mealType === 'mixed' ? 'SESI MAKAN' : mealType.toUpperCase()} • {time} WIB
+                              {mealType === 'mixed' ? 'MEAL SESSION' : mealType.toUpperCase()} • {time}
                             </span>
                           </div>
                         </div>
@@ -148,10 +149,13 @@ const HistoryPage = () => {
                         <div className="p-8 space-y-6">
                           {sessionEntries.map((entry) => (
                             <div key={entry.id} className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 last:pb-0 border-b border-slate-100 last:border-0">
-                              <div className="flex-1 min-w-0">
-                                <p className="text-lg font-bold text-[var(--text-main)] truncate group-hover:text-[var(--primary-green)] transition-colors">{entry.foodName}</p>
+                              <div 
+                                className="flex-1 min-w-0 cursor-pointer group/item"
+                                onClick={() => setSelectedEntry(entry)}
+                              >
+                                <p className="text-lg font-bold text-[var(--text-main)] truncate group-hover/item:text-[var(--primary-green)] transition-colors">{entry.foodName}</p>
                                 <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mt-1">
-                                  {entry.quantity} {entry.unit}
+                                  {entry.quantity} {entry.unit} • <span className="text-[var(--primary-green)]">Click for details</span>
                                 </p>
                               </div>
                               
@@ -159,8 +163,8 @@ const HistoryPage = () => {
                                 {[
                                   { label: 'KCAL', val: entry.calories, color: 'text-[var(--primary-green)]' },
                                   { label: 'PROT', val: (entry.protein || 0) + 'g', color: 'text-[var(--accent-blue)]' },
-                                  { label: 'KARB', val: (entry.carbs || 0) + 'g', color: 'text-[var(--warning)]' },
-                                  { label: 'LEMAK', val: (entry.fat || 0) + 'g', color: 'text-[var(--danger)]' }
+                                  { label: 'CARBS', val: (entry.carbs || 0) + 'g', color: 'text-[var(--warning)]' },
+                                  { label: 'FAT', val: (entry.fat || 0) + 'g', color: 'text-[var(--danger)]' }
                                 ].map((stat) => (
                                   <div key={stat.label} className="text-center min-w-[50px]">
                                     <div className={`text-base font-extrabold ${stat.color}`}>{stat.val}</div>
@@ -192,11 +196,74 @@ const HistoryPage = () => {
         isOpen={deleteModal.isOpen}
         onClose={() => setDeleteModal({ isOpen: false, item: null })}
         onConfirm={handleConfirmDelete}
-        title="Hapus Data?"
-        message="Data nutrisi untuk item ini akan dihapus permanen."
+        title="Delete Data?"
+        message="Nutrition data for this item will be permanently deleted."
         itemName={deleteModal.item?.foodName}
         isLoading={isDeleting}
       />
+
+      {/* Detail Popup Modal */}
+      {selectedEntry && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-300" onClick={() => setSelectedEntry(null)} />
+          <div className="relative w-full max-w-2xl bg-white rounded-[3rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="p-10">
+              <div className="flex justify-between items-start mb-8">
+                <div>
+                  <h3 className="text-3xl font-black text-slate-900">{selectedEntry.foodName}</h3>
+                  <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mt-2">{selectedEntry.mealType} • {selectedEntry.quantity} {selectedEntry.unit}</p>
+                </div>
+                <button onClick={() => setSelectedEntry(null)} className="p-3 rounded-2xl bg-slate-50 text-slate-400 hover:text-rose-500 transition-colors">
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+                {[
+                  { label: 'Calories', val: selectedEntry.calories, unit: 'kcal', color: 'bg-emerald-50 text-emerald-600', icon: '🔥' },
+                  { label: 'Protein', val: selectedEntry.protein, unit: 'g', color: 'bg-blue-50 text-blue-600', icon: '🍗' },
+                  { label: 'Carbs', val: selectedEntry.carbs, unit: 'g', color: 'bg-amber-50 text-amber-600', icon: '🍞' },
+                  { label: 'Fat', val: selectedEntry.fat, unit: 'g', color: 'bg-rose-50 text-rose-600', icon: '🥑' }
+                ].map((n) => (
+                  <div key={n.label} className={`p-6 rounded-[2rem] ${n.color} border border-transparent hover:border-current/10 transition-all`}>
+                    <div className="text-2xl mb-2">{n.icon}</div>
+                    <div className="text-2xl font-black">{n.val}</div>
+                    <div className="text-[10px] font-black uppercase tracking-widest opacity-70">{n.label} ({n.unit})</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-6">
+                <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 pb-4">Micronutrients & Others</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                  {[
+                    { label: 'Calcium', val: selectedEntry.calcium || '—', unit: 'mg' },
+                    { label: 'Iron', val: selectedEntry.iron || '—', unit: 'mg' },
+                    { label: 'Vitamin A', val: selectedEntry.vitamin_a || '—', unit: 'IU' },
+                    { label: 'Vitamin C', val: selectedEntry.vitamin_c || '—', unit: 'mg' },
+                    { label: 'Fiber', val: selectedEntry.fiber || '—', unit: 'g' },
+                    { label: 'Sugar', val: selectedEntry.sugar || '—', unit: 'g' }
+                  ].map((m) => (
+                    <div key={m.label} className="flex justify-between items-center py-1">
+                      <span className="text-sm font-bold text-slate-600">{m.label}</span>
+                      <span className="text-sm font-black text-slate-900">{m.val} <span className="text-[10px] text-slate-400 font-bold uppercase">{m.unit}</span></span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-12 pt-8 border-t border-slate-100 flex justify-end">
+                <button 
+                  onClick={() => setSelectedEntry(null)}
+                  className="px-8 py-4 rounded-2xl bg-slate-900 text-white font-bold text-sm hover:scale-105 active:scale-100 transition-all"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

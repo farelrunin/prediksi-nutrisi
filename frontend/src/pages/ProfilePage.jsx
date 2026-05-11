@@ -128,10 +128,10 @@ const ProfilePage = () => {
   // Get BMI Status
   const getBMIStatus = (bmi) => {
     if (!bmi) return null;
-    if (bmi < 18.5) return { status: 'Kurus', color: 'text-blue-400' };
+    if (bmi < 18.5) return { status: 'Underweight', color: 'text-blue-400' };
     if (bmi < 25) return { status: 'Normal', color: 'text-emerald-400' };
-    if (bmi < 30) return { status: 'Berlebih', color: 'text-yellow-400' };
-    return { status: 'Obesitas', color: 'text-red-400' };
+    if (bmi < 30) return { status: 'Overweight', color: 'text-yellow-400' };
+    return { status: 'Obese', color: 'text-red-400' };
   };
 
   const bmi = calculateBMI();
@@ -161,6 +161,18 @@ const ProfilePage = () => {
       setFormData((prev) => {
         const newData = { ...prev, [name]: value };
         
+        // Auto-calculate Age if dateOfBirth changes
+        if (name === 'dateOfBirth' && value) {
+          const birthDate = new Date(value);
+          const today = new Date();
+          let age = today.getFullYear() - birthDate.getFullYear();
+          const monthDiff = today.getMonth() - birthDate.getMonth();
+          if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+          }
+          newData.age = age;
+        }
+
         // Fix: Reset pregnancy/breastfeeding if gender is male
         if (name === 'gender' && value === 'male') {
           newData.is_pregnant = false;
@@ -169,7 +181,7 @@ const ProfilePage = () => {
         
         // Auto-calculate targets when nutritionGoal changes
         if (name === 'nutritionGoal' && value) {
-          const weight = parseFloat(prev.weight) || 70; // Fallback to 70kg if not set
+          const weight = parseFloat(prev.weight) || 70; 
           
           let targets = {};
           switch(value) {
@@ -210,8 +222,8 @@ const ProfilePage = () => {
           Object.assign(newData, targets);
           notify({ 
             type: 'info', 
-            title: 'Target Diperbarui', 
-            message: `Target nutrisi disesuaikan otomatis untuk tujuan: ${value === 'lose' ? 'Menurunkan BB' : value === 'gain' ? 'Menaikkan BB' : value === 'build_muscle' ? 'Membentuk Otot' : 'Menjaga BB'}.` 
+            title: 'Targets Updated', 
+            message: `Nutrition targets automatically adjusted for goal: ${value === 'lose' ? 'Weight Loss' : value === 'gain' ? 'Weight Gain' : value === 'build_muscle' ? 'Build Muscle' : 'Maintain'}.` 
           });
         }
         
@@ -272,7 +284,7 @@ const ProfilePage = () => {
       img.src = tempImage;
     } catch (e) {
       console.error(e);
-      notify({ type: 'error', title: 'Pemrosesan Gagal', message: 'Gagal memproses gambar. Silakan coba lagi.' });
+      notify({ type: 'error', title: 'Processing Failed', message: 'Failed to process image. Please try again.' });
     }
   };
 
@@ -296,21 +308,21 @@ const ProfilePage = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.fullName.trim()) newErrors.fullName = 'Nama wajib diisi';
-    if (!formData.gender) newErrors.gender = 'Jenis kelamin wajib dipilih';
+    if (!formData.fullName.trim()) newErrors.fullName = 'Full Name is required';
+    if (!formData.gender) newErrors.gender = 'Gender is required';
     if (formData.height && formData.height <= 0) {
-      newErrors.height = 'Tinggi badan harus lebih dari 0';
+      newErrors.height = 'Height must be greater than 0';
     }
     if (formData.weight && formData.weight <= 0) {
-      newErrors.weight = 'Berat badan harus lebih dari 0';
+      newErrors.weight = 'Weight must be greater than 0';
     }
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
       notify({ 
         type: 'warning', 
-        title: 'Data Belum Lengkap', 
-        message: 'Mohon lengkapi data yang wajib diisi: ' + Object.values(newErrors).join(', ') 
+        title: 'Incomplete Data', 
+        message: 'Please complete required fields: ' + Object.values(newErrors).join(', ') 
       });
       return false;
     }
@@ -357,12 +369,12 @@ const ProfilePage = () => {
       localStorage.setItem('nutrisiAI_profile', JSON.stringify(formData));
 
       setSuccess(true);
-      notify({ type: 'success', title: 'Berhasil', message: 'Profil Anda telah diperbarui.' });
+      notify({ type: 'success', title: 'Success', message: 'Your profile has been updated.' });
       setTimeout(() => setSuccess(false), 3000);
     } catch (error) {
       console.error('Error saving profile:', error);
-      setErrors({ global: error.message || 'Gagal menyimpan profil. Silakan coba lagi.' });
-      notify({ type: 'error', title: 'Gagal Simpan', message: error.message || 'Terjadi kesalahan server saat menyimpan profil.' });
+      setErrors({ global: error.message || 'Failed to save profile. Please try again.' });
+      notify({ type: 'error', title: 'Save Failed', message: error.message || 'Server error occurred while saving profile.' });
     } finally {
       setLoading(false);
     }
@@ -397,7 +409,7 @@ const ProfilePage = () => {
     });
     setErrors({});
     setIsResetModalOpen(false);
-    notify({ type: 'info', title: 'Form Reset', message: 'Seluruh isian formulir telah dibersihkan.' });
+    notify({ type: 'info', title: 'Form Reset', message: 'All form fields have been cleared.' });
   };
 
   // Get initials for avatar
@@ -419,8 +431,8 @@ const ProfilePage = () => {
           <div className="bg-white rounded-[3rem] w-full max-w-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
               <div>
-                <h3 className="text-xl font-bold text-slate-900">Atur Posisi Foto</h3>
-                <p className="text-xs font-medium text-slate-500 mt-1">Geser foto untuk menyesuaikan posisi.</p>
+                <h3 className="text-xl font-bold text-slate-900">Adjust Photo</h3>
+                <p className="text-xs font-medium text-slate-500 mt-1">Drag the photo to adjust position.</p>
               </div>
               <button onClick={() => setIsCropping(false)} className="p-3 rounded-2xl bg-white text-slate-400 hover:text-rose-500 transition-colors shadow-sm">
                 <RotateCcw size={20} />
@@ -467,7 +479,7 @@ const ProfilePage = () => {
             <div className="p-8 space-y-6">
               <div className="space-y-4">
                 <div className="flex justify-between text-xs font-bold text-slate-400 uppercase tracking-widest">
-                  <span>Ukuran</span>
+                  <span>Zoom</span>
                   <span>{Math.round(scale * 100)}%</span>
                 </div>
                 <input
@@ -486,13 +498,13 @@ const ProfilePage = () => {
                   onClick={() => setIsCropping(false)}
                   className="flex-1 px-8 py-4 rounded-2xl font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 transition-all"
                 >
-                  Batal
+                  Cancel
                 </button>
                 <button
                   onClick={handleCropSave}
                   className="flex-1 px-8 py-4 rounded-2xl font-bold text-white bg-[var(--primary-green)] shadow-lg shadow-emerald-500/40 hover:scale-[1.02] active:scale-100 transition-all"
                 >
-                  Gunakan Foto Ini
+                  Use This Photo
                 </button>
               </div>
             </div>
@@ -506,15 +518,15 @@ const ProfilePage = () => {
         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <h1 className="text-4xl font-extrabold tracking-tight text-[var(--text-main)]">
-              Profil <span className="text-[var(--primary-green)]">Saya</span>
+              My <span className="text-[var(--primary-green)]">Profile</span>
             </h1>
-            <p className="mt-2 text-[var(--text-muted)] font-medium">Atur informasi fisik dan target nutrisi Anda.</p>
+            <p className="mt-2 text-[var(--text-muted)] font-medium">Manage your physical data and nutrition targets.</p>
           </div>
           <button
             onClick={() => navigate('/dashboard')}
             className="flex items-center gap-2 bg-white border border-[var(--border-card)] px-6 py-3 rounded-2xl text-xs font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all shadow-sm"
           >
-            <ArrowLeft size={16} /> Kembali
+            <ArrowLeft size={16} /> Back
           </button>
         </div>
 
@@ -524,7 +536,7 @@ const ProfilePage = () => {
             <div className="p-2 bg-[var(--primary-green)] rounded-xl text-white">
               <CheckCircle2 size={20} />
             </div>
-            <span className="text-sm font-bold text-[var(--primary-green)]">Profil Berhasil Diperbarui!</span>
+            <span className="text-sm font-bold text-[var(--primary-green)]">Profile Updated Successfully!</span>
           </div>
         )}
 
@@ -558,7 +570,7 @@ const ProfilePage = () => {
 
               <div className="space-y-6 pt-8 border-t border-slate-100 text-left">
                 <div className="flex justify-between items-center">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)]">Kelengkapan</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)]">Completeness</span>
                   <span className="text-xs font-bold text-[var(--primary-green)]">{isProfileComplete ? '100%' : '60%'}</span>
                 </div>
                 <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden p-[1px]">
@@ -585,18 +597,18 @@ const ProfilePage = () => {
           <div className="lg:col-span-8 space-y-10">
             <form onSubmit={handleSubmit} className="space-y-10">
               
-              {/* Seksi: Informasi Dasar */}
+              {/* Section: Basic Information */}
               <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-10 shadow-xl">
                 <div className="flex items-center gap-4 mb-10">
                   <div className="p-2.5 bg-[var(--primary-green)]/10 rounded-xl text-[var(--primary-green)]">
                     <User size={20} />
                   </div>
-                  <h2 className="text-lg font-bold text-[var(--text-main)] uppercase tracking-wide">Informasi Dasar</h2>
+                  <h2 className="text-lg font-bold text-[var(--text-main)] uppercase tracking-wide">Basic Information</h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Nama Lengkap</label>
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Full Name</label>
                     <input
                       type="text" name="fullName" value={formData.fullName} onChange={handleChange}
                       maxLength="100"
@@ -612,19 +624,19 @@ const ProfilePage = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Jenis Kelamin</label>
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Gender</label>
                     <select
                       name="gender" value={formData.gender} onChange={handleChange}
                       className={`w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border text-[var(--text-main)] font-semibold outline-none transition-all appearance-none ${errors.gender ? 'border-rose-500 bg-rose-50' : 'border-transparent focus:border-[var(--primary-green)]'}`}
                     >
-                      <option value="">Pilih...</option>
-                      <option value="male">Laki-laki</option>
-                      <option value="female">Perempuan</option>
+                      <option value="">Select...</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
                     </select>
                     {errors.gender && <p className="text-[10px] font-bold text-rose-500 ml-2 animate-pulse">{errors.gender}</p>}
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Tanggal Lahir</label>
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Date of Birth</label>
                     <input
                       type="date" 
                       name="dateOfBirth" 
@@ -637,28 +649,29 @@ const ProfilePage = () => {
                 </div>
               </div>
 
-              {/* Seksi: Data Fisik */}
+              {/* Section: Physical Data */}
               <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-10 shadow-xl">
                 <div className="flex items-center gap-4 mb-10">
                   <div className="p-2.5 bg-[var(--accent-blue)]/10 rounded-xl text-[var(--accent-blue)]">
                     <Zap size={20} />
                   </div>
-                  <h2 className="text-lg font-bold text-[var(--text-main)] uppercase tracking-wide">Data Fisik</h2>
+                  <h2 className="text-lg font-bold text-[var(--text-main)] uppercase tracking-wide">Physical Data</h2>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                   {[
-                    { label: 'Tinggi (cm)', name: 'height', val: formData.height, min: 50, max: 300 },
-                    { label: 'Berat (kg)', name: 'weight', val: formData.weight, min: 10, max: 500 },
-                    { label: 'Usia', name: 'age', val: formData.age, min: 1, max: 120 },
-                    { label: 'Tidur (jam)', name: 'sleepHours', val: formData.sleepHours, min: 0, max: 24 }
+                    { label: 'Height (cm)', name: 'height', val: formData.height, min: 50, max: 300, readOnly: false },
+                    { label: 'Weight (kg)', name: 'weight', val: formData.weight, min: 10, max: 500, readOnly: false },
+                    { label: 'Age', name: 'age', val: formData.age, min: 1, max: 120, readOnly: true },
+                    { label: 'Sleep (hrs)', name: 'sleepHours', val: formData.sleepHours, min: 0, max: 24, readOnly: false }
                   ].map((field) => (
                     <div key={field.name} className="space-y-2">
                       <label className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] ml-1">{field.label}</label>
                       <input
                         type="number" name={field.name} value={field.val} onChange={handleChange}
                         min={field.min} max={field.max}
-                        className="w-full px-4 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-transparent text-[var(--text-main)] font-extrabold text-center focus:border-[var(--primary-green)] outline-none transition-all"
+                        readOnly={field.readOnly}
+                        className={`w-full px-4 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-transparent text-[var(--text-main)] font-extrabold text-center focus:border-[var(--primary-green)] outline-none transition-all ${field.readOnly ? 'opacity-70 cursor-not-allowed bg-slate-50' : ''}`}
                       />
                     </div>
                   ))}
@@ -667,7 +680,7 @@ const ProfilePage = () => {
                 {/* Special Conditions (Pregnancy/Breastfeeding) */}
                 {formData.gender === 'female' && (
                   <div className="mt-10 pt-8 border-t border-slate-100">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1 block mb-6">Kondisi Khusus (Opsional)</label>
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1 block mb-6">Special Conditions (Optional)</label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className={`p-6 rounded-[2rem] border transition-all cursor-pointer flex items-center justify-between ${formData.is_pregnant ? 'border-[var(--primary-green)] bg-emerald-50' : 'border-[var(--border-card)] bg-[var(--bg-secondary)]'}`}
                            onClick={() => setFormData(prev => ({ ...prev, is_pregnant: !prev.is_pregnant, is_breastfeeding: false }))}>
@@ -676,8 +689,8 @@ const ProfilePage = () => {
                             <Heart className="w-5 h-5" />
                           </div>
                           <div>
-                            <p className="font-bold text-[var(--text-main)]">Sedang Hamil</p>
-                            <p className="text-[10px] font-medium text-[var(--text-muted)]">Target nutrisi akan disesuaikan</p>
+                            <p className="font-bold text-[var(--text-main)]">Currently Pregnant</p>
+                            <p className="text-[10px] font-medium text-[var(--text-muted)]">Nutrition targets will be adjusted</p>
                           </div>
                         </div>
                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${formData.is_pregnant ? 'border-[var(--primary-green)] bg-[var(--primary-green)]' : 'border-slate-300'}`}>
@@ -692,8 +705,8 @@ const ProfilePage = () => {
                             <Sun className="w-5 h-5" />
                           </div>
                           <div>
-                            <p className="font-bold text-[var(--text-main)]">Sedang Menyusui</p>
-                            <p className="text-[10px] font-medium text-[var(--text-muted)]">Target nutrisi akan disesuaikan</p>
+                            <p className="font-bold text-[var(--text-main)]">Breastfeeding</p>
+                            <p className="text-[10px] font-medium text-[var(--text-muted)]">Nutrition targets will be adjusted</p>
                           </div>
                         </div>
                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${formData.is_breastfeeding ? 'border-[var(--accent-blue)] bg-[var(--accent-blue)]' : 'border-slate-300'}`}>
@@ -705,21 +718,21 @@ const ProfilePage = () => {
                 )}
               </div>
 
-              {/* Seksi: Target Nutrisi */}
+              {/* Section: Nutrition Targets */}
               <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-10 shadow-xl">
                 <div className="flex items-center gap-4 mb-10">
                   <div className="p-2.5 bg-[var(--warning)]/10 rounded-xl text-[var(--warning)]">
                     <Target size={20} />
                   </div>
-                  <h2 className="text-lg font-bold text-[var(--text-main)] uppercase tracking-wide">Target Nutrisi</h2>
+                  <h2 className="text-lg font-bold text-[var(--text-main)] uppercase tracking-wide">Nutrition Targets</h2>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
                   {[
-                    { label: 'Kalori', name: 'targetCalories', val: formData.targetCalories, color: 'focus:border-[var(--primary-green)]', min: 0, max: 10000 },
+                    { label: 'Calories', name: 'targetCalories', val: formData.targetCalories, color: 'focus:border-[var(--primary-green)]', min: 0, max: 10000 },
                     { label: 'Protein (g)', name: 'targetProtein', val: formData.targetProtein, color: 'focus:border-[var(--accent-blue)]', min: 0, max: 1000 },
-                    { label: 'Karbo (g)', name: 'targetCarbs', val: formData.targetCarbs, color: 'focus:border-[var(--warning)]', min: 0, max: 1000 },
-                    { label: 'Lemak (g)', name: 'targetFat', val: formData.targetFat, color: 'focus:border-[var(--danger)]', min: 0, max: 1000 }
+                    { label: 'Carbs (g)', name: 'targetCarbs', val: formData.targetCarbs, color: 'focus:border-[var(--warning)]', min: 0, max: 1000 },
+                    { label: 'Fat (g)', name: 'targetFat', val: formData.targetFat, color: 'focus:border-[var(--danger)]', min: 0, max: 1000 }
                   ].map((field) => (
                     <div key={field.name} className="space-y-2">
                       <label className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] ml-1">{field.label}</label>
@@ -733,16 +746,16 @@ const ProfilePage = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Tujuan Nutrisi</label>
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Nutrition Goal</label>
                   <select
                     name="nutritionGoal" value={formData.nutritionGoal} onChange={handleChange}
                     className="w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-transparent text-[var(--text-main)] font-semibold focus:border-[var(--primary-green)] outline-none transition-all appearance-none"
                   >
-                    <option value="">Pilih Tujuan...</option>
-                    <option value="maintain">Menjaga Berat Badan</option>
-                    <option value="lose">Menurunkan Berat Badan</option>
-                    <option value="gain">Menaikkan Berat Badan</option>
-                    <option value="build_muscle">Membentuk Massa Otot</option>
+                    <option value="">Select Goal...</option>
+                    <option value="maintain">Maintain Weight</option>
+                    <option value="lose">Weight Loss</option>
+                    <option value="gain">Weight Gain</option>
+                    <option value="build_muscle">Build Muscle Mass</option>
                   </select>
                   {errors.nutritionGoal && <p className="text-[10px] font-bold text-rose-500 ml-2 animate-pulse">{errors.nutritionGoal}</p>}
                 </div>
@@ -755,7 +768,7 @@ const ProfilePage = () => {
                   className="flex-1 group relative flex items-center justify-center gap-3 bg-[var(--primary-green)] px-10 py-5 rounded-2xl font-bold text-white text-lg shadow-lg shadow-emerald-500/20 hover:scale-[1.02] active:scale-100 transition-all disabled:opacity-50"
                 >
                   {loading ? <RefreshCw className="animate-spin" /> : <Save size={24} />}
-                  <span>{loading ? 'Menyimpan...' : 'Simpan Perubahan'}</span>
+                  <span>{loading ? 'Saving...' : 'Save Changes'}</span>
                 </button>
                 <button
                   type="button" onClick={handleReset}
@@ -773,9 +786,9 @@ const ProfilePage = () => {
         isOpen={isResetModalOpen}
         onClose={() => setIsResetModalOpen(false)}
         onConfirm={confirmReset}
-        title="Reset Formulir?"
-        message="Semua perubahan yang belum disimpan akan hilang."
-        itemName="Formulir Profil"
+        title="Reset Form?"
+        message="All unsaved changes will be lost."
+        itemName="Profile Form"
       />
     </div>
   );

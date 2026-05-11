@@ -47,8 +47,8 @@ function AppContent() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/kategori" element={<KategoriPage />} />
-          <Route path="/panduan" element={<PanduanPage />} />
+          <Route path="/categories" element={<KategoriPage />} />
+          <Route path="/guide" element={<PanduanPage />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           
@@ -57,7 +57,7 @@ function AppContent() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/nutri-check" element={<InputGizi />} />
             <Route path="/history" element={<HistoryPage />} />
-            <Route path="/profil" element={<ProfilePage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Route>
         </Routes>
       </main>

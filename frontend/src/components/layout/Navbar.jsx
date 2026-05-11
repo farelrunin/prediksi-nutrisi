@@ -6,10 +6,10 @@ import { useTheme } from '../../context/ThemeContext';
 
 const publicMenuItems = [
   { label: 'Home', to: '/', scrollTop: true },
-  { label: 'Fitur', to: '/#fitur', hash: '#fitur' },
-  { label: 'Cara Kerja', to: '/#cara-kerja', hash: '#cara-kerja' },
-  { label: 'Kategori', to: '/kategori' },
-  { label: 'Panduan', to: '/panduan' },
+  { label: 'Features', to: '/#features', hash: '#features' },
+  { label: 'How it Works', to: '/#how-it-works', hash: '#how-it-works' },
+  { label: 'Categories', to: '/categories' },
+  { label: 'Guide', to: '/guide' },
 ];
 
 const authenticatedMenuItems = [
@@ -17,8 +17,8 @@ const authenticatedMenuItems = [
   { label: 'Dashboard', to: '/dashboard' },
   { label: 'Nutri Check', to: '/nutri-check' },
   { label: 'History', to: '/history' },
-  { label: 'Panduan', to: '/panduan' },
-  { label: 'Kategori', to: '/kategori' },
+  { label: 'Guide', to: '/guide' },
+  { label: 'Categories', to: '/categories' },
 ];
 
 const Navbar = () => {
@@ -191,14 +191,14 @@ const Navbar = () => {
           <button
             onClick={toggleTheme}
             className="p-3 md:p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-[var(--border-card)] text-[var(--text-main)] hover:border-[var(--primary-green)]/30 transition-all shadow-sm active:scale-95"
-            title={theme === 'light' ? 'Ganti ke Dark Mode' : 'Ganti ke Light Mode'}
+            title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
           >
             {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
           </button>
 
           {user ? (
             <div className="flex items-center gap-4">
-              <Link to="/profil" className="hidden md:flex items-center gap-3 bg-white border border-[var(--border-card)] px-5 py-2.5 rounded-2xl hover:border-[var(--primary-green)]/30 transition-all shadow-sm">
+              <Link to="/profile" className="hidden md:flex items-center gap-3 bg-white border border-[var(--border-card)] px-5 py-2.5 rounded-2xl hover:border-[var(--primary-green)]/30 transition-all shadow-sm">
                 <div className="w-8 h-8 rounded-full overflow-hidden bg-[var(--primary-green)]/10 flex items-center justify-center text-[var(--primary-green)] border border-slate-100">
                   {user?.avatar_url || user?.avatar ? (
                     <img
@@ -224,10 +224,10 @@ const Navbar = () => {
           ) : (
             <div className="flex items-center gap-2">
               <Link to="/login" className="px-6 py-2.5 text-[11px] font-bold uppercase tracking-widest text-[var(--text-main)] hover:text-[var(--primary-green)] transition-all">
-                Masuk
+                Login
               </Link>
               <Link to="/register" className="bg-[var(--text-main)] text-white px-8 py-3 rounded-2xl text-[11px] font-bold uppercase tracking-widest shadow-xl hover:scale-105 active:scale-100 transition-all">
-                Daftar
+                Sign Up
               </Link>
             </div>
           )}
@@ -275,11 +275,11 @@ const Navbar = () => {
               ))}
               {user && (
                 <Link
-                  to="/profil"
+                  to="/profile"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 border-t border-slate-100 mt-2"
                 >
-                  Profil Saya
+                  My Profile
                 </Link>
               )}
             </div>

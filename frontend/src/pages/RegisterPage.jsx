@@ -24,8 +24,8 @@ const RegisterPage = () => {
     if (registrationSuccess && mounted) {
       notify({
         type: 'success',
-        title: 'Registrasi Berhasil',
-        message: 'Akun Anda telah berhasil dibuat. Silakan masuk untuk melanjutkan.'
+        title: 'Registration Successful',
+        message: 'Your account has been successfully created. Please log in to continue.'
       });
       navigate('/login', { replace: true });
     }
@@ -37,13 +37,24 @@ const RegisterPage = () => {
     if (formData.password !== formData.confirmPassword) {
       notify({
         type: 'warning',
-        title: 'Validasi Password',
-        message: 'Password tidak cocok, silakan cek kembali.'
+        title: 'Password Validation',
+        message: 'Passwords do not match, please check again.'
       });
       return;
     }
     setLoading(true);
-    try {
+      // Strict Email Validation Regex
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|id|net|org)$/;
+      if (!emailRegex.test(formData.email)) {
+        notify({
+          type: 'warning',
+          title: 'Invalid Email Domain',
+          message: 'Please use a common email domain (.com, .id, .net, or .org).'
+        });
+        setLoading(false);
+        return;
+      }
+
       await register({
         name: formData.name,
         email: formData.email,
@@ -54,8 +65,8 @@ const RegisterPage = () => {
       console.error('Register error:', error);
       notify({
         type: 'error',
-        title: 'Registrasi Gagal',
-        message: error.message || 'Gagal mendaftar, silakan coba lagi.'
+        title: 'Registration Failed',
+        message: error.message || 'Could not register, please try again.'
       });
     }
     setLoading(false);
@@ -89,7 +100,7 @@ const RegisterPage = () => {
             <Apple className="text-white" size={28} />
           </div>
           <h1 className="text-3xl font-extrabold tracking-tighter text-white mb-1">
-            Mulai <span className="text-[var(--primary-green)]">Sekarang</span>
+            Get <span className="text-[var(--primary-green)]">Started</span>
           </h1>
           <p className="text-xs font-bold uppercase tracking-widest text-white/70">NutriAI Assistant</p>
         </div>
@@ -101,7 +112,7 @@ const RegisterPage = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-[11px] font-bold uppercase tracking-widest text-slate-600 ml-2">Nama Lengkap</label>
+                <label className="text-[11px] font-bold uppercase tracking-widest text-slate-600 ml-2">Full Name</label>
                 <div className="relative">
                   <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500">
                     <User size={18} />
@@ -109,7 +120,7 @@ const RegisterPage = () => {
                   <input
                     type="text" name="name" value={formData.name} onChange={handleChange} required
                     minLength="2" maxLength="100"
-                    placeholder="Nama Lengkap"
+                    placeholder="John Doe"
                     className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
                   />
                 </div>
@@ -124,7 +135,7 @@ const RegisterPage = () => {
                   <input
                     type="email" name="email" value={formData.email} onChange={handleChange} required
                     maxLength="100"
-                    placeholder="nama@email.com"
+                    placeholder="name@email.com"
                     className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
                   />
                 </div>
@@ -139,7 +150,7 @@ const RegisterPage = () => {
                   <input
                     type={showPassword ? "text" : "password"} name="password" value={formData.password} onChange={handleChange} required
                     minLength="8" maxLength="100"
-                    placeholder="Minimal 8 karakter"
+                    placeholder="Min. 8 characters"
                     className="w-full pl-14 pr-14 py-4 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
                   />
                   <button
@@ -153,7 +164,7 @@ const RegisterPage = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[11px] font-bold uppercase tracking-widest text-slate-600 ml-2">Konfirmasi Password</label>
+                <label className="text-[11px] font-bold uppercase tracking-widest text-slate-600 ml-2">Confirm Password</label>
                 <div className="relative">
                   <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500">
                     <Lock size={18} />
@@ -178,7 +189,7 @@ const RegisterPage = () => {
               type="submit" disabled={loading}
               className="w-full group relative flex items-center justify-center gap-3 bg-[var(--primary-green)] px-10 py-5 rounded-2xl font-bold text-white text-lg shadow-xl shadow-emerald-500/20 hover:scale-[1.02] active:scale-100 transition-all disabled:opacity-50 mt-4"
             >
-              <span>{loading ? 'Mendaftar...' : 'Daftar'}</span>
+              <span>{loading ? 'Creating Account...' : 'Sign Up'}</span>
               <UserPlus size={20} />
             </button>
           </form>
@@ -187,9 +198,9 @@ const RegisterPage = () => {
         {/* Footer Link */}
         <div className="text-center mt-10">
           <p className="text-sm font-semibold text-white/80">
-            Sudah punya akun?{' '}
+            Already have an account?{' '}
             <Link to="/login" className="text-[var(--primary-green)] hover:underline font-bold underline-offset-4">
-              Masuk Sekarang
+              Login Now
             </Link>
           </p>
         </div>

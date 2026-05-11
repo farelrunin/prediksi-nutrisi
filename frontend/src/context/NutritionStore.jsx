@@ -119,13 +119,46 @@ const calculateDailyIntake = (entries) => {
   };
 };
 
+const calculateStreak = (entries) => {
+  if (!entries || entries.length === 0) return 0;
+
+  // 1. Get unique dates (YYYY-MM-DD) sorted descending
+  const dates = [...new Set(entries.map(e => e.timestamp.split('T')[0]))]
+    .sort((a, b) => new Date(b) - new Date(a));
+
+  const today = new Date().toISOString().split('T')[0];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+
+  // 2. Check if started today or yesterday
+  if (dates[0] !== today && dates[0] !== yesterday) return 0;
+
+  let streak = 0;
+  let currentDate = new Date(dates[0]);
+
+  for (let i = 0; i < dates.length; i++) {
+    const entryDate = new Date(dates[i]);
+    const diffTime = Math.abs(currentDate - entryDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (i === 0 || diffDays === 1) {
+      streak++;
+      currentDate = entryDate;
+    } else if (diffDays > 1) {
+      break;
+    }
+  }
+
+  return streak;
+};
+
 const buildNutritionState = (entries, previousState) => {
   const sortedEntries = sortEntries(entries);
 
   return {
     ...previousState,
     history: sortedEntries,
-    dailyIntake: calculateDailyIntake(sortedEntries)
+    dailyIntake: calculateDailyIntake(sortedEntries),
+    streak: calculateStreak(sortedEntries)
   };
 };
 
@@ -154,7 +187,8 @@ export const NutritionProvider = ({ children }) => {
     dailyIntake: { ...EMPTY_DAILY_INTAKE },
     targets: DEFAULT_TARGETS,
     history: [],
-    recommendations: []
+    recommendations: [],
+    streak: 0
   });
   const [historyLoading, setHistoryLoading] = useState(false);
   const [historyError, setHistoryError] = useState('');
@@ -171,7 +205,7 @@ export const NutritionProvider = ({ children }) => {
     try {
       return await nutritionService.predictNutrition(data);
     } catch (error) {
-      console.error('Prediction error:', error);
+      console.error("Failed to update:", error);
       throw error;
     }
   };
@@ -189,10 +223,10 @@ export const NutritionProvider = ({ children }) => {
       const normalizedHistory = history.map(normalizeStoredEntry);
 
       setNutritionData((prev) => buildNutritionState(normalizedHistory, prev));
-      return normalizedHistory; // Kembalikan data agar bisa dipakai langsung
+      return normalizedHistory;
     } catch (error) {
-      console.error('Load history error:', error);
-      setHistoryError(error.message || 'Gagal memuat riwayat asupan.');
+      console.error("Failed to fetch AKG targets:", error);
+      setHistoryError("Failed to load intake history.");
       return [];
     } finally {
       setHistoryLoading(false);
@@ -227,7 +261,7 @@ export const NutritionProvider = ({ children }) => {
       
       setNutritionData(prev => ({ ...prev, recommendations: finalRecommendations }));
     } catch (error) {
-      console.error("Gagal memuat rekomendasi AI:", error);
+      console.error("Failed to load AI recommendations:", error);
     }
   };
 
@@ -274,7 +308,7 @@ export const NutritionProvider = ({ children }) => {
 
       const parsedFoods = prediction.foods ?? prediction.parsed_data?.parsed_foods ?? [];
       if (parsedFoods.length === 0) {
-        throw new Error('Cerita makanan belum bisa dikenali. Coba tulis makanan dan porsinya lebih jelas.');
+        throw new Error('Could not identify food in story. Please provide more details.');
       }
 
       const savedEntries = await Promise.all(
@@ -323,7 +357,7 @@ export const NutritionProvider = ({ children }) => {
       const newHistory = await refreshHistory();
       refreshRecommendations(newHistory);
     } catch (error) {
-      console.error("Gagal menghapus di Store:", error);
+      console.error("Failed to delete in Context:", error);
       throw error;
     }
   };

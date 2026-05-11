@@ -12,12 +12,12 @@ const InputGizi = () => {
         <div className="mb-12 text-center">
           <h1 className="text-4xl font-black tracking-tight text-[var(--text-main)] mb-4">Nutri Check</h1>
           <p className="text-[var(--text-muted)] font-medium max-w-lg mx-auto">
-            Ceritakan apa yang Anda makan hari ini, dan biarkan AI kami menganalisis nutrisinya untuk Anda.
+            Tell us what you ate today, and let our AI analyze the nutrition for you.
           </p>
         </div>
 
         <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-black/40">
-          <FoodForm onAddFood={addFoodEntry} submitLabel="Analisis Nutrisi" />
+          <FoodForm onAddFood={addFoodEntry} submitLabel="Analyze Nutrition" />
         </div>
       </div>
     </div>

@@ -5,39 +5,39 @@ const RiskScoreCard = ({ riskScore, aiAdvice }) => {
   if (riskScore === null) {
     return (
       <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-6 text-slate-300">
-        <h3 className="text-lg font-bold text-white mb-3">Risk Score Malnutrisi</h3>
-        <p>Belum ada data — mulai input makanan untuk melihat analisis risiko</p>
+        <h3 className="text-lg font-bold text-white mb-3">Malnutrition Risk Score</h3>
+        <p>No data yet — start inputting food to see risk analysis</p>
       </div>
     );
   }
 
   const getRiskLevel = (score) => {
     if (score < 0.3) return {
-      level: 'Rendah',
+      level: 'Low',
       icon: CheckCircle,
       bgColor: 'from-green-500 to-green-700',
       textColor: 'text-green-400',
       iconBgClass: 'bg-green-500/10',
       iconTextClass: 'text-green-400',
-      description: 'Asupan nutrisi Anda dalam kondisi baik. Pertahankan pola makan sehat!'
+      description: 'Your nutritional intake is in good condition. Keep up the healthy eating!'
     };
     if (score < 0.7) return {
-      level: 'Sedang',
+      level: 'Medium',
       icon: AlertCircle,
       bgColor: 'from-yellow-500 to-yellow-700',
       textColor: 'text-yellow-400',
       iconBgClass: 'bg-yellow-500/10',
       iconTextClass: 'text-yellow-400',
-      description: 'Perhatikan asupan nutrisi Anda. Ada beberapa nutrisi yang perlu ditingkatkan.'
+      description: 'Pay attention to your nutritional intake. Some nutrients need to be increased.'
     };
     return {
-      level: 'Tinggi',
+      level: 'High',
       icon: AlertTriangle,
       bgColor: 'from-red-500 to-red-700',
       textColor: 'text-red-400',
       iconBgClass: 'bg-red-500/10',
       iconTextClass: 'text-red-400',
-      description: 'Risiko malnutrisi tinggi. Segera konsultasikan dengan ahli gizi.'
+      description: 'High risk of malnutrition. Consult with a nutritionist immediately.'
     };
   };
 
@@ -48,8 +48,8 @@ const RiskScoreCard = ({ riskScore, aiAdvice }) => {
       <div className={`bg-gradient-to-r ${bgColor} p-6 text-white`}>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-bold">Risk Score Malnutrisi</h3>
-            <p className="text-white/80 text-sm">Berdasarkan AI Analysis</p>
+            <h3 className="text-lg font-bold">Malnutrition Risk Score</h3>
+            <p className="text-white/80 text-sm">Based on AI Analysis</p>
           </div>
           <Icon size={32} className="opacity-90" />
         </div>
@@ -59,7 +59,7 @@ const RiskScoreCard = ({ riskScore, aiAdvice }) => {
             {(riskScore * 100).toFixed(1)}%
           </div>
           <div className="text-xl font-semibold">
-            Risiko {level}
+            {level} Risk
           </div>
         </div>
       </div>
@@ -81,16 +81,16 @@ const RiskScoreCard = ({ riskScore, aiAdvice }) => {
             <TrendingUp className={iconTextClass} size={16} />
           </div>
           <div>
-            <h4 className={`${textColor} font-semibold mb-2`}>Rekomendasi</h4>
+            <h4 className={`${textColor} font-semibold mb-2`}>Recommendation</h4>
             <p className="text-slate-300 text-sm leading-relaxed">{description}</p>
           </div>
         </div>
 
         <div className="mt-4 pt-4 border-t border-white/10">
           <div className="flex justify-between text-sm">
-            <span className="text-slate-400">Terakhir Update</span>
+            <span className="text-slate-400">Last Update</span>
             <span className="text-white font-medium">
-              {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
+              {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
             </span>
           </div>
         </div>

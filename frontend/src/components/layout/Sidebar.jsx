@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Plus, User, Zap, List } from 'lucide-react';
 
@@ -7,17 +7,17 @@ const Sidebar = () => {
 
   const menuItems = [
     { path: '/dashboard', icon: Home, label: 'Dashboard' },
-    { path: '/input-gizi', icon: Plus, label: 'Input Makanan' },
-    { path: '/riwayat-asupan', icon: List, label: 'Riwayat Asupan' },
-    { path: '/profile', icon: User, label: 'Profil' },
+    { path: '/nutri-check', icon: Plus, label: 'Add Meal' },
+    { path: '/history', icon: List, label: 'History' },
+    { path: '/profile', icon: User, label: 'Profile' },
   ];
 
   return (
     <div className="fixed left-0 top-16 h-full w-64 bg-white/5 backdrop-blur-xl border-r border-white/10 overflow-y-auto">
       <div className="p-6">
         <div className="mb-8">
-          <h2 className="text-lg font-bold text-white mb-2">Menu Utama</h2>
-          <p className="text-sm text-slate-400">Kelola nutrisi Anda</p>
+          <h2 className="text-lg font-bold text-white mb-2">Main Menu</h2>
+          <p className="text-sm text-slate-400">Manage your nutrition</p>
         </div>
 
         <nav className="space-y-2">
@@ -44,10 +44,10 @@ const Sidebar = () => {
           <div className="bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-xl p-4 border border-white/10">
             <div className="flex items-center space-x-2 mb-2">
               <Zap className="text-emerald-400" size={18} />
-              <span className="font-semibold text-white text-sm">Tips Kesehatan</span>
+              <span className="font-semibold text-white text-sm">Health Tips</span>
             </div>
             <p className="text-sm text-slate-300">
-              Konsumsi sayuran hijau dan air putih setiap hari untuk hasil optimal!
+              Consume green vegetables and water daily for optimal results!
             </p>
           </div>
         </div>

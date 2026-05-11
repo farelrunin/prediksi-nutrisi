@@ -6,7 +6,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-slate-800 border border-white/20 rounded-xl p-4 shadow-xl backdrop-blur-xl">
-        <p className="font-semibold text-white mb-2">{`Hari: ${label}`}</p>
+        <p className="font-semibold text-white mb-2">{`Day: ${label}`}</p>
         {payload.map((entry, index) => (
           <p key={index} className="text-sm" style={{ color: entry.color }}>
             {`${entry.name}: ${entry.value}${entry.dataKey === 'calories' ? ' kcal' : 'g'}`}
@@ -18,7 +18,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-const dayFormatter = new Intl.DateTimeFormat('id-ID', { weekday: 'short' });
+const dayFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'short' });
 
 const normalizeNumber = (value) => {
   const number = Number(value);
@@ -85,13 +85,13 @@ const NutritionChart = ({ data = [] }) => {
         <div>
           <h3 className="text-xl font-bold text-white flex items-center gap-2">
             <TrendingUp className="text-emerald-400" size={24} />
-            Tren Nutrisi Mingguan
+            Weekly Nutrition Trend
           </h3>
-          <p className="text-slate-300 text-sm mt-1">Pantau pola asupan Anda</p>
+          <p className="text-slate-300 text-sm mt-1">Monitor your intake patterns</p>
         </div>
         <div className="flex items-center gap-2 text-sm text-slate-400">
           <Calendar size={16} />
-          <span>7 hari terakhir</span>
+          <span>Last 7 days</span>
         </div>
       </div>
 
@@ -122,7 +122,7 @@ const NutritionChart = ({ data = [] }) => {
                 dataKey="calories"
                 stroke="#3b82f6"
                 strokeWidth={3}
-                name="Kalori"
+                name="Calories"
                 dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
                 activeDot={{ r: 6, stroke: '#3b82f6', strokeWidth: 2 }}
               />
@@ -139,20 +139,20 @@ const NutritionChart = ({ data = [] }) => {
           </ResponsiveContainer>
         ) : (
           <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-white/10 bg-slate-950/20 px-6 text-center text-slate-400">
-            Belum ada riwayat asupan. Tambahkan makanan dulu supaya tren 7 hari terakhir bisa muncul.
+            No intake history yet. Add food first so the 7-day trend can appear.
           </div>
         )}
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-4">
         <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
-          <div className="text-sm text-blue-400 font-medium mb-1">Rata-rata Kalori</div>
+          <div className="text-sm text-blue-400 font-medium mb-1">Average Calories</div>
           <div className="text-2xl font-bold text-blue-300">
             {Math.round(averageCalories || 0)} kcal
           </div>
         </div>
         <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4">
-          <div className="text-sm text-emerald-400 font-medium mb-1">Rata-rata Protein</div>
+          <div className="text-sm text-emerald-400 font-medium mb-1">Average Protein</div>
           <div className="text-2xl font-bold text-emerald-300">
             {Math.round(averageProtein || 0)}g
           </div>

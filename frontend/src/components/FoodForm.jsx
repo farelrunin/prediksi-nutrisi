@@ -3,10 +3,10 @@ import { Plus, Search, MessageSquare, List, Brain, Sparkles } from 'lucide-react
 import { useNutrition } from '../context/useNutrition';
 
 const mealTypes = [
-  { value: 'breakfast', label: 'Sarapan' },
-  { value: 'lunch', label: 'Makan Siang' },
-  { value: 'dinner', label: 'Makan Malam' },
-  { value: 'snack', label: 'Camilan' }
+  { value: 'breakfast', label: 'Breakfast' },
+  { value: 'lunch', label: 'Lunch' },
+  { value: 'dinner', label: 'Dinner' },
+  { value: 'snack', label: 'Snack' }
 ];
 
 const formatMetric = (value, suffix = '') => {
@@ -28,12 +28,12 @@ const formatFoodPortion = (food) => {
     return `${food.quantity} ${food.unit}`;
   }
 
-  return '1 porsi';
+  return '1 portion';
 };
 
 import { useNotification } from '../context/useNotification';
 
-const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
+const FoodForm = ({ onAddFood, submitLabel = 'Add Food' }) => {
   const { notify } = useNotification();
   const [isManualMode, setIsManualMode] = useState(false);
   const [story, setStory] = useState('');
@@ -45,7 +45,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
   const [manualData, setManualData] = useState({
     foodName: '',
     quantity: 1,
-    unit: 'porsi',
+    unit: 'portion',
     mealType: 'breakfast'
   });
   const { predictNutrition } = useNutrition();
@@ -53,7 +53,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
   const handleAnalyzeAI = async () => {
     const trimmedStory = story.trim();
     if (trimmedStory.length < 10) {
-      notify({ type: 'warning', title: 'Cerita Terlalu Pendek', message: 'Tuliskan minimal 10 karakter agar AI bisa menganalisis.' });
+      notify({ type: 'warning', title: 'Story Too Short', message: 'Write at least 10 characters for AI to analyze.' });
       return;
     }
 
@@ -64,11 +64,11 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
     try {
       const result = await predictNutrition({ story: trimmedStory });
       setPredictionResult(result);
-      notify({ type: 'success', title: 'Analisis Selesai', message: 'AI berhasil mengekstrak nutrisi dari cerita Anda!' });
+      notify({ type: 'success', title: 'Analysis Complete', message: 'AI successfully extracted nutrition from your story!' });
     } catch (error) {
       console.error('Prediction error:', error);
-      setPredictionError(error.message || 'Gagal menganalisis cerita makanan.');
-      notify({ type: 'error', title: 'Gagal Analisis', message: 'AI sedang sibuk atau kuota habis. Coba lagi nanti.' });
+      setPredictionError(error.message || 'Failed to analyze food story.');
+      notify({ type: 'error', title: 'Analysis Failed', message: 'AI is busy or quota exceeded. Please try again later.' });
     } finally {
       setPredicting(false);
     }
@@ -96,7 +96,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
           fat: 0
         };
         await onAddFood(manualFinalData);
-        notify({ type: 'success', title: 'Data Tersimpan', message: 'Makanan berhasil ditambahkan secara manual!' });
+        notify({ type: 'success', title: 'Data Saved', message: 'Food added manually successfully!' });
       } else {
         const trimmedStory = story.trim();
         let nutritionData = predictionResult;
@@ -107,13 +107,13 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
 
         const finalData = {
           food_name: nutritionData.food_name || (nutritionData.foods && nutritionData.foods.length > 0 ? nutritionData.foods.map(f => f.name).join(', ') : trimmedStory),
-          meal_type: 'lunch', // Default atau bisa disesuaikan
+          meal_type: 'lunch', // Default or can be customized
           calories: Number(nutritionData.calories || 0),
           protein: Number(nutritionData.protein || 0),
           carbs: Number(nutritionData.carbs || 0),
           fat: Number(nutritionData.fat || 0),
           quantity: 1,
-          unit: 'porsi'
+          unit: 'portion'
         };
 
         await onAddFood(finalData);
@@ -121,11 +121,11 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
         setStory('');
         setPredictionResult(null);
         setPredictionError('');
-        notify({ type: 'success', title: 'Data Tersimpan', message: 'Nutrisi Anda berhasil dicatat!' });
+        notify({ type: 'success', title: 'Data Saved', message: 'Your nutrition has been recorded!' });
       }
     } catch (error) {
       console.error('Error adding food:', error);
-      notify({ type: 'error', title: 'Gagal Simpan', message: `Gagal menambahkan data: ${error.message || 'Coba lagi.'}` });
+      notify({ type: 'error', title: 'Save Failed', message: `Failed to add data: ${error.message || 'Try again.'}` });
     }
 
     setLoading(false);
@@ -162,12 +162,12 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
           <div className="space-y-6">
             <div>
               <label className="mb-4 block text-xs font-black uppercase tracking-[0.2em] text-[var(--text-muted)]">
-                Ceritakan makanan Anda hari ini
+                Tell us about your food today
               </label>
               <textarea
                 value={story}
                 onChange={(e) => handleStoryChange(e.target.value)}
-                placeholder="Contoh: Tadi pagi sarapan bubur ayam, siang makan nasi padang lauk rendang..."
+                placeholder="Example: Had chicken porridge for breakfast, and Padang rice with rendang for lunch..."
                 className="min-h-[180px] w-full resize-none rounded-[2rem] border border-[var(--border-card)] bg-[var(--bg-primary)] px-8 py-6 text-[var(--text-main)] placeholder-slate-600 outline-none transition-all focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/10 text-lg leading-relaxed shadow-inner"
                 required={!isManualMode}
                 maxLength="1000"
@@ -176,7 +176,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
                 <div className="flex items-center gap-2 text-[var(--text-muted)]">
                   <Brain size={14} className="text-[var(--primary-green)]" />
                   <p className="text-[10px] font-bold uppercase tracking-widest">
-                    AI akan menganalisis makanan, porsi, dan estimasi nutrisi Anda.
+                    AI will analyze food, portion, and nutrition estimates for you.
                   </p>
                 </div>
                 
@@ -191,7 +191,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
                   ) : (
                     <Sparkles size={14} className="group-hover:rotate-12 transition-transform" />
                   )}
-                  {predicting ? 'Menganalisis...' : 'Analisis dengan AI'}
+                  {predicting ? 'Analyzing...' : 'Analyze with AI'}
                 </button>
               </div>
             </div>
@@ -204,7 +204,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
                     <Brain size={16} className="text-[var(--primary-green)] animate-pulse" />
                   </div>
                 </div>
-                <span className="text-xs font-black uppercase tracking-widest text-[var(--primary-green)]">Menganalisis...</span>
+                <span className="text-xs font-black uppercase tracking-widest text-[var(--primary-green)]">Analyzing...</span>
               </div>
             )}
 
@@ -216,7 +216,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
                   onClick={() => setIsManualMode(true)}
                   className="bg-[var(--danger)] text-white px-4 py-2 rounded-xl text-xs uppercase tracking-widest w-fit hover:brightness-110"
                 >
-                  Gunakan Input Manual
+                  Use Manual Input
                 </button>
               </div>
             )}
@@ -229,7 +229,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
                       <Brain size={24} />
                     </div>
                     <div>
-                      <div className="text-lg font-black text-[var(--text-main)]">Hasil Analisis AI</div>
+                      <div className="text-lg font-black text-[var(--text-main)]">AI Analysis Results</div>
                       <div className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mt-1">
                         {foods.length} Item • {formatMetric(totalQuantity, ' g')} Total
                       </div>
@@ -239,16 +239,17 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
                     predictionResult.risk_level === 'tinggi' ? 'text-[var(--danger)]' : 
                     predictionResult.risk_level === 'sedang' ? 'text-[var(--warning)]' : 'text-[var(--primary-green)]'
                   }`}>
-                    RISIKO {predictionResult.risk_level?.toUpperCase()}
+                    {predictionResult.risk_level === 'tinggi' ? 'HIGH RISK' : 
+                     predictionResult.risk_level === 'sedang' ? 'MEDIUM RISK' : 'LOW RISK'}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 mb-10">
                   {[
-                    { label: 'Kalori', val: formatMetric(predictionResult.calories), color: 'text-[var(--primary-green)]' },
+                    { label: 'Calories', val: formatMetric(predictionResult.calories), color: 'text-[var(--primary-green)]' },
                     { label: 'Protein', val: formatMetric(predictionResult.protein, 'g'), color: 'text-[var(--accent-blue)]' },
-                    { label: 'Karbo', val: formatMetric(predictionResult.carbs, 'g'), color: 'text-[var(--warning)]' },
-                    { label: 'Lemak', val: formatMetric(predictionResult.fat, 'g'), color: 'text-[var(--danger)]' }
+                    { label: 'Carbs', val: formatMetric(predictionResult.carbs, 'g'), color: 'text-[var(--warning)]' },
+                    { label: 'Fat', val: formatMetric(predictionResult.fat, 'g'), color: 'text-[var(--danger)]' }
                   ].map((m) => (
                     <div key={m.label} className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-3xl px-4 py-6 text-center shadow-lg transition-transform hover:scale-105">
                       <div className={`text-xl font-black mb-1 ${m.color}`}>{m.val}</div>
@@ -278,18 +279,18 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
           <div className="space-y-8 p-6 bg-[var(--bg-secondary)] rounded-[2.5rem] border border-[var(--border-card)] animate-in slide-in-from-bottom duration-500">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-2">Nama Makanan</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-2">Food Name</label>
                 <input 
                   type="text"
                   value={manualData.foodName}
                   onChange={(e) => setManualData({...manualData, foodName: e.target.value})}
-                  placeholder="Contoh: Telur Goreng"
+                  placeholder="Example: Fried Egg"
                   className="w-full bg-[var(--bg-primary)] border border-[var(--border-card)] rounded-2xl px-6 py-4 text-[var(--text-main)] outline-none focus:border-[var(--primary-green)]"
                   required={isManualMode}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-2">Waktu Makan</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-2">Meal Time</label>
                 <select 
                   value={manualData.mealType}
                   onChange={(e) => setManualData({...manualData, mealType: e.target.value})}
@@ -299,7 +300,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-2">Jumlah</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-2">Quantity</label>
                 <input 
                   type="number"
                   value={manualData.quantity}
@@ -311,15 +312,15 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-2">Satuan</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-2">Unit</label>
                 <select 
                   value={manualData.unit}
                   onChange={(e) => setManualData({...manualData, unit: e.target.value})}
                   className="w-full bg-[var(--bg-primary)] border border-[var(--border-card)] rounded-2xl px-6 py-4 text-[var(--text-main)] outline-none focus:border-[var(--primary-green)] appearance-none cursor-pointer"
                 >
-                  <option value="porsi">Porsi</option>
-                  <option value="butir">Butir</option>
-                  <option value="gram">Gram</option>
+                  <option value="portion">Portion</option>
+                  <option value="item">Item/Piece</option>
+                  <option value="gram">Grams</option>
                   <option value="ml">Ml</option>
                 </select>
               </div>
@@ -337,7 +338,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
           ) : (
             <Plus size={24} className="group-hover:rotate-90 transition-transform duration-300" />
           )}
-          <span>{loading ? 'Menyimpan...' : (isManualMode ? 'Tambah Makanan' : 'Simpan Data Nutrisi')}</span>
+          <span>{loading ? 'Saving...' : (isManualMode ? 'Add Food' : 'Save Nutrition Data')}</span>
         </button>
       </form>
     </div>

@@ -8,7 +8,7 @@ const Footer = () => {
   const { user } = auth;
   const location = useLocation();
   
-  const hideOnPaths = ['/login', '/register', '/profil', '/forgot-password'];
+  const hideOnPaths = ['/login', '/register', '/profile', '/forgot-password'];
   if (hideOnPaths.includes(location.pathname)) {
     return null;
   }
@@ -29,7 +29,7 @@ const Footer = () => {
               </span>
             </Link>
             <p className="text-[var(--text-muted)] text-sm leading-relaxed font-medium">
-              Membangun masa depan yang lebih sehat melalui teknologi kecerdasan buatan.
+              Building a healthier future through artificial intelligence technology.
             </p>
             <div className="flex items-center gap-4">
               {/* Gunakan ikon yang pasti ada di semua versi Lucide */}
@@ -46,19 +46,19 @@ const Footer = () => {
           </div>
 
           <div className="space-y-6">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-main)]">Navigasi</h4>
+            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-main)]">Navigation</h4>
             <ul className="space-y-4">
               <li><Link to="/" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Home</Link></li>
-              <li><Link to="/kategori" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Kategori</Link></li>
-              <li><Link to="/panduan" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Panduan Nutrisi</Link></li>
+              <li><Link to="/categories" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Categories</Link></li>
+              <li><Link to="/guide" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Nutrition Guide</Link></li>
             </ul>
           </div>
 
           <div className="space-y-6">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-main)]">Dukungan</h4>
+            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-main)]">Support</h4>
             <ul className="space-y-4">
-              <li><Link to="/privacy" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Privacy</Link></li>
-              <li><Link to="/terms" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Terms</Link></li>
+              <li><Link to="/privacy" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Privacy Policy</Link></li>
+              <li><Link to="/terms" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Terms of Service</Link></li>
             </ul>
             <div className="pt-4">
               <a href="mailto:farelrunin@gmail.com" className="flex items-center gap-2 text-sm font-black text-[var(--primary-green)]">
@@ -71,8 +71,8 @@ const Footer = () => {
           <div className="space-y-6">
             {!user ? (
               <div className="bg-gradient-to-br from-[var(--primary-green)]/10 to-[var(--accent-blue)]/10 border border-[var(--primary-green)]/20 p-8 rounded-[2.5rem]">
-                <h4 className="text-lg font-black text-[var(--text-main)] mb-2">Mulai Sekarang</h4>
-                <Link to="/register" className="block w-full bg-[var(--primary-green)] text-[var(--bg-primary)] text-center py-4 rounded-2xl text-xs font-black uppercase tracking-widest shadow-lg">Daftar</Link>
+                <h4 className="text-lg font-black text-[var(--text-main)] mb-2">Join Us</h4>
+                <Link to="/register" className="block w-full bg-[var(--primary-green)] text-[var(--bg-primary)] text-center py-4 rounded-2xl text-xs font-black uppercase tracking-widest shadow-lg">Sign Up</Link>
               </div>
             ) : (
               <div className="bg-[var(--bg-primary)] border border-[var(--border-card)] p-8 rounded-[2.5rem] flex flex-col items-center text-center justify-center space-y-4">
