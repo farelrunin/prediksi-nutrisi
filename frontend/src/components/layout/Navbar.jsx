@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Apple, User, LogOut, Menu, X, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../../context/useAuth';
 import { useTheme } from '../../context/ThemeContext';
+import ConfirmModal from '../shared/ConfirmModal';
 
 const publicMenuItems = [
   { label: 'Home', to: '/', scrollTop: true },
@@ -27,6 +28,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   
   // Magic Indicator State
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
@@ -37,6 +39,7 @@ const Navbar = () => {
   const handleLogout = () => {
     logout();
     setIsMobileMenuOpen(false);
+    setShowLogoutModal(false);
     navigate('/', { replace: true });
   };
 
@@ -215,7 +218,7 @@ const Navbar = () => {
                 </span>
               </Link>
               <button
-                onClick={handleLogout}
+                onClick={() => setShowLogoutModal(true)}
                 className="p-3.5 rounded-2xl bg-rose-50 text-[var(--danger)] hover:bg-[var(--danger)] hover:text-white transition-all shadow-sm active:scale-95"
               >
                 <LogOut size={16} />
@@ -286,6 +289,16 @@ const Navbar = () => {
           </div>
         )}
       </div>
+
+      {/* Logout Confirmation Modal */}
+      <ConfirmModal
+        isOpen={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={handleLogout}
+        title="Logout Confirmation"
+        message="Are you sure you want to end your current session?"
+        itemName="Logout"
+      />
     </nav>
   );
 };
