@@ -7,39 +7,49 @@ const geminiService = require("../services/geminiService");
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
-// Helper: Database Fallback Search
+// Helper: Database Fallback Search (Lebih Cerdas)
 async function searchFoodDatabase(story) {
   try {
-    // Cari kata kunci utama dari input (pisahkan spasi)
-    const keywords = story.split(' ').filter(word => word.length > 2);
+    const stopWords = ['saya', 'makan', 'dengan', 'lalu', 'minum', 'dan', 'di', 'yang', 'untuk', 'adalah', 'itu', 'adalah', 'ke'];
+    const keywords = story.toLowerCase().split(' ')
+      .filter(word => word.length > 2 && !stopWords.includes(word));
     
-    const matches = await Food.findAll({
-      where: {
-        [Op.or]: [
-          { food_name_id: { [Op.like]: `%${story}%` } },
-          { food_name_en: { [Op.like]: `%${story}%` } },
-          ...keywords.map(k => ({ food_name_id: { [Op.like]: `%${k}%` } }))
-        ]
-      },
-      limit: 3
-    });
+    if (keywords.length === 0) return null;
 
-    if (matches.length > 0) {
-      const bestMatch = matches[0];
-      return {
-        parsed_foods: [{ name: bestMatch.food_name_id, quantity: 1, unit: 'porsi' }],
-        total_nutrition: {
-          calories: bestMatch.calories || 0,
-          protein: bestMatch.protein || 0,
-          carbs: bestMatch.carbohydrates || 0,
-          fat: bestMatch.total_fat || 0,
-          quantity_grams: 100
+    let totalNutrition = { calories: 0, protein: 0, carbs: 0, fat: 0, quantity_grams: 0 };
+    let foundFoods = [];
+
+    for (const word of keywords) {
+      const match = await Food.findOne({
+        where: {
+          [Op.or]: [
+            { food_name_id: { [Op.like]: `%${word}%` } },
+            { food_name_en: { [Op.like]: `%${word}%` } }
+          ]
         },
+        order: [['food_name_id', 'ASC']] // Biar konsisten
+      });
+
+      if (match) {
+        foundFoods.push({ name: match.food_name_id, quantity: 1, unit: 'porsi' });
+        totalNutrition.calories += match.calories || 0;
+        totalNutrition.protein += match.protein || 0;
+        totalNutrition.carbs += match.carbohydrates || 0;
+        totalNutrition.fat += match.total_fat || 0;
+        totalNutrition.quantity_grams += 100;
+      }
+    }
+
+    if (foundFoods.length > 0) {
+      return {
+        parsed_foods: foundFoods,
+        total_nutrition: totalNutrition,
         is_fallback: true
       };
     }
     return null;
   } catch (e) {
+    console.error("Search Error:", e);
     return null;
   }
 }
