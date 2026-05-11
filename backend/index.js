@@ -2,8 +2,6 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
-const { connectDB } = require("./database-express");
-
 // Import Routers
 const authRouter = require("./routers/auth");
 const foodRouter = require("./routers/food");
