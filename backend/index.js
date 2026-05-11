@@ -44,9 +44,13 @@ app.get("/", (req, res) => res.json({ message: "NutriAI Express API is running (
 // Connect to Database
 (async () => {
   try {
+    const { sequelize } = require("./database-express");
     await connectDB();
+    // Sync models to database (create tables if not exist)
+    await sequelize.sync({ alter: true });
+    console.log("✅ Database synchronized");
   } catch (err) {
-    console.error("❌ DB Connection failed:", err.message);
+    console.error("❌ DB Initialization failed:", err.message);
   }
 })();
 
