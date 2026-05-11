@@ -5,22 +5,34 @@ if (!process.env.DATABASE_URL) {
   console.error("❌ DATABASE_URL is not set! Please set it in environment variables.");
 }
 
-// DEBUG LOG (Aman, tidak cetak password)
-console.log("🛠️ Attempting DB connection with Host:", process.env.MYSQLHOST || "Using DATABASE_URL");
+// LOG UNTUK DEBUG (Sangat membantu lihat apa yang dibaca Railway)
+console.log("🔍 Checking Environment Variables...");
+console.log("- MYSQLHOST:", process.env.MYSQLHOST ? "FOUND" : "NOT FOUND");
+console.log("- DATABASE_URL:", process.env.DATABASE_URL ? "FOUND" : "NOT FOUND");
 
-const sequelize = process.env.MYSQLHOST 
-  ? new Sequelize(process.env.MYSQLDATABASE, process.env.MYSQLUSER, process.env.MYSQLPASSWORD, {
-      host: process.env.MYSQLHOST,
-      port: process.env.MYSQLPORT || 3306,
-      dialect: "mysql",
-      dialectModule: require('mysql2'),
-      logging: false,
-    })
-  : new Sequelize(process.env.DATABASE_URL, {
-      dialect: "mysql",
-      dialectModule: require('mysql2'),
-      logging: false,
-    });
+let sequelize;
+
+if (process.env.MYSQLHOST) {
+  console.log("🚀 Using individual Railway variables...");
+  sequelize = new Sequelize(process.env.MYSQLDATABASE, process.env.MYSQLUSER, process.env.MYSQLPASSWORD, {
+    host: process.env.MYSQLHOST,
+    port: process.env.MYSQLPORT || 3306,
+    dialect: "mysql",
+    dialectModule: require('mysql2'),
+    logging: false,
+  });
+} else if (process.env.DATABASE_URL) {
+  console.log("🚀 Using DATABASE_URL...");
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect: "mysql",
+    dialectModule: require('mysql2'),
+    logging: false,
+    dialectOptions: {},
+  });
+} else {
+  console.error("❌ NO DATABASE CONFIG FOUND! Defaulting to localhost (will likely fail)");
+  sequelize = new Sequelize("mysql://root@localhost/nutriai_db", { dialect: "mysql", dialectModule: require('mysql2') });
+}
 
 const connectDB = async () => {
   try {
