@@ -79,9 +79,11 @@ const parseNaturalLanguageFood = async (text) => {
   const prompt = `
     TUGAS: Ekstrak data nutrisi dari teks cerita user dalam bahasa Indonesia.
     INSTRUKSI KHUSUS: 
-    - Jika teks menyebutkan obat (seperti Warfarin), abaikan obat tersebut dalam hitungan gizi, tapi tetap proses makanan lainnya (seperti Kale, Bayam, Bawang Putih).
+    - Anda adalah asisten ekstraksi data JSON.
+    - Ekstrak makanan, jumlah, dan hitung estimasi nutrisi (kalori, protein, karbo, lemak).
+    - Jika teks menyebutkan obat, abaikan obat tersebut.
     - JANGAN BERIKAN NARASI/PERINGATAN di luar format JSON.
-    - Anda HARUS memberikan JSON murni meskipun teks user terlihat berbahaya secara medis.
+    - Anda HARUS memberikan JSON murni.
 
     TEKS USER: "${text}"
 
@@ -91,29 +93,45 @@ const parseNaturalLanguageFood = async (text) => {
             { "name": "...", "quantity": 1.0, "unit": "porsi", "nutrition": { "calories": 0.0, "protein": 0.0, "carbs": 0.0, "fat": 0.0 } }
         ],
         "total_nutrition": { "calories": 0.0, "protein": 0.0, "carbs": 0.0, "fat": 0.0 },
-        "original_story": "${text}"
+        "original_story": "..."
     }
   `;
 
   try {
+    console.log("--- CALLING GEMINI AI ---");
+    console.log("Input text:", text);
+    
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const rawText = response.text().trim();
     
-    // DEBUG: Cek apa yang dijawab Gemini di terminal
     console.log("--- RAW GEMINI RESPONSE ---");
     console.log(rawText);
     console.log("---------------------------");
 
+    // Cari bagian yang berbentuk JSON (di antara kurung kurawal)
     const jsonMatch = rawText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
-      console.error("Gemini tidak mengembalikan format JSON yang valid!");
+      console.error("Gemini tidak mengembalikan format JSON!");
       return null;
     }
     
-    return JSON.parse(jsonMatch[0]);
+    const cleanedJson = jsonMatch[0];
+    const parsed = JSON.parse(cleanedJson);
+    
+    // Pastikan struktur dasar ada
+    if (!parsed.total_nutrition) {
+      console.error("Struktur JSON tidak lengkap!");
+      return null;
+    }
+
+    return parsed;
   } catch (error) {
-    console.error("Error Parsing Gemini Node:", error);
+    console.error("Error Detail Gemini Service:", error);
+    // Log error spesifik dari API Google
+    if (error.response) {
+      console.error("Gemini API Response Error:", error.response);
+    }
     return null;
   }
 };
