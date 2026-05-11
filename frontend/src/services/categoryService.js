@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE_URL = 'https://nutriai-backend-production-2987.up.railway.app';
 const API_URL = `${API_BASE_URL}/categories`;
 
 export const categoryService = {

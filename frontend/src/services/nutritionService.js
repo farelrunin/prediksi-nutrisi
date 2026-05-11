@@ -1,7 +1,7 @@
 // nutritionService.js
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'; // Adjust to your backend URL
+const API_BASE_URL = 'https://nutriai-backend-production-2987.up.railway.app';
 
 export const nutritionService = {
   async addFoodEntry(foodData) {
