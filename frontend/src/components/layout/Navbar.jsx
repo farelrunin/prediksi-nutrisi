@@ -194,7 +194,7 @@ const Navbar = () => {
                 <div className="w-8 h-8 rounded-full overflow-hidden bg-[var(--primary-green)]/10 flex items-center justify-center text-[var(--primary-green)] border border-slate-100">
                   {user?.avatar_url || user?.avatar ? (
                     <img
-                      src={user.avatar_url?.startsWith('http') ? user.avatar_url : `https://nutriai-backend-production-2987.up.railway.app${user.avatar_url}`}
+                      src={user.avatar_url?.startsWith('http') || user.avatar_url?.startsWith('data:') ? user.avatar_url : `https://nutriai-backend-production-2987.up.railway.app${user.avatar_url}`}
                       alt="Profile"
                       className="w-full h-full object-cover"
                     />

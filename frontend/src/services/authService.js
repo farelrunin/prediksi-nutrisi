@@ -65,16 +65,14 @@ export const authService = {
     }
   },
 
-  async uploadAvatar(file) {
+  async uploadAvatar(base64Data) {
     try {
       const token = localStorage.getItem('token');
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await axios.post(`${API_BASE_URL}/auth/avatar`, formData, {
+      const response = await axios.post(`${API_BASE_URL}/auth/avatar`, {
+        avatar_data: base64Data
+      }, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
+          Authorization: `Bearer ${token}`
         }
       });
       return response.data;

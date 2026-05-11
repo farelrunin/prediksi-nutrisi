@@ -4,29 +4,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { User } = require("../models-express");
 const authenticateToken = require("../middleware/auth");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-
-// Multer Config
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "../static/uploads");
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true });
-    }
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, "avatar-" + uniqueSuffix + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({ 
-  storage,
-  limits: { fileSize: 2 * 1024 * 1024 }, // Limit 2MB
-});
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
@@ -107,19 +84,18 @@ router.put("/profile", authenticateToken, async (req, res) => {
   }
 });
 
-// Upload Avatar
-router.post("/avatar", authenticateToken, upload.single("file"), async (req, res) => {
+// Upload Avatar (Base64 System)
+router.post("/avatar", authenticateToken, async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ detail: "No file uploaded" });
+    const { avatar_data } = req.body;
+    if (!avatar_data) return res.status(400).json({ detail: "No image data provided" });
 
     const user = await User.findByPk(req.user.sub);
     if (!user) return res.status(404).json({ detail: "User not found" });
 
-    // Gunakan URL relatif yang bisa diakses via static
-    const avatarUrl = `/static/uploads/${req.file.filename}`;
-    await user.update({ avatar_url: avatarUrl });
+    await user.update({ avatar_url: avatar_data });
 
-    res.json({ avatar_url: avatarUrl });
+    res.json({ avatar_url: avatar_data });
   } catch (error) {
     res.status(500).json({ detail: error.message });
   }

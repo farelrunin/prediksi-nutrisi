@@ -264,13 +264,10 @@ const ProfilePage = () => {
 
         ctx.drawImage(img, x, y, drawWidth, drawHeight);
         
-        canvas.toBlob((blob) => {
-          const croppedFile = new File([blob], "avatar.jpg", { type: "image/jpeg" });
-          const previewUrl = URL.createObjectURL(blob);
-          setPreviewImage(previewUrl);
-          setProfileImage(croppedFile);
-          setIsCropping(false);
-        }, 'image/jpeg', 0.9);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7); // 0.7 for balance between quality and size
+        setPreviewImage(dataUrl);
+        setProfileImage(dataUrl);
+        setIsCropping(false);
       };
       img.src = tempImage;
     } catch (e) {
@@ -541,7 +538,7 @@ const ProfilePage = () => {
               <div className="relative mx-auto w-40 h-40 mb-8">
                 {previewImage ? (
                   <img
-                    src={previewImage?.startsWith('http') || previewImage?.startsWith('blob') ? previewImage : `https://nutriai-backend-production-2987.up.railway.app${previewImage}`}
+                    src={previewImage?.startsWith('http') || previewImage?.startsWith('blob') || previewImage?.startsWith('data:') ? previewImage : `https://nutriai-backend-production-2987.up.railway.app${previewImage}`}
                     alt="Profile"
                     className="w-full h-full rounded-full object-cover border-4 border-white shadow-xl group-hover:scale-105 transition-transform duration-500"
                   />

@@ -22,7 +22,7 @@ const User = sequelize.define("User", {
   age: { type: DataTypes.INTEGER },
   sleep_hours: { type: DataTypes.FLOAT },
   profile: { type: DataTypes.JSON, defaultValue: {} },
-  avatar_url: { type: DataTypes.STRING(255) },
+  avatar_url: { type: DataTypes.TEXT('long') },
 }, {
   tableName: "users",
   underscored: true
