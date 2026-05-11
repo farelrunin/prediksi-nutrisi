@@ -32,7 +32,7 @@ const DashboardPage = () => {
         {/* Header */}
         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-[var(--text-main)]">
+            <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-[var(--text-main)]">
               Dashboard
             </h1>
             <div className="mt-2 flex flex-wrap items-center gap-3">
@@ -102,13 +102,13 @@ const DashboardPage = () => {
             </MagicCard>
 
             {/* Weekly Trend Chart */}
-            <MagicCard className="bg-[var(--bg-card)] rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 shadow-xl border border-[var(--border-card)] overflow-visible">
+            <MagicCard className="bg-[var(--bg-card)] rounded-[1.5rem] md:rounded-[2.5rem] p-5 md:p-10 shadow-xl border border-[var(--border-card)]">
               <NutritionChart data={nutritionData.history} />
             </MagicCard>
           </div>
 
           {/* RIGHT COLUMN */}
-          <div className="lg:col-span-4 space-y-12">
+          <div className="lg:col-span-4 space-y-6 md:space-y-12">
             
             <RiskScoreCard 
               riskScore={riskScore} 

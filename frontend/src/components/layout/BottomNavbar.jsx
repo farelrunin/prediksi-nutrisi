@@ -43,15 +43,13 @@ const BottomNavbar = () => {
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) => `
-                  relative -top-4 w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 rotate-45
+                  relative -top-2 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300
                   ${isActive 
-                    ? 'bg-[var(--primary-green)] text-white shadow-xl shadow-emerald-500/40 scale-105' 
-                    : 'bg-gradient-to-br from-[var(--primary-green)] to-[var(--accent-blue)] text-white shadow-lg scale-100'}
+                    ? 'bg-[var(--text-main)] text-[var(--bg-primary)] shadow-lg' 
+                    : 'bg-[var(--bg-secondary)] text-[var(--text-main)] border border-[var(--border-card)] shadow-sm'}
                 `}
               >
-                <div className="-rotate-45 flex items-center justify-center">
-                  <Icon size={24} strokeWidth={2.5} />
-                </div>
+                <Icon size={24} strokeWidth={isActive ? 3 : 2} />
               </NavLink>
             );
           }

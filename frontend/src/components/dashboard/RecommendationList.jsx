@@ -36,8 +36,7 @@ const RecommendationList = () => {
     );
   }
 
-  return (
-    <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[2.5rem] shadow-xl border border-[var(--border-card)] p-6 md:p-10">
+    <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[1.5rem] md:rounded-[2.5rem] shadow-xl border border-[var(--border-card)] p-5 md:p-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h3 className="text-xl font-bold text-[var(--text-main)] flex items-center gap-2">

@@ -34,7 +34,7 @@ const LandingPage = () => {
         <div className="relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative max-w-2xl animate-in fade-in slide-in-from-left duration-1000">
             {/* Clean Container for Text */}
-            <div className="relative z-10 p-8 md:p-10 lg:p-14 rounded-[2.5rem] md:rounded-[3.5rem] bg-[var(--bg-card)]/80 border border-[var(--border-card)] shadow-2xl overflow-hidden group">
+            <div className="relative z-10 p-6 md:p-10 lg:p-14 rounded-[1.5rem] md:rounded-[3.5rem] bg-[var(--bg-card)]/80 border border-[var(--border-card)] shadow-2xl overflow-hidden group">
               <div className="relative z-10">
                 <div className="inline-flex items-center gap-2 mb-6 ml-1">
                   <Sparkles size={16} className="text-[var(--primary-green)]" />
