@@ -108,7 +108,7 @@ router.put("/profile", authenticateToken, async (req, res) => {
 });
 
 // Upload Avatar
-router.post("/avatar", authenticateToken, upload.single("avatar"), async (req, res) => {
+router.post("/avatar", authenticateToken, upload.single("file"), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ detail: "No file uploaded" });
 
