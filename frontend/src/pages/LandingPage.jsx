@@ -11,13 +11,18 @@ const LandingPage = () => {
   return (
     <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-main)] overflow-x-hidden">
       {/* Background Image - Clean & Sharp (Matching Login Style) */}
-      <div className="fixed inset-0 z-0">
+      {/* Background Image - Optimized with Fallback */}
+      <div className="fixed inset-0 z-0 bg-[#0f1715]"> {/* Dark fallback color */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--primary-green)_0%,_transparent_70%)] opacity-10 animate-pulse" />
         <img
           src="/bg-food.jpg"
           alt="Healthy Food"
-          className="w-full h-full object-cover brightness-[0.7] saturate-[1.2]"
+          loading="eager"
+          className="w-full h-full object-cover brightness-[0.5] saturate-[1.2] transition-opacity duration-1000"
+          onLoad={(e) => e.currentTarget.style.opacity = '1'}
+          style={{ opacity: 0 }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-primary)]/40 to-[var(--bg-primary)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-primary)]/60 to-[var(--bg-primary)]" />
       </div>
 
       {/* Hero Section */}
