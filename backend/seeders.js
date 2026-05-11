@@ -64,57 +64,58 @@ const seedData = async () => {
     const foodsToInsert = [];
     const counts = {};
 
-    fs.createReadStream(csvPath)
-      .pipe(csv())
-      .on('data', (row) => {
-        // Logika mapping: Kita cari kategori yang cocok dari kolom 'category' di CSV (jika ada)
-        // Jika tidak ada, kita coba mapping berdasarkan nama atau default ke 'Lainnya'
-        let targetCatName = (row.category || 'Menu Kafe').toLowerCase();
-        
-        // Cari kategori yang paling mendekati di map kita
-        let categoryId = null;
-        for (const [name, catObj] of Object.entries(categoryMap)) {
-          if (targetCatName.includes(name) || name.includes(targetCatName)) {
-            categoryId = catObj.id;
-            counts[catObj.id] = (counts[catObj.id] || 0) + 1;
-            break;
+    // KITA BUNGKUS PAKE PROMISE BIAR SERVER WAJIB NUNGGU
+    await new Promise((resolve, reject) => {
+      fs.createReadStream(csvPath)
+        .pipe(csv())
+        .on('data', (row) => {
+          let targetCatName = (row.category || 'Menu Kafe').toLowerCase();
+          let categoryId = null;
+          for (const [name, catObj] of Object.entries(categoryMap)) {
+            if (targetCatName.includes(name) || name.includes(targetCatName)) {
+              categoryId = catObj.id;
+              counts[catObj.id] = (counts[catObj.id] || 0) + 1;
+              break;
+            }
           }
-        }
 
-        if (!categoryId) {
-          // Default ke kategori pertama di 'Lainnya' jika tidak ketemu
-          categoryId = categoryMap['menu kafe'].id;
-          counts[categoryId] = (counts[categoryId] || 0) + 1;
-        }
+          if (!categoryId) {
+            categoryId = categoryMap['menu kafe'].id;
+            counts[categoryId] = (counts[categoryId] || 0) + 1;
+          }
 
-        foodsToInsert.push({
-          food_name_en: row.food_name || row.food_name_en || 'Unknown Food',
-          food_name_id: row.food_name_id || row.food_name || 'Makanan',
-          calories: parseFloat(row.calories) || 0,
-          protein: parseFloat(row.protein) || 0,
-          carbohydrates: parseFloat(row.carbohydrates) || 0,
-          total_fat: parseFloat(row.total_fat) || 0,
-          category_id: categoryId
-        });
-      })
-      .on('end', async () => {
-        console.log(`📦 Inserting ${foodsToInsert.length} foods into database...`);
-        
-        // Insert secara chunk (biar tidak meledak memory-nya)
-        const chunkSize = 100;
-        for (let i = 0; i < foodsToInsert.length; i += chunkSize) {
-          const chunk = foodsToInsert.slice(i, i + chunkSize);
-          await Food.bulkCreate(chunk);
-          if (i % 500 === 0) console.log(`... ${i} items inserted`);
-        }
+          foodsToInsert.push({
+            food_name_en: row.food_name || row.food_name_en || 'Unknown Food',
+            food_name_id: row.food_name_id || row.food_name || 'Makanan',
+            calories: parseFloat(row.calories) || 0,
+            protein: parseFloat(row.protein) || 0,
+            carbohydrates: parseFloat(row.carbohydrates) || 0,
+            total_fat: parseFloat(row.total_fat) || 0,
+            category_id: categoryId
+          });
+        })
+        .on('end', async () => {
+          try {
+            console.log(`📦 Inserting ${foodsToInsert.length} foods into database...`);
+            const chunkSize = 100;
+            for (let i = 0; i < foodsToInsert.length; i += chunkSize) {
+              const chunk = foodsToInsert.slice(i, i + chunkSize);
+              await Food.bulkCreate(chunk);
+              if (i % 500 === 0) console.log(`... ${i} items inserted`);
+            }
 
-        // Update item_count di tabel categories
-        for (const [id, count] of Object.entries(counts)) {
-          await Category.update({ item_count: count }, { where: { id: id } });
-        }
+            for (const [id, count] of Object.entries(counts)) {
+              await Category.update({ item_count: count }, { where: { id: id } });
+            }
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
+        })
+        .on('error', (err) => reject(err));
+    });
 
-        console.log("✅ Dataset seeding completed successfully!");
-      });
+    console.log("✅ Dataset seeding completed successfully!");
 
   } catch (error) {
     console.error("❌ Seeding failed:", error);
