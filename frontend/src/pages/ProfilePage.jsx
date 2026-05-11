@@ -628,8 +628,12 @@ const ProfilePage = () => {
                   <div className="space-y-2">
                     <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Tanggal Lahir</label>
                     <input
-                      type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange}
-                      className="w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-transparent text-[var(--text-main)] font-semibold focus:border-[var(--primary-green)] outline-none transition-all"
+                      type="date" 
+                      name="dateOfBirth" 
+                      value={formData.dateOfBirth} 
+                      onChange={handleChange}
+                      max={new Date().toISOString().split('T')[0]}
+                      className="w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-transparent text-[var(--text-main)] font-semibold focus:border-[var(--primary-green)] outline-none transition-all cursor-pointer"
                     />
                   </div>
                 </div>
