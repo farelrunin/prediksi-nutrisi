@@ -69,14 +69,17 @@ const Navbar = () => {
     const activeIndex = currentMenuItems.findIndex(item => 
       location.pathname === item.to || (item.href && location.hash === item.href)
     );
-    // Gunakan requestAnimationFrame supaya tidak macet (Fix Forced Reflow)
-    requestAnimationFrame(() => {
+    
+    // Gunakan timeout kecil supaya elemen sudah ter-render sempurna
+    const timer = setTimeout(() => {
       if (activeIndex !== -1) {
         updateIndicator(activeIndex);
       } else if (location.pathname === '/' || location.pathname === '') {
         updateIndicator(0);
       }
-    });
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, [location.pathname, location.hash, user, currentMenuItems]);
 
   return (
