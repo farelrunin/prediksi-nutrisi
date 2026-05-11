@@ -41,8 +41,14 @@ app.use("/categories", categoryRouter);
 // Health Check
 app.get("/", (req, res) => res.json({ message: "NutriAI Express API is running (Modular Mode)" }));
 
-// Connect to Database
-connectDB();
+// Connect to Database (tidak boleh crash server jika gagal)
+(async () => {
+  try {
+    await connectDB();
+  } catch (err) {
+    console.error("❌ DB Connection failed, server tetap jalan:", err.message);
+  }
+})();
 
 app.listen(PORT, () => {
   console.log(`🚀 Server Express (Local) running on http://localhost:${PORT}`);
