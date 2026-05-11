@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
+import BottomNavbar from './components/layout/BottomNavbar';
 import Footer from './components/layout/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
 import LandingPage from './pages/LandingPage';
@@ -63,8 +64,9 @@ function AppContent() {
           </Route>
         </Routes>
       </main>
-      <Footer />
-    </div>
+          <Footer />
+          <BottomNavbar />
+        </div>
   );
 }
 

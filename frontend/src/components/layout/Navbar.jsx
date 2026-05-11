@@ -235,59 +235,17 @@ const Navbar = () => {
             </div>
           )}
 
-          {/* Mobile Toggle */}
-          <button
+          {/* Mobile Toggle - Hiden because we use BottomNavbar */}
+          {/* <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="lg:hidden p-3.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-card)] text-[var(--text-main)] shadow-sm"
           >
             {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          </button> */}
         </div>
 
-        {/* Mobile Dropdown */}
-        {isMobileMenuOpen && (
-          <div className="absolute top-[calc(100%+1rem)] left-0 right-0 lg:hidden bg-[var(--bg-card)]/95 backdrop-blur-2xl border border-[var(--border-card)] rounded-[2.5rem] p-6 shadow-3xl animate-in slide-in-from-top-4 duration-300">
-            <div className="flex flex-col gap-2">
-              {currentMenuItems.map((item) => (
-                <NavLink
-                  key={item.label}
-                  to={item.to || '/'}
-                  onClick={(e) => {
-                    if (item.href) {
-                      e.preventDefault();
-                      const target = document.querySelector(item.href);
-                      if (target) {
-                        const navbarHeight = 100;
-                        const elementPosition = target.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
-                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-                      }
-                    }
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className={({ isActive }) =>
-                    `px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all ${
-                      isActive && !item.href
-                        ? 'bg-[var(--primary-green)] text-[var(--bg-primary)] shadow-lg shadow-emerald-500/20' 
-                        : 'text-[var(--text-muted)] hover:bg-[var(--bg-secondary)]'
-                    }`
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              ))}
-              {user && (
-                <Link
-                  to="/profile"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest text-[var(--text-muted)] hover:bg-[var(--bg-secondary)] border-t border-[var(--border-card)]/30 mt-2"
-                >
-                  My Profile
-                </Link>
-              )}
-            </div>
-          </div>
-        )}
+        {/* Mobile Dropdown - Disabled in favor of BottomNavbar */}
+        {/* {isMobileMenuOpen && ( ... )} */}
       </div>
 
       {/* Logout Confirmation Modal */}
