@@ -110,14 +110,14 @@ const Navbar = () => {
             setHoveredIndex(null);
           }}
         >
-          {/* THE MAGIC SLIDING PILL */}
+          {/* THE MAGIC SLIDING PILL (MzCode Style) */}
           <div 
-            className="absolute h-[75%] bg-[var(--primary-green)] rounded-full transition-all duration-500 ease-out z-0"
+            className="absolute h-[75%] bg-gradient-to-r from-[var(--primary-green)] to-[var(--accent-blue)] rounded-full transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) z-0"
             style={{
               left: `${indicatorStyle.left}px`,
               width: `${indicatorStyle.width}px`,
               opacity: indicatorStyle.opacity,
-              boxShadow: '0 0 25px var(--primary-green), 0 0 5px var(--primary-green)',
+              boxShadow: '0 0 20px rgba(16, 185, 129, 0.5), 0 0 40px rgba(16, 185, 129, 0.2)',
               top: '50%',
               transform: 'translateY(-50%)'
             }}
