@@ -541,7 +541,7 @@ const ProfilePage = () => {
               <div className="relative mx-auto w-40 h-40 mb-8">
                 {previewImage ? (
                   <img
-                    src={previewImage}
+                    src={previewImage?.startsWith('http') || previewImage?.startsWith('blob') ? previewImage : `https://nutriai-backend-production-2987.up.railway.app${previewImage}`}
                     alt="Profile"
                     className="w-full h-full rounded-full object-cover border-4 border-white shadow-xl group-hover:scale-105 transition-transform duration-500"
                   />

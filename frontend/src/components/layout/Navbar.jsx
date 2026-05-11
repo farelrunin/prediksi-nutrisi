@@ -192,10 +192,14 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               <Link to="/profil" className="hidden md:flex items-center gap-3 bg-white border border-[var(--border-card)] px-5 py-2.5 rounded-2xl hover:border-[var(--primary-green)]/30 transition-all shadow-sm">
                 <div className="w-8 h-8 rounded-full overflow-hidden bg-[var(--primary-green)]/10 flex items-center justify-center text-[var(--primary-green)] border border-slate-100">
-                  {user.avatar_url ? (
-                    <img src={user.avatar_url} alt="Profile" className="w-full h-full object-cover" />
+                  {user?.avatar_url || user?.avatar ? (
+                    <img
+                      src={user.avatar_url?.startsWith('http') ? user.avatar_url : `https://nutriai-backend-production-2987.up.railway.app${user.avatar_url}`}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
-                    <User size={16} />
+                    <User size={18} />
                   )}
                 </div>
                 <span className="text-xs font-bold text-[var(--text-main)] truncate max-w-[100px]">
