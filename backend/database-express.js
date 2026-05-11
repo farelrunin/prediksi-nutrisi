@@ -15,11 +15,7 @@ const sequelize = new Sequelize(dbUrl, {
   dialect: "mysql",
   dialectModule: require('mysql2'),
   logging: false,
-  dialectOptions: {
-    ssl: dbUrl.includes("railway.internal") ? false : {
-      rejectUnauthorized: false
-    }
-  }
+  dialectOptions: {}, // Hilangkan semua gembok SSL biar lancar
 });
 
 const connectDB = async () => {
