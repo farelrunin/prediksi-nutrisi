@@ -14,8 +14,6 @@ const publicMenuItems = [
 
 const authenticatedMenuItems = [
   { label: 'Home', to: '/' },
-  { label: 'Fitur', to: '/#fitur', hash: '#fitur' },
-  { label: 'Cara Kerja', to: '/#cara-kerja', hash: '#cara-kerja' },
   { label: 'Dashboard', to: '/dashboard' },
   { label: 'Nutri Check', to: '/nutri-check' },
   { label: 'History', to: '/history' },
