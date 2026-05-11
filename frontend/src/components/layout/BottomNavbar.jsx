@@ -43,14 +43,15 @@ const BottomNavbar = () => {
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) => `
-                  relative -top-6 w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500
+                  relative -top-4 w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 rotate-45
                   ${isActive 
-                    ? 'bg-[var(--primary-green)] text-white shadow-2xl shadow-emerald-500/50 scale-110' 
-                    : 'bg-gradient-to-br from-[var(--primary-green)] to-[var(--accent-blue)] text-white shadow-xl scale-100'}
+                    ? 'bg-[var(--primary-green)] text-white shadow-xl shadow-emerald-500/40 scale-105' 
+                    : 'bg-gradient-to-br from-[var(--primary-green)] to-[var(--accent-blue)] text-white shadow-lg scale-100'}
                 `}
               >
-                <Icon size={28} strokeWidth={2.5} />
-                <div className="absolute -bottom-1 w-1.5 h-1.5 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="-rotate-45 flex items-center justify-center">
+                  <Icon size={24} strokeWidth={2.5} />
+                </div>
               </NavLink>
             );
           }

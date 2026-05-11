@@ -91,7 +91,7 @@ const Navbar = () => {
   }, [location.pathname, location.hash, user, currentMenuItems]);
 
   return (
-    <nav className="fixed top-8 left-1/2 -translate-x-1/2 z-[100] w-[90%] max-w-7xl mx-auto transition-all duration-500">
+    <nav className="absolute lg:fixed top-8 left-1/2 -translate-x-1/2 z-[100] w-[90%] max-w-7xl mx-auto transition-all duration-500">
       <div className="bg-[var(--bg-card)]/80 backdrop-blur-xl border border-[var(--border-card)] rounded-full px-8 py-3 shadow-2xl flex justify-between items-center relative group">
         
         {/* Subtle Gradient Accent */}
