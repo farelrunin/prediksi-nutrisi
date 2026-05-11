@@ -45,12 +45,12 @@ const ForgotPasswordPage = () => {
 
         {/* Form Card */}
         <div 
-          className="backdrop-blur-2xl border border-white/40 rounded-[32px] p-10 shadow-[0_32px_100px_rgba(0,0,0,0.15)] bg-white/30"
+          className="backdrop-blur-2xl border border-[var(--glass-border)] rounded-[32px] p-10 shadow-[0_32px_100px_rgba(0,0,0,0.15)] bg-[var(--glass-bg)]"
         >
           {!submitted ? (
             <form onSubmit={handleSubmit} className="space-y-8">
               <div className="space-y-4">
-                <p className="text-sm text-slate-600 font-medium text-center">
+                <p className="text-sm text-[var(--glass-text)] font-medium text-center">
                   Enter your email and we will send instructions to reset your password.
                 </p>
                 
@@ -63,7 +63,7 @@ const ForgotPasswordPage = () => {
               </div>
               
               <div className="space-y-2">
-                <label className="text-[11px] font-bold uppercase tracking-widest text-slate-600 ml-2">Email Address</label>
+                <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--glass-text)] ml-2">Email Address</label>
                 <div className="relative">
                   <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500">
                     <Mail size={18} />
@@ -71,7 +71,7 @@ const ForgotPasswordPage = () => {
                   <input
                     type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
                     placeholder="name@email.com"
-                    className="w-full pl-14 pr-6 py-5 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
+                    className="w-full pl-14 pr-6 py-5 rounded-2xl bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--glass-text)] font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-[var(--text-muted)]"
                   />
                 </div>
               </div>
@@ -88,9 +88,9 @@ const ForgotPasswordPage = () => {
               <div className="w-20 h-20 bg-emerald-50 text-[var(--primary-green)] rounded-full flex items-center justify-center mx-auto shadow-inner">
                 <Mail size={40} />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900">Email Sent!</h3>
+              <h3 className="text-2xl font-bold text-[var(--text-main)]">Email Sent!</h3>
               <div className="space-y-4">
-                <p className="text-sm text-slate-600 font-medium leading-relaxed">
+                <p className="text-sm text-[var(--text-muted)] font-medium leading-relaxed">
                   Please check your email <strong>{email}</strong> for further instructions.
                 </p>
                 <div className="bg-amber-50 border border-amber-100 p-4 rounded-2xl">
@@ -109,8 +109,8 @@ const ForgotPasswordPage = () => {
           )}
 
 
-          <div className="mt-8 pt-8 border-t border-white/50">
-            <Link to="/login" className="flex items-center justify-center gap-2 text-sm font-bold text-slate-600 hover:text-slate-900 transition-colors">
+          <div className="mt-8 pt-8 border-t border-[var(--glass-border)]">
+            <Link to="/login" className="flex items-center justify-center gap-2 text-sm font-bold text-[var(--glass-text)] hover:text-[var(--primary-green)] transition-colors">
               <ArrowLeft size={16} />
               Back to Login
             </Link>

@@ -118,7 +118,7 @@ const LoginPage = () => {
                     type="email" name="email" value={formData.email} onChange={handleChange} required
                     maxLength="100"
                     placeholder="name@email.com"
-                    className="w-full pl-14 pr-6 py-5 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
+                    className="w-full pl-14 pr-6 py-5 rounded-2xl bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--glass-text)] font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-[var(--text-muted)]"
                   />
                 </div>
               </div>
@@ -168,7 +168,7 @@ const LoginPage = () => {
           {/* Social Login */}
           <button 
             type="button" onClick={() => loginWithGoogle()} disabled={loading}
-            className="w-full flex items-center justify-center gap-4 bg-white/60 backdrop-blur-md border border-white/50 py-5 rounded-2xl text-sm font-bold text-slate-700 hover:bg-white/80 transition-all shadow-sm"
+            className="w-full flex items-center justify-center gap-4 bg-[var(--glass-bg)] backdrop-blur-md border border-[var(--glass-border)] py-5 rounded-2xl text-sm font-bold text-[var(--glass-text)] hover:bg-[var(--bg-card)] transition-all shadow-sm"
           >
             <svg className="w-6 h-6" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />

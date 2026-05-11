@@ -31,15 +31,15 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, itemName, is
             </button>
           </div>
 
-          <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-          <p className="text-slate-400 leading-relaxed">
-            {message} <span className="font-semibold text-white">"{itemName}"</span>? This action cannot be undone.
+          <h3 className="text-xl font-bold text-[var(--text-main)] mb-2">{title}</h3>
+          <p className="text-[var(--text-muted)] leading-relaxed">
+            {message} <span className="font-semibold text-[var(--text-main)]">"{itemName}"</span>? This action cannot be undone.
           </p>
 
           <div className="mt-8 flex gap-3">
             <button
               onClick={onClose}
-              className="flex-1 rounded-2xl border border-white/10 bg-white/5 py-3 text-sm font-semibold text-white transition-all hover:bg-white/10"
+              className="flex-1 rounded-2xl border border-[var(--border-card)] bg-[var(--bg-secondary)] py-3 text-sm font-semibold text-[var(--text-main)] transition-all hover:bg-[var(--bg-secondary)]/80"
             >
               Cancel
             </button>

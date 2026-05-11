@@ -10,18 +10,18 @@ const MOBILE_BREAKPOINT = 768;
 const createParticleElement = (x, y, color = DEFAULT_GLOW_COLOR) => {
   const el = document.createElement('div');
   el.className = 'particle';
-  el.style.cssText = \`
+  el.style.cssText = `
     position: absolute;
     width: 3px;
     height: 3px;
     border-radius: 50%;
-    background: rgba(\${color}, 0.8);
-    box-shadow: 0 0 6px rgba(\${color}, 0.6);
+    background: rgba(${color}, 0.8);
+    box-shadow: 0 0 6px rgba(${color}, 0.6);
     pointer-events: none;
     z-index: 100;
-    left: \${x}px;
-    top: \${y}px;
-  \`;
+    left: ${x}px;
+    top: ${y}px;
+  `;
   return el;
 };
 
@@ -35,10 +35,10 @@ const updateCardGlowProperties = (card, mouseX, mouseY, glow, radius) => {
   const relativeX = ((mouseX - rect.left) / rect.width) * 100;
   const relativeY = ((mouseY - rect.top) / rect.height) * 100;
 
-  card.style.setProperty('--glow-x', \`\${relativeX}%\`);
-  card.style.setProperty('--glow-y', \`\${relativeY}%\`);
+  card.style.setProperty('--glow-x', `${relativeX}%`);
+  card.style.setProperty('--glow-y', `${relativeY}%`);
   card.style.setProperty('--glow-intensity', glow.toString());
-  card.style.setProperty('--glow-radius', \`\${radius}px\`);
+  card.style.setProperty('--glow-radius', `${radius}px`);
 };
 
 const ParticleCard = ({
@@ -178,11 +178,11 @@ const ParticleCard = ({
       const y = e.clientY - rect.top;
       const maxDistance = Math.max(Math.hypot(x, y), Math.hypot(x - rect.width, y - rect.height));
       const ripple = document.createElement('div');
-      ripple.style.cssText = \`
-        position: absolute; width: \${maxDistance * 2}px; height: \${maxDistance * 2}px;
-        border-radius: 50%; background: radial-gradient(circle, rgba(\${glowColor}, 0.3) 0%, transparent 70%);
-        left: \${x - maxDistance}px; top: \${y - maxDistance}px; pointer-events: none; z-index: 100;
-      \`;
+      ripple.style.cssText = `
+        position: absolute; width: ${maxDistance * 2}px; height: ${maxDistance * 2}px;
+        border-radius: 50%; background: radial-gradient(circle, rgba(${glowColor}, 0.3) 0%, transparent 70%);
+        left: ${x - maxDistance}px; top: ${y - maxDistance}px; pointer-events: none; z-index: 100;
+      `;
       element.appendChild(ripple);
       gsap.fromTo(ripple, { scale: 0, opacity: 1 }, { scale: 1.2, opacity: 0, duration: 0.6, ease: 'power2.out', onComplete: () => ripple.remove() });
     };
@@ -203,7 +203,7 @@ const ParticleCard = ({
   }, [animateParticles, clearAllParticles, disableAnimations, enableTilt, enableMagnetism, clickEffect, glowColor]);
 
   return (
-    <div ref={cardRef} className={\`\${className} particle-container\`} style={{ ...style, position: 'relative', overflow: 'hidden' }}>
+    <div ref={cardRef} className={`${className} particle-container`} style={{ ...style, position: 'relative', overflow: 'hidden' }}>
       {children}
     </div>
   );
@@ -216,11 +216,11 @@ const GlobalSpotlight = ({ gridRef, disableAnimations = false, enabled = true, s
     if (disableAnimations || !gridRef?.current || !enabled) return;
     const spotlight = document.createElement('div');
     spotlight.className = 'global-spotlight';
-    spotlight.style.cssText = \`
+    spotlight.style.cssText = `
       position: fixed; width: 600px; height: 600px; border-radius: 50%; pointer-events: none;
-      background: radial-gradient(circle, rgba(\${glowColor}, 0.08) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(${glowColor}, 0.08) 0%, transparent 70%);
       z-index: 200; opacity: 0; transform: translate(-50%, -50%); mix-blend-mode: overlay;
-    \`;
+    `;
     document.body.appendChild(spotlight);
     spotlightRef.current = spotlight;
 
@@ -292,7 +292,7 @@ const MagicBento = ({
       <div className="card-grid" ref={gridRef}>
         {stats.map((stat, index) => {
           const cardProps = {
-            className: \`magic-bento-card \${enableBorderGlow ? 'magic-bento-card--border-glow' : ''}\`,
+            className: `magic-bento-card ${enableBorderGlow ? 'magic-bento-card--border-glow' : ''}`,
             style: { '--glow-color': glowColor }
           };
 

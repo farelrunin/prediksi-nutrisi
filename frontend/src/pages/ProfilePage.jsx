@@ -428,13 +428,13 @@ const ProfilePage = () => {
       {/* Custom Cropper Modal */}
       {isCropping && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
-          <div className="bg-white rounded-[3rem] w-full max-w-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
-            <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+          <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[3rem] w-full max-w-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="p-8 border-b border-[var(--border-card)] flex justify-between items-center bg-[var(--bg-secondary)]/50">
               <div>
-                <h3 className="text-xl font-bold text-slate-900">Adjust Photo</h3>
-                <p className="text-xs font-medium text-slate-500 mt-1">Drag the photo to adjust position.</p>
+                <h3 className="text-xl font-bold text-[var(--text-main)]">Adjust Photo</h3>
+                <p className="text-xs font-medium text-[var(--text-muted)] mt-1">Drag the photo to adjust position.</p>
               </div>
-              <button onClick={() => setIsCropping(false)} className="p-3 rounded-2xl bg-white text-slate-400 hover:text-rose-500 transition-colors shadow-sm">
+              <button onClick={() => setIsCropping(false)} className="p-3 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-card)] text-[var(--text-muted)] hover:text-rose-500 transition-colors shadow-sm">
                 <RotateCcw size={20} />
               </button>
             </div>
@@ -478,7 +478,7 @@ const ProfilePage = () => {
 
             <div className="p-8 space-y-6">
               <div className="space-y-4">
-                <div className="flex justify-between text-xs font-bold text-slate-400 uppercase tracking-widest">
+                <div className="flex justify-between text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest">
                   <span>Zoom</span>
                   <span>{Math.round(scale * 100)}%</span>
                 </div>
@@ -496,7 +496,7 @@ const ProfilePage = () => {
               <div className="flex gap-4">
                 <button
                   onClick={() => setIsCropping(false)}
-                  className="flex-1 px-8 py-4 rounded-2xl font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 transition-all"
+                  className="flex-1 px-8 py-4 rounded-2xl font-bold text-[var(--text-muted)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-secondary)]/80 transition-all"
                 >
                   Cancel
                 </button>
@@ -524,7 +524,7 @@ const ProfilePage = () => {
           </div>
           <button
             onClick={() => navigate('/dashboard')}
-            className="flex items-center gap-2 bg-white border border-[var(--border-card)] px-6 py-3 rounded-2xl text-xs font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all shadow-sm"
+            className="flex items-center gap-2 bg-[var(--bg-card)] border border-[var(--border-card)] px-6 py-3 rounded-2xl text-xs font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all shadow-sm"
           >
             <ArrowLeft size={16} /> Back
           </button>
@@ -568,12 +568,12 @@ const ProfilePage = () => {
               <h3 className="text-2xl font-bold text-[var(--text-main)] mb-1">{formData.fullName || 'User'}</h3>
               <p className="text-xs font-semibold text-[var(--text-muted)] mb-8">{formData.email}</p>
 
-              <div className="space-y-6 pt-8 border-t border-slate-100 text-left">
+              <div className="space-y-6 pt-8 border-t border-[var(--border-card)]/30 text-left">
                 <div className="flex justify-between items-center">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)]">Completeness</span>
                   <span className="text-xs font-bold text-[var(--primary-green)]">{isProfileComplete ? '100%' : '60%'}</span>
                 </div>
-                <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden p-[1px]">
+                <div className="h-2 w-full bg-[var(--bg-secondary)] rounded-full overflow-hidden p-[1px]">
                   <div className={`h-full bg-[var(--primary-green)] rounded-full transition-all duration-1000 ${isProfileComplete ? 'w-full' : 'w-[60%]'}`} />
                 </div>
               </div>
@@ -620,7 +620,7 @@ const ProfilePage = () => {
                     <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Email</label>
                     <input
                       type="email" name="email" value={formData.email} disabled
-                      className="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-slate-100 text-slate-400 font-semibold opacity-60 cursor-not-allowed"
+                      className="w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-card)] text-[var(--text-muted)] font-semibold opacity-60 cursor-not-allowed"
                     />
                   </div>
                   <div className="space-y-2">
@@ -772,7 +772,7 @@ const ProfilePage = () => {
                 </button>
                 <button
                   type="button" onClick={handleReset}
-                  className="px-10 py-5 rounded-2xl border border-slate-200 bg-white text-[var(--text-muted)] font-bold uppercase tracking-widest text-xs hover:text-[var(--danger)] hover:border-rose-200 transition-all shadow-sm"
+                  className="px-10 py-5 rounded-2xl border border-[var(--border-card)] bg-[var(--bg-card)] text-[var(--text-muted)] font-bold uppercase tracking-widest text-xs hover:text-[var(--danger)] hover:border-rose-200 transition-all shadow-sm"
                 >
                   Reset
                 </button>

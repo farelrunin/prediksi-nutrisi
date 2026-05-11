@@ -4,8 +4,8 @@ import { AlertTriangle, CheckCircle, AlertCircle, TrendingUp } from 'lucide-reac
 const RiskScoreCard = ({ riskScore, aiAdvice }) => {
   if (riskScore === null) {
     return (
-      <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-6 text-slate-300">
-        <h3 className="text-lg font-bold text-white mb-3">Malnutrition Risk Score</h3>
+      <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[2.5rem] shadow-xl border border-[var(--border-card)] p-10 text-[var(--text-muted)] group hover:shadow-emerald-500/5 transition-all">
+        <h3 className="text-lg font-bold text-[var(--text-main)] mb-3">Malnutrition Risk Score</h3>
         <p>No data yet — start inputting food to see risk analysis</p>
       </div>
     );
@@ -44,14 +44,14 @@ const RiskScoreCard = ({ riskScore, aiAdvice }) => {
   const { level, icon: Icon, bgColor, textColor, description, iconBgClass, iconTextClass } = getRiskLevel(riskScore);
 
   return (
-    <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 overflow-hidden">
-      <div className={`bg-gradient-to-r ${bgColor} p-6 text-white`}>
+    <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[2.5rem] shadow-xl border border-[var(--border-card)] overflow-hidden group hover:shadow-emerald-500/5 transition-all">
+      <div className="bg-gradient-to-br from-emerald-500/10 to-blue-500/10 p-10">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-bold">Malnutrition Risk Score</h3>
-            <p className="text-white/80 text-sm">Based on AI Analysis</p>
+            <h3 className="text-lg font-bold text-[var(--text-main)]">Malnutrition Risk Score</h3>
+            <p className="text-[var(--text-muted)] text-sm">Based on AI Analysis</p>
           </div>
-          <Icon size={32} className="opacity-90" />
+          <Icon size={32} className="text-[var(--text-main)] opacity-90" />
         </div>
 
         <div className="text-center">
@@ -64,14 +64,14 @@ const RiskScoreCard = ({ riskScore, aiAdvice }) => {
         </div>
       </div>
 
-      <div className="bg-white/5 p-6">
+      <div className="bg-[var(--bg-secondary)] p-6">
         {aiAdvice && (
           <div className="mb-6 rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4">
             <div className="flex items-center gap-2 mb-2 text-emerald-400 font-bold text-xs uppercase tracking-wider">
               <TrendingUp size={14} />
               <span>Gemini AI Advice</span>
             </div>
-            <p className="text-white text-sm italic leading-relaxed">
+            <p className="text-[var(--text-main)] text-sm italic leading-relaxed">
               "{aiAdvice}"
             </p>
           </div>
@@ -82,14 +82,14 @@ const RiskScoreCard = ({ riskScore, aiAdvice }) => {
           </div>
           <div>
             <h4 className={`${textColor} font-semibold mb-2`}>Recommendation</h4>
-            <p className="text-slate-300 text-sm leading-relaxed">{description}</p>
+            <p className="text-[var(--text-muted)] text-sm leading-relaxed">{description}</p>
           </div>
         </div>
 
         <div className="mt-4 pt-4 border-t border-white/10">
           <div className="flex justify-between text-sm">
-            <span className="text-slate-400">Last Update</span>
-            <span className="text-white font-medium">
+            <span className="text-[var(--text-muted)]">Last Update</span>
+            <span className="text-[var(--text-main)] font-medium">
               {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
             </span>
           </div>

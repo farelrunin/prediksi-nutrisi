@@ -28,7 +28,7 @@ const RecommendationList = () => {
 
   if (recommendations.length === 0) {
     return (
-      <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-8 text-center">
+      <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[2.5rem] shadow-xl border border-[var(--border-card)] p-12 text-center">
         <Lightbulb className="mx-auto mb-4 text-emerald-500/30" size={48} />
         <h3 className="text-xl font-bold text-[var(--text-main)] mb-2">No Recommendations Yet</h3>
         <p className="text-[var(--text-muted)]">Log some food so Gemini can provide personalized advice for you.</p>
@@ -37,10 +37,10 @@ const RecommendationList = () => {
   }
 
   return (
-    <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-6">
+    <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[2.5rem] shadow-xl border border-[var(--border-card)] p-10">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h3 className="text-xl font-bold text-white flex items-center gap-2">
+          <h3 className="text-xl font-bold text-[var(--text-main)] flex items-center gap-2">
             <Lightbulb className="text-emerald-400" size={24} />
             Gemini's Personal Recommendations
           </h3>
@@ -57,7 +57,7 @@ const RecommendationList = () => {
           const IconComp = getIcon(rec.type);
           
           return (
-            <div key={index} className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white/40 p-6 transition-all hover:bg-white/60 hover:border-emerald-500/30">
+            <div key={index} className="group relative overflow-hidden rounded-[2rem] border border-[var(--border-card)] bg-[var(--bg-secondary)] p-8 transition-all hover:border-[var(--primary-green)]/30">
               <div className={`absolute top-0 right-0 h-24 w-24 -mr-8 -mt-8 opacity-5 ${style.text}`}>
                 <IconComp size={100} />
               </div>
@@ -80,7 +80,7 @@ const RecommendationList = () => {
                   {rec.foods && (
                     <div className="flex flex-wrap gap-2">
                       {rec.foods.map((food, fIdx) => (
-                        <span key={fIdx} className="rounded-lg bg-slate-950/60 px-3 py-1 text-xs font-semibold text-white border border-white/10 hover:border-emerald-500/30 transition-colors">
+                        <span key={fIdx} className="rounded-lg bg-[var(--bg-primary)] px-3 py-1.5 text-xs font-semibold text-[var(--text-main)] border border-[var(--border-card)] hover:border-[var(--primary-green)]/30 transition-colors">
                           {food}
                         </span>
                       ))}

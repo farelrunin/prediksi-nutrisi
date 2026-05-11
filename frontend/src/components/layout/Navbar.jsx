@@ -198,7 +198,7 @@ const Navbar = () => {
 
           {user ? (
             <div className="flex items-center gap-4">
-              <Link to="/profile" className="hidden md:flex items-center gap-3 bg-white border border-[var(--border-card)] px-5 py-2.5 rounded-2xl hover:border-[var(--primary-green)]/30 transition-all shadow-sm">
+              <Link to="/profile" className="hidden md:flex items-center gap-3 bg-[var(--bg-card)] border border-[var(--border-card)] px-5 py-2.5 rounded-2xl hover:border-[var(--primary-green)]/30 transition-all shadow-sm">
                 <div className="w-8 h-8 rounded-full overflow-hidden bg-[var(--primary-green)]/10 flex items-center justify-center text-[var(--primary-green)] border border-slate-100">
                   {user?.avatar_url || user?.avatar ? (
                     <img
@@ -235,7 +235,7 @@ const Navbar = () => {
           {/* Mobile Toggle */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-3.5 rounded-2xl bg-white border border-[var(--border-card)] text-[var(--text-main)] shadow-sm"
+            className="lg:hidden p-3.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-card)] text-[var(--text-main)] shadow-sm"
           >
             {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -243,7 +243,7 @@ const Navbar = () => {
 
         {/* Mobile Dropdown */}
         {isMobileMenuOpen && (
-          <div className="absolute top-[calc(100%+1rem)] left-0 right-0 lg:hidden bg-white/95 backdrop-blur-2xl border border-[var(--border-card)] rounded-[2.5rem] p-6 shadow-3xl animate-in slide-in-from-top-4 duration-300">
+          <div className="absolute top-[calc(100%+1rem)] left-0 right-0 lg:hidden bg-[var(--bg-card)]/95 backdrop-blur-2xl border border-[var(--border-card)] rounded-[2.5rem] p-6 shadow-3xl animate-in slide-in-from-top-4 duration-300">
             <div className="flex flex-col gap-2">
               {currentMenuItems.map((item) => (
                 <NavLink
@@ -265,8 +265,8 @@ const Navbar = () => {
                   className={({ isActive }) =>
                     `px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all ${
                       isActive && !item.href
-                        ? 'bg-[var(--primary-green)] text-white shadow-lg shadow-emerald-500/20' 
-                        : 'text-slate-600 hover:bg-slate-50'
+                        ? 'bg-[var(--primary-green)] text-[var(--bg-primary)] shadow-lg shadow-emerald-500/20' 
+                        : 'text-[var(--text-muted)] hover:bg-[var(--bg-secondary)]'
                     }`
                   }
                 >
@@ -277,7 +277,7 @@ const Navbar = () => {
                 <Link
                   to="/profile"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 border-t border-slate-100 mt-2"
+                  className="px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest text-[var(--text-muted)] hover:bg-[var(--bg-secondary)] border-t border-[var(--border-card)]/30 mt-2"
                 >
                   My Profile
                 </Link>

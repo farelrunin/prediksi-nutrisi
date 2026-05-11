@@ -148,7 +148,7 @@ const HistoryPage = () => {
                         {/* Items in Session */}
                         <div className="p-8 space-y-6">
                           {sessionEntries.map((entry) => (
-                            <div key={entry.id} className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 last:pb-0 border-b border-slate-100 last:border-0">
+                            <div key={entry.id} className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 last:pb-0 border-b border-[var(--border-card)]/30 last:border-0">
                               <div 
                                 className="flex-1 min-w-0 cursor-pointer group/item"
                                 onClick={() => setSelectedEntry(entry)}
@@ -206,14 +206,14 @@ const HistoryPage = () => {
       {selectedEntry && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-300" onClick={() => setSelectedEntry(null)} />
-          <div className="relative w-full max-w-2xl bg-white rounded-[3rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="relative w-full max-w-2xl bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[3rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="p-10">
               <div className="flex justify-between items-start mb-8">
                 <div>
-                  <h3 className="text-3xl font-black text-slate-900">{selectedEntry.foodName}</h3>
-                  <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mt-2">{selectedEntry.mealType} • {selectedEntry.quantity} {selectedEntry.unit}</p>
+                  <h3 className="text-3xl font-black text-[var(--text-main)]">{selectedEntry.foodName}</h3>
+                  <p className="text-sm font-bold text-[var(--text-muted)] uppercase tracking-widest mt-2">{selectedEntry.mealType} • {selectedEntry.quantity} {selectedEntry.unit}</p>
                 </div>
-                <button onClick={() => setSelectedEntry(null)} className="p-3 rounded-2xl bg-slate-50 text-slate-400 hover:text-rose-500 transition-colors">
+                <button onClick={() => setSelectedEntry(null)} className="p-3 rounded-2xl bg-[var(--bg-secondary)] text-[var(--text-muted)] hover:text-rose-500 transition-colors">
                   <X size={20} />
                 </button>
               </div>
@@ -245,8 +245,8 @@ const HistoryPage = () => {
                     { label: 'Sugar', val: selectedEntry.sugar || '—', unit: 'g' }
                   ].map((m) => (
                     <div key={m.label} className="flex justify-between items-center py-1">
-                      <span className="text-sm font-bold text-slate-600">{m.label}</span>
-                      <span className="text-sm font-black text-slate-900">{m.val} <span className="text-[10px] text-slate-400 font-bold uppercase">{m.unit}</span></span>
+                      <span className="text-sm font-bold text-[var(--text-muted)]">{m.label}</span>
+                      <span className="text-sm font-black text-[var(--text-main)]">{m.val} <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase">{m.unit}</span></span>
                     </div>
                   ))}
                 </div>
@@ -255,7 +255,7 @@ const HistoryPage = () => {
               <div className="mt-12 pt-8 border-t border-slate-100 flex justify-end">
                 <button 
                   onClick={() => setSelectedEntry(null)}
-                  className="px-8 py-4 rounded-2xl bg-slate-900 text-white font-bold text-sm hover:scale-105 active:scale-100 transition-all"
+                  className="px-8 py-4 rounded-2xl bg-[var(--text-main)] text-[var(--bg-card)] font-bold text-sm hover:scale-105 active:scale-100 transition-all"
                 >
                   Close
                 </button>

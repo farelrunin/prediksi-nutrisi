@@ -184,7 +184,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Add Food' }) => {
                   type="button"
                   onClick={handleAnalyzeAI}
                   disabled={predicting || story.trim().length < 10}
-                  className="flex items-center gap-2 bg-white border border-[var(--primary-green)]/30 text-[var(--primary-green)] px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[var(--primary-green)] hover:text-white transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed group"
+                  className="flex items-center gap-2 bg-[var(--bg-card)] border border-[var(--primary-green)]/30 text-[var(--primary-green)] px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[var(--primary-green)] hover:text-white transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed group"
                 >
                   {predicting ? (
                     <div className="h-3 w-3 border-2 border-current border-t-transparent rounded-full animate-spin" />

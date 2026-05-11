@@ -129,7 +129,7 @@ const RegisterPage = () => {
                     type="text" name="name" value={formData.name} onChange={handleChange} required
                     minLength="2" maxLength="100"
                     placeholder="John Doe"
-                    className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
+                    className="w-full pl-14 pr-6 py-4 rounded-2xl bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--glass-text)] font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-[var(--text-muted)]"
                   />
                 </div>
               </div>
@@ -144,7 +144,7 @@ const RegisterPage = () => {
                     type="email" name="email" value={formData.email} onChange={handleChange} required
                     maxLength="100"
                     placeholder="name@email.com"
-                    className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white/40 border border-white/50 text-slate-900 font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-slate-500"
+                    className="w-full pl-14 pr-6 py-4 rounded-2xl bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--glass-text)] font-semibold focus:border-[var(--primary-green)] focus:ring-4 focus:ring-[var(--primary-green)]/5 outline-none transition-all placeholder:text-[var(--text-muted)]"
                   />
                 </div>
               </div>

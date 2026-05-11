@@ -21,6 +21,8 @@
   --warning: #F59E0B;
   --danger: #EF4444;
   --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-text: #102A1C;
 }
 
 [data-theme='dark'] {
@@ -32,6 +34,8 @@
   --text-main: #E2E8F0;
   --text-muted: #94A3B8;
   --glass-bg: rgba(13, 27, 19, 0.7);
+  --glass-border: rgba(27, 45, 36, 0.5);
+  --glass-text: #E2E8F0;
 }
 
 * {
@@ -81,7 +85,7 @@ a {
   background: var(--bg-secondary);
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: var(--text-muted);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {

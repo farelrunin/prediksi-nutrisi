@@ -53,7 +53,7 @@ const DashboardPage = () => {
               )}
             </div>
           </div>
-          <div className="bg-white border border-[var(--border-card)] px-6 py-3 rounded-2xl text-xs font-bold text-[var(--text-muted)] shadow-sm">
+          <div className="bg-[var(--bg-card)] border border-[var(--border-card)] px-6 py-3 rounded-2xl text-xs font-bold text-[var(--text-muted)] shadow-sm">
             {new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
           </div>
         </div>
@@ -70,7 +70,7 @@ const DashboardPage = () => {
           <div className="lg:col-span-8 space-y-12">
             
             {/* Daily Nutrition Summary */}
-            <MagicCard className="bg-white/10 rounded-[2.5rem] p-10 shadow-xl">
+            <MagicCard className="bg-[var(--bg-card)] rounded-[2.5rem] p-10 shadow-xl border border-[var(--border-card)]">
               <div className="mb-10 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-[var(--text-main)]">Daily Nutrition</h2>
                 <Link to="/nutri-check" className="flex items-center gap-2 rounded-xl bg-[var(--primary-green)] px-5 py-3 text-sm font-bold text-white hover:scale-105 transition-transform shadow-lg shadow-emerald-500/20">
@@ -102,7 +102,7 @@ const DashboardPage = () => {
             </MagicCard>
 
             {/* Weekly Trend Chart */}
-            <MagicCard className="bg-white/10 rounded-[2.5rem] p-10 shadow-xl overflow-visible">
+            <MagicCard className="bg-[var(--bg-card)] rounded-[2.5rem] p-10 shadow-xl border border-[var(--border-card)] overflow-visible">
               <NutritionChart data={nutritionData.history} />
             </MagicCard>
           </div>
@@ -115,7 +115,7 @@ const DashboardPage = () => {
               aiAdvice={nutritionData.lastAiAdvice} 
             />
 
-            <MagicCard className="bg-white/10 rounded-[2.5rem] p-10 shadow-xl">
+            <MagicCard className="bg-[var(--bg-card)] rounded-[2.5rem] p-10 shadow-xl border border-[var(--border-card)]">
               <div className="mb-8 flex items-center justify-between">
                 <h2 className="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Recent Activity</h2>
                 <Link to="/history" className="text-[11px] font-bold text-[var(--primary-green)] hover:underline uppercase tracking-widest">History →</Link>
@@ -135,7 +135,7 @@ const DashboardPage = () => {
                         <p className="truncate text-sm font-semibold text-[var(--text-main)] group-hover:text-[var(--primary-green)] transition-colors">{e.foodName}</p>
                         <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider mt-1">{e.mealType}</p>
                       </div>
-                      <span className="text-xs font-bold text-[var(--primary-green)] bg-white px-3 py-1.5 rounded-lg shadow-sm border border-[var(--border-card)]">{e.calories} kcal</span>
+                      <span className="text-xs font-bold text-[var(--primary-green)] bg-[var(--bg-primary)] px-3 py-1.5 rounded-lg shadow-sm border border-[var(--border-card)]">{e.calories} kcal</span>
                     </div>
                   ))
                 )}

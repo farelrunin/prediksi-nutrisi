@@ -13,7 +13,7 @@ const PrivacyPolicy = () => {
           <ArrowLeft size={16} /> Back to Home
         </Link>
 
-        <div className="bg-white border border-[var(--border-card)] rounded-[3rem] p-12 md:p-20 shadow-xl">
+        <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[3rem] p-12 md:p-20 shadow-xl">
           <div className="flex items-center gap-4 mb-10">
             <div className="p-3 bg-[var(--primary-green)]/10 rounded-2xl text-[var(--primary-green)]">
               <Shield size={24} />
