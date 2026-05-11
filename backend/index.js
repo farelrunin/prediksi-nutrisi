@@ -45,8 +45,11 @@ app.get("/", (req, res) => res.json({ message: "NutriAI Express API is running (
 (async () => {
   try {
     const { sequelize } = require("./database-express");
+    // IMPORT MODELS DISINI supaya Sequelize tahu tabel apa yang mau dibuat
+    require("./models-express"); 
+    
     await connectDB();
-    // Sync models to database (create tables if not exist)
+    // Sync models to database
     await sequelize.sync({ alter: true });
     console.log("✅ Database synchronized");
   } catch (err) {
