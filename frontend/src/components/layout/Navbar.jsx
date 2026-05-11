@@ -4,6 +4,24 @@ import { Apple, User, LogOut, Menu, X, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../../context/useAuth';
 import { useTheme } from '../../context/ThemeContext';
 
+const publicMenuItems = [
+  { label: 'Home', to: '/', scrollTop: true },
+  { label: 'Fitur', href: '#fitur' },
+  { label: 'Cara Kerja', href: '#cara-kerja' },
+  { label: 'Kategori', to: '/kategori' },
+  { label: 'Panduan', to: '/panduan' },
+  { label: 'Mulai', to: '/register' },
+];
+
+const authenticatedMenuItems = [
+  { label: 'Home', to: '/' },
+  { label: 'Dashboard', to: '/dashboard' },
+  { label: 'Nutri Check', to: '/nutri-check' },
+  { label: 'History', to: '/history' },
+  { label: 'Panduan', to: '/panduan' },
+  { label: 'Kategori', to: '/kategori' },
+];
+
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
@@ -15,6 +33,7 @@ const Navbar = () => {
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const menuRefs = useRef([]);
+  const parentRef = useRef(null);
 
   const handleLogout = () => {
     logout();
@@ -32,33 +51,25 @@ const Navbar = () => {
     }
   };
 
-  const publicMenuItems = [
-    { label: 'Home', to: '/', scrollTop: true },
-    { label: 'Fitur', href: '#fitur' },
-    { label: 'Cara Kerja', href: '#cara-kerja' },
-    { label: 'Kategori', to: '/kategori' },
-    { label: 'Panduan', to: '/panduan' },
-    { label: 'Mulai', to: '/register' },
-  ];
-
-  const authenticatedMenuItems = [
-    { label: 'Home', to: '/' },
-    { label: 'Dashboard', to: '/dashboard' },
-    { label: 'Nutri Check', to: '/nutri-check' },
-    { label: 'History', to: '/history' },
-    { label: 'Panduan', to: '/panduan' },
-    { label: 'Kategori', to: '/kategori' },
-  ];
-
   const currentMenuItems = user ? authenticatedMenuItems : publicMenuItems;
 
-  // Update indicator position
+  // Update indicator position with precision
   const updateIndicator = (index) => {
-    const el = menuRefs.current[index];
-    if (el) {
+    if (index === null || index === -1) {
+      setIndicatorStyle(prev => ({ ...prev, opacity: 0 }));
+      return;
+    }
+    
+    const parent = parentRef.current;
+    const child = menuRefs.current[index];
+    
+    if (parent && child) {
+      const parentRect = parent.getBoundingClientRect();
+      const childRect = child.getBoundingClientRect();
+      
       setIndicatorStyle({
-        left: el.offsetLeft,
-        width: el.offsetWidth,
+        left: childRect.left - parentRect.left,
+        width: childRect.width,
         opacity: 1
       });
     }
@@ -70,14 +81,14 @@ const Navbar = () => {
       location.pathname === item.to || (item.href && location.hash === item.href)
     );
     
-    // Gunakan timeout kecil supaya elemen sudah ter-render sempurna
+    // Beri waktu sedikit untuk browser menghitung layout
     const timer = setTimeout(() => {
       if (activeIndex !== -1) {
         updateIndicator(activeIndex);
       } else if (location.pathname === '/' || location.pathname === '') {
         updateIndicator(0);
       }
-    }, 100);
+    }, 300); // Sedikit lebih lama agar transisi halaman selesai
 
     return () => clearTimeout(timer);
   }, [location.pathname, location.hash, user, currentMenuItems]);
@@ -101,60 +112,74 @@ const Navbar = () => {
 
         {/* Desktop Menu with Magic Sliding Indicator */}
         <div 
+          ref={parentRef}
           className="hidden lg:flex items-center gap-1 relative bg-white/5 px-2 py-1.5 rounded-full border border-white/10 shadow-inner"
           onMouseLeave={() => {
             const activeIndex = currentMenuItems.findIndex(item => 
               location.pathname === item.to || (item.href && location.hash === item.href)
             );
-            updateIndicator(activeIndex !== -1 ? activeIndex : 0);
+            if (activeIndex !== -1) {
+              updateIndicator(activeIndex);
+            } else if (location.pathname === '/' || location.pathname === '') {
+              updateIndicator(0);
+            } else {
+              setIndicatorStyle(prev => ({ ...prev, opacity: 0 }));
+            }
             setHoveredIndex(null);
           }}
         >
           {/* THE MAGIC SLIDING PILL (MzCode Style) */}
           <div 
-            className="absolute h-[75%] bg-gradient-to-r from-[var(--primary-green)] to-[var(--accent-blue)] rounded-full transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) z-0"
+            className="absolute h-[75%] bg-gradient-to-r from-[var(--primary-green)] to-[var(--accent-blue)] rounded-full transition-all duration-500 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] z-0"
             style={{
               left: `${indicatorStyle.left}px`,
               width: `${indicatorStyle.width}px`,
               opacity: indicatorStyle.opacity,
-              boxShadow: '0 0 20px rgba(16, 185, 129, 0.5), 0 0 40px rgba(16, 185, 129, 0.2)',
+              boxShadow: '0 0 20px rgba(16, 185, 129, 0.4)',
               top: '50%',
               transform: 'translateY(-50%)'
             }}
           />
 
-          {currentMenuItems.map((item, index) => (
-            <div
-              key={item.label}
-              ref={el => menuRefs.current[index] = el}
-              onMouseEnter={() => {
-                updateIndicator(index);
-                setHoveredIndex(index);
-              }}
-              className="relative"
-            >
-              <NavLink
-                to={item.to || (item.href ? '/' : '')}
-                onClick={(e) => {
-                  if (item.href) {
-                    e.preventDefault();
-                    const target = document.querySelector(item.href);
-                    if (target) {
-                      const navbarHeight = 100;
-                      const elementPosition = target.getBoundingClientRect().top;
-                      const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
-                      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-                    }
-                  }
+          {currentMenuItems.map((item, index) => {
+            const isInternal = item.to;
+            const isActive = isInternal 
+              ? location.pathname === item.to 
+              : location.hash === item.href;
+
+            return (
+              <div
+                key={item.label}
+                ref={el => menuRefs.current[index] = el}
+                onMouseEnter={() => {
+                  updateIndicator(index);
+                  setHoveredIndex(index);
                 }}
-                className={({ isActive }) => {
-                  return `relative z-10 px-6 py-2.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-500 block text-[var(--text-main)]`;
-                }}
+                className="relative"
               >
-                {item.label}
-              </NavLink>
-            </div>
-          ))}
+                <NavLink
+                  to={item.to || (item.href ? '/' : '')}
+                  onClick={(e) => {
+                    if (item.href) {
+                      e.preventDefault();
+                      const target = document.querySelector(item.href);
+                      if (target) {
+                        const navbarHeight = 100;
+                        const elementPosition = target.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                      }
+                    }
+                  }}
+                  className={() => {
+                    return `relative z-10 px-6 py-2.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-500 block ${isActive || hoveredIndex === index ? 'text-black' : 'text-[var(--text-main)]'}`;
+                  }}
+                >
+                  {item.label}
+                </NavLink>
+              </div>
+            );
+          })}
         </div>
 
         {/* Action Buttons */}
