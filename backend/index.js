@@ -41,17 +41,20 @@ app.use("/categories", categoryRouter);
 // Health Check
 app.get("/", (req, res) => res.json({ message: "NutriAI Express API is running (Modular Mode)" }));
 
-// Connect to Database (tidak boleh crash server jika gagal)
+// Connect to Database
 (async () => {
   try {
     await connectDB();
   } catch (err) {
-    console.error("❌ DB Connection failed, server tetap jalan:", err.message);
+    console.error("❌ DB Connection failed:", err.message);
   }
 })();
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server Express (Local) running on http://localhost:${PORT}`);
-});
+// Hanya jalankan app.listen di lokal (bukan di Vercel)
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  });
+}
 
 module.exports = app;
