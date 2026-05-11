@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShieldCheck, Sparkles, TrendingUp, Apple, Globe, Camera, Briefcase } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
+import SoftAurora from '../components/shared/SoftAurora';
 
 const LandingPage = () => {
   const { user } = useAuth();
@@ -10,19 +11,22 @@ const LandingPage = () => {
 
   return (
     <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-main)] overflow-x-hidden">
-      {/* Background Image - Clean & Sharp (Matching Login Style) */}
-      {/* Background Image - Optimized with Fallback */}
-      <div className="fixed inset-0 z-0 bg-[#0f1715]"> {/* Dark fallback color */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--primary-green)_0%,_transparent_70%)] opacity-10 animate-pulse" />
-        <img
-          src="/bg-food.jpg"
-          alt="Healthy Food"
-          loading="eager"
-          className="w-full h-full object-cover brightness-[0.5] saturate-[1.2] transition-opacity duration-1000"
-          onLoad={(e) => e.currentTarget.style.opacity = '1'}
-          style={{ opacity: 0 }}
+      {/* Background - Animated Soft Aurora */}
+      <div className="fixed inset-0 z-0 bg-[#060a09]"> {/* Very dark green base */}
+        <SoftAurora
+          speed={0.4}
+          scale={1.2}
+          brightness={0.8}
+          color1="#22c55e" // Emerald 500
+          color2="#3b82f6" // Blue 500
+          noiseFrequency={2.0}
+          noiseAmplitude={0.8}
+          bandHeight={0.4}
+          bandSpread={1.2}
+          enableMouseInteraction={true}
+          mouseInfluence={0.15}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-primary)]/60 to-[var(--bg-primary)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-primary)]/40 to-[var(--bg-primary)]" />
       </div>
 
       {/* Hero Section */}

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserPlus, Mail, Lock, User, Apple, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
 import { useNotification } from '../context/useNotification';
+import SoftAurora from '../components/shared/SoftAurora';
 
 const RegisterPage = () => {
   const { register, user } = useAuth();
@@ -83,14 +84,20 @@ const RegisterPage = () => {
   return (
     <div className="min-h-screen flex flex-col items-center pt-32 pb-12 bg-transparent px-6 relative overflow-hidden">
       
-      {/* Background with user image */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src="/bg-food.jpg" 
-          alt="Healthy Food" 
-          className="w-full h-full object-cover" 
+      {/* Background - Animated Soft Aurora */}
+      <div className="absolute inset-0 z-0 bg-[#060a09]">
+        <SoftAurora
+          speed={0.3}
+          scale={1.5}
+          brightness={0.7}
+          color1="#22c55e"
+          color2="#3b82f6"
+          noiseFrequency={2.5}
+          noiseAmplitude={1.0}
+          enableMouseInteraction={true}
+          mouseInfluence={0.2}
         />
-        <div className="absolute inset-0 bg-black/10" />
+        <div className="absolute inset-0 bg-black/20" />
       </div>
 
       <div className="relative z-10 w-full max-w-md">
