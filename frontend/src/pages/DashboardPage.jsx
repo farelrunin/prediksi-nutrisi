@@ -19,8 +19,8 @@ const DashboardPage = () => {
 
   const quickStats = [
     { icon: Target, label: 'Kalori', value: Math.round(nutritionData.dailyIntake.calories), target: nutritionData.targets.calories, unit: 'kcal', color: 'text-[var(--primary-green)]', glow: 'rgba(34, 197, 94, 0.12)' },
-    { icon: TrendingUp, label: 'Protein', value: Math.round(nutritionData.dailyIntake.protein), target: nutritionData.targets.protein, unit: 'g', color: 'text-[var(--accent-blue)]', glow: 'rgba(59, 130, 246, 0.12)' },
-    { icon: Calendar, label: 'Entri', value: todayEntries.length, target: 10, unit: 'item', color: 'text-[var(--warning)]', glow: 'rgba(245, 158, 11, 0.12)' },
+    { icon: TrendingUp, label: 'Protein', value: Math.round(nutritionData.dailyIntake.protein), target: nutritionData.targets.protein, unit: 'g', color: 'text-[var(--primary-green)]', glow: 'rgba(34, 197, 94, 0.12)' },
+    { icon: Calendar, label: 'Entri', value: todayEntries.length, target: 10, unit: 'item', color: 'text-[var(--primary-green)]', glow: 'rgba(34, 197, 94, 0.12)' },
     { icon: Award, label: 'Streak', value: Math.min(nutritionData.history.length, 7), target: 7, unit: 'hari', color: 'text-[var(--primary-green)]', glow: 'rgba(34, 197, 94, 0.12)' }
   ];
 
