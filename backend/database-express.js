@@ -11,24 +11,16 @@ let dbUrl = (process.env.DATABASE_URL || "mysql://localhost/nutriai_db")
   .replace("?ssl-mode=REQUIRED", "")
   .replace("&ssl-mode=REQUIRED", "");
 
-// Prioritize individual Railway variables if they exist
-const sequelize = process.env.MYSQLHOST 
-  ? new Sequelize(process.env.MYSQLDATABASE, process.env.MYSQLUSER, process.env.MYSQLPASSWORD, {
-      host: process.env.MYSQLHOST,
-      port: process.env.MYSQLPORT || 3306,
-      dialect: "mysql",
-      dialectModule: require('mysql2'),
-      logging: false,
-      dialectOptions: {}, // Internal Railway connection doesn't need SSL
-    })
-  : new Sequelize(dbUrl, {
-      dialect: "mysql",
-      dialectModule: require('mysql2'),
-      logging: false,
-      dialectOptions: dbUrl.includes("railway.internal") ? {} : {
-        ssl: { rejectUnauthorized: false }
-      },
-    });
+const sequelize = new Sequelize(dbUrl, {
+  dialect: "mysql",
+  dialectModule: require('mysql2'),
+  logging: false,
+  dialectOptions: {
+    ssl: dbUrl.includes("railway.internal") ? false : {
+      rejectUnauthorized: false
+    }
+  }
+});
 
 const connectDB = async () => {
   try {
