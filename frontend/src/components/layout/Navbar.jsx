@@ -210,13 +210,25 @@ const Navbar = () => {
               {currentMenuItems.map((item) => (
                 <NavLink
                   key={item.label}
-                  to={item.to}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  to={item.to || '/'}
+                  onClick={(e) => {
+                    if (item.href) {
+                      e.preventDefault();
+                      const target = document.querySelector(item.href);
+                      if (target) {
+                        const navbarHeight = 100;
+                        const elementPosition = target.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                      }
+                    }
+                    setIsMobileMenuOpen(false);
+                  }}
                   className={({ isActive }) =>
-                    `px-6 py-4 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all ${
-                      isActive 
-                        ? 'bg-[var(--primary-green)] text-white' 
-                        : 'text-[var(--text-muted)] hover:bg-slate-50'
+                    `px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all ${
+                      isActive && !item.href
+                        ? 'bg-[var(--primary-green)] text-white shadow-lg shadow-emerald-500/20' 
+                        : 'text-slate-600 hover:bg-slate-50'
                     }`
                   }
                 >
@@ -224,13 +236,13 @@ const Navbar = () => {
                 </NavLink>
               ))}
               {user && (
-                <NavLink
+                <Link
                   to="/profil"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="px-6 py-4 rounded-2xl text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] hover:bg-slate-50 border-t border-slate-100 mt-2"
+                  className="px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 border-t border-slate-100 mt-2"
                 >
                   Profil Saya
-                </NavLink>
+                </Link>
               )}
             </div>
           </div>
