@@ -19,9 +19,33 @@ router.get("/", authenticateToken, async (req, res) => {
 // Add Entry
 router.post("/", authenticateToken, async (req, res) => {
   try {
-    const entry = await FoodEntry.create({ ...req.body, user_id: req.user.sub });
-    res.json(entry);
+    const { 
+      food_name, 
+      meal_type, 
+      calories, 
+      protein, 
+      carbs, 
+      fat, 
+      quantity, 
+      unit 
+    } = req.body;
+
+    // Pastikan semua data wajib ada nilainya (fallback ke 0 atau default)
+    const newEntry = await FoodEntry.create({
+      user_id: req.user.sub,
+      food_name: food_name || "Makanan Tanpa Nama",
+      meal_type: meal_type || "snack",
+      calories: parseFloat(calories) || 0,
+      protein: parseFloat(protein) || 0,
+      carbs: parseFloat(carbs) || 0,
+      fat: parseFloat(fat) || 0,
+      quantity: parseFloat(quantity) || 1,
+      unit: unit || "porsi"
+    });
+
+    res.json(newEntry);
   } catch (error) {
+    console.error("DB Save Error:", error);
     res.status(500).json({ detail: "Gagal menyimpan ke database: " + error.message });
   }
 });
