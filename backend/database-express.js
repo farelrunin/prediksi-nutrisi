@@ -11,11 +11,13 @@ let dbUrl = (process.env.DATABASE_URL || "mysql://localhost/nutriai_db")
   .replace("?ssl-mode=REQUIRED", "")
   .replace("&ssl-mode=REQUIRED", "");
 
+const isRailwayInternal = dbUrl.includes("railway.internal");
+
 const sequelize = new Sequelize(dbUrl, {
   dialect: "mysql",
   dialectModule: require('mysql2'),
   logging: false,
-  dialectOptions: {
+  dialectOptions: isRailwayInternal ? {} : {
     ssl: {
       rejectUnauthorized: false
     }
