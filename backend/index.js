@@ -38,24 +38,37 @@ app.use("/food", foodRouter);
 app.use("/predict", predictRouter);
 app.use("/categories", categoryRouter);
 
-// Health Check
-app.get("/", (req, res) => res.json({ message: "NutriAI Express API is running (Modular Mode)" }));
+// Import Models & Database
+const { sequelize, connectDB } = require("./database-express");
+require("./models-express");
 
-// Connect to Database
+// Connect to Database & Sync
 (async () => {
   try {
-    const { sequelize } = require("./database-express");
-    // IMPORT MODELS DISINI supaya Sequelize tahu tabel apa yang mau dibuat
-    require("./models-express"); 
-    
     await connectDB();
-    // Sync models to database
     await sequelize.sync({ alter: true });
-    console.log("✅ Database synchronized");
+    console.log("✅ Database synchronized (Production)");
   } catch (err) {
     console.error("❌ DB Initialization failed:", err.message);
   }
 })();
+
+// Health Check with DB Status
+app.get("/", async (req, res) => {
+  try {
+    await sequelize.authenticate();
+    res.json({ 
+      message: "NutriAI Express API is running",
+      database: "Connected",
+      sync: "Ready"
+    });
+  } catch (err) {
+    res.status(500).json({ 
+      message: "API Running but DB Error",
+      error: err.message 
+    });
+  }
+});
 
 // Hanya jalankan app.listen di lokal (bukan di Vercel)
 if (process.env.NODE_ENV !== "production") {
