@@ -1,0 +1,201 @@
+:root {
+  --hue: 142;
+  --sat: 70%;
+  --white: hsl(0, 0%, 100%);
+  --primary-glow: rgba(34, 197, 94, 1);
+  --primary-glow-soft: rgba(34, 197, 94, 0.2);
+  --primary-border: rgba(34, 197, 94, 0.8);
+  --border-color: var(--border-card);
+  --background-dark: var(--bg-card);
+  color-scheme: light dark;
+}
+
+.card-grid {
+  display: grid;
+  gap: 1.5em;
+  padding: 1em 0;
+  width: 100%;
+}
+
+.magic-bento-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  aspect-ratio: 4/3;
+  min-height: 180px;
+  width: 100%;
+  max-width: 100%;
+  padding: 1.75em;
+  border-radius: 2.5rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --glow-intensity: 0;
+  --glow-radius: 200px;
+}
+
+/* Light mode specific background */
+[data-theme='light'] .magic-bento-card {
+  background: white;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+.magic-bento-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+.magic-bento-card__header,
+.magic-bento-card__content {
+  display: flex;
+  position: relative;
+  z-index: 10;
+}
+
+.magic-bento-card__header {
+  gap: 0.75em;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+.magic-bento-card__content {
+  flex-direction: column;
+  margin-top: auto;
+}
+
+.magic-bento-card__icon-wrapper {
+  padding: 0.75em;
+  border-radius: 1.25rem;
+  background: var(--bg-secondary);
+  color: var(--primary-green);
+  transition: transform 0.3s ease;
+}
+
+.magic-bento-card:hover .magic-bento-card__icon-wrapper {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+.magic-bento-card__label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.magic-bento-card__value-container {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4em;
+}
+
+.magic-bento-card__value {
+  font-weight: 900;
+  font-size: 2.5rem;
+  margin: 0;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+.magic-bento-card__unit {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+@media (max-width: 639px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1em;
+  }
+
+  .magic-bento-card {
+    min-height: 150px;
+    padding: 1.25em;
+  }
+  
+  .magic-bento-card__value {
+    font-size: 1.75rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Border glow effect */
+.magic-bento-card--border-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: radial-gradient(
+    var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+    rgba(34, 197, 94, calc(var(--glow-intensity) * 0.8)) 0%,
+    rgba(34, 197, 94, calc(var(--glow-intensity) * 0.4)) 30%,
+    transparent 60%
+  );
+  border-radius: inherit;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.magic-bento-card--border-glow:hover::after {
+  opacity: 1;
+}
+
+.particle-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.particle::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: rgba(34, 197, 94, 0.2);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+/* Global spotlight styles */
+.global-spotlight {
+  mix-blend-mode: overlay;
+  will-change: transform, opacity;
+  z-index: 200 !important;
+  pointer-events: none;
+}
+
+.bento-section {
+  position: relative;
+  user-select: none;
+}

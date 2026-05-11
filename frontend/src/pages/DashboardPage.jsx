@@ -4,6 +4,7 @@ import { TrendingUp, Target, Calendar, Award, List, ChevronRight } from 'lucide-
 import RiskScoreCard from '../components/dashboard/RiskScoreCard';
 import NutritionChart from '../components/dashboard/NutritionChart';
 import RecommendationList from '../components/dashboard/RecommendationList';
+import MagicBento from '../components/dashboard/MagicBento';
 import { useNutrition } from '../context/useNutrition';
 import { useAuth } from '../context/useAuth';
 import MagicCard from '../components/shared/MagicCard';
@@ -57,26 +58,9 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        {/* Quick Stats Grid */}
-        <div className="mb-12 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
-          {quickStats.map((stat, idx) => (
-            <MagicCard 
-              key={idx} 
-              glowColor={stat.glow}
-              className="bg-white/10 rounded-[2.5rem] p-8 shadow-sm transition-all hover:scale-[1.02] hover:shadow-xl group"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className={`p-2.5 rounded-2xl bg-[var(--bg-secondary)] ${stat.color} group-hover:scale-110 transition-transform`}>
-                  <stat.icon size={20} />
-                </div>
-                <span className="text-xs font-bold text-[var(--text-muted)]">{stat.label}</span>
-              </div>
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-extrabold text-[var(--text-main)]">{stat.value}</span>
-                <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">{stat.unit}</span>
-              </div>
-            </MagicCard>
-          ))}
+        {/* Magic Bento Quick Stats */}
+        <div className="mb-12">
+          <MagicBento stats={quickStats} />
         </div>
 
         {/* Main Grid */}
