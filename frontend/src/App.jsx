@@ -19,10 +19,26 @@ import { AuthProvider } from './context/AuthContext';
 import { NutritionProvider } from './context/NutritionStore';
 import { NotificationProvider } from './context/NotificationContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { useLocation } from 'react-router-dom';
+
+// Component to handle scroll to top on route change
+function ScrollToTop() {
+  const { pathname, hash } = useLocation();
+
+  React.useEffect(() => {
+    // Only scroll to top if there is NO hash (not an anchor link)
+    if (!hash) {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
+
+  return null;
+}
 
 function AppContent() {
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-main)]">
+      <ScrollToTop />
       <Navbar />
       <main className="min-h-screen">
         <Routes>

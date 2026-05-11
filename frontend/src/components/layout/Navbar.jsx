@@ -154,14 +154,13 @@ const Navbar = () => {
                 <NavLink
                   to={item.to || '/'}
                   onClick={(e) => {
+                    setIsMobileMenuOpen(false);
                     if (item.hash) {
                       if (location.pathname !== '/') {
-                        // Let the default navigation happen to /#hash
-                        setIsMobileMenuOpen(false);
+                        // Let navigation happen to /#hash
                       } else {
                         // Smooth scroll on home page
                         e.preventDefault();
-                        setIsMobileMenuOpen(false);
                         const target = document.querySelector(item.hash);
                         if (target) {
                           const navbarHeight = 100;
@@ -170,6 +169,9 @@ const Navbar = () => {
                           window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
                         }
                       }
+                    } else if (item.to) {
+                      // Force scroll to top for internal pages
+                      window.scrollTo(0, 0);
                     }
                   }}
                   className={() => {
