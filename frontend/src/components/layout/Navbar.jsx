@@ -69,12 +69,15 @@ const Navbar = () => {
     const activeIndex = currentMenuItems.findIndex(item => 
       location.pathname === item.to || (item.href && location.hash === item.href)
     );
-    if (activeIndex !== -1) {
-      updateIndicator(activeIndex);
-    } else if (location.pathname === '/' || location.pathname === '') {
-      updateIndicator(0); // Default to Home
-    }
-  }, [location.pathname, location.hash, user]);
+    // Gunakan requestAnimationFrame supaya tidak macet (Fix Forced Reflow)
+    requestAnimationFrame(() => {
+      if (activeIndex !== -1) {
+        updateIndicator(activeIndex);
+      } else if (location.pathname === '/' || location.pathname === '') {
+        updateIndicator(0);
+      }
+    });
+  }, [location.pathname, location.hash, user, currentMenuItems]);
 
   return (
     <nav className="fixed top-8 left-1/2 -translate-x-1/2 z-[100] w-[90%] max-w-7xl mx-auto transition-all duration-500">
