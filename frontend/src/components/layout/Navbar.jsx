@@ -98,8 +98,8 @@ const Navbar = () => {
         
         {/* Logo */}
         <Link to="/" onClick={handleHomeClick} className="flex items-center gap-3">
-          <div className="bg-gradient-to-br from-[var(--primary-green)] to-[var(--accent-blue)] p-2 rounded-2xl shadow-lg shadow-emerald-500/20">
-            <Apple className="text-white" size={20} />
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[var(--primary-green)] to-[var(--accent-blue)] p-2 shadow-lg shadow-emerald-500/20 flex items-center justify-center overflow-hidden">
+            <img src="/icon.png" alt="NutriAI Logo" className="w-full h-full object-contain" />
           </div>
           <span className="text-xl font-extrabold tracking-tighter text-[var(--text-main)]">
             Nutri<span className="text-[var(--primary-green)]">AI</span>
