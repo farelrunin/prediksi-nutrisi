@@ -78,7 +78,7 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-8 left-1/2 -translate-x-1/2 z-[100] w-[90%] max-w-7xl mx-auto transition-all duration-500">
-      <div className="bg-white/40 backdrop-blur-[40px] border border-white/60 rounded-full px-8 py-3 shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex justify-between items-center relative overflow-hidden group">
+      <div className="bg-white/40 backdrop-blur-[40px] border border-white/60 rounded-full px-8 py-3 shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex justify-between items-center relative group">
         
         {/* Subtle Gradient Accent */}
         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-green)]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
