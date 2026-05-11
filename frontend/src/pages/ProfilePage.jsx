@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   User,
   Save,
-  RotateCcw,
+  RefreshCw,
   ArrowLeft,
   Upload,
   AlertCircle,
@@ -752,7 +752,7 @@ const ProfilePage = () => {
                   type="submit" disabled={loading}
                   className="flex-1 group relative flex items-center justify-center gap-3 bg-[var(--primary-green)] px-10 py-5 rounded-2xl font-bold text-white text-lg shadow-lg shadow-emerald-500/20 hover:scale-[1.02] active:scale-100 transition-all disabled:opacity-50"
                 >
-                  {loading ? <RotateCcw className="animate-spin" /> : <Save size={24} />}
+                  {loading ? <RefreshCw className="animate-spin" /> : <Save size={24} />}
                   <span>{loading ? 'Menyimpan...' : 'Simpan Perubahan'}</span>
                 </button>
                 <button
