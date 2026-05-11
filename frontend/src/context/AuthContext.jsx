@@ -47,8 +47,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const data = await authService.register(userData);
-      localStorage.setItem('token', data.token);
-      setUser({ name: data.name, email: userData.email });
+      // Hapus auto-login supaya user login manual lewat halaman Login
       return data;
     } catch (error) {
       console.error('Register error:', error);

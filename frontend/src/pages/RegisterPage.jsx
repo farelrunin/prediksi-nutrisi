@@ -21,16 +21,16 @@ const RegisterPage = () => {
 
   useEffect(() => {
     let mounted = true;
-    if (registrationSuccess && user && mounted) {
+    if (registrationSuccess && mounted) {
       notify({
         type: 'success',
-        title: 'Akun Terdaftar',
-        message: 'Selamat datang di NutriAI! Profil Anda telah berhasil dibuat.'
+        title: 'Registrasi Berhasil',
+        message: 'Akun Anda telah berhasil dibuat. Silakan masuk untuk melanjutkan.'
       });
-      navigate('/profil', { replace: true });
+      navigate('/login', { replace: true });
     }
     return () => { mounted = false; };
-  }, [user, registrationSuccess, navigate, notify]);
+  }, [registrationSuccess, navigate, notify]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
