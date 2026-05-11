@@ -43,6 +43,7 @@ const RegisterPage = () => {
       return;
     }
     setLoading(true);
+    try {
       // Strict Email Validation Regex
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|id|net|org)$/;
       if (!emailRegex.test(formData.email)) {
