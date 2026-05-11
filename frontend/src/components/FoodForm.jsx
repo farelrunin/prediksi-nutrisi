@@ -83,7 +83,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Tambah Makanan' }) => {
           setPredicting(false);
         }
       }
-    }, 450);
+    }, 1500);
 
     return () => {
       window.clearTimeout(timeoutId);

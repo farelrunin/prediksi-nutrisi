@@ -98,11 +98,6 @@ const parseNaturalLanguageFood = async (text) => {
   `;
 
   try {
-    const key = process.env.GEMINI_API_KEY;
-    console.log("--- CALLING GEMINI AI ---");
-    console.log("Using API Key (Prefix):", key ? key.substring(0, 10) + "..." : "MISSING");
-    console.log("Input text:", text);
-    
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const rawText = response.text().trim();
