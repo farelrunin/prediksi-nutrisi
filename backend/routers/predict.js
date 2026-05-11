@@ -113,6 +113,7 @@ router.post("/", async (req, res) => {
     score: riskLevel === "High" ? 0.9 : 0.2,
     suggestion: riskLevel === "High" ? "Segera perbaiki pola makan Anda!" : "Pola makan cukup seimbang",
     ai_advice: aiAdvice,
+    food_name: foodInfo.food_name,
     ...parsedData.total_nutrition,
     quantity_grams: parsedData.total_nutrition.quantity_grams || 0,
     foods: parsedData.parsed_foods,
