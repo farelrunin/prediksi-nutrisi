@@ -12,21 +12,21 @@ const LandingPage = () => {
   return (
     <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-main)] overflow-x-hidden">
       {/* Background - Animated Soft Aurora */}
-      <div className="fixed inset-0 z-0 bg-[#060a09]"> {/* Very dark green base */}
+      <div className="fixed inset-0 z-0 bg-[var(--bg-primary)]">
         <SoftAurora
           speed={0.4}
-          scale={1.2}
-          brightness={0.8}
-          color1="#22c55e" // Emerald 500
-          color2="#3b82f6" // Blue 500
-          noiseFrequency={2.0}
-          noiseAmplitude={0.8}
-          bandHeight={0.4}
-          bandSpread={1.2}
+          scale={1.4}
+          brightness={1.2}
+          color1="#10B981" // More vibrant emerald
+          color2="#3B82F6" // More vibrant blue
+          noiseFrequency={1.8}
+          noiseAmplitude={0.7}
+          bandHeight={0.3}
+          bandSpread={1.5}
           enableMouseInteraction={true}
-          mouseInfluence={0.15}
+          mouseInfluence={0.1}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-primary)]/40 to-[var(--bg-primary)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-primary)]/20 to-[var(--bg-primary)]" />
       </div>
 
       {/* Hero Section */}
@@ -34,17 +34,17 @@ const LandingPage = () => {
         <div className="relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative max-w-2xl animate-in fade-in slide-in-from-left duration-1000">
             {/* Clean Container for Text */}
-            <div className="relative z-10 p-8 lg:p-12 rounded-[2.5rem] bg-white/10 border border-white/20 shadow-2xl overflow-hidden group">
+            <div className="relative z-10 p-10 lg:p-14 rounded-[3.5rem] bg-[var(--bg-card)]/80 border border-[var(--border-card)] shadow-2xl overflow-hidden group">
               <div className="relative z-10">
                 <div className="inline-flex items-center gap-2 mb-6 ml-1">
                   <Sparkles size={16} className="text-[var(--primary-green)]" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-main)]/60">AI-Powered Nutrition Assistant</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">AI-Powered Nutrition Assistant</span>
                 </div>
-                <h1 className="text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight mb-8">
+                <h1 className="text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight mb-8 text-[var(--text-main)]">
                   Eat Well, <br />
-                  <span className="text-[var(--primary-green)] drop-shadow-[0_0_15px_rgba(255,255,255,1)]">Stay Healthy.</span>
+                  <span className="text-[var(--primary-green)]">Stay Healthy.</span>
                 </h1>
-                <p className="text-lg text-[var(--text-main)] leading-relaxed mb-10 max-w-lg font-bold opacity-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
+                <p className="text-lg text-[var(--text-main)] leading-relaxed mb-10 max-w-lg font-medium opacity-90">
                   NutriAI helps you monitor your daily intake intelligently. Get in-depth analysis and personalized menu recommendations in just seconds.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-5">

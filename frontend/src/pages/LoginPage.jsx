@@ -74,19 +74,19 @@ const LoginPage = () => {
     <div className="min-h-screen flex flex-col items-center pt-32 pb-12 bg-transparent px-6 relative overflow-hidden">
       
       {/* Background - Animated Soft Aurora */}
-      <div className="absolute inset-0 z-0 bg-[#060a09]">
+      <div className="absolute inset-0 z-0 bg-[var(--bg-primary)]">
         <SoftAurora
           speed={0.3}
           scale={1.5}
-          brightness={0.7}
-          color1="#22c55e"
-          color2="#3b82f6"
+          brightness={1.0}
+          color1="#10B981"
+          color2="#3B82F6"
           noiseFrequency={2.5}
           noiseAmplitude={1.0}
           enableMouseInteraction={true}
-          mouseInfluence={0.2}
+          mouseInfluence={0.1}
         />
-        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-[var(--bg-primary)]/20" />
       </div>
 
       <div className="relative z-10 w-full max-w-md">
@@ -104,7 +104,7 @@ const LoginPage = () => {
 
         {/* Form Card */}
         <div 
-          className="backdrop-blur-2xl border border-white/40 rounded-[32px] p-10 shadow-[0_32px_100px_rgba(0,0,0,0.15)] bg-white/30"
+          className="bg-[var(--bg-card)]/80 border border-[var(--border-card)] rounded-[32px] p-10 shadow-2xl"
         >
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="space-y-6">
