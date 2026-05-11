@@ -226,7 +226,7 @@ const Navbar = () => {
               <Link to="/login" className="px-6 py-2.5 text-[11px] font-bold uppercase tracking-widest text-[var(--text-main)] hover:text-[var(--primary-green)] transition-all">
                 Login
               </Link>
-              <Link to="/register" className="bg-[var(--text-main)] text-white px-8 py-3 rounded-2xl text-[11px] font-bold uppercase tracking-widest shadow-xl hover:scale-105 active:scale-100 transition-all">
+              <Link to="/register" className="bg-[var(--text-main)] text-[var(--bg-primary)] px-8 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-xl hover:scale-105 active:scale-100 transition-all">
                 Sign Up
               </Link>
             </div>
