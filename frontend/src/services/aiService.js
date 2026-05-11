@@ -1,4 +1,4 @@
-// aiService.js
+d// aiService.js
 import axios from 'axios';
 
 const API_BASE_URL = 'https://nutriai-backend-production-2987.up.railway.app';
