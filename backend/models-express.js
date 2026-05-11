@@ -19,6 +19,8 @@ const User = sequelize.define("User", {
   target_fat: { type: DataTypes.FLOAT },
   is_pregnant: { type: DataTypes.BOOLEAN, defaultValue: false },
   is_breastfeeding: { type: DataTypes.BOOLEAN, defaultValue: false },
+  age: { type: DataTypes.INTEGER },
+  sleep_hours: { type: DataTypes.FLOAT },
   profile: { type: DataTypes.JSON, defaultValue: {} },
   avatar_url: { type: DataTypes.STRING(255) },
 }, {
