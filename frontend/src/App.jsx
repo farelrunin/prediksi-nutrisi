@@ -15,6 +15,7 @@ import KategoriPage from './pages/KategoriPage';
 import PanduanPage from './pages/PanduanPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import NutritionInfoPage from './pages/NutritionInfoPage';
 import { AuthProvider } from './context/AuthContext';
 import { NutritionProvider } from './context/NutritionStore';
 import { NotificationProvider } from './context/NotificationContext';
@@ -51,6 +52,7 @@ function AppContent() {
           <Route path="/guide" element={<PanduanPage />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/nutrition-info" element={<NutritionInfoPage />} />
           
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>

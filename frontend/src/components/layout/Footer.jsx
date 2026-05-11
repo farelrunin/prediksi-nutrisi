@@ -59,6 +59,7 @@ const Footer = () => {
             <ul className="space-y-4">
               <li><Link to="/privacy" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Privacy Policy</Link></li>
               <li><Link to="/terms" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Terms of Service</Link></li>
+              <li><Link to="/nutrition-info" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Nutrition Basics</Link></li>
             </ul>
             <div className="pt-4">
               <a href="mailto:farelrunin@gmail.com" className="flex items-center gap-2 text-sm font-black text-[var(--primary-green)]">
@@ -86,6 +87,7 @@ const Footer = () => {
         <div className="pt-10 border-t border-[var(--border-card)] flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">
           <p>© 2026 NutriAI</p>
           <div className="flex gap-6">
+            <Link to="/nutrition-info">Basics</Link>
             <Link to="/privacy">Privacy</Link>
             <Link to="/terms">Terms</Link>
           </div>
