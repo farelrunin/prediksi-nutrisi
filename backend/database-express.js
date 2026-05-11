@@ -5,18 +5,20 @@ if (!process.env.DATABASE_URL) {
   console.error("❌ DATABASE_URL is not set! Please set it in environment variables.");
 }
 
-// Convert MySQL URL to Node format and remove incompatible ssl-mode param
-let dbUrl = (process.env.DATABASE_URL || "mysql://localhost/nutriai_db")
-  .replace("mysql+pymysql://", "mysql://")
-  .replace("?ssl-mode=REQUIRED", "")
-  .replace("&ssl-mode=REQUIRED", "");
-
-const sequelize = new Sequelize(dbUrl, {
-  dialect: "mysql",
-  dialectModule: require('mysql2'),
-  logging: false,
-  dialectOptions: {}, // Hilangkan semua gembok SSL biar lancar
-});
+// GUNAKAN VARIABEL SATU-SATU (INI CARA PALING AMPUH DI RAILWAY)
+const sequelize = new Sequelize(
+  process.env.MYSQLDATABASE || 'railway',
+  process.env.MYSQLUSER || 'root',
+  process.env.MYSQLPASSWORD || '',
+  {
+    host: process.env.MYSQLHOST || 'localhost',
+    port: process.env.MYSQLPORT || 3306,
+    dialect: "mysql",
+    dialectModule: require('mysql2'),
+    logging: false,
+    dialectOptions: {}, 
+  }
+);
 
 const connectDB = async () => {
   try {
