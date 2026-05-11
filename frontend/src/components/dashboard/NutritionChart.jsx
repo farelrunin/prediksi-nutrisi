@@ -80,7 +80,7 @@ const NutritionChart = ({ data = [] }) => {
   const averageProtein = chartData.reduce((sum, item) => sum + item.protein, 0) / chartData.length;
 
   return (
-    <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg p-6">
+    <div className="w-full">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="text-xl font-bold text-white flex items-center gap-2">

@@ -118,7 +118,7 @@ const DashboardPage = () => {
             </MagicCard>
 
             {/* Weekly Trend Chart */}
-            <MagicCard className="bg-white/10 rounded-[2.5rem] p-4 shadow-xl overflow-visible">
+            <MagicCard className="bg-white/10 rounded-[2.5rem] p-10 shadow-xl overflow-visible">
               <NutritionChart data={nutritionData.history} />
             </MagicCard>
           </div>
