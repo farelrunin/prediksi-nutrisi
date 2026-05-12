@@ -57,8 +57,8 @@ const seedData = async () => {
       }
     }
 
-    console.log("📂 Reading dataset: foods_cleaned.csv...");
-    const csvPath = path.join(__dirname, 'data', 'processed', 'foods_cleaned.csv');
+    console.log("📂 Reading dataset: opennutritionclean_foods.csv...");
+    const csvPath = path.join(__dirname, 'data', 'raw', 'opennutritionclean_foods.csv');
     
     if (!fs.existsSync(csvPath)) return;
 
@@ -69,9 +69,9 @@ const seedData = async () => {
       fs.createReadStream(csvPath)
         .pipe(csv())
         .on('data', (row) => {
-          // Bersihkan data dari spasi aneh
-          const rawNameEn = row.food_name_en || row['food_name_en'] || '';
-          const rawNameId = row.food_name_id || row['food_name_id'] || '';
+          // Bersihkan data dari spasi aneh (Menggunakan header baru)
+          const rawNameEn = row.foodname_100g || row['foodname_100g'] || '';
+          const rawNameId = row.foodname_id || row['foodname_id'] || rawNameEn; // Fallback ke English jika ID tidak ada
           
           const foodName = rawNameEn.toLowerCase().trim();
           const foodNameId = rawNameId.toLowerCase().trim();
