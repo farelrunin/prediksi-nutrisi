@@ -31,7 +31,7 @@ const LandingPage = () => {
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center pt-24 px-6 lg:px-8">
-        <div className="relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center">
+        <div className="relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-8 md:gap-16 items-center">
           <div className="relative max-w-2xl animate-in fade-in slide-in-from-left duration-1000">
             {/* Clean Container for Text */}
             <div className="relative z-10 p-6 md:p-10 lg:p-14 rounded-[1.5rem] md:rounded-[3.5rem] bg-[var(--bg-card)]/80 border border-[var(--border-card)] shadow-2xl overflow-hidden group">
@@ -124,9 +124,9 @@ const LandingPage = () => {
 
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-to-tr from-[var(--primary-green)]/20 to-[var(--accent-blue)]/20 rounded-[3rem] blur-2xl" />
-              <div className="relative rounded-[3rem] overflow-hidden border border-[var(--border-card)] shadow-2xl">
+              <div className="relative rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-[var(--border-card)] shadow-2xl">
                 <img src="/bg-food.jpg" alt="Health App" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-12">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-8 md:p-12">
                   <p className="text-white text-xl font-bold italic">"Health starts with what you eat."</p>
                 </div>
               </div>

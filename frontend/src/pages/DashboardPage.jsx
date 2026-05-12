@@ -26,11 +26,11 @@ const DashboardPage = () => {
   ];
 
   return (
-    <div className="min-h-screen pb-24 pt-24 md:pt-32 px-4 md:px-8 bg-[var(--bg-primary)]">
+    <div className="min-h-screen bg-[var(--bg-primary)] p-4 md:p-10 lg:p-14 pb-32">
       <div className="mx-auto max-w-7xl">
         
         {/* Header */}
-        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-[var(--text-main)]">
               Dashboard

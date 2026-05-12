@@ -60,6 +60,17 @@ body {
   min-height: 100vh;
 }
 
+/* Aggressive Mobile Scaling */
+@media (max-width: 640px) {
+  html {
+    font-size: 14px; /* Shrink everything globally */
+  }
+  
+  .glow-card::before {
+    border-radius: 1.5rem !important;
+  }
+}
+
 button,
 input,
 select,
@@ -111,6 +122,9 @@ a {
   inset: 0;
   padding: 2px; /* Border thickness */
   border-radius: 2.5rem;
+  @media (max-width: 640px) {
+    border-radius: 1.5rem;
+  }
   background: linear-gradient(90deg, transparent, var(--primary-green), var(--secondary-green), transparent);
   background-size: 200% 100%;
   -webkit-mask: 
