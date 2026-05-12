@@ -4,9 +4,9 @@ import { AlertTriangle, CheckCircle, AlertCircle, TrendingUp } from 'lucide-reac
 const RiskScoreCard = ({ riskScore, aiAdvice }) => {
   if (riskScore === null) {
     return (
-      <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[2.5rem] shadow-xl border border-[var(--border-card)] p-10 text-[var(--text-muted)] group hover:shadow-emerald-500/5 transition-all">
-        <h3 className="text-lg font-bold text-[var(--text-main)] mb-3">Malnutrition Risk Score</h3>
-        <p>No data yet — start inputting food to see risk analysis</p>
+      <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[1.5rem] md:rounded-[2.5rem] shadow-xl border border-[var(--border-card)] p-6 md:p-10 text-[var(--text-muted)] group hover:shadow-emerald-500/5 transition-all">
+        <h3 className="text-base md:text-lg font-bold text-[var(--text-main)] mb-3">Malnutrition Risk Score</h3>
+        <p className="text-sm">No data yet — start inputting food to see risk analysis</p>
       </div>
     );
   }
@@ -44,8 +44,8 @@ const RiskScoreCard = ({ riskScore, aiAdvice }) => {
   const { level, icon: Icon, bgColor, textColor, description, iconBgClass, iconTextClass } = getRiskLevel(riskScore);
 
   return (
-    <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[2.5rem] shadow-xl border border-[var(--border-card)] overflow-hidden group hover:shadow-emerald-500/5 transition-all">
-      <div className="bg-gradient-to-br from-emerald-500/10 to-blue-500/10 p-10">
+    <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[1.5rem] md:rounded-[2.5rem] shadow-xl border border-[var(--border-card)] overflow-hidden group hover:shadow-emerald-500/5 transition-all">
+      <div className="bg-gradient-to-br from-emerald-500/10 to-blue-500/10 p-6 md:p-10">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-lg font-bold text-[var(--text-main)]">Malnutrition Risk Score</h3>
@@ -55,10 +55,10 @@ const RiskScoreCard = ({ riskScore, aiAdvice }) => {
         </div>
 
         <div className="text-center">
-          <div className="text-5xl font-bold mb-2">
+          <div className="text-4xl md:text-5xl font-bold mb-1">
             {(riskScore * 100).toFixed(1)}%
           </div>
-          <div className="text-xl font-semibold">
+          <div className="text-base md:text-xl font-semibold">
             {level} Risk
           </div>
         </div>

@@ -83,9 +83,9 @@ const NutritionChart = ({ data = [] }) => {
     <div className="w-full">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-xl font-bold text-white flex items-center gap-2">
+          <h3 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
             <TrendingUp className="text-emerald-400" size={24} />
-            Weekly Nutrition Trend
+            Weekly Trend
           </h3>
           <p className="text-slate-300 text-sm mt-1">Monitor your intake patterns</p>
         </div>
@@ -95,7 +95,7 @@ const NutritionChart = ({ data = [] }) => {
         </div>
       </div>
 
-      <div className="h-80">
+      <div className="h-64 md:h-80">
         {hasHistory ? (
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
@@ -146,15 +146,15 @@ const NutritionChart = ({ data = [] }) => {
 
       <div className="mt-6 grid grid-cols-2 gap-4">
         <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
-          <div className="text-sm text-blue-400 font-medium mb-1">Average Calories</div>
-          <div className="text-2xl font-bold text-blue-300">
-            {Math.round(averageCalories || 0)} kcal
+          <div className="text-sm text-blue-400 font-medium mb-1">Avg. Calories</div>
+          <div className="text-lg md:text-2xl font-bold text-blue-300">
+            {Math.round(averageCalories || 0)} <span className="text-xs font-normal opacity-70">kcal</span>
           </div>
         </div>
         <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4">
-          <div className="text-sm text-emerald-400 font-medium mb-1">Average Protein</div>
-          <div className="text-2xl font-bold text-emerald-300">
-            {Math.round(averageProtein || 0)}g
+          <div className="text-sm text-emerald-400 font-medium mb-1">Avg. Protein</div>
+          <div className="text-lg md:text-2xl font-bold text-emerald-300">
+            {Math.round(averageProtein || 0)}<span className="text-xs font-normal opacity-70">g</span>
           </div>
         </div>
       </div>

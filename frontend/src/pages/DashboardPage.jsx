@@ -78,7 +78,7 @@ const DashboardPage = () => {
                 </Link>
               </div>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
                 {[
                   { label: 'Calories', cur: nutritionData.dailyIntake.calories, tar: nutritionData.targets.calories, unit: 'kcal', color: 'from-[var(--primary-green)] to-[var(--secondary-green)]' },
                   { label: 'Protein', cur: nutritionData.dailyIntake.protein, tar: nutritionData.targets.protein, unit: 'g', color: 'from-[var(--accent-blue)] to-blue-600' },
@@ -88,7 +88,7 @@ const DashboardPage = () => {
                   <div key={m.label} className="space-y-4">
                     <div className="flex justify-between items-end">
                       <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">{m.label}</span>
-                      <span className="text-[11px] font-bold text-[var(--text-main)]">{Math.round(m.cur)}/{m.tar}</span>
+                      <span className="text-[11px] font-bold text-[var(--text-main)]">{Math.round(m.cur)}<span className="text-[9px] opacity-60 ml-0.5">/{m.tar}</span></span>
                     </div>
                     <div className="h-2.5 w-full bg-[var(--bg-secondary)] rounded-full overflow-hidden p-[1px]">
                       <div 
