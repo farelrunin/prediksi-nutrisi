@@ -8,13 +8,14 @@ import {
   User,
   Sparkles
 } from 'lucide-react';
+import { useAuth } from '../../context/useAuth';
 
 const BottomNavbar = () => {
+  const { user } = useAuth();
   const location = useLocation();
   
-  // Hide on auth pages
-  const hideOnPaths = ['/login', '/register', '/forgot-password'];
-  if (hideOnPaths.includes(location.pathname)) {
+  // Hide if not logged in or on auth pages
+  if (!user || ['/login', '/register', '/forgot-password'].includes(location.pathname)) {
     return null;
   }
 
