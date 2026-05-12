@@ -29,6 +29,7 @@ const Navbar = () => {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isGuestMenuOpen, setIsGuestMenuOpen] = useState(false);
   
   // Magic Indicator State
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
@@ -87,7 +88,11 @@ const Navbar = () => {
       }
     }, 300); // Sedikit lebih lama agar transisi halaman selesai
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      setIsMobileMenuOpen(false);
+      setIsGuestMenuOpen(false);
+    };
   }, [location.pathname, location.hash, user, currentMenuItems]);
 
   return (
@@ -225,13 +230,31 @@ const Navbar = () => {
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2 md:gap-4">
-              <Link to="/login" className="hidden md:block text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors">
-                Login
-              </Link>
-              <Link to="/register" className="bg-[var(--text-main)] text-[var(--bg-primary)] px-4 md:px-6 py-2.5 md:py-3 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg">
-                Get Started
-              </Link>
+            <div className="relative">
+              <button 
+                onClick={() => setIsGuestMenuOpen(!isGuestMenuOpen)}
+                className="bg-[var(--text-main)] text-[var(--bg-primary)] px-4 md:px-6 py-2.5 md:py-3 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg flex items-center gap-2"
+              >
+                <span>Get Started</span>
+              </button>
+
+              {/* Guest Dropdown for Mobile/Desktop */}
+              {isGuestMenuOpen && (
+                <div className="absolute top-[calc(100%+1.5rem)] right-0 w-40 bg-[var(--bg-card)]/95 backdrop-blur-2xl border border-[var(--border-card)] rounded-2xl p-2 shadow-2xl animate-in fade-in slide-in-from-top-4 duration-300 z-[110]">
+                  <Link 
+                    to="/login"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest text-[var(--text-main)] hover:bg-[var(--primary-green)]/10 hover:text-[var(--primary-green)] transition-all"
+                  >
+                    Login
+                  </Link>
+                  <Link 
+                    to="/register"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest text-[var(--text-main)] hover:bg-[var(--primary-green)]/10 hover:text-[var(--primary-green)] transition-all"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              )}
             </div>
           )}
 
