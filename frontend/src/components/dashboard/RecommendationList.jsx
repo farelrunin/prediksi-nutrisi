@@ -35,7 +35,7 @@ const RecommendationList = () => {
       </div>
     );
   }
-
+  return (
     <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[1.5rem] md:rounded-[2.5rem] shadow-xl border border-[var(--border-card)] p-5 md:p-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
