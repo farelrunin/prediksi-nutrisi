@@ -2,6 +2,8 @@
 
 **NutriAI** adalah platform kesehatan digital cerdas yang dirancang untuk memantau asupan nutrisi harian dengan pendekatan yang modern dan personal. Dengan menggabungkan kekuatan **Generative AI (Gemini)** dan arsitektur **Fullstack Cloud**, NutriAI mentransformasi cara Anda mencatat pola makan hanya melalui percakapan alami.
 
+🔗 **Live Website**: [https://prediksi-nutrisi-production.up.railway.app/](https://prediksi-nutrisi-production.up.railway.app/)
+
 ---
 
 ## ✨ Fitur Unggulan
