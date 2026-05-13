@@ -1,131 +1,91 @@
-# NutriAI — Premium AI Nutrition Dashboard
+# 🥗 NutriAI — Premium AI Nutrition Dashboard
 
-**NutriAI** adalah platform kesehatan digital cerdas yang dirancang untuk memantau asupan nutrisi harian dengan pendekatan yang modern dan personal. Menggunakan teknologi **Generative AI (Gemini)** dan **NLP (Natural Language Processing)**, NutriAI memungkinkan pengguna untuk mencatat pola makan hanya dengan bercerita secara alami.
+**NutriAI** adalah platform kesehatan digital cerdas yang dirancang untuk memantau asupan nutrisi harian dengan pendekatan yang modern dan personal. Dengan menggabungkan kekuatan **Generative AI (Gemini)** dan arsitektur **Fullstack Cloud**, NutriAI mentransformasi cara Anda mencatat pola makan hanya melalui percakapan alami.
 
 ---
 
 ## ✨ Fitur Unggulan
-- **🤖 Smart NLP Tracking**: Tidak perlu input manual yang rumit. Cukup ketik *"Saya makan soto ayam porsi besar dan jus alpukat"*, dan sistem akan membedah setiap komponen nutrisinya.
-- **💎 Premium Glassmorphism UI**: Antarmuka bersih, segar, dan transparan yang memberikan pengalaman pengguna kelas dunia.
-- **📊 Real-time Dashboard**: Pantau progres harian Anda (Kalori, Protein, Karbo, Lemak) dengan grafik interaktif.
-- **💡 AI Recommendations**: Dapatkan saran makanan yang dipersonalisasi berdasarkan riwayat asupan Anda melalui integrasi Gemini AI.
-- **📚 Database Kategori**: Akses ratusan referensi makanan yang dikelompokkan secara cerdas untuk membantu Anda memilih menu sehat.
+
+- **🤖 Smart NLP "Nutri Check"**: Lupakan input manual yang membosankan. Cukup ketik *"Tadi siang makan nasi padang porsi besar dan es teh manis"*, dan AI akan membedah setiap komponen nutrisinya (Kalori, Protein, Karbo, Lemak).
+- **💎 Premium Glassmorphism UI**: Antarmuka bersih, segar, dan transparan yang memberikan pengalaman pengguna kelas dunia dengan sentuhan animasi halus.
+- **📊 Real-time Nutrition Dashboard**: Pantau progres asupan harian Anda secara visual dengan grafik interaktif yang akurat.
+- **💡 Personal AKG (Angka Kecukupan Gizi)**: Perhitungan target nutrisi harian yang dinamis berdasarkan profil fisik, BMR, TDEE, serta kondisi khusus (Kehamilan/Menyusui).
+- **📚 Intelligent Food Database**: Akses ratusan referensi makanan yang disinkronisasi langsung dari dataset nutrisi yang telah dibersihkan.
 
 ---
 
 ## 🛠️ Teknologi yang Digunakan
-- **Frontend**: [React.js](https://reactjs.org/) + [Vite](https://vitejs.dev/) (Fast & Modern Development)
-- **Backend**: [FastAPI](https://fastapi.tiangolo.com/) (Python's high-performance framework)
-- **Database**: [MySQL](https://www.mysql.com/) (Data persistence)
-- **AI Engine**: [Google Gemini AI](https://ai.google.dev/) (Natural language analysis & advice)
-- **Styling**: Vanilla CSS with Modern Tokens & [TailwindCSS](https://tailwindcss.com/) utilities.
+
+### **Frontend (Client)**
+- **Framework**: [React.js](https://reactjs.org/) + [Vite](https://vitejs.dev/)
+- **State Management**: React Context API
+- **Styling**: Vanilla CSS with Modern Design Tokens + TailwindCSS Utilities
+- **Charts**: Recharts / Chart.js for data visualization
+
+### **Backend (Server)**
+- **Environment**: [Node.js](https://nodejs.org/)
+- **Framework**: [Express.js](https://expressjs.com/)
+- **ORM**: [Sequelize](https://sequelize.org/)
+- **AI Engine**: [Google Gemini AI API](https://ai.google.dev/) (NLP Analysis & Advice)
+
+### **Database & Infrastructure**
+- **Database**: [MySQL](https://www.mysql.com/)
+- **Containerization**: [Docker](https://www.docker.com/) (Unified Monorepo Architecture)
+- **Deployment**: [Railway](https://railway.app/) (Fullstack Production Environment)
 
 ---
 
-## 🚀 Panduan Instalasi (Lengkap)
+## 🚀 Panduan Instalasi (Lokal)
 
-Ikuti langkah-langkah di bawah ini untuk menjalankan NutriAI di mesin lokal Anda.
-
-### 1. Persiapan Awal (Clone)
+### 1. Clone Repository
 ```bash
-# Clone repository ini
 git clone https://github.com/farelrunin/prediksi-nutrisi.git
-
-# Masuk ke direktori proyek
 cd prediksi-nutrisi
 ```
 
-### 2. Setup Backend (Server)
-Pastikan Anda memiliki Python 3.9+ dan MySQL yang sudah berjalan.
-
-1. Masuk ke folder backend:
-   ```bash
-   cd backend
-   ```
-2. Buat Virtual Environment:
-   ```bash
-   python -m venv venv
-   # Aktifkan venv (Windows)
-   venv\Scripts\activate
-   ```
-3. Install Dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Konfigurasi Environment:
-   Buat file `.env` di dalam folder `backend/` dan sesuaikan nilainya:
+### 2. Setup Backend
+1. Masuk ke folder backend: `cd backend`
+2. Install dependencies: `npm install`
+3. Konfigurasi `.env`:
    ```env
-   DATABASE_URL=mysql+pymysql://root:@localhost/nutriai_db
-   SECRET_KEY=masukkan_kunci_acak_disini
-   GEMINI_API_KEY=masukkan_api_key_gemini_anda
+   PORT=8000
+   DATABASE_URL=mysql://root:password@localhost:3306/nutriai_db
+   SECRET_KEY=kunci_rahasia_anda
+   GEMINI_API_KEY=api_key_gemini_anda
    ```
-5. Jalankan Server:
-   ```bash
-   uvicorn main:app --reload
-   ```
-   *Backend akan berjalan di `http://localhost:8000`*
+4. Jalankan Server: `npm run dev`
 
-### 3. Setup Frontend (Client)
-1. Buka terminal baru dan masuk ke folder frontend:
-   ```bash
-   cd frontend
-   ```
-2. Install Modul:
-   ```bash
-   npm install
-   ```
-3. Tambahkan Aset Gambar:
-   Pastikan file `bg-food.jpg` tersedia di folder `frontend/public/` untuk mengaktifkan visual latar belakang premium.
-4. Jalankan Aplikasi:
-   ```bash
-   npm run dev
-   ```
-   *Akses aplikasi di `http://localhost:5173`*
+### 3. Setup Frontend
+1. Buka terminal baru dan masuk ke folder frontend: `cd frontend`
+2. Install dependencies: `npm install`
+3. Jalankan Aplikasi: `npm run dev`
 
 ---
 
-## 📸 Struktur Navigasi
-- **Beranda (`/`)**: Perkenalan fitur dan cara kerja aplikasi.
-- **Login/Register**: Akses akun dengan desain glassmorphism transparan.
-- **Dashboard (`/dashboard`)**: Pusat kontrol nutrisi harian.
-- **Nutri Check (`/nutri-check`)**: Fitur unggulan analisis makanan berbasis NLP.
-- **Riwayat (`/history`)**: Jurnal makanan harian Anda.
-- **Kategori (`/kategori`)**: Eksplorasi database nutrisi makanan.
-- **Profil (`/profil`)**: Pengaturan data fisik dan target personal.
+## 🚢 Deployment (Railway + Docker)
+
+Proyek ini menggunakan konfigurasi **Dockerfile** tunggal yang cerdas untuk menjalankan Frontend dan Backend secara terpisah namun tetap dalam satu ekosistem:
+
+- **Service Frontend**: Menggunakan `SERVICE_TYPE=frontend`
+- **Service Backend**: Menggunakan `SERVICE_TYPE=backend`
+- **Database**: MySQL Instance di Railway dengan sinkronisasi otomatis.
 
 ---
 
-## ⚖️ Hukum & Privasi
-Proyek ini dilengkapi dengan halaman [Kebijakan Privasi](/privacy) dan [Ketentuan Layanan](/terms) yang transparan untuk menjaga keamanan data pengguna.
+## 🔒 Security & Validation Checklist
+- [x] **JWT Authentication**: Pengamanan rute API menggunakan JSON Web Tokens.
+- [x] **Password Hashing**: Keamanan data kredensial menggunakan `bcryptjs`.
+- [x] **Input Validation**: Validasi ketat pada sisi Client (HTML5) dan Server (Express Validation).
+- [x] **CORS Hardened**: Pembatasan akses API hanya untuk domain yang diizinkan.
+- [x] **AI Rate Limiting**: Pembatasan input teks panjang untuk menjaga performa AI.
 
 ---
 
+## 👨‍💻 Tim Pengembang (Capstone C24-PSxxx)
+- **Farel Indra Syahputra** — Fullstack Developer & Cloud Architect
+- **[Nama Temanmu]** — Backend Developer & Database Engineer
+- **Tim AI & Data Science** — Model Development & Data Insights
+
 ---
 
-## 👨‍💻 Tim Pengembang
-Dibuat oleh **Farel Indra Syahputra** untuk pengembangan teknologi nutrisi masa depan.
-
----
-
-## 🔒 Security Implementation Checklist & Roadmap
-
-Berikut adalah status keamanan sistem NutriAI saat ini:
-
-### ✅ Keamanan yang Sudah Diperketat (Hardened)
-- [x] **Backend Pydantic Validation**: Semua input API (Register, Login, Profile) divalidasi menggunakan skema Pydantic yang ketat (`EmailStr`, `min_length`, `max_length`).
-- [x] **Frontend HTML5 Constraints**: Penambahan atribut `minLength`, `maxLength`, serta `min/max` pada input numerik untuk mencegah data tidak logis (misal: usia 999 tahun).
-- [x] **Password Security**: Minimal 8 karakter diwajibkan di sisi client dan server untuk mencegah password lemah.
-- [x] **Secure NLP Pipeline**: Penambahan `maxLength="1000"` pada input cerita makanan untuk mencegah serangan *Large String Injection* yang bisa membebani AI.
-- [x] **Database Sanitation**: Menggunakan ORM SQLAlchemy yang secara otomatis melakukan parameterisasi query untuk mencegah *SQL Injection*.
-- [x] **Input Error Handling**: Pesan error dari server kini difilter dan diparsing agar tidak membocorkan detail teknis sistem ke pengguna (mencegah *Information Leakage*).
-
-### 🚀 Kelebihan Sistem Saat Ini
-- **Resilient**: Sistem tidak mudah *crash* jika diberi input teks yang sangat besar atau format yang salah.
-- **User-Friendly Security**: Fitur "Show Password" membantu keamanan pengguna dalam mencegah kesalahan ketik sandi tanpa mengurangi proteksi.
-- **API Integrity**: Server akan menolak permintaan ilegal meskipun pengguna mencoba memintas (bypass) validasi antarmuka.
-
-### ⚠️ Area Rawan (Future Roadmap)
-- [ ] **Rate Limiting**: Saat ini belum ada pembatasan jumlah percobaan login per menit (rawan serangan *Brute Force*).
-- [ ] **File Upload Security**: Belum ada validasi tipe file (magic bytes) yang ketat untuk unggahan foto profil (saat ini hanya bergantung pada ekstensi).
-- [ ] **Account Lockout**: Belum ada sistem blokir akun sementara jika salah password berkali-kali.
-- [ ] **2FA (Two-Factor Authentication)**: Belum tersedia untuk keamanan ekstra akun pengguna.
+*NutriAI — Monitoring nutrisi jadi lebih cerdas, sehat, dan bergaya.*
