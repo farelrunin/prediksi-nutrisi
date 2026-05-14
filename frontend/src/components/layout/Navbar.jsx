@@ -58,7 +58,9 @@ const Navbar = () => {
     }
   };
 
-  const currentMenuItems = user ? getAuthenticatedMenuItems(t) : getPublicMenuItems(t);
+  const currentMenuItems = React.useMemo(() => 
+    user ? getAuthenticatedMenuItems(t) : getPublicMenuItems(t),
+  [user, t]);
 
   // Update indicator position with precision
   const updateIndicator = (index) => {
