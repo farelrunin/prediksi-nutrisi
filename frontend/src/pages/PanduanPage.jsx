@@ -1,3 +1,7 @@
+import React, { useState } from 'react';
+import { 
+  Search, Info, CheckCircle2, XCircle, HeartPulse, Stethoscope, Droplets, 
+  Activity, Wind, Baby, Thermometer, AlertCircle, Apple, ChevronDown, 
   Target, Lightbulb, HelpCircle, BookOpen, AlertTriangle 
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
