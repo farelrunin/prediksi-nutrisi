@@ -80,20 +80,20 @@ const Navbar = () => {
   // Set initial position based on active route
   useEffect(() => {
     const activeIndex = currentMenuItems.findIndex(item => 
-      location.pathname === item.to || (item.href && location.hash === item.href)
+      location.pathname === item.to || (item.hash && location.hash === item.hash)
     );
     
-    // Beri waktu sedikit untuk browser menghitung layout
-    const timer = setTimeout(() => {
-      if (activeIndex !== -1) {
-        updateIndicator(activeIndex);
-      } else if (location.pathname === '/' || location.pathname === '') {
-        updateIndicator(0);
-      }
-    }, 300); // Sedikit lebih lama agar transisi halaman selesai
+    // Immediate update for better snappiness
+    if (activeIndex !== -1) {
+      updateIndicator(activeIndex);
+    } else if (location.pathname === '/' || location.pathname === '') {
+      updateIndicator(0);
+    } else {
+      // On other pages like /profile, hide indicator
+      setIndicatorStyle(prev => ({ ...prev, opacity: 0 }));
+    }
 
     return () => {
-      clearTimeout(timer);
       setIsMobileMenuOpen(false);
       setIsGuestMenuOpen(false);
     };
@@ -122,7 +122,7 @@ const Navbar = () => {
           className="hidden lg:flex items-center gap-1 relative bg-[var(--bg-secondary)] px-2 py-1.5 rounded-full border border-[var(--border-card)] shadow-inner"
           onMouseLeave={() => {
             const activeIndex = currentMenuItems.findIndex(item => 
-              location.pathname === item.to || (item.href && location.hash === item.href)
+              location.pathname === item.to || (item.hash && location.hash === item.hash)
             );
             if (activeIndex !== -1) {
               updateIndicator(activeIndex);
@@ -134,14 +134,14 @@ const Navbar = () => {
             setHoveredIndex(null);
           }}
         >
-          {/* THE MAGIC SLIDING PILL (MzCode Style) */}
+          {/* THE MAGIC SLIDING PILL (Snappy & Smooth) */}
           <div 
-            className="absolute h-[75%] bg-gradient-to-r from-[var(--primary-green)] to-[var(--accent-blue)] rounded-full transition-all duration-500 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] z-0 pointer-events-none"
+            className="absolute h-[75%] bg-gradient-to-r from-[var(--primary-green)] to-[var(--accent-blue)] rounded-full transition-all duration-300 ease-out z-0 pointer-events-none"
             style={{
               left: `${indicatorStyle.left}px`,
               width: `${indicatorStyle.width}px`,
               opacity: indicatorStyle.opacity,
-              boxShadow: '0 0 20px rgba(16, 185, 129, 0.4)',
+              boxShadow: '0 0 15px rgba(16, 185, 129, 0.3)',
               top: '50%',
               transform: 'translateY(-50%)'
             }}
