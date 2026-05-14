@@ -163,6 +163,7 @@ const NutritionChart = ({ data = [] }) => {
           </div>
         </div>
       </div>
+    </div>
   );
 };
 
