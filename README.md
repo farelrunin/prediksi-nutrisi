@@ -1,4 +1,4 @@
-# 🥗 NutriAI — Premium AI Nutrition Dashboard
+# NutriAI — Premium AI Nutrition Dashboard
 
 **NutriAI** adalah platform kesehatan digital cerdas yang dirancang untuk memantau asupan nutrisi harian dengan pendekatan yang modern dan personal. Dengan menggabungkan kekuatan **Generative AI (Gemini)** dan arsitektur **Fullstack Cloud**, NutriAI mentransformasi cara Anda mencatat pola makan hanya melalui percakapan alami.
 
@@ -16,7 +16,7 @@
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
+## Teknologi yang Digunakan
 
 ### **Frontend (Client)**
 - **Framework**: [React.js](https://reactjs.org/) + [Vite](https://vitejs.dev/)
@@ -64,7 +64,7 @@ cd prediksi-nutrisi
 
 ---
 
-## 🚢 Deployment (Railway + Docker)
+## Deployment (Railway + Docker)
 
 Proyek ini menggunakan konfigurasi **Dockerfile** tunggal yang cerdas untuk menjalankan Frontend dan Backend secara terpisah namun tetap dalam satu ekosistem:
 
