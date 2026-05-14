@@ -124,7 +124,7 @@ export default function KategoriPage() {
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-main)] overflow-x-hidden">
 
-      <div className="relative z-10 pt-32 pb-20 px-4">
+      <div className="relative z-10 pt-44 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16 text-center">
             <h1 className="text-4xl lg:text-5xl font-extrabold text-[var(--text-main)] mb-6">

@@ -30,7 +30,7 @@ const DashboardPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] p-4 pt-32 md:p-10 md:pt-36 lg:p-14 lg:pt-40 pb-32">
+    <div className="min-h-screen bg-[var(--bg-primary)] p-4 pt-44 md:p-10 md:pt-48 lg:p-14 lg:pt-52 pb-32">
       <div className="mx-auto max-w-7xl">
         
         {/* Header */}

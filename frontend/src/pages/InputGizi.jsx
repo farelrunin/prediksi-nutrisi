@@ -11,7 +11,7 @@ const InputGizi = () => {
   const t = translations[language];
 
   return (
-    <div className="min-h-screen pt-32 pb-16 bg-[var(--bg-primary)] px-4">
+    <div className="min-h-screen pt-44 pb-16 bg-[var(--bg-primary)] px-4">
       <div className="max-w-4xl mx-auto">
         <div className="mb-12 text-center">
           <h1 className="text-4xl font-black tracking-tight text-[var(--text-main)] mb-4">{t.nutriCheck}</h1>

@@ -70,7 +70,7 @@ const HistoryPage = () => {
   };
 
   return (
-    <div className="min-h-screen pb-24 pt-32 px-4 md:px-8 bg-[var(--bg-primary)]">
+    <div className="min-h-screen pb-24 pt-44 px-4 md:px-8 bg-[var(--bg-primary)]">
       <div className="mx-auto max-w-6xl space-y-12">
         
         {/* Header Section */}

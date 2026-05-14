@@ -19,7 +19,7 @@ const PanduanPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pt-32 pb-20 px-6">
+    <div className="min-h-screen bg-[var(--bg-primary)] pt-44 pb-20 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="mb-16 text-center">

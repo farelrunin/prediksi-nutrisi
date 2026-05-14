@@ -444,7 +444,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pb-24 pt-32 px-4 md:px-8">
+    <div className="min-h-screen bg-[var(--bg-primary)] pb-24 pt-44 px-4 md:px-8">
       {/* Custom Cropper Modal */}
       {isCropping && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
