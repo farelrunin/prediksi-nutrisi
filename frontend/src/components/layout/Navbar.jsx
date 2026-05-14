@@ -195,14 +195,6 @@ const Navbar = () => {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2 md:gap-4">
-          {/* Theme Toggle Button */}
-          <button
-            onClick={toggleTheme}
-            className="p-3 md:p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-[var(--border-card)] text-[var(--text-main)] hover:border-[var(--primary-green)]/30 transition-all shadow-sm active:scale-95"
-            title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-          >
-            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
-          </button>
 
           {user ? (
             <div className="flex items-center gap-4">

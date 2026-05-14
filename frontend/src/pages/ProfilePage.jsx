@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   User,
   Save,
   RefreshCw,
-  ArrowLeft,
   Upload,
   AlertCircle,
   CheckCircle2,
@@ -14,8 +12,17 @@ import {
   Heart,
   Sun,
   RotateCcw,
+  Settings,
+  Globe,
+  Bell,
+  Shield,
+  ChevronRight,
+  Moon,
 } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
+import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
+import { translations } from '../constants/translations';
 import { authService } from '../services/authService';
 import { useNotification } from '../context/useNotification';
 import ConfirmModal from '../components/shared/ConfirmModal';
@@ -23,7 +30,11 @@ import ConfirmModal from '../components/shared/ConfirmModal';
 const ProfilePage = () => {
   const { user, setUser } = useAuth();
   const { notify } = useNotification();
-  const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
+  const { language, toggleLanguage } = useLanguage();
+  const t = translations[language];
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const settingsRef = useRef(null);
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -116,6 +127,15 @@ const ProfilePage = () => {
     };
 
     fetchProfile();
+
+    // Close settings when clicking outside
+    const handleClickOutside = (event) => {
+      if (settingsRef.current && !settingsRef.current.contains(event.target)) {
+        setIsSettingsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [user]);
 
   // Calculate BMI
@@ -518,16 +538,84 @@ const ProfilePage = () => {
         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <h1 className="text-4xl font-extrabold tracking-tight text-[var(--text-main)]">
-              My <span className="text-[var(--primary-green)]">Profile</span>
+              My <span className="text-[var(--primary-green)]">{t.profileTitle}</span>
             </h1>
-            <p className="mt-2 text-[var(--text-muted)] font-medium">Manage your physical data and nutrition targets.</p>
+            <p className="mt-2 text-[var(--text-muted)] font-medium">{t.profileSubtitle}</p>
           </div>
-          <button
-            onClick={() => navigate('/dashboard')}
-            className="flex items-center gap-2 bg-[var(--bg-card)] border border-[var(--border-card)] px-6 py-3 rounded-2xl text-xs font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all shadow-sm"
-          >
-            <ArrowLeft size={16} /> Back
-          </button>
+          
+          {/* Settings Popover Button */}
+          <div className="relative" ref={settingsRef}>
+            <button
+              onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+              className="flex items-center gap-2 bg-[var(--bg-card)] border border-[var(--border-card)] px-6 py-3 rounded-2xl text-xs font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all shadow-sm active:scale-95"
+            >
+              <Settings size={18} className={isSettingsOpen ? 'animate-spin-slow' : ''} />
+              {t.settings}
+            </button>
+
+            {isSettingsOpen && (
+              <div className="absolute top-full right-0 mt-4 w-72 bg-[var(--bg-card)]/95 backdrop-blur-2xl border border-[var(--border-card)] rounded-[2rem] p-4 shadow-2xl z-[100] animate-in fade-in zoom-in-95 duration-200">
+                <div className="space-y-2">
+                  <h4 className="px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-muted)]">{t.preferences}</h4>
+                  
+                  {/* Theme Toggle */}
+                  <button
+                    onClick={toggleTheme}
+                    className="w-full flex items-center justify-between px-4 py-3.5 rounded-2xl hover:bg-[var(--bg-secondary)] transition-all group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-xl bg-amber-100 text-amber-600 group-hover:scale-110 transition-transform">
+                        {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+                      </div>
+                      <span className="text-xs font-bold text-[var(--text-main)]">{theme === 'light' ? t.darkMode : t.lightMode}</span>
+                    </div>
+                    <div className={`w-10 h-5 rounded-full p-1 transition-colors ${theme === 'dark' ? 'bg-[var(--primary-green)]' : 'bg-slate-200'}`}>
+                      <div className={`w-3 h-3 bg-white rounded-full transition-transform ${theme === 'dark' ? 'translate-x-5' : 'translate-x-0'}`} />
+                    </div>
+                  </button>
+
+                  {/* Language Toggle */}
+                  <button
+                    onClick={toggleLanguage}
+                    className="w-full flex items-center justify-between px-4 py-3.5 rounded-2xl hover:bg-[var(--bg-secondary)] transition-all group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-xl bg-blue-100 text-blue-600 group-hover:scale-110 transition-transform">
+                        <Globe size={18} />
+                      </div>
+                      <span className="text-xs font-bold text-[var(--text-main)]">{t.language}</span>
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[var(--primary-green)]">
+                      {language === 'id' ? 'ID' : 'EN'}
+                    </span>
+                  </button>
+
+                  <div className="my-2 border-t border-[var(--border-card)]/30 mx-2" />
+                  <h4 className="px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-muted)]">{t.account}</h4>
+
+                  {/* Placeholder Settings */}
+                  {[
+                    { icon: <Bell size={18} />, label: t.notifications, color: 'bg-rose-100 text-rose-600' },
+                    { icon: <Shield size={18} />, label: t.privacy, color: 'bg-emerald-100 text-emerald-600' },
+                  ].map((item, idx) => (
+                    <button
+                      key={idx}
+                      className="w-full flex items-center justify-between px-4 py-3.5 rounded-2xl hover:bg-[var(--bg-secondary)] transition-all group opacity-60"
+                      onClick={() => notify({ type: 'info', title: t.soon, message: `${item.label} feature coming soon!` })}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-xl ${item.color} group-hover:scale-110 transition-transform`}>
+                          {item.icon}
+                        </div>
+                        <span className="text-xs font-bold text-[var(--text-main)]">{item.label}</span>
+                      </div>
+                      <ChevronRight size={14} className="text-[var(--text-muted)]" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Success Message */}
@@ -536,7 +624,7 @@ const ProfilePage = () => {
             <div className="p-2 bg-[var(--primary-green)] rounded-xl text-white">
               <CheckCircle2 size={20} />
             </div>
-            <span className="text-sm font-bold text-[var(--primary-green)]">Profile Updated Successfully!</span>
+            <span className="text-sm font-bold text-[var(--primary-green)]">{t.successUpdate}</span>
           </div>
         )}
 
@@ -603,12 +691,12 @@ const ProfilePage = () => {
                   <div className="p-2.5 bg-[var(--primary-green)]/10 rounded-xl text-[var(--primary-green)]">
                     <User size={20} />
                   </div>
-                  <h2 className="text-lg font-bold text-[var(--text-main)] uppercase tracking-wide">Basic Information</h2>
+                  <h2 className="text-lg font-bold text-[var(--text-main)] uppercase tracking-wide">{t.basicInformation || 'Basic Information'}</h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Full Name</label>
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{t.fullName}</label>
                     <input
                       type="text" name="fullName" value={formData.fullName} onChange={handleChange}
                       maxLength="100"
@@ -617,26 +705,26 @@ const ProfilePage = () => {
                     {errors.fullName && <p className="text-[10px] font-bold text-rose-500 ml-2 animate-pulse">{errors.fullName}</p>}
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Email</label>
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{t.email}</label>
                     <input
                       type="email" name="email" value={formData.email} disabled
                       className="w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-card)] text-[var(--text-muted)] font-semibold opacity-60 cursor-not-allowed"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Gender</label>
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{t.gender}</label>
                     <select
                       name="gender" value={formData.gender} onChange={handleChange}
                       className={`w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border text-[var(--text-main)] font-semibold outline-none transition-all appearance-none ${errors.gender ? 'border-rose-500 bg-rose-50' : 'border-transparent focus:border-[var(--primary-green)]'}`}
                     >
-                      <option value="">Select...</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
+                      <option value="">{t.selectGender}</option>
+                      <option value="male">{t.male}</option>
+                      <option value="female">{t.female}</option>
                     </select>
                     {errors.gender && <p className="text-[10px] font-bold text-rose-500 ml-2 animate-pulse">{errors.gender}</p>}
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Date of Birth</label>
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{t.birthDate}</label>
                     <input
                       type="date" 
                       name="dateOfBirth" 
@@ -655,15 +743,15 @@ const ProfilePage = () => {
                   <div className="p-2.5 bg-[var(--accent-blue)]/10 rounded-xl text-[var(--accent-blue)]">
                     <Zap size={20} />
                   </div>
-                  <h2 className="text-lg font-bold text-[var(--text-main)] uppercase tracking-wide">Physical Data</h2>
+                  <h2 className="text-lg font-bold text-[var(--text-main)] uppercase tracking-wide">{t.physicalData}</h2>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                   {[
-                    { label: 'Height (cm)', name: 'height', val: formData.height, min: 50, max: 300, readOnly: false },
-                    { label: 'Weight (kg)', name: 'weight', val: formData.weight, min: 10, max: 500, readOnly: false },
-                    { label: 'Age', name: 'age', val: formData.age, min: 1, max: 120, readOnly: true },
-                    { label: 'Sleep (hrs)', name: 'sleepHours', val: formData.sleepHours, min: 0, max: 24, readOnly: false }
+                    { label: t.height, name: 'height', val: formData.height, min: 50, max: 300, readOnly: false },
+                    { label: t.weight, name: 'weight', val: formData.weight, min: 10, max: 500, readOnly: false },
+                    { label: t.age, name: 'age', val: formData.age, min: 1, max: 120, readOnly: true },
+                    { label: t.sleep, name: 'sleepHours', val: formData.sleepHours, min: 0, max: 24, readOnly: false }
                   ].map((field) => (
                     <div key={field.name} className="space-y-2">
                       <label className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] ml-1">{field.label}</label>
@@ -680,7 +768,7 @@ const ProfilePage = () => {
                 {/* Special Conditions (Pregnancy/Breastfeeding) */}
                 {formData.gender === 'female' && (
                   <div className="mt-10 pt-8 border-t border-slate-100">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1 block mb-6">Special Conditions (Optional)</label>
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1 block mb-6">{t.specialConditions}</label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className={`p-6 rounded-[2rem] border transition-all cursor-pointer flex items-center justify-between ${formData.is_pregnant ? 'border-[var(--primary-green)] bg-emerald-50' : 'border-[var(--border-card)] bg-[var(--bg-secondary)]'}`}
                            onClick={() => setFormData(prev => ({ ...prev, is_pregnant: !prev.is_pregnant, is_breastfeeding: false }))}>
@@ -689,8 +777,8 @@ const ProfilePage = () => {
                             <Heart className="w-5 h-5" />
                           </div>
                           <div>
-                            <p className="font-bold text-[var(--text-main)]">Currently Pregnant</p>
-                            <p className="text-[10px] font-medium text-[var(--text-muted)]">Nutrition targets will be adjusted</p>
+                            <p className="font-bold text-[var(--text-main)]">{t.pregnant}</p>
+                            <p className="text-[10px] font-medium text-[var(--text-muted)]">{t.soon}</p>
                           </div>
                         </div>
                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${formData.is_pregnant ? 'border-[var(--primary-green)] bg-[var(--primary-green)]' : 'border-slate-300'}`}>
@@ -705,8 +793,8 @@ const ProfilePage = () => {
                             <Sun className="w-5 h-5" />
                           </div>
                           <div>
-                            <p className="font-bold text-[var(--text-main)]">Breastfeeding</p>
-                            <p className="text-[10px] font-medium text-[var(--text-muted)]">Nutrition targets will be adjusted</p>
+                            <p className="font-bold text-[var(--text-main)]">{t.breastfeeding}</p>
+                            <p className="text-[10px] font-medium text-[var(--text-muted)]">{t.soon}</p>
                           </div>
                         </div>
                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${formData.is_breastfeeding ? 'border-[var(--accent-blue)] bg-[var(--accent-blue)]' : 'border-slate-300'}`}>
@@ -724,15 +812,15 @@ const ProfilePage = () => {
                   <div className="p-2.5 bg-[var(--warning)]/10 rounded-xl text-[var(--warning)]">
                     <Target size={20} />
                   </div>
-                  <h2 className="text-lg font-bold text-[var(--text-main)] uppercase tracking-wide">Nutrition Targets</h2>
+                  <h2 className="text-lg font-bold text-[var(--text-main)] uppercase tracking-wide">{t.nutritionTargets}</h2>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
                   {[
-                    { label: 'Calories', name: 'targetCalories', val: formData.targetCalories, color: 'focus:border-[var(--primary-green)]', min: 0, max: 10000 },
-                    { label: 'Protein (g)', name: 'targetProtein', val: formData.targetProtein, color: 'focus:border-[var(--accent-blue)]', min: 0, max: 1000 },
-                    { label: 'Carbs (g)', name: 'targetCarbs', val: formData.targetCarbs, color: 'focus:border-[var(--warning)]', min: 0, max: 1000 },
-                    { label: 'Fat (g)', name: 'targetFat', val: formData.targetFat, color: 'focus:border-[var(--danger)]', min: 0, max: 1000 }
+                    { label: t.calories, name: 'targetCalories', val: formData.targetCalories, color: 'focus:border-[var(--primary-green)]', min: 0, max: 10000 },
+                    { label: t.protein, name: 'targetProtein', val: formData.targetProtein, color: 'focus:border-[var(--accent-blue)]', min: 0, max: 1000 },
+                    { label: t.carbs, name: 'targetCarbs', val: formData.targetCarbs, color: 'focus:border-[var(--warning)]', min: 0, max: 1000 },
+                    { label: t.fat, name: 'targetFat', val: formData.targetFat, color: 'focus:border-[var(--danger)]', min: 0, max: 1000 }
                   ].map((field) => (
                     <div key={field.name} className="space-y-2">
                       <label className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] ml-1">{field.label}</label>
@@ -746,16 +834,16 @@ const ProfilePage = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">Nutrition Goal</label>
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{t.nutritionGoal}</label>
                   <select
                     name="nutritionGoal" value={formData.nutritionGoal} onChange={handleChange}
                     className="w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-transparent text-[var(--text-main)] font-semibold focus:border-[var(--primary-green)] outline-none transition-all appearance-none"
                   >
-                    <option value="">Select Goal...</option>
-                    <option value="maintain">Maintain Weight</option>
-                    <option value="lose">Weight Loss</option>
-                    <option value="gain">Weight Gain</option>
-                    <option value="build_muscle">Build Muscle Mass</option>
+                    <option value="">{t.selectGoal}</option>
+                    <option value="maintain">{t.maintainWeight}</option>
+                    <option value="lose">{t.loseWeight}</option>
+                    <option value="gain">{t.gainWeight}</option>
+                    <option value="build_muscle">{t.buildMuscle}</option>
                   </select>
                   {errors.nutritionGoal && <p className="text-[10px] font-bold text-rose-500 ml-2 animate-pulse">{errors.nutritionGoal}</p>}
                 </div>
@@ -768,13 +856,13 @@ const ProfilePage = () => {
                   className="flex-1 group relative flex items-center justify-center gap-3 bg-[var(--primary-green)] px-10 py-5 rounded-2xl font-bold text-white text-lg shadow-lg shadow-emerald-500/20 hover:scale-[1.02] active:scale-100 transition-all disabled:opacity-50"
                 >
                   {loading ? <RefreshCw className="animate-spin" /> : <Save size={24} />}
-                  <span>{loading ? 'Saving...' : 'Save Changes'}</span>
+                  <span>{loading ? t.saving : t.saveChanges}</span>
                 </button>
                 <button
                   type="button" onClick={handleReset}
                   className="px-10 py-5 rounded-2xl border border-[var(--border-card)] bg-[var(--bg-card)] text-[var(--text-muted)] font-bold uppercase tracking-widest text-xs hover:text-[var(--danger)] hover:border-rose-200 transition-all shadow-sm"
                 >
-                  Reset
+                  {t.reset}
                 </button>
               </div>
             </form>
@@ -786,9 +874,9 @@ const ProfilePage = () => {
         isOpen={isResetModalOpen}
         onClose={() => setIsResetModalOpen(false)}
         onConfirm={confirmReset}
-        title="Reset Form?"
-        message="All unsaved changes will be lost."
-        itemName="Profile Form"
+        title={t.resetTitle}
+        message={t.resetMessage}
+        itemName={t.resetItem}
       />
     </div>
   );

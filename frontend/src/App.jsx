@@ -21,6 +21,7 @@ import { AuthProvider } from './context/AuthContext';
 import { NutritionProvider } from './context/NutritionStore';
 import { NotificationProvider } from './context/NotificationContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { LanguageProvider } from './context/LanguageContext';
 import { useLocation } from 'react-router-dom';
 
 // Component to handle scroll to top on route change
@@ -73,15 +74,17 @@ function AppContent() {
 function App() {
   return (
     <NotificationProvider>
-      <ThemeProvider>
-        <AuthProvider>
-          <NutritionProvider>
-            <Router>
-              <AppContent />
-            </Router>
-          </NutritionProvider>
-        </AuthProvider>
-      </ThemeProvider>
+      <LanguageProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <NutritionProvider>
+              <Router>
+                <AppContent />
+              </Router>
+            </NutritionProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </LanguageProvider>
     </NotificationProvider>
   );
 }
