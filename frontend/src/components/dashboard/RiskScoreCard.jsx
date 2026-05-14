@@ -1,43 +1,48 @@
 import React from 'react';
 import { AlertTriangle, CheckCircle, AlertCircle, TrendingUp } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
+import { translations } from '../../constants/translations';
 
 const RiskScoreCard = ({ riskScore, aiAdvice }) => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   if (riskScore === null) {
     return (
       <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[1.5rem] md:rounded-[2.5rem] shadow-xl border border-[var(--border-card)] p-6 md:p-10 text-[var(--text-muted)] group hover:shadow-emerald-500/5 transition-all">
-        <h3 className="text-base md:text-lg font-bold text-[var(--text-main)] mb-3">Malnutrition Risk Score</h3>
-        <p className="text-sm">No data yet — start inputting food to see risk analysis</p>
+        <h3 className="text-base md:text-lg font-bold text-[var(--text-main)] mb-3">{t.riskScore}</h3>
+        <p className="text-sm">{language === 'id' ? 'Belum ada data — mulai masukkan makanan untuk melihat analisis risiko' : 'No data yet — start inputting food to see risk analysis'}</p>
       </div>
     );
   }
 
   const getRiskLevel = (score) => {
     if (score < 0.3) return {
-      level: 'Low',
+      level: t.lowRisk,
       icon: CheckCircle,
       bgColor: 'from-green-500 to-green-700',
       textColor: 'text-green-400',
       iconBgClass: 'bg-green-500/10',
       iconTextClass: 'text-green-400',
-      description: 'Your nutritional intake is in good condition. Keep up the healthy eating!'
+      description: language === 'id' ? 'Asupan gizi Anda dalam kondisi baik. Pertahankan pola makan sehat!' : 'Your nutritional intake is in good condition. Keep up the healthy eating!'
     };
     if (score < 0.7) return {
-      level: 'Medium',
+      level: t.moderateRisk,
       icon: AlertCircle,
       bgColor: 'from-yellow-500 to-yellow-700',
       textColor: 'text-yellow-400',
       iconBgClass: 'bg-yellow-500/10',
       iconTextClass: 'text-yellow-400',
-      description: 'Pay attention to your nutritional intake. Some nutrients need to be increased.'
+      description: language === 'id' ? 'Perhatikan asupan gizi Anda. Beberapa nutrisi perlu ditingkatkan.' : 'Pay attention to your nutritional intake. Some nutrients need to be increased.'
     };
     return {
-      level: 'High',
+      level: t.highRisk,
       icon: AlertTriangle,
       bgColor: 'from-red-500 to-red-700',
       textColor: 'text-red-400',
       iconBgClass: 'bg-red-500/10',
       iconTextClass: 'text-red-400',
-      description: 'High risk of malnutrition. Consult with a nutritionist immediately.'
+      description: language === 'id' ? 'Risiko tinggi malnutrisi. Segera konsultasikan dengan ahli gizi.' : 'High risk of malnutrition. Consult with a nutritionist immediately.'
     };
   };
 
@@ -48,8 +53,8 @@ const RiskScoreCard = ({ riskScore, aiAdvice }) => {
       <div className="bg-gradient-to-br from-emerald-500/10 to-blue-500/10 p-6 md:p-10">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-bold text-[var(--text-main)]">Malnutrition Risk Score</h3>
-            <p className="text-[var(--text-muted)] text-sm">Based on AI Analysis</p>
+            <h3 className="text-lg font-bold text-[var(--text-main)]">{t.riskScore}</h3>
+            <p className="text-[var(--text-muted)] text-sm">{t.basedOnAI}</p>
           </div>
           <Icon size={32} className="text-[var(--text-main)] opacity-90" />
         </div>
@@ -59,7 +64,7 @@ const RiskScoreCard = ({ riskScore, aiAdvice }) => {
             {(riskScore * 100).toFixed(1)}%
           </div>
           <div className="text-base md:text-xl font-semibold">
-            {level} Risk
+            {level}
           </div>
         </div>
       </div>
@@ -81,16 +86,16 @@ const RiskScoreCard = ({ riskScore, aiAdvice }) => {
             <TrendingUp className={iconTextClass} size={16} />
           </div>
           <div>
-            <h4 className={`${textColor} font-semibold mb-2`}>Recommendation</h4>
+            <h4 className={`${textColor} font-semibold mb-2`}>{t.recommendation}</h4>
             <p className="text-[var(--text-muted)] text-sm leading-relaxed">{description}</p>
           </div>
         </div>
 
         <div className="mt-4 pt-4 border-t border-white/10">
           <div className="flex justify-between text-sm">
-            <span className="text-[var(--text-muted)]">Last Update</span>
+            <span className="text-[var(--text-muted)]">{t.lastUpdate}</span>
             <span className="text-[var(--text-main)] font-medium">
-              {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+              {new Date().toLocaleTimeString(language === 'id' ? 'id-ID' : 'en-US', { hour: '2-digit', minute: '2-digit' })}
             </span>
           </div>
         </div>

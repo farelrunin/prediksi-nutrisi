@@ -8,10 +8,14 @@ import MagicBento from '../components/dashboard/MagicBento';
 import { useNutrition } from '../context/useNutrition';
 import { useAuth } from '../context/useAuth';
 import MagicCard from '../components/shared/MagicCard';
+import { useLanguage } from '../context/LanguageContext';
+import { translations } from '../constants/translations';
 
 const DashboardPage = () => {
   const { nutritionData, getRiskScore, historyLoading } = useNutrition();
   const { user } = useAuth();
+  const { language } = useLanguage();
+  const t = translations[language];
   const riskScore = getRiskScore();
 
   const todayEntries = nutritionData.history.filter((item) =>
@@ -19,42 +23,42 @@ const DashboardPage = () => {
   );
 
   const quickStats = [
-    { icon: Target, label: 'Calories', value: Math.round(nutritionData.dailyIntake.calories), target: nutritionData.targets.calories, unit: 'kcal', color: 'text-[var(--primary-green)]', glow: 'rgba(34, 197, 94, 0.12)' },
-    { icon: TrendingUp, label: 'Protein', value: Math.round(nutritionData.dailyIntake.protein), target: nutritionData.targets.protein, unit: 'g', color: 'text-[var(--primary-green)]', glow: 'rgba(34, 197, 94, 0.12)' },
-    { icon: Calendar, label: 'Entries', value: todayEntries.length, target: 10, unit: 'item', color: 'text-[var(--primary-green)]', glow: 'rgba(34, 197, 94, 0.12)' },
-    { icon: Award, label: 'Streak', value: nutritionData.streak || 0, target: 7, unit: 'days', color: 'text-[var(--primary-green)]', glow: 'rgba(34, 197, 94, 0.12)' }
+    { icon: Target, label: t.calories, value: Math.round(nutritionData.dailyIntake.calories), target: nutritionData.targets.calories, unit: t.kcal, color: 'text-[var(--primary-green)]', glow: 'rgba(34, 197, 94, 0.12)' },
+    { icon: TrendingUp, label: t.protein, value: Math.round(nutritionData.dailyIntake.protein), target: nutritionData.targets.protein, unit: 'g', color: 'text-[var(--primary-green)]', glow: 'rgba(34, 197, 94, 0.12)' },
+    { icon: Calendar, label: t.entries, value: todayEntries.length, target: 10, unit: t.item, color: 'text-[var(--primary-green)]', glow: 'rgba(34, 197, 94, 0.12)' },
+    { icon: Award, label: t.streak, value: nutritionData.streak || 0, target: 7, unit: t.days, color: 'text-[var(--primary-green)]', glow: 'rgba(34, 197, 94, 0.12)' }
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] p-4 md:p-10 lg:p-14 pb-32">
+    <div className="min-h-screen bg-[var(--bg-primary)] p-4 pt-32 md:p-10 md:pt-36 lg:p-14 lg:pt-40 pb-32">
       <div className="mx-auto max-w-7xl">
         
         {/* Header */}
         <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-[var(--text-main)]">
-              Dashboard
+              {t.dashboard}
             </h1>
             <div className="mt-2 flex flex-wrap items-center gap-3">
-              <p className="text-[var(--text-muted)] font-medium">Welcome back, {user?.name || 'User'}.</p>
+              <p className="text-[var(--text-muted)] font-medium">{t.welcomeBack}, {user?.name || 'User'}.</p>
               
               {user?.gender === 'female' && user?.is_pregnant && (
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-50 border border-rose-100 rounded-full animate-in zoom-in duration-500">
                   <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-rose-600">Pregnancy Mode Active</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-rose-600">{t.pregnancyMode}</span>
                 </div>
               )}
 
               {user?.gender === 'female' && user?.is_breastfeeding && (
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-sky-50 border border-sky-100 rounded-full animate-in zoom-in duration-500">
                   <div className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-sky-600">Breastfeeding Mode Active</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-sky-600">{t.breastfeedingMode}</span>
                 </div>
               )}
             </div>
           </div>
           <div className="bg-[var(--bg-card)] border border-[var(--border-card)] px-6 py-3 rounded-2xl text-xs font-bold text-[var(--text-muted)] shadow-sm">
-            {new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            {new Date().toLocaleDateString(language === 'id' ? 'id-ID' : 'en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
           </div>
         </div>
 
@@ -72,18 +76,18 @@ const DashboardPage = () => {
             {/* Daily Nutrition Summary */}
             <MagicCard className="bg-[var(--bg-card)] rounded-[2.5rem] p-10 shadow-xl border border-[var(--border-card)]">
               <div className="mb-10 flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-[var(--text-main)]">Daily Nutrition</h2>
+                <h2 className="text-2xl font-bold text-[var(--text-main)]">{t.dailyNutrition}</h2>
                 <Link to="/nutri-check" className="flex items-center gap-2 rounded-xl bg-[var(--primary-green)] px-5 py-3 text-sm font-bold text-white hover:scale-105 transition-transform shadow-lg shadow-emerald-500/20">
-                  Add Meal <ChevronRight size={16} />
+                  {t.addMeal} <ChevronRight size={16} />
                 </Link>
               </div>
               
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
                 {[
-                  { label: 'Calories', cur: nutritionData.dailyIntake.calories, tar: nutritionData.targets.calories, unit: 'kcal', color: 'from-[var(--primary-green)] to-[var(--secondary-green)]' },
-                  { label: 'Protein', cur: nutritionData.dailyIntake.protein, tar: nutritionData.targets.protein, unit: 'g', color: 'from-[var(--accent-blue)] to-blue-600' },
-                  { label: 'Carbs', cur: nutritionData.dailyIntake.carbs, tar: nutritionData.targets.carbs, unit: 'g', color: 'from-[var(--warning)] to-orange-500' },
-                  { label: 'Fat', cur: nutritionData.dailyIntake.fat, tar: nutritionData.targets.fat, unit: 'g', color: 'from-[var(--danger)] to-rose-600' }
+                  { label: t.calories, cur: nutritionData.dailyIntake.calories, tar: nutritionData.targets.calories, unit: t.kcal, color: 'from-[var(--primary-green)] to-[var(--secondary-green)]' },
+                  { label: t.protein, cur: nutritionData.dailyIntake.protein, tar: nutritionData.targets.protein, unit: 'g', color: 'from-[var(--accent-blue)] to-blue-600' },
+                  { label: t.carbs, cur: nutritionData.dailyIntake.carbs, tar: nutritionData.targets.carbs, unit: 'g', color: 'from-[var(--warning)] to-orange-500' },
+                  { label: t.fat, cur: nutritionData.dailyIntake.fat, tar: nutritionData.targets.fat, unit: 'g', color: 'from-[var(--danger)] to-rose-600' }
                 ].map((m) => (
                   <div key={m.label} className="space-y-4">
                     <div className="flex justify-between items-end">
@@ -117,16 +121,16 @@ const DashboardPage = () => {
 
             <MagicCard className="bg-[var(--bg-card)] rounded-[2.5rem] p-10 shadow-xl border border-[var(--border-card)]">
               <div className="mb-8 flex items-center justify-between">
-                <h2 className="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Recent Activity</h2>
-                <Link to="/history" className="text-[11px] font-bold text-[var(--primary-green)] hover:underline uppercase tracking-widest">History →</Link>
+                <h2 className="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">{t.recentActivity}</h2>
+                <Link to="/history" className="text-[11px] font-bold text-[var(--primary-green)] hover:underline uppercase tracking-widest">{t.history} →</Link>
               </div>
 
               <div className="space-y-5">
                 {historyLoading ? (
-                  <div className="text-center py-10 animate-pulse text-[var(--text-muted)] font-bold text-xs uppercase tracking-widest">Loading...</div>
+                  <div className="text-center py-10 animate-pulse text-[var(--text-muted)] font-bold text-xs uppercase tracking-widest">{t.loading}</div>
                 ) : todayEntries.length === 0 ? (
                   <div className="text-center py-16 border-2 border-dashed border-slate-100 rounded-3xl bg-slate-50/50">
-                    <p className="text-xs font-bold text-slate-400">No Data Today</p>
+                    <p className="text-xs font-bold text-slate-400">{t.noDataToday}</p>
                   </div>
                 ) : (
                   todayEntries.slice(0, 4).map((e, i) => (

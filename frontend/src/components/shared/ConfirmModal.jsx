@@ -1,8 +1,13 @@
 import React from 'react';
 import { AlertTriangle, X } from 'lucide-react';
 import { colors } from '../../styles/colors';
+import { useLanguage } from '../../context/LanguageContext';
+import { translations } from '../../constants/translations';
 
-const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, itemName, isLoading }) => {
+const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, itemName, isLoading, confirmLabel, cancelLabel }) => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   if (!isOpen) return null;
 
   return (
@@ -33,7 +38,7 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, itemName, is
 
           <h3 className="text-xl font-bold text-[var(--text-main)] mb-2">{title}</h3>
           <p className="text-[var(--text-muted)] leading-relaxed">
-            {message} <span className="font-semibold text-[var(--text-main)]">"{itemName}"</span>? This action cannot be undone.
+            {message} {itemName && <span className="font-semibold text-[var(--text-main)]">"{itemName}"</span>}
           </p>
 
           <div className="mt-8 flex gap-3">
@@ -41,7 +46,7 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, itemName, is
               onClick={onClose}
               className="flex-1 rounded-2xl border border-[var(--border-card)] bg-[var(--bg-secondary)] py-3 text-sm font-semibold text-[var(--text-main)] transition-all hover:bg-[var(--bg-secondary)]/80"
             >
-              Cancel
+              {cancelLabel || t.cancel}
             </button>
             <button
               onClick={onConfirm}
@@ -51,10 +56,10 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, itemName, is
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  <span>Processing...</span>
+                  <span>{t.loading}</span>
                 </div>
               ) : (
-                "Yes, Delete"
+                confirmLabel || t.confirm
               )}
             </button>
           </div>

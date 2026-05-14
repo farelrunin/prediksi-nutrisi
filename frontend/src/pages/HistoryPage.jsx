@@ -2,47 +2,50 @@ import { useState } from 'react';
 import { List, CalendarDays, Clock3, UtensilsCrossed, Trash2, X } from 'lucide-react';
 import { useNutrition } from '../context/useNutrition';
 import { useNotification } from '../context/useNotification';
+import { useLanguage } from '../context/LanguageContext';
+import { translations } from '../constants/translations';
 import { colors } from '../styles/colors';
 import ConfirmModal from '../components/shared/ConfirmModal';
-
-const formatDayLabel = (dateValue) => new Date(dateValue).toLocaleDateString('en-US', {
-  weekday: 'long',
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric'
-});
-
-const getDateKey = (dateValue) => {
-  const date = new Date(dateValue);
-  const month = `${date.getMonth() + 1}`.padStart(2, '0');
-  const day = `${date.getDate()}`.padStart(2, '0');
-  return `${date.getFullYear()}-${month}-${day}`;
-};
-
-const groupEntriesByDay = (entries) => entries.reduce((groups, entry) => {
-  const dateKey = getDateKey(entry.timestamp);
-  if (!groups[dateKey]) {
-    groups[dateKey] = {};
-  }
-
-  // Group by session (exact same timestamp or within the same minute)
-  const time = new Date(entry.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-  const sessionKey = `${entry.mealType}-${time}`;
-  
-  if (!groups[dateKey][sessionKey]) {
-    groups[dateKey][sessionKey] = [];
-  }
-
-  groups[dateKey][sessionKey].push(entry);
-  return groups;
-}, {});
 
 const HistoryPage = () => {
   const { nutritionData, historyLoading, historyError, deleteFoodEntry } = useNutrition();
   const { notify } = useNotification();
+  const { language } = useLanguage();
+  const t = translations[language];
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const getDateKey = (dateValue) => {
+    const date = new Date(dateValue);
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+    const day = `${date.getDate()}`.padStart(2, '0');
+    return `${date.getFullYear()}-${month}-${day}`;
+  };
+
+  const formatDayLabel = (dateValue) => new Date(dateValue).toLocaleDateString(language === 'id' ? 'id-ID' : 'en-US', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+
+  const groupEntriesByDay = (entries) => entries.reduce((groups, entry) => {
+    const dateKey = getDateKey(entry.timestamp);
+    if (!groups[dateKey]) {
+      groups[dateKey] = {};
+    }
+
+    const time = new Date(entry.timestamp).toLocaleTimeString(language === 'id' ? 'id-ID' : 'en-US', { hour: '2-digit', minute: '2-digit' });
+    const sessionKey = `${entry.mealType}-${time}`;
+    
+    if (!groups[dateKey][sessionKey]) {
+      groups[dateKey][sessionKey] = [];
+    }
+
+    groups[dateKey][sessionKey].push(entry);
+    return groups;
+  }, {});
 
   const groupedData = groupEntriesByDay(nutritionData.history);
   const sortedDays = Object.keys(groupedData).sort((a, b) => new Date(b) - new Date(a));
@@ -56,9 +59,9 @@ const HistoryPage = () => {
       setIsDeleting(true);
       try {
         await deleteFoodEntry(deleteModal.item.id);
-        notify({ type: 'success', title: 'Success', message: 'Nutrition data deleted successfully.' });
+        notify({ type: 'success', title: language === 'id' ? 'Berhasil' : 'Success', message: language === 'id' ? 'Data nutrisi berhasil dihapus.' : 'Nutrition data deleted successfully.' });
       } catch (error) {
-        notify({ type: 'error', title: 'Delete Failed', message: error.message });
+        notify({ type: 'error', title: language === 'id' ? 'Gagal Menghapus' : 'Delete Failed', message: error.message });
       } finally {
         setIsDeleting(false);
       }
@@ -74,13 +77,13 @@ const HistoryPage = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
             <h1 className="text-4xl font-black tracking-tight text-[var(--text-main)]">
-              Nutrition <span className="text-[var(--primary-green)]">Journal</span>
+              {language === 'id' ? 'Jurnal' : 'Nutrition'} <span className="text-[var(--primary-green)]">{language === 'id' ? 'Nutrisi' : 'Journal'}</span>
             </h1>
-            <p className="mt-2 text-[var(--text-muted)] font-medium">Complete history of your daily nutrition journey.</p>
+            <p className="mt-2 text-[var(--text-muted)] font-medium">{language === 'id' ? 'Riwayat lengkap perjalanan nutrisi harian Anda.' : 'Complete history of your daily nutrition journey.'}</p>
           </div>
           <div className="bg-[var(--bg-card)] border border-[var(--border-card)] px-8 py-4 rounded-3xl shadow-xl flex items-center gap-4">
             <div className="text-center">
-              <div className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Total Entries</div>
+              <div className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">{language === 'id' ? 'Total Entri' : 'Total Entries'}</div>
               <div className="text-xl font-black text-[var(--text-main)]">{nutritionData.history.length}</div>
             </div>
           </div>
@@ -89,16 +92,16 @@ const HistoryPage = () => {
         {historyLoading ? (
           <div className="flex h-96 flex-col items-center justify-center space-y-4">
             <div className="h-12 w-12 rounded-full border-4 border-[var(--primary-green)]/20 border-t-[var(--primary-green)] animate-spin" />
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary-green)]">Loading Journal...</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary-green)]">{language === 'id' ? 'Memuat Jurnal...' : 'Loading Journal...'}</p>
           </div>
         ) : sortedDays.length === 0 ? (
           <div className="rounded-[3rem] border-2 border-dashed border-[var(--border-card)] p-32 text-center bg-[var(--bg-card)]/30">
             <div className="w-20 h-20 bg-[var(--bg-card)] rounded-3xl flex items-center justify-center mx-auto mb-8 border border-[var(--border-card)]">
               <UtensilsCrossed className="text-[var(--primary-green)]/30" size={40} />
             </div>
-            <h2 className="text-2xl font-black text-[var(--text-main)]">Your Journal is Empty</h2>
+            <h2 className="text-2xl font-black text-[var(--text-main)]">{language === 'id' ? 'Jurnal Anda Kosong' : 'Your Journal is Empty'}</h2>
             <p className="mt-4 text-[var(--text-muted)] max-w-md mx-auto font-medium">
-              Let's record your food today to start monitoring your nutrition!
+              {language === 'id' ? 'Mari catat makanan Anda hari ini untuk mulai memantau nutrisi Anda!' : "Let's record your food today to start monitoring your nutrition!"}
             </p>
           </div>
         ) : (
@@ -122,9 +125,9 @@ const HistoryPage = () => {
                   </div>
                   <div className="h-[1px] flex-1 bg-[var(--border-card)]"></div>
                   <div className="hidden md:flex gap-8 text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
-                    <span className="text-[var(--primary-green)]">{Math.round(dayTotals.calories)} kcal</span>
-                    <span>{Math.round(dayTotals.protein)}g Prot</span>
-                    <span>{Math.round(dayTotals.carbs)}g Carbs</span>
+                    <span className="text-[var(--primary-green)]">{Math.round(dayTotals.calories)} {t.kcal}</span>
+                    <span>{Math.round(dayTotals.protein)}g {language === 'id' ? 'Prot' : 'Prot'}</span>
+                    <span>{Math.round(dayTotals.carbs)}g {language === 'id' ? 'Karbo' : 'Carbs'}</span>
                   </div>
                 </div>
 
@@ -155,7 +158,7 @@ const HistoryPage = () => {
                               >
                                 <p className="text-lg font-bold text-[var(--text-main)] truncate group-hover/item:text-[var(--primary-green)] transition-colors">{entry.foodName}</p>
                                 <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mt-1">
-                                  {entry.quantity} {entry.unit} • <span className="text-[var(--primary-green)]">Click for details</span>
+                                  {entry.quantity} {entry.unit} • <span className="text-[var(--primary-green)]">{language === 'id' ? 'Klik untuk detail' : 'Click for details'}</span>
                                 </p>
                               </div>
                               
@@ -196,8 +199,8 @@ const HistoryPage = () => {
         isOpen={deleteModal.isOpen}
         onClose={() => setDeleteModal({ isOpen: false, item: null })}
         onConfirm={handleConfirmDelete}
-        title="Delete Data?"
-        message="Nutrition data for this item will be permanently deleted."
+        title={language === 'id' ? 'Hapus Data?' : 'Delete Data?'}
+        message={language === 'id' ? 'Data nutrisi untuk item ini akan dihapus secara permanen.' : 'Nutrition data for this item will be permanently deleted.'}
         itemName={deleteModal.item?.foodName}
         isLoading={isDeleting}
       />
@@ -237,12 +240,12 @@ const HistoryPage = () => {
                 <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 pb-4">Micronutrients & Others</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                   {[
-                    { label: 'Calcium', val: selectedEntry.calcium || '—', unit: 'mg' },
-                    { label: 'Iron', val: selectedEntry.iron || '—', unit: 'mg' },
+                    { label: language === 'id' ? 'Kalsium' : 'Calcium', val: selectedEntry.calcium || '—', unit: 'mg' },
+                    { label: language === 'id' ? 'Zat Besi' : 'Iron', val: selectedEntry.iron || '—', unit: 'mg' },
                     { label: 'Vitamin A', val: selectedEntry.vitamin_a || '—', unit: 'IU' },
                     { label: 'Vitamin C', val: selectedEntry.vitamin_c || '—', unit: 'mg' },
-                    { label: 'Fiber', val: selectedEntry.fiber || '—', unit: 'g' },
-                    { label: 'Sugar', val: selectedEntry.sugar || '—', unit: 'g' }
+                    { label: language === 'id' ? 'Serat' : 'Fiber', val: selectedEntry.fiber || '—', unit: 'g' },
+                    { label: language === 'id' ? 'Gula' : 'Sugar', val: selectedEntry.sugar || '—', unit: 'g' }
                   ].map((m) => (
                     <div key={m.label} className="flex justify-between items-center py-1">
                       <span className="text-sm font-bold text-[var(--text-muted)]">{m.label}</span>
@@ -257,7 +260,7 @@ const HistoryPage = () => {
                   onClick={() => setSelectedEntry(null)}
                   className="px-8 py-4 rounded-2xl bg-[var(--text-main)] text-[var(--bg-card)] font-bold text-sm hover:scale-105 active:scale-100 transition-all"
                 >
-                  Close
+                  {language === 'id' ? 'Tutup' : 'Close'}
                 </button>
               </div>
             </div>

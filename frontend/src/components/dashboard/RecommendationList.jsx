@@ -1,6 +1,8 @@
 import React from 'react';
 import { Lightbulb, CheckCircle, AlertTriangle, Target, Zap, Waves } from 'lucide-react';
 import { useNutrition } from '../../context/useNutrition';
+import { useLanguage } from '../../context/LanguageContext';
+import { translations } from '../../constants/translations';
 
 const getIcon = (type) => {
   switch (type?.toLowerCase()) {
@@ -24,14 +26,16 @@ const getStyle = (priority) => {
 
 const RecommendationList = () => {
   const { nutritionData } = useNutrition();
+  const { language } = useLanguage();
+  const t = translations[language];
   const recommendations = nutritionData.recommendations || [];
 
   if (recommendations.length === 0) {
     return (
       <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[2.5rem] shadow-xl border border-[var(--border-card)] p-12 text-center">
         <Lightbulb className="mx-auto mb-4 text-emerald-500/30" size={48} />
-        <h3 className="text-xl font-bold text-[var(--text-main)] mb-2">No Recommendations Yet</h3>
-        <p className="text-[var(--text-muted)]">Log some food so Gemini can provide personalized advice for you.</p>
+        <h3 className="text-xl font-bold text-[var(--text-main)] mb-2">{language === 'id' ? 'Belum Ada Rekomendasi' : 'No Recommendations Yet'}</h3>
+        <p className="text-[var(--text-muted)]">{language === 'id' ? 'Catat beberapa makanan agar Gemini dapat memberikan saran pribadi untuk Anda.' : 'Log some food so Gemini can provide personalized advice for you.'}</p>
       </div>
     );
   }
@@ -41,12 +45,12 @@ const RecommendationList = () => {
         <div>
           <h3 className="text-xl font-bold text-[var(--text-main)] flex items-center gap-2">
             <Lightbulb className="text-emerald-400" size={24} />
-            Gemini's Recommendations
+            {language === 'id' ? 'Rekomendasi Gemini' : "Gemini's Recommendations"}
           </h3>
-          <p className="text-[var(--text-muted)] text-sm mt-1 italic">Intelligent analysis based on history</p>
+          <p className="text-[var(--text-muted)] text-sm mt-1 italic">{language === 'id' ? 'Analisis cerdas berdasarkan riwayat Anda' : 'Intelligent analysis based on history'}</p>
         </div>
         <div className="w-fit rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-bold text-emerald-400 border border-emerald-500/30 uppercase tracking-tighter">
-          {recommendations.length} Suggestions
+          {recommendations.length} {language === 'id' ? 'Saran' : 'Suggestions'}
         </div>
       </div>
 
@@ -98,9 +102,11 @@ const RecommendationList = () => {
             <CheckCircle size={20} />
           </div>
           <div>
-            <h5 className="font-bold text-[var(--text-main)] text-sm mb-1">Why is this recommendation important?</h5>
+            <h5 className="font-bold text-[var(--text-main)] text-sm mb-1">{language === 'id' ? 'Mengapa rekomendasi ini penting?' : 'Why is this recommendation important?'}</h5>
             <p className="text-[var(--text-muted)] text-xs leading-relaxed">
-              Gemini compares your health profile with nutrition trends from your daily food history to provide advice that helps achieve long-term health goals.
+              {language === 'id' 
+                ? 'Gemini membandingkan profil kesehatan Anda dengan tren nutrisi dari riwayat makanan harian Anda untuk memberikan saran yang membantu mencapai tujuan kesehatan jangka panjang.' 
+                : 'Gemini compares your health profile with nutrition trends from your daily food history to provide advice that helps achieve long-term health goals.'}
             </p>
           </div>
         </div>

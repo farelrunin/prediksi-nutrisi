@@ -3,28 +3,32 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Apple, User, LogOut, Menu, X, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../../context/useAuth';
 import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { translations } from '../../constants/translations';
 import ConfirmModal from '../shared/ConfirmModal';
 
-const publicMenuItems = [
-  { label: 'Home', to: '/', scrollTop: true },
+const getPublicMenuItems = (t) => [
+  { label: t.home, to: '/', scrollTop: true },
   { label: 'Features', to: '/#features', hash: '#features' },
   { label: 'How it Works', to: '/#how-it-works', hash: '#how-it-works' },
-  { label: 'Categories', to: '/categories' },
-  { label: 'Guide', to: '/guide' },
+  { label: t.categories, to: '/categories' },
+  { label: t.guide, to: '/guide' },
 ];
 
-const authenticatedMenuItems = [
-  { label: 'Home', to: '/' },
-  { label: 'Dashboard', to: '/dashboard' },
-  { label: 'Nutri Check', to: '/nutri-check' },
-  { label: 'History', to: '/history' },
-  { label: 'Guide', to: '/guide' },
-  { label: 'Categories', to: '/categories' },
+const getAuthenticatedMenuItems = (t) => [
+  { label: t.home, to: '/' },
+  { label: t.dashboard, to: '/dashboard' },
+  { label: t.nutriCheck, to: '/nutri-check' },
+  { label: t.history, to: '/history' },
+  { label: t.guide, to: '/guide' },
+  { label: t.categories, to: '/categories' },
 ];
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { language } = useLanguage();
+  const t = translations[language];
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -54,7 +58,7 @@ const Navbar = () => {
     }
   };
 
-  const currentMenuItems = user ? authenticatedMenuItems : publicMenuItems;
+  const currentMenuItems = user ? getAuthenticatedMenuItems(t) : getPublicMenuItems(t);
 
   // Update indicator position with precision
   const updateIndicator = (index) => {
@@ -268,9 +272,9 @@ const Navbar = () => {
         isOpen={showLogoutModal}
         onClose={() => setShowLogoutModal(false)}
         onConfirm={handleLogout}
-        title="Logout Confirmation"
-        message="Are you sure you want to end your current session?"
-        itemName="Logout"
+        title={t.logout}
+        message={language === 'id' ? 'Apakah Anda yakin ingin mengakhiri sesi Anda?' : 'Are you sure you want to end your current session?'}
+        itemName={t.logout}
       />
     </nav>
   );
