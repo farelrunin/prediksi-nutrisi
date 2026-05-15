@@ -778,7 +778,9 @@ const ProfilePage = () => {
                           </div>
                           <div>
                             <p className="font-bold text-[var(--text-main)]">{t.pregnant}</p>
-                            <p className="text-[10px] font-medium text-[var(--text-muted)]">{t.soon}</p>
+                            <p className={`text-[10px] font-black uppercase tracking-widest ${formData.is_pregnant ? 'text-[var(--primary-green)]' : 'text-[var(--text-muted)] opacity-60'}`}>
+                              {formData.is_pregnant ? t.pregnancyMode : t.clickToActivate}
+                            </p>
                           </div>
                         </div>
                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${formData.is_pregnant ? 'border-[var(--primary-green)] bg-[var(--primary-green)]' : 'border-slate-300'}`}>
@@ -794,7 +796,9 @@ const ProfilePage = () => {
                           </div>
                           <div>
                             <p className="font-bold text-[var(--text-main)]">{t.breastfeeding}</p>
-                            <p className="text-[10px] font-medium text-[var(--text-muted)]">{t.soon}</p>
+                            <p className={`text-[10px] font-black uppercase tracking-widest ${formData.is_breastfeeding ? 'text-[var(--accent-blue)]' : 'text-[var(--text-muted)] opacity-60'}`}>
+                              {formData.is_breastfeeding ? t.breastfeedingMode : t.clickToActivate}
+                            </p>
                           </div>
                         </div>
                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${formData.is_breastfeeding ? 'border-[var(--accent-blue)] bg-[var(--accent-blue)]' : 'border-slate-300'}`}>

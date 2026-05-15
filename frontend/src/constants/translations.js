@@ -65,8 +65,9 @@ export const translations = {
     resetTitle: 'Reset Formulir?',
     resetMessage: 'Semua perubahan yang belum disimpan akan hilang.',
     resetItem: 'Formulir Profil',
-    pregnancyMode: 'Mode Kehamilan Aktif',
+     pregnancyMode: 'Mode Kehamilan Aktif',
     breastfeedingMode: 'Mode Menyusui Aktif',
+    clickToActivate: 'Klik untuk aktifkan',
 
     // Dashboard
     dailyNutrition: 'Nutrisi Harian',
@@ -166,8 +167,9 @@ export const translations = {
     resetTitle: 'Reset Form?',
     resetMessage: 'All unsaved changes will be lost.',
     resetItem: 'Profile Form',
-    pregnancyMode: 'Pregnancy Mode Active',
+     pregnancyMode: 'Pregnancy Mode Active',
     breastfeedingMode: 'Breastfeeding Mode Active',
+    clickToActivate: 'Click to activate',
 
     // Dashboard
     dailyNutrition: 'Daily Nutrition',
