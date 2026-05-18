@@ -110,7 +110,7 @@ const Navbar = () => {
         
         {/* Logo */}
         <Link to="/" onClick={handleHomeClick} className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[var(--primary-green)] to-[var(--accent-blue)] p-2 shadow-lg shadow-emerald-500/20 flex items-center justify-center overflow-hidden">
+          <div className="w-10 h-10 rounded-2xl bg-[var(--primary-green)] p-2 shadow-lg shadow-emerald-500/20 flex items-center justify-center overflow-hidden">
             <img src="/icon.png" alt="NutriAI Logo" className="w-full h-full object-contain" />
           </div>
           <span className="text-xl font-extrabold tracking-tighter text-[var(--text-main)]">
@@ -138,7 +138,7 @@ const Navbar = () => {
         >
           {/* THE MAGIC SLIDING PILL (Snappy & Smooth) */}
           <div 
-            className="absolute h-[75%] bg-gradient-to-r from-[var(--primary-green)] to-[var(--accent-blue)] rounded-full transition-all duration-300 ease-out z-0 pointer-events-none"
+            className="absolute h-[75%] bg-[var(--primary-green)] rounded-full transition-all duration-300 ease-out z-0 pointer-events-none"
             style={{
               left: `${indicatorStyle.left}px`,
               width: `${indicatorStyle.width}px`,
