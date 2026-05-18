@@ -39,6 +39,7 @@ const FoodEntry = sequelize.define("FoodEntry", {
   protein: { type: DataTypes.FLOAT, allowNull: false },
   carbs: { type: DataTypes.FLOAT, allowNull: false },
   fat: { type: DataTypes.FLOAT, allowNull: false },
+  image_url: { type: DataTypes.TEXT('long'), allowNull: true, field: 'image_url' }
 }, {
   tableName: "food_entries",
   timestamps: true,

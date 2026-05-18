@@ -93,6 +93,7 @@ const normalizeStoredEntry = (entry) => {
     protein: normalizeNumber(entry.protein),
     carbs: normalizeNumber(entry.carbs),
     fat: normalizeNumber(entry.fat),
+    image_url: entry.image_url ?? entry.imageUrl ?? null,
     timestamp
   };
 };
@@ -338,14 +339,15 @@ export const NutritionProvider = ({ children }) => {
 
     const nutrition = estimateNutrition(foodData);
     const payload = {
-      meal_type: foodData.mealType,
-      food_name: foodData.foodName,
+      meal_type: foodData.mealType || foodData.meal_type || 'mixed',
+      food_name: foodData.foodName || foodData.food_name || 'Makanan',
       quantity: normalizeNumber(foodData.quantity),
-      unit: foodData.unit,
-      calories: nutrition.calories,
-      protein: nutrition.protein,
-      carbs: nutrition.carbs,
-      fat: nutrition.fat
+      unit: foodData.unit || 'portion',
+      calories: foodData.calories !== undefined ? normalizeNumber(foodData.calories) : nutrition.calories,
+      protein: foodData.protein !== undefined ? normalizeNumber(foodData.protein) : nutrition.protein,
+      carbs: foodData.carbs !== undefined ? normalizeNumber(foodData.carbs) : nutrition.carbs,
+      fat: foodData.fat !== undefined ? normalizeNumber(foodData.fat) : nutrition.fat,
+      image_url: foodData.image_url || null
     };
 
       const savedEntry = await nutritionService.addFoodEntry(payload);

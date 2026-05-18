@@ -221,6 +221,16 @@ const HistoryPage = () => {
                 </button>
               </div>
 
+              {selectedEntry.image_url && (
+                <div className="mb-8 overflow-hidden rounded-[2rem] max-h-[220px] border border-[var(--border-card)] flex justify-center items-center bg-black/5">
+                  <img 
+                    src={selectedEntry.image_url} 
+                    alt={selectedEntry.foodName} 
+                    className="max-h-[220px] w-full object-contain"
+                  />
+                </div>
+              )}
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
                 {[
                   { label: 'Calories', val: selectedEntry.calories, unit: 'kcal', color: 'bg-emerald-50 text-emerald-600', icon: '🔥' },

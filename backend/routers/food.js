@@ -27,7 +27,8 @@ router.post("/", authenticateToken, async (req, res) => {
       carbs, 
       fat, 
       quantity, 
-      unit 
+      unit,
+      image_url
     } = req.body;
 
     // Pastikan semua data wajib ada nilainya (fallback ke 0 atau default)
@@ -40,7 +41,8 @@ router.post("/", authenticateToken, async (req, res) => {
       carbs: parseFloat(carbs) || 0,
       fat: parseFloat(fat) || 0,
       quantity: parseFloat(quantity) || 1,
-      unit: unit || "porsi"
+      unit: unit || "porsi",
+      image_url: image_url || null
     });
 
     res.json(newEntry);

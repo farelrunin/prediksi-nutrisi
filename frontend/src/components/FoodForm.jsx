@@ -55,6 +55,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Add Food' }) => {
   // Camera & Upload States
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [imageBase64, setImageBase64] = useState('');
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [facingMode, setFacingMode] = useState('environment'); // default to back camera
   const videoRef = useRef(null);
@@ -151,6 +152,12 @@ const FoodForm = ({ onAddFood, submitLabel = 'Add Food' }) => {
       setPreviewUrl(url);
       setPredictionResult(null); // Reset previous results
       setPredictionError('');
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageBase64(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -165,6 +172,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Add Food' }) => {
       URL.revokeObjectURL(previewUrl);
       setPreviewUrl(null);
     }
+    setImageBase64('');
     setPredictionResult(null);
     setPredictionError('');
   };
@@ -268,7 +276,8 @@ const FoodForm = ({ onAddFood, submitLabel = 'Add Food' }) => {
           carbs: Number(predictionResult.carbs || 0),
           fat: Number(predictionResult.fat || 0),
           quantity: 1,
-          unit: 'portion'
+          unit: 'portion',
+          image_url: imageBase64
         };
 
         await onAddFood(finalData);
@@ -278,6 +287,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Add Food' }) => {
           URL.revokeObjectURL(previewUrl);
           setPreviewUrl(null);
         }
+        setImageBase64('');
         setPredictionResult(null);
         setPredictionError('');
         notify({ type: 'success', title: language === 'id' ? 'Data Tersimpan' : 'Data Saved', message: language === 'id' ? 'Nutrisi Anda telah dicatat!' : 'Your nutrition has been recorded!' });
