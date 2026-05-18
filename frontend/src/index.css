@@ -35,6 +35,8 @@
   --glass-bg: rgba(13, 27, 19, 0.7);
   --glass-border: rgba(27, 45, 36, 0.5);
   --glass-text: #E2E8F0;
+  --primary-green: #22C55E; /* Vibrant contrast green for dark mode */
+  --secondary-green: #4ADE80;
 }
 
 * {

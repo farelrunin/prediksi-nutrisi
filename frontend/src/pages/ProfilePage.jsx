@@ -696,7 +696,7 @@ const ProfilePage = () => {
                 </label>
               </div>
 
-              <h3 className="text-2xl font-bold text-[var(--text-main)] mb-1">{formData.fullName || 'User'}</h3>
+              <h2 className="text-2xl font-bold text-[var(--text-main)] mb-1">{formData.fullName || 'User'}</h2>
               <p className="text-xs font-semibold text-[var(--text-muted)] mb-8">{formData.email}</p>
 
               <div className="space-y-6 pt-8 border-t border-[var(--border-card)]/30 text-left">
@@ -768,8 +768,9 @@ const ProfilePage = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{t.fullName}</label>
+                    <label htmlFor="fullName" className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{t.fullName}</label>
                     <input
+                      id="fullName"
                       type="text" name="fullName" value={formData.fullName} onChange={handleChange}
                       maxLength="100"
                       className={`w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border text-[var(--text-main)] font-semibold outline-none transition-all ${errors.fullName ? 'border-rose-500 bg-rose-50' : 'border-transparent focus:border-[var(--primary-green)]'}`}
@@ -777,15 +778,17 @@ const ProfilePage = () => {
                     {errors.fullName && <p className="text-[10px] font-bold text-rose-500 ml-2 animate-pulse">{errors.fullName}</p>}
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{t.email}</label>
+                    <label htmlFor="email" className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{t.email}</label>
                     <input
+                      id="email"
                       type="email" name="email" value={formData.email} disabled
                       className="w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-card)] text-[var(--text-muted)] font-semibold opacity-60 cursor-not-allowed"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{t.gender}</label>
+                    <label htmlFor="gender" className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{t.gender}</label>
                     <select
+                      id="gender"
                       name="gender" value={formData.gender} onChange={handleChange}
                       className={`w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border text-[var(--text-main)] font-semibold outline-none transition-all appearance-none ${errors.gender ? 'border-rose-500 bg-rose-50' : 'border-transparent focus:border-[var(--primary-green)]'}`}
                     >
@@ -796,8 +799,9 @@ const ProfilePage = () => {
                     {errors.gender && <p className="text-[10px] font-bold text-rose-500 ml-2 animate-pulse">{errors.gender}</p>}
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{t.birthDate}</label>
+                    <label htmlFor="dateOfBirth" className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{t.birthDate}</label>
                     <input
+                      id="dateOfBirth"
                       type="date" 
                       name="dateOfBirth" 
                       value={formData.dateOfBirth} 
@@ -826,8 +830,9 @@ const ProfilePage = () => {
                     { label: t.sleep, name: 'sleepHours', val: formData.sleepHours, min: 0, max: 24, readOnly: false }
                   ].map((field) => (
                     <div key={field.name} className="space-y-2">
-                      <label className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] ml-1">{field.label}</label>
+                      <label htmlFor={field.name} className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] ml-1">{field.label}</label>
                       <input
+                        id={field.name}
                         type="number" name={field.name} value={field.val} onChange={handleChange}
                         min={field.min} max={field.max}
                         readOnly={field.readOnly}
@@ -899,8 +904,9 @@ const ProfilePage = () => {
                     { label: t.fat, name: 'targetFat', val: formData.targetFat, color: 'focus:border-[var(--danger)]', min: 0, max: 1000 }
                   ].map((field) => (
                     <div key={field.name} className="space-y-2">
-                      <label className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] ml-1">{field.label}</label>
+                      <label htmlFor={field.name} className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] ml-1">{field.label}</label>
                       <input
+                        id={field.name}
                         type="number" name={field.name} value={field.val} onChange={handleChange}
                         min={field.min} max={field.max}
                         className={`w-full px-4 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-transparent text-[var(--text-main)] font-extrabold text-center outline-none transition-all ${field.color}`}
@@ -910,8 +916,9 @@ const ProfilePage = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{t.nutritionGoal}</label>
+                  <label htmlFor="nutritionGoal" className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{t.nutritionGoal}</label>
                   <select
+                    id="nutritionGoal"
                     name="nutritionGoal" value={formData.nutritionGoal} onChange={handleChange}
                     className="w-full px-6 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-transparent text-[var(--text-main)] font-semibold focus:border-[var(--primary-green)] outline-none transition-all appearance-none"
                   >
