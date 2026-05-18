@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5173;
 const DIST = path.join(__dirname, 'dist');
 
 // ── Manual gzip middleware (no extra deps needed) ────────────────────────────
