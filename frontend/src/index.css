@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -13,8 +12,8 @@
   --bg-secondary: #F4F8F2;
   --bg-card: #FFFFFF;
   --border-card: #E2E8D5;
-  --primary-green: #22C55E;
-  --secondary-green: #16A34A;
+  --primary-green: #15803D; /* WCAG Compliant High Contrast Green */
+  --secondary-green: #166534;
   --accent-blue: #38BDF8;
   --text-main: #102A1C;
   --text-muted: #64748B;

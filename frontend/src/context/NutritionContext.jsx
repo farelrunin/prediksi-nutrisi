@@ -70,10 +70,13 @@ export const NutritionProvider = ({ children }) => {
   const [historyLoading, setHistoryLoading] = useState(false);
   const [historyError, setHistoryError] = useState(null);
 
-  // Load history from backend on mount
+  // Load history from backend on mount (only for authenticated users)
   React.useEffect(() => {
-    fetchHistory();
-    fetchTargets();
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetchHistory();
+      fetchTargets();
+    }
   }, []);
 
   const fetchTargets = async () => {

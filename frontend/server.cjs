@@ -1,10 +1,12 @@
 // Frontend production server — serves Vite dist with gzip + security headers
 // CommonJS (.cjs) to avoid ES Module conflicts with Vite's package.json "type":"module"
 const express = require('express');
+const compression = require('compression');
 const path = require('path');
 const fs = require('fs');
 
 const app = express();
+app.use(compression());
 const PORT = 5173;
 const DIST = path.join(__dirname, 'dist');
 
