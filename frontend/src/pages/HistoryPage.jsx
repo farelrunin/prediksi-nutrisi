@@ -162,41 +162,79 @@ const HistoryPage = () => {
 
                         {/* Items in Session */}
                         <div className="p-8 space-y-6">
-                          {sessionEntries.map((entry) => (
-                            <div key={entry.id} className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 last:pb-0 border-b border-[var(--border-card)]/30 last:border-0">
-                              <div 
-                                className="flex-1 min-w-0 cursor-pointer group/item"
-                                onClick={() => setSelectedEntry(entry)}
-                              >
-                                <p className="text-lg font-bold text-[var(--text-main)] truncate group-hover/item:text-[var(--primary-green)] transition-colors">{entry.foodName}</p>
-                                <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mt-1">
-                                  {entry.quantity} {entry.unit} • <span className="text-[var(--primary-green)]">{t.clickForDetails}</span>
-                                </p>
-                              </div>
-                              
-                              <div className="flex items-center gap-4 lg:gap-8 overflow-x-auto no-scrollbar pb-2 md:pb-0">
-                                {[
-                                  { label: 'KCAL', val: entry.calories, color: 'text-[var(--primary-green)]' },
-                                  { label: 'PROT', val: (entry.protein || 0) + 'g', color: 'text-[var(--accent-blue)]' },
-                                  { label: 'CARBS', val: (entry.carbs || 0) + 'g', color: 'text-[var(--warning)]' },
-                                  { label: 'FAT', val: (entry.fat || 0) + 'g', color: 'text-[var(--danger)]' }
-                                ].map((stat) => (
-                                  <div key={stat.label} className="text-center min-w-[50px]">
-                                    <div className={`text-base font-extrabold ${stat.color}`}>{stat.val}</div>
-                                    <div className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-widest">{stat.label}</div>
+                          {sessionEntries.map((entry) => {
+                            const isKalkulator = entry.unit && entry.unit.includes('(Kalkulator)');
+                            const cleanUnit = isKalkulator ? entry.unit.replace(' (Kalkulator)', '') : entry.unit;
+                            
+                            let sourceLabel = language === 'id' ? 'AI Cerita' : 'AI Story';
+                            let sourceBadgeColor = 'bg-blue-500/10 text-blue-500 border-blue-500/20';
+                            let sourceIcon = '✍️';
+                            
+                            if (isKalkulator) {
+                              sourceLabel = language === 'id' ? 'Kalkulator Mandiri' : 'Manual Calculator';
+                              sourceBadgeColor = 'bg-amber-500/10 text-amber-500 border-amber-500/20';
+                              sourceIcon = '🧮';
+                            } else if (entry.image_url) {
+                              sourceLabel = language === 'id' ? 'AI Kamera' : 'AI Camera';
+                              sourceBadgeColor = 'bg-purple-500/10 text-purple-500 border-purple-500/20';
+                              sourceIcon = '📷';
+                            }
+
+                            return (
+                              <div key={entry.id} className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 last:pb-0 border-b border-[var(--border-card)]/30 last:border-0">
+                                <div className="flex items-center gap-4 flex-1 min-w-0">
+                                  {/* Camera Photo Thumbnail if present */}
+                                  {entry.image_url && (
+                                    <div className="w-16 h-16 rounded-2xl overflow-hidden border border-[var(--border-card)] shadow-md flex-shrink-0 bg-black/5 flex items-center justify-center">
+                                      <img 
+                                        src={entry.image_url} 
+                                        alt={entry.foodName} 
+                                        className="w-full h-full object-cover" 
+                                      />
+                                    </div>
+                                  )}
+
+                                  <div 
+                                    className="flex-1 min-w-0 cursor-pointer group/item text-left"
+                                    onClick={() => setSelectedEntry(entry)}
+                                  >
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                      <p className="text-lg font-bold text-[var(--text-main)] truncate group-hover/item:text-[var(--primary-green)] transition-colors">{entry.foodName}</p>
+                                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border ${sourceBadgeColor}`}>
+                                        <span>{sourceIcon}</span>
+                                        <span>{sourceLabel}</span>
+                                      </span>
+                                    </div>
+                                    <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mt-1.5">
+                                      {entry.quantity} {cleanUnit} • <span className="text-[var(--primary-green)]">{t.clickForDetails}</span>
+                                    </p>
                                   </div>
-                                ))}
+                                </div>
                                 
-                                <button 
-                                  onClick={() => handleDeleteClick(entry)}
-                                  aria-label={`${t.delete} ${entry.foodName}`}
-                                  className="p-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-card)] text-[var(--danger)] hover:bg-[var(--danger)] hover:text-white transition-all shadow-md active:scale-95 ml-4"
-                                >
-                                  <Trash2 size={18} />
-                                </button>
+                                <div className="flex items-center gap-4 lg:gap-8 overflow-x-auto no-scrollbar pb-2 md:pb-0">
+                                  {[
+                                    { label: 'KCAL', val: Math.round(entry.calories), color: 'text-[var(--primary-green)]' },
+                                    { label: 'PROT', val: (entry.protein || 0).toFixed(1) + 'g', color: 'text-[var(--accent-blue)]' },
+                                    { label: 'CARBS', val: (entry.carbs || 0).toFixed(1) + 'g', color: 'text-[var(--warning)]' },
+                                    { label: 'FAT', val: (entry.fat || 0).toFixed(1) + 'g', color: 'text-[var(--danger)]' }
+                                  ].map((stat) => (
+                                    <div key={stat.label} className="text-center min-w-[50px]">
+                                      <div className={`text-base font-extrabold ${stat.color}`}>{stat.val}</div>
+                                      <div className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-widest">{stat.label}</div>
+                                    </div>
+                                  ))}
+                                  
+                                  <button 
+                                    onClick={() => handleDeleteClick(entry)}
+                                    aria-label={`${t.delete} ${entry.foodName}`}
+                                    className="p-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-card)] text-[var(--danger)] hover:bg-[var(--danger)] hover:text-white transition-all shadow-md active:scale-95 ml-4"
+                                  >
+                                    <Trash2 size={18} />
+                                  </button>
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       </div>
                     );
@@ -219,77 +257,102 @@ const HistoryPage = () => {
       />
 
       {/* Detail Popup Modal */}
-      {selectedEntry && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-300" onClick={() => setSelectedEntry(null)} />
-          <div className="relative w-full max-w-2xl bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[3rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
-            <div className="p-10">
-              <div className="flex justify-between items-start mb-8">
-                <div>
-                  <h3 className="text-3xl font-black text-[var(--text-main)]">{selectedEntry.foodName}</h3>
-                  <p className="text-sm font-bold text-[var(--text-muted)] uppercase tracking-widest mt-2">{selectedEntry.mealType} • {selectedEntry.quantity} {selectedEntry.unit}</p>
-                </div>
-                <button onClick={() => setSelectedEntry(null)} aria-label={t.close} className="p-3 rounded-2xl bg-[var(--bg-secondary)] text-[var(--text-muted)] hover:text-rose-500 transition-colors">
-                  <X size={20} />
-                </button>
-              </div>
+      {selectedEntry && (() => {
+        const isKalkulator = selectedEntry.unit && selectedEntry.unit.includes('(Kalkulator)');
+        const cleanUnit = isKalkulator ? selectedEntry.unit.replace(' (Kalkulator)', '') : selectedEntry.unit;
+        
+        let sourceLabel = language === 'id' ? 'AI Cerita' : 'AI Story';
+        let sourceBadgeColor = 'bg-blue-500/10 text-blue-500 border-blue-500/20';
+        let sourceIcon = '✍️';
+        
+        if (isKalkulator) {
+          sourceLabel = language === 'id' ? 'Kalkulator Mandiri' : 'Manual Calculator';
+          sourceBadgeColor = 'bg-amber-500/10 text-amber-500 border-amber-500/20';
+          sourceIcon = '🧮';
+        } else if (selectedEntry.image_url) {
+          sourceLabel = language === 'id' ? 'AI Kamera' : 'AI Camera';
+          sourceBadgeColor = 'bg-purple-500/10 text-purple-500 border-purple-500/20';
+          sourceIcon = '📷';
+        }
 
-              {selectedEntry.image_url && (
-                <div className="mb-8 overflow-hidden rounded-[2rem] max-h-[220px] border border-[var(--border-card)] flex justify-center items-center bg-black/5">
-                  <img 
-                    src={selectedEntry.image_url} 
-                    alt={selectedEntry.foodName} 
-                    className="max-h-[220px] w-full object-contain"
-                  />
-                </div>
-              )}
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-                {[
-                  { label: t.caloriesLabel, val: selectedEntry.calories, unit: 'kcal', color: 'bg-emerald-50 text-emerald-600', icon: '🔥' },
-                  { label: t.proteinLabel, val: selectedEntry.protein, unit: 'g', color: 'bg-blue-50 text-blue-600', icon: '🍗' },
-                  { label: t.carbsLabel, val: selectedEntry.carbs, unit: 'g', color: 'bg-amber-50 text-amber-600', icon: '🍞' },
-                  { label: t.fatLabel, val: selectedEntry.fat, unit: 'g', color: 'bg-rose-50 text-rose-600', icon: '🥑' }
-                ].map((n) => (
-                  <div key={n.label} className={`p-6 rounded-[2rem] ${n.color} border border-transparent hover:border-current/10 transition-all`}>
-                    <div className="text-2xl mb-2">{n.icon}</div>
-                    <div className="text-2xl font-black">{n.val}</div>
-                    <div className="text-[10px] font-black uppercase tracking-widest opacity-70">{n.label} ({n.unit})</div>
+        return (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-300" onClick={() => setSelectedEntry(null)} />
+            <div className="relative w-full max-w-2xl bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[3rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+              <div className="p-10 text-left">
+                <div className="flex justify-between items-start mb-8">
+                  <div>
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <h3 className="text-3xl font-black text-[var(--text-main)]">{selectedEntry.foodName}</h3>
+                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${sourceBadgeColor}`}>
+                        <span>{sourceIcon}</span>
+                        <span>{sourceLabel}</span>
+                      </span>
+                    </div>
+                    <p className="text-sm font-bold text-[var(--text-muted)] uppercase tracking-widest mt-2">{selectedEntry.mealType} • {selectedEntry.quantity} {cleanUnit}</p>
                   </div>
-                ))}
-              </div>
+                  <button onClick={() => setSelectedEntry(null)} aria-label={t.close} className="p-3 rounded-2xl bg-[var(--bg-secondary)] text-[var(--text-muted)] hover:text-rose-500 transition-colors">
+                    <X size={20} />
+                  </button>
+                </div>
 
-              <div className="space-y-6">
-                <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-muted)] border-b border-[var(--border-card)]/30 pb-4">{t.micronutrientsOthers}</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                {selectedEntry.image_url && (
+                  <div className="mb-8 overflow-hidden rounded-[2rem] max-h-[220px] border border-[var(--border-card)] flex justify-center items-center bg-black/5">
+                    <img 
+                      src={selectedEntry.image_url} 
+                      alt={selectedEntry.foodName} 
+                      className="max-h-[220px] w-full object-contain"
+                    />
+                  </div>
+                )}
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
                   {[
-                    { label: t.calcium, val: selectedEntry.calcium || '—', unit: 'mg' },
-                    { label: t.iron, val: selectedEntry.iron || '—', unit: 'mg' },
-                    { label: 'Vitamin A', val: selectedEntry.vitamin_a || '—', unit: 'IU' },
-                    { label: 'Vitamin C', val: selectedEntry.vitamin_c || '—', unit: 'mg' },
-                    { label: t.fiber, val: selectedEntry.fiber || '—', unit: 'g' },
-                    { label: t.sugar, val: selectedEntry.sugar || '—', unit: 'g' }
-                  ].map((m) => (
-                    <div key={m.label} className="flex justify-between items-center py-1">
-                      <span className="text-sm font-bold text-[var(--text-muted)]">{m.label}</span>
-                      <span className="text-sm font-black text-[var(--text-main)]">{m.val} <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase">{m.unit}</span></span>
+                    { label: t.caloriesLabel, val: Math.round(selectedEntry.calories), unit: 'kcal', color: 'bg-emerald-50 text-emerald-600', icon: '🔥' },
+                    { label: t.proteinLabel, val: (selectedEntry.protein || 0).toFixed(1), unit: 'g', color: 'bg-blue-50 text-blue-600', icon: '🍗' },
+                    { label: t.carbsLabel, val: (selectedEntry.carbs || 0).toFixed(1), unit: 'g', color: 'bg-amber-50 text-amber-600', icon: '🍞' },
+                    { label: t.fatLabel, val: (selectedEntry.fat || 0).toFixed(1), unit: 'g', color: 'bg-rose-50 text-rose-600', icon: '🥑' }
+                  ].map((n) => (
+                    <div key={n.label} className={`p-6 rounded-[2rem] ${n.color} border border-transparent hover:border-current/10 transition-all`}>
+                      <div className="text-2xl mb-2">{n.icon}</div>
+                      <div className="text-2xl font-black">{n.val}</div>
+                      <div className="text-[10px] font-black uppercase tracking-widest opacity-70">{n.label} ({n.unit})</div>
                     </div>
                   ))}
                 </div>
-              </div>
 
-              <div className="mt-12 pt-8 border-t border-slate-100 flex justify-end">
-                <button 
-                  onClick={() => setSelectedEntry(null)}
-                  className="px-8 py-4 rounded-2xl bg-[var(--text-main)] text-[var(--bg-card)] font-bold text-sm hover:scale-105 active:scale-100 transition-all"
-                >
-                  {t.close}
-                </button>
+                <div className="space-y-6">
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-muted)] border-b border-[var(--border-card)]/30 pb-4">{t.micronutrientsOthers}</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                    {[
+                      { label: t.calcium, val: selectedEntry.calcium || '—', unit: 'mg' },
+                      { label: t.iron, val: selectedEntry.iron || '—', unit: 'mg' },
+                      { label: 'Vitamin A', val: selectedEntry.vitamin_a || '—', unit: 'IU' },
+                      { label: 'Vitamin C', val: selectedEntry.vitamin_c || '—', unit: 'mg' },
+                      { label: t.fiber, val: selectedEntry.fiber || '—', unit: 'g' },
+                      { label: t.sugar, val: selectedEntry.sugar || '—', unit: 'g' }
+                    ].map((m) => (
+                      <div key={m.label} className="flex justify-between items-center py-1">
+                        <span className="text-sm font-bold text-[var(--text-muted)]">{m.label}</span>
+                        <span className="text-sm font-black text-[var(--text-main)]">{m.val} <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase">{m.unit}</span></span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-12 pt-8 border-t border-slate-100 flex justify-end">
+                  <button 
+                    onClick={() => setSelectedEntry(null)}
+                    className="px-8 py-4 rounded-2xl bg-[var(--text-main)] text-[var(--bg-card)] font-bold text-sm hover:scale-105 active:scale-100 transition-all text-white"
+                  >
+                    {t.close}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { 
-  Search, Info, CheckCircle2, XCircle, HeartPulse, Stethoscope, Droplets, 
-  Activity, Wind, Baby, Thermometer, AlertCircle, Apple, ChevronDown, 
+import {
+  Search, Info, CheckCircle2, XCircle, HeartPulse, Stethoscope, Droplets,
+  Activity, Wind, Baby, Thermometer, AlertCircle, Apple, ChevronDown,
   Target, Lightbulb, HelpCircle, BookOpen, AlertTriangle, Share2, Bookmark, ArrowLeft
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
@@ -17,7 +17,7 @@ const PanduanPage = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
-  const filteredConditions = healthConditions.filter(c => 
+  const filteredConditions = healthConditions.filter(c =>
     c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.scientificName.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -74,7 +74,7 @@ const PanduanPage = () => {
         title: selectedCondition.title,
         text: selectedCondition.description,
         url: window.location.href
-      }).catch(() => {});
+      }).catch(() => { });
     } else {
       navigator.clipboard.writeText(window.location.href);
       showToast(language === 'id' ? 'Tautan panduan disalin ke clipboard!' : 'Guide link copied to clipboard!');
@@ -98,7 +98,7 @@ const PanduanPage = () => {
     return (
       <div className="min-h-screen bg-[var(--bg-primary)] pt-44 pb-20 px-6 animate-in fade-in duration-500">
         <div className="max-w-5xl mx-auto">
-          
+
           {/* Animated Toast Notification */}
           {toastMessage && (
             <div className="fixed bottom-10 right-6 md:right-10 z-[200] bg-[var(--text-main)] text-[var(--bg-primary)] px-6 py-4 rounded-2xl font-black text-xs shadow-2xl flex items-center gap-3 animate-in slide-in-from-bottom-5 duration-300">
@@ -109,8 +109,8 @@ const PanduanPage = () => {
 
           {/* Breadcrumbs */}
           <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-8">
-            <button 
-              onClick={() => { setSelectedCondition(null); window.scrollTo(0, 0); }} 
+            <button
+              onClick={() => { setSelectedCondition(null); window.scrollTo(0, 0); }}
               className="hover:text-[var(--primary-green)] transition-colors"
             >
               {language === 'id' ? 'Panduan' : 'Guide'}
@@ -121,7 +121,7 @@ const PanduanPage = () => {
 
           {/* Premium Actions Bar */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 mb-12 pb-6 border-b border-[var(--border-card)]/30">
-            <button 
+            <button
               onClick={() => { setSelectedCondition(null); window.scrollTo(0, 0); }}
               className="flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-card)] text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] hover:text-[var(--text-main)] hover:border-[var(--primary-green)]/30 transition-all shadow-sm active:scale-95"
             >
@@ -129,14 +129,14 @@ const PanduanPage = () => {
               <span>{language === 'id' ? 'Kembali' : 'Back'}</span>
             </button>
             <div className="flex items-center gap-3">
-              <button 
+              <button
                 onClick={handleShare}
                 className="flex-1 sm:flex-none flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-card)] text-[10px] font-black uppercase tracking-widest text-[var(--text-main)] hover:border-[var(--primary-green)]/30 transition-all shadow-sm active:scale-95"
               >
                 <Share2 size={14} />
                 <span>Share</span>
               </button>
-              <button 
+              <button
                 onClick={handleSave}
                 className="flex-1 sm:flex-none flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl bg-[var(--primary-green)] text-white text-[10px] font-black uppercase tracking-widest hover:scale-105 hover:shadow-emerald-500/20 hover:shadow-lg transition-all active:scale-95"
               >
@@ -149,7 +149,7 @@ const PanduanPage = () => {
           {/* Condition Header Details (Premium Showcase matching the high-fidelity layout!) */}
           <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative overflow-hidden mb-12">
             <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--primary-green)]/5 rounded-full blur-3xl pointer-events-none" />
-            
+
             <div className="flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10">
               {/* Title, Alias, Description */}
               <div className="flex-grow space-y-4 max-w-2xl">
@@ -167,9 +167,9 @@ const PanduanPage = () => {
 
               {/* Cover Image */}
               <div className="w-full lg:w-[280px] h-48 lg:h-44 rounded-2xl overflow-hidden border border-[var(--border-card)] shadow-lg relative shrink-0">
-                <img 
-                  src={selectedCondition.image} 
-                  alt={selectedCondition.title} 
+                <img
+                  src={selectedCondition.image}
+                  alt={selectedCondition.title}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -194,10 +194,10 @@ const PanduanPage = () => {
 
           {/* Unified Two Columns Responsive Layout (Gejala, Makanan, Tips, Targets) */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-            
+
             {/* LEFT COLUMN: Main content (Gejala, Makanan, Tips) - Takes 2/3 on Desktop */}
             <div className="lg:col-span-2 space-y-8">
-              
+
               {/* Gejala & Tanda Grid */}
               <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2rem] p-8 shadow-sm">
                 <div className="flex items-center gap-3 mb-6">
@@ -294,7 +294,7 @@ const PanduanPage = () => {
 
             {/* RIGHT COLUMN: Sidebar (Target, Aksi Cepat, Referensi) - Takes 1/3 on Desktop */}
             <div className="space-y-8">
-              
+
               {/* Target Nutrisi Harian Widget */}
               <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2rem] p-6 shadow-sm space-y-4">
                 <h3 className="text-xs font-black uppercase tracking-widest text-[var(--text-main)] mb-2 flex items-center gap-2">
@@ -319,21 +319,21 @@ const PanduanPage = () => {
                   <span>⚡</span> {language === 'id' ? 'Aksi Cepat' : 'Quick Actions'}
                 </h3>
                 <div className="space-y-3 pt-3 border-t border-[var(--border-card)]/30">
-                  <button 
+                  <button
                     onClick={() => { setSelectedCondition(null); window.scrollTo(0, 0); }}
                     className="w-full text-left px-5 py-3.5 rounded-xl bg-[var(--bg-secondary)]/50 border border-[var(--border-card)] hover:border-[var(--primary-green)]/35 text-xs font-bold text-[var(--text-main)] transition-all flex items-center justify-between"
                   >
-                    <span>🔍 {language === 'id' ? 'Cari Makanan Sesuai' : 'Find Matching Food'}</span>
+                    <span>🔍 {language === 'id' ? ' Sesuai' : 'Find Matching Food'}</span>
                     <span>→</span>
                   </button>
-                  <button 
+                  <button
                     onClick={handleSave}
                     className="w-full text-left px-5 py-3.5 rounded-xl bg-[var(--bg-secondary)]/50 border border-[var(--border-card)] hover:border-[var(--primary-green)]/35 text-xs font-bold text-[var(--text-main)] transition-all flex items-center justify-between"
                   >
                     <span>📋 {language === 'id' ? 'Program Diri' : 'Self Program'}</span>
                     <span>→</span>
                   </button>
-                  <button 
+                  <button
                     onClick={handleSave}
                     className="w-full py-3.5 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-card)] hover:bg-[var(--primary-green)] hover:text-white hover:border-transparent text-xs font-black uppercase tracking-wider text-[var(--text-muted)] transition-all"
                   >
@@ -384,7 +384,7 @@ const PanduanPage = () => {
                 const isOpen = openFaqIndex === i;
                 return (
                   <div key={i} className="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-card)] overflow-hidden shadow-sm transition-all duration-300">
-                    <button 
+                    <button
                       onClick={() => setOpenFaqIndex(isOpen ? null : i)}
                       className="w-full p-6 text-left flex justify-between items-center font-extrabold text-[var(--text-main)] text-sm hover:text-[var(--primary-green)] transition-colors"
                     >
@@ -413,9 +413,9 @@ const PanduanPage = () => {
                   className="group text-left bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2rem] overflow-hidden hover:border-[var(--primary-green)]/35 hover:scale-[1.02] transition-all flex flex-col shadow-sm h-full"
                 >
                   <div className="h-28 w-full overflow-hidden relative shrink-0">
-                    <img 
-                      src={condition.image} 
-                      alt={condition.title} 
+                    <img
+                      src={condition.image}
+                      alt={condition.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -460,9 +460,9 @@ const PanduanPage = () => {
           <div className="absolute inset-0 bg-[var(--primary-green)]/10 blur-xl group-focus-within:bg-[var(--primary-green)]/20 transition-all rounded-full" />
           <div className="relative flex items-center bg-[var(--bg-card)] border border-[var(--border-card)] rounded-3xl px-8 py-5 shadow-2xl">
             <Search className="text-[var(--primary-green)] mr-4" size={24} />
-            <input 
+            <input
               type="text"
-              placeholder={language === 'id' ? 'Cari kondisi kesehatan (Diabetes, GERD, Hipertensi...)' : 'Search health conditions (Diabetes, GERD, Hypertension...)'}
+              placeholder={language === 'id' ? 'Cari kondisi kesehatan' : 'Search health conditions'}
               className="bg-transparent w-full outline-none text-[var(--text-main)] font-bold text-lg placeholder-slate-600"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -476,7 +476,7 @@ const PanduanPage = () => {
         {/* Grid Conditions */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredConditions.map((condition) => (
-            <button 
+            <button
               key={condition.id}
               aria-label={`${language === 'id' ? 'Lihat panduan' : 'View guide for'} ${condition.title}`}
               onClick={() => {
@@ -488,9 +488,9 @@ const PanduanPage = () => {
             >
               {/* Card Image Header with Icon Overlay */}
               <div className="relative h-52 w-full overflow-hidden shrink-0">
-                <img 
-                  src={condition.image} 
-                  alt={condition.title} 
+                <img
+                  src={condition.image}
+                  alt={condition.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                   loading="lazy"
                 />

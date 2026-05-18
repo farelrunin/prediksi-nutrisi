@@ -585,7 +585,7 @@ const FoodForm = ({ onAddFood }) => {
           foodName: item.name,
           mealType: item.mealType,
           quantity: Number(item.quantity),
-          unit: item.unit,
+          unit: `${item.unit} (Kalkulator)`,
           calories: Number(item.calories),
           protein: Number(item.protein),
           carbs: Number(item.carbs),
@@ -1024,7 +1024,7 @@ const FoodForm = ({ onAddFood }) => {
                   type="text" 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={language === 'id' ? 'Cari makanan dalam dataset (nasi, ayam, bayam...)' : 'Search foods in dataset (rice, chicken, spinach...)'}
+                  placeholder={language === 'id' ? 'Cari makanan dalam dataset' : 'Search foods in dataset '}
                   className="flex-grow bg-[var(--bg-primary)] border border-[var(--border-card)] rounded-2xl px-6 py-4 text-[var(--text-main)] outline-none focus:border-[var(--primary-green)] shadow-inner font-semibold text-sm"
                 />
                 <button 
