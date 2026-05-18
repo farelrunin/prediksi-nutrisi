@@ -230,10 +230,10 @@ export const getHealthConditions = (language) => [
   },
   {
     id: 'gerd',
-    title: 'GERD',
+    title: language === 'id' ? 'Asam Lambung (GERD)' : 'GERD (Acid Reflux)',
     scientificName: 'Gastroesophageal Reflux Disease (Penyakit Refluks Asam Lambung)',
     icon: <Wind className="text-emerald-500" />,
-    image: 'https://images.unsplash.com/photo-1517686469429-8faf88b9f7af?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80',
     description: language === 'id' ? 'Penyakit kronis di mana isi lambung mengalir kembali ke kerongkongan, menyebabkan gejala yang tidak nyaman seperti heartburn.' : 'A condition where stomach contents flow back into the esophagus, causing a burning sensation (heartburn).',
     symptoms: language === 'id' ? 
       ['Sensasi terbakar di dada (heartburn)', 'Rasa asam di mulut', 'Suara serak', 'Batuk kering kronis', 'Kesulitan menelan'] : 
