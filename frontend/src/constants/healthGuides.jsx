@@ -9,7 +9,7 @@ export const getHealthConditions = (language) => [
     title: language === 'id' ? 'Anemia (Kurang Darah)' : 'Anemia',
     scientificName: 'Anemia Defisiensi Besi',
     icon: <Droplets className="text-red-500" />,
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=400&q=70',
     description: language === 'id' ? 'Kondisi di mana tubuh kekurangan sel darah merah sehat untuk membawa oksigen ke seluruh jaringan tubuh akibat kekurangan zat besi.' : 'A condition in which the body lacks healthy red blood cells to carry sufficient oxygen to the body\'s tissues due to iron deficiency.',
     symptoms: language === 'id' ? 
       ['Kelelahan ekstrem', 'Kulit pucat', 'Tangan & kaki dingin', 'Pusing atau kliyengan', 'Sesak napas saat aktivitas ringan'] : 
@@ -46,7 +46,7 @@ export const getHealthConditions = (language) => [
     title: language === 'id' ? 'Asam Urat' : 'Gout',
     scientificName: 'Gouty Arthritis (Hyperuricemia)',
     icon: <HeartPulse className="text-purple-500" />,
-    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=400&q=70',
     description: language === 'id' ? 'Peradangan sendi yang menyakitkan yang disebabkan oleh penumpukan kristal monosodium urat di sendi.' : 'A painful inflammatory arthritis caused by the buildup of monosodium urate crystals in the joints.',
     symptoms: language === 'id' ? 
       ['Nyeri sendi mendadak dan parah', 'Sendi bengkak dan merah', 'Sensasi panas di area sendi', 'Kekakuan sendi di pagi hari'] : 
@@ -83,7 +83,7 @@ export const getHealthConditions = (language) => [
     title: language === 'id' ? 'Batu Empedu (Kolelitiasis)' : 'Gallstones',
     scientificName: 'Cholelithiasis',
     icon: <Activity className="text-yellow-600" />,
-    image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=70',
     description: language === 'id' ? 'Kondisi terbentuknya endapan cairan pencernaan yang mengeras di kantong empedu Anda akibat penumpukan kolesterol atau bilirubin.' : 'Hardened deposits of digestive fluid that can form in your gallbladder due to cholesterol or bilirubin buildup.',
     symptoms: language === 'id' ? 
       ['Nyeri hebat di perut kanan atas', 'Mual dan muntah setelah makan berlemak', 'Nyeri punggung di antara tulang belikat', 'Nyeri di bahu kanan'] : 
@@ -120,7 +120,7 @@ export const getHealthConditions = (language) => [
     title: language === 'id' ? 'Batu Ginjal (Nefrolitiasis)' : 'Kidney Stones',
     scientificName: 'Nephrolitiasis',
     icon: <Stethoscope className="text-blue-600" />,
-    image: 'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=400&q=70',
     description: language === 'id' ? 'Terbentuknya materi keras menyerupai batu di dalam ginjal akibat limbah zat dalam darah yang menumpuk dan mengkristal.' : 'Hard deposits made of minerals and salts that form inside your kidneys when urine becomes highly concentrated.',
     symptoms: language === 'id' ? 
       ['Nyeri tajam di sisi atau punggung', 'Nyeri saat buang air kecil', 'Urine keruh atau kemerahan', 'Mual dan muntah'] : 
@@ -157,7 +157,7 @@ export const getHealthConditions = (language) => [
     title: language === 'id' ? 'Diabetes' : 'Diabetes',
     scientificName: 'Diabetes Mellitus',
     icon: <Droplets className="text-orange-500" />,
-    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=70',
     description: language === 'id' ? 'Diabetes Mellitus adalah penyakit metabolik kronis yang ditandai dengan hiperglikemia (gula darah tinggi) akibat gangguan produksi/penggunaan insulin.' : 'A chronic metabolic disease characterized by high blood sugar due to failure in insulin production or effective use.',
     symptoms: language === 'id' ? 
       ['Sering haus (polidipsia)', 'Sering buang air kecil, terutama malam hari', 'Pandangan kabur', 'Luka sulit sembuh', 'Penurunan berat badan drastis tanpa sebab'] : 
@@ -196,7 +196,7 @@ export const getHealthConditions = (language) => [
     title: language === 'id' ? 'Gagal Ginjal Kronis' : 'Chronic Kidney Disease',
     scientificName: 'Chronic Kidney Disease (CKD)',
     icon: <Activity className="text-blue-800" />,
-    image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=400&q=70',
     description: language === 'id' ? 'Kondisi penurunan fungsi ginjal secara bertahap dalam menyaring limbah dan cairan dari darah. Diet ginjal ketat sangat dibutuhkan untuk mencegah uremia.' : "A gradual loss of kidney function over time, affecting the body's ability to filter waste from the blood.",
     symptoms: language === 'id' ? 
       ['Pembengkakan di tangan/kaki (edema)', 'Sesak napas', 'Gatal-gatal kronis', 'Urine berbusa', 'Nafsu makan menurun'] : 
@@ -233,7 +233,7 @@ export const getHealthConditions = (language) => [
     title: language === 'id' ? 'Asam Lambung (GERD)' : 'GERD (Acid Reflux)',
     scientificName: 'Gastroesophageal Reflux Disease (Penyakit Refluks Asam Lambung)',
     icon: <Wind className="text-emerald-500" />,
-    image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=400&q=70',
     description: language === 'id' ? 'Penyakit kronis di mana isi lambung mengalir kembali ke kerongkongan, menyebabkan gejala yang tidak nyaman seperti heartburn.' : 'A condition where stomach contents flow back into the esophagus, causing a burning sensation (heartburn).',
     symptoms: language === 'id' ? 
       ['Sensasi terbakar di dada (heartburn)', 'Rasa asam di mulut', 'Suara serak', 'Batuk kering kronis', 'Kesulitan menelan'] : 
@@ -270,7 +270,7 @@ export const getHealthConditions = (language) => [
     title: 'Hipertensi',
     scientificName: 'Hipertensi (Tekanan Darah Tinggi)',
     icon: <HeartPulse className="text-red-600" />,
-    image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=400&q=70',
     description: language === 'id' ? 'Hipertensi adalah kondisi medis kronis di mana tekanan darah arteri meningkat secara persisten (>130/80 mmHg). Batasi natrium untuk menjaga stabilitas jantung.' : 'A chronic condition where the arterial blood pressure is persistently elevated (>130/80 mmHg).',
     symptoms: language === 'id' ? 
       ['Sakit kepala parah', 'Kelelahan atau kebingungan', 'Masalah penglihatan', 'Nyeri dada', 'Detak jantung tidak teratur'] : 
@@ -307,7 +307,7 @@ export const getHealthConditions = (language) => [
     title: 'Hipotensi (Darah Rendah)',
     scientificName: 'Hipotensi',
     icon: <Droplets className="text-pink-400" />,
-    image: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=400&q=70',
     description: language === 'id' ? 'Kondisi tekanan darah di bawah 90/60 mmHg. Berbeda dengan hipertensi yang butuh pantang garam, penderita hipotensi memerlukan asupan cairan dan garam terukur.' : 'A condition where blood pressure is below normal (90/60 mmHg), which can cause dizziness or fainting.',
     symptoms: language === 'id' ? 
       ['Pusing atau kliyengan', 'Pandangan kabur', 'Mual', 'Pingsan (sinkop)', 'Kurang konsentrasi'] : 
@@ -344,7 +344,7 @@ export const getHealthConditions = (language) => [
     title: 'Ibu Hamil',
     scientificName: 'Kehamilan (Pregnancy)',
     icon: <Baby className="text-pink-500" />,
-    image: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=400&q=70',
     description: language === 'id' ? 'Masa kehamilan membutuhkan peningkatan nutrisi spesifik untuk mendukung pertumbuhan janin dan mencegah anemia defisiensi besi pada ibu.' : 'Pregnancy requires specific nutrients to support fetal growth and maternal health.',
     symptoms: language === 'id' ? 
       ['Morning sickness', 'Kelelahan', 'Sering buang air kecil', 'Perubahan nafsu makan', 'Kram perut'] : 
@@ -381,7 +381,7 @@ export const getHealthConditions = (language) => [
     title: 'Ibu Menyusui',
     scientificName: 'Masa Menyusui (Laktasi)',
     icon: <Baby className="text-blue-400" />,
-    image: 'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=400&q=70',
     description: language === 'id' ? 'Fase menyusui membutuhkan kalori dan cairan lebih banyak daripada masa kehamilan untuk memproduksi air susu ibu yang bernutrisi lengkap.' : 'The breastfeeding phase requires more calories and fluids for quality milk production.',
     symptoms: language === 'id' ? 
       ['Rasa haus berlebih', 'Sering lapar', 'Payudara terasa penuh', 'Kelelahan'] : 
@@ -418,7 +418,7 @@ export const getHealthConditions = (language) => [
     title: 'Intoleransi Laktosa',
     scientificName: 'Intoleransi Laktosa (Lactose Intolerance)',
     icon: <AlertCircle className="text-orange-400" />,
-    image: 'https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=400&q=70',
     description: language === 'id' ? 'Ketidakmampuan tubuh mencerna laktosa (gula alami dalam susu) karena kekurangan enzim laktase di usus halus. Konsumsi alternatif susu non-diary.' : 'The inability to fully digest lactose (the sugar in milk) due to a deficiency of the lactase enzyme.',
     symptoms: language === 'id' ? 
       ['Perut kembung & gas', 'Diare setelah minum susu', 'Sering buang angin', 'Kram perut'] : 
@@ -455,7 +455,7 @@ export const getHealthConditions = (language) => [
     title: 'Kolesterol Tinggi',
     scientificName: 'Hiperkolesterolemia (Dislipidemia)',
     icon: <HeartPulse className="text-emerald-600" />,
-    image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=400&q=70',
     description: language === 'id' ? 'Kondisi gangguan metabolisme lipid di mana kadar LDL (kolesterol jahat) dan trigliserida dalam darah melebihi batas aman, meningkatkan risiko penyakit jantung.' : 'A lipid metabolic disorder characterized by elevated levels of LDL (bad cholesterol) and triglycerides in the blood, increasing the risk of cardiovascular disease.',
     symptoms: language === 'id' ? 
       ['Sering pegal di pundak atau leher', 'Mudah mengantuk', 'Kesemutan di kaki & tangan', 'Nyeri dada ringan (jika pembuluh menyempit)'] : 
@@ -492,7 +492,7 @@ export const getHealthConditions = (language) => [
     title: 'Maag (Gastritis)',
     scientificName: 'Gastritis / Dispepsia',
     icon: <Thermometer className="text-red-400" />,
-    image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=400&q=70',
     description: language === 'id' ? 'Peradangan, iritasi, atau pengikisan pada lapisan dinding lambung. Berbeda dengan GERD (asam naik ke kerongkongan), maag berfokus pada lambung.' : 'Inflammation of the lining of the stomach causing heartburn and abdominal pain.',
     symptoms: language === 'id' ? 
       ['Nyeri ulu hati atau perih', 'Perut kembung', 'Mual & muntah', 'Cepat merasa kenyang saat makan'] : 
@@ -529,7 +529,7 @@ export const getHealthConditions = (language) => [
     title: 'Tipes (Demam Tifoid)',
     scientificName: 'Demam Tifoid (Typhoid Fever)',
     icon: <AlertCircle className="text-red-700" />,
-    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=70',
     description: language === 'id' ? 'Penyakit infeksi akut pada saluran pencernaan (usus halus) yang disebabkan oleh bakteri Salmonella typhi. Butuh makanan lunak rendah serat.' : 'An infection of the digestive tract by Salmonella typhi bacteria attacking the small intestine.',
     symptoms: language === 'id' ? 
       ['Demam tinggi (meningkat di malam hari)', 'Sakit perut parah', 'Diare atau sembelit', 'Lidah kotor (selaput putih)', 'Mual & lemas'] : 
