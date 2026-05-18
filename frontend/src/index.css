@@ -12,8 +12,8 @@
   --bg-secondary: #F4F8F2;
   --bg-card: #FFFFFF;
   --border-card: #E2E8D5;
-  --primary-green: #15803D; /* WCAG Compliant High Contrast Green */
-  --secondary-green: #166534;
+  --primary-green: #166534; /* Perfect High Contrast Green (6.5:1 ratio) */
+  --secondary-green: #14532D;
   --accent-blue: #38BDF8;
   --text-main: #102A1C;
   --text-muted: #64748B;
