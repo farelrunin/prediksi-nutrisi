@@ -150,6 +150,12 @@ router.get("/system-stats", authenticateToken, async (req, res) => {
     // Ambil list semua user terdaftar
     const users = await User.findAll({
       attributes: ["id", "name", "email", "gender", "created_at"],
+      include: [
+        {
+          model: FoodEntry,
+          attributes: ["id"]
+        }
+      ],
       order: [["created_at", "DESC"]]
     });
 

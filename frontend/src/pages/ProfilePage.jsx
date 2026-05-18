@@ -1057,24 +1057,41 @@ const ProfilePage = () => {
                               <th className="py-4 px-6">Name</th>
                               <th className="py-4 px-6">Email</th>
                               <th className="py-4 px-6">Gender</th>
+                              <th className="py-4 px-6">Gemini AI Usage</th>
                               <th className="py-4 px-6">Joined Date</th>
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-[var(--border-card)]/30 text-xs font-semibold text-[var(--text-main)] bg-[var(--bg-card)]">
-                            {adminStats.users.map((u) => (
-                              <tr key={u.id} className="hover:bg-[var(--primary-green)]/5 transition-colors">
-                                <td className="py-4 px-6 font-bold">{u.name}</td>
-                                <td className="py-4 px-6 text-[var(--text-muted)]">{u.email}</td>
-                                <td className="py-4 px-6 capitalize">{u.gender || '-'}</td>
-                                <td className="py-4 px-6 text-[var(--text-muted)]">
-                                  {new Date(u.created_at || Date.now()).toLocaleDateString('id-ID', {
-                                    year: 'numeric',
-                                    month: 'short',
-                                    day: 'numeric'
-                                  })}
-                                </td>
-                              </tr>
-                            ))}
+                            {adminStats.users.map((u) => {
+                              const foodCount = u.FoodEntries ? u.FoodEntries.length : 0;
+                              const estTokens = foodCount * 850;
+                              return (
+                                <tr key={u.id} className="hover:bg-[var(--primary-green)]/5 transition-colors">
+                                  <td className="py-4 px-6 font-bold">{u.name}</td>
+                                  <td className="py-4 px-6 text-[var(--text-muted)]">{u.email}</td>
+                                  <td className="py-4 px-6 capitalize">{u.gender || '-'}</td>
+                                  <td className="py-4 px-6 font-black text-emerald-500">
+                                    {estTokens > 0 ? (
+                                      <span>
+                                        {estTokens.toLocaleString('id-ID')} <span className="text-[9px] font-bold text-[var(--text-muted)]">Tokens</span>
+                                        <span className="text-[10px] text-[var(--text-muted)] block font-bold uppercase tracking-tight">
+                                          ({foodCount} {foodCount === 1 ? 'call' : 'calls'})
+                                        </span>
+                                      </span>
+                                    ) : (
+                                      <span className="text-[10px] text-[var(--text-muted)] font-bold">-</span>
+                                    )}
+                                  </td>
+                                  <td className="py-4 px-6 text-[var(--text-muted)]">
+                                    {new Date(u.created_at || Date.now()).toLocaleDateString('id-ID', {
+                                      year: 'numeric',
+                                      month: 'short',
+                                      day: 'numeric'
+                                    })}
+                                  </td>
+                                </tr>
+                              );
+                            })}
                           </tbody>
                         </table>
                       </div>
