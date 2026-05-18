@@ -13,6 +13,21 @@ const model = genAI.getGenerativeModel({
   ]
 });
 
+// Cache in-memory untuk meminimalkan pemanggilan berulang ke Gemini
+const recsCache = new Map();
+const storyCache = new Map();
+
+// Bersihkan cache secara berkala agar ram tidak bengkak
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, value] of recsCache.entries()) {
+    if (now - value.timestamp > 15 * 60 * 1000) recsCache.delete(key);
+  }
+  for (const [key, value] of storyCache.entries()) {
+    if (now - value.timestamp > 30 * 60 * 1000) storyCache.delete(key);
+  }
+}, 5 * 60 * 1000);
+
 const getAiAdvice = async (foodData, userProfile) => {
   const prompt = `
     Bertindaklah sebagai Pakar Nutrisi Profesional Indonesia yang kritis dan peduli kesehatan.
@@ -39,7 +54,10 @@ const getAiAdvice = async (foodData, userProfile) => {
   `;
 
   try {
-    const result = await model.generateContent(prompt);
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig: { maxOutputTokens: 200 } // Limit output tokens
+    });
     const response = await result.response;
     return response.text().trim();
   } catch (error) {
@@ -55,6 +73,13 @@ const getAiRecommendations = async (historyData, profileData) => {
     foods: ["Air Putih", "Sayur"], type: "energy"
   }];
 
+  const cacheKey = JSON.stringify({ history: historyData.slice(0, 5), profile: profileData });
+  const cached = recsCache.get(cacheKey);
+  if (cached && (Date.now() - cached.timestamp < 15 * 60 * 1000)) {
+    console.log("⚡ [Cache Hit] Menggunakan rekomendasi ter-cache untuk menghemat token Gemini!");
+    return cached.data;
+  }
+
   const prompt = `
     Anda adalah ahli gizi AI profesional. Berikan 3 rekomendasi nutrisi JSON untuk profil ${JSON.stringify(profileData)} dan riwayat ${JSON.stringify(historyData.slice(0, 5))}.
     Jika ada asupan ekstrem (>5000 kkal), berikan peringatan medis sebagai rekomendasi pertama (priority high).
@@ -65,10 +90,17 @@ const getAiRecommendations = async (historyData, profileData) => {
   `;
 
   try {
-    const result = await model.generateContent(prompt);
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig: { maxOutputTokens: 350 } // Limit JSON response size
+    });
     const response = await result.response;
     const text = response.text().replace(/```json/g, '').replace(/```/g, '').trim();
-    return JSON.parse(text);
+    const parsed = JSON.parse(text);
+    
+    // Simpan ke cache
+    recsCache.set(cacheKey, { data: parsed, timestamp: Date.now() });
+    return parsed;
   } catch (error) {
     console.error("Error Gemini Recommendations:", error);
     return fallback;
@@ -76,6 +108,13 @@ const getAiRecommendations = async (historyData, profileData) => {
 };
 
 const parseNaturalLanguageFood = async (text) => {
+  const cacheKey = text.trim().toLowerCase();
+  const cached = storyCache.get(cacheKey);
+  if (cached && (Date.now() - cached.timestamp < 30 * 60 * 1000)) {
+    console.log("⚡ [Cache Hit] Teks cerita sama persis terdeteksi, menggunakan analisis ter-cache!");
+    return cached.data;
+  }
+
   const prompt = `
     TUGAS: Ekstrak data nutrisi dari teks cerita user dalam bahasa Indonesia.
     INSTRUKSI KHUSUS: 
@@ -98,7 +137,10 @@ const parseNaturalLanguageFood = async (text) => {
   `;
 
   try {
-    const result = await model.generateContent(prompt);
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig: { maxOutputTokens: 400 } // Limit response size
+    });
     const response = await result.response;
     const rawText = response.text().trim();
     
@@ -106,7 +148,6 @@ const parseNaturalLanguageFood = async (text) => {
     console.log(rawText);
     console.log("---------------------------");
 
-    // Cari bagian yang berbentuk JSON (di antara kurung kurawal)
     const jsonMatch = rawText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
       console.error("Gemini tidak mengembalikan format JSON!");
@@ -116,19 +157,16 @@ const parseNaturalLanguageFood = async (text) => {
     const cleanedJson = jsonMatch[0];
     const parsed = JSON.parse(cleanedJson);
     
-    // Pastikan struktur dasar ada
     if (!parsed.total_nutrition) {
       console.error("Struktur JSON tidak lengkap!");
       return null;
     }
 
+    // Simpan ke cache
+    storyCache.set(cacheKey, { data: parsed, timestamp: Date.now() });
     return parsed;
   } catch (error) {
     console.error("Error Detail Gemini Service:", error);
-    // Log error spesifik dari API Google
-    if (error.response) {
-      console.error("Gemini API Response Error:", error.response);
-    }
     return null;
   }
 };
@@ -167,7 +205,10 @@ const analyzeFoodImage = async (imageBuffer, mimeType, userProfile = {}) => {
   `;
 
   try {
-    const result = await model.generateContent([prompt, imagePart]);
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: prompt }, imagePart] }],
+      generationConfig: { maxOutputTokens: 500 } // Limit response size
+    });
     const response = await result.response;
     const rawText = response.text().trim();
     
@@ -175,7 +216,6 @@ const analyzeFoodImage = async (imageBuffer, mimeType, userProfile = {}) => {
     console.log(rawText);
     console.log("---------------------------------");
 
-    // Cari bagian yang berbentuk JSON (di antara kurung kurawal)
     const jsonMatch = rawText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
       console.error("Gemini tidak mengembalikan format JSON untuk analisis gambar!");
@@ -185,7 +225,6 @@ const analyzeFoodImage = async (imageBuffer, mimeType, userProfile = {}) => {
     const cleanedJson = jsonMatch[0];
     const parsed = JSON.parse(cleanedJson);
     
-    // Pastikan struktur dasar ada
     if (!parsed.total_nutrition) {
       console.error("Struktur JSON tidak lengkap untuk analisis gambar!");
       return null;

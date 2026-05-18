@@ -153,9 +153,38 @@ const FoodForm = ({ onAddFood, submitLabel = 'Add Food' }) => {
       setPredictionResult(null); // Reset previous results
       setPredictionError('');
 
+      // Kompres gambar menjadi maksimal 640px sebelum dikonversi ke Base64 & dikirim
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageBase64(reader.result);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const max_size = 640;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > max_size) {
+              height *= max_size / width;
+              width = max_size;
+            }
+          } else {
+            if (height > max_size) {
+              width *= max_size / height;
+              height = max_size;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Gunakan kompresi JPEG 75% berkualitas tinggi namun sangat hemat token & bandwidth
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.75);
+          setImageBase64(compressedBase64);
+        };
+        img.src = event.target.result;
       };
       reader.readAsDataURL(file);
     }
