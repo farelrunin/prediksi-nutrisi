@@ -7,41 +7,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { translations } from '../constants/translations';
 import { useNutrition } from '../context/useNutrition';
 import { useNotification } from '../context/useNotification';
-
-const FOOD_DATABASE = [
-  { id: 'dada-ayam', name: 'Dada Ayam (dimasak)', category: 'protein', categoryLabelId: 'Protein', calories: 165, protein: 31, carbs: 0, fat: 3.6, baseServing: 100, unit: 'g' },
-  { id: 'salmon', name: 'Salmon, Atlantik (dimasak)', category: 'protein', categoryLabelId: 'Protein', calories: 206, protein: 22.1, carbs: 0, fat: 12.4, baseServing: 100, unit: 'g' },
-  { id: 'daging-sapi', name: 'Daging Sapi Giling (85% tanpa lemak, dimasak)', category: 'protein', categoryLabelId: 'Protein', calories: 218, protein: 24.2, carbs: 0, fat: 13, baseServing: 100, unit: 'g' },
-  { id: 'tahu', name: 'Tahu, keras', category: 'protein', categoryLabelId: 'Protein', calories: 76, protein: 8, carbs: 2, fat: 4.2, baseServing: 100, unit: 'g' },
-  { id: 'telur', name: 'Telur (utuh, besar)', category: 'protein', categoryLabelId: 'Protein', calories: 72, protein: 6.3, carbs: 0.4, fat: 5, baseServing: 50, unit: 'g' },
-  { id: 'lentil', name: 'Lentil (dimasak)', category: 'protein', categoryLabelId: 'Protein', calories: 116, protein: 9, carbs: 20, fat: 0.4, baseServing: 100, unit: 'g' },
-  { id: 'nasi-merah', name: 'Nasi Merah (dimasak)', category: 'biji-bijian', categoryLabelId: 'Biji-bijian', calories: 112, protein: 2.6, carbs: 23.5, fat: 0.9, baseServing: 100, unit: 'g' },
-  { id: 'nasi-putih', name: 'Nasi Putih (dimasak)', category: 'biji-bijian', categoryLabelId: 'Biji-bijian', calories: 130, protein: 2.7, carbs: 28.2, fat: 0.3, baseServing: 100, unit: 'g' },
-  { id: 'quinoa', name: 'Quinoa (dimasak)', category: 'biji-bijian', categoryLabelId: 'Biji-bijian', calories: 120, protein: 4.4, carbs: 21.3, fat: 1.9, baseServing: 100, unit: 'g' },
-  { id: 'roti-gandum', name: 'Roti Gandum Utuh', category: 'biji-bijian', categoryLabelId: 'Biji-bijian', calories: 247, protein: 10.5, carbs: 46, fat: 3.4, baseServing: 100, unit: 'g' },
-  { id: 'roti-putih', name: 'Roti Putih', category: 'biji-bijian', categoryLabelId: 'Biji-bijian', calories: 266, protein: 8.2, carbs: 49.2, fat: 3.2, baseServing: 100, unit: 'g' },
-  { id: 'pasta', name: 'Pasta (dimasak)', category: 'biji-bijian', categoryLabelId: 'Biji-bijian', calories: 158, protein: 5.8, carbs: 31, fat: 0.9, baseServing: 100, unit: 'g' },
-  { id: 'brokoli', name: 'Brokoli (dimasak)', category: 'sayuran', categoryLabelId: 'Sayuran', calories: 35, protein: 2.4, carbs: 7.2, fat: 0.4, baseServing: 100, unit: 'g' },
-  { id: 'bayam', name: 'Bayam (dimasak)', category: 'sayuran', categoryLabelId: 'Sayuran', calories: 23, protein: 2.9, carbs: 3.8, fat: 0.4, baseServing: 100, unit: 'g' },
-  { id: 'wortel', name: 'Wortel (dimasak)', category: 'sayuran', categoryLabelId: 'Sayuran', calories: 35, protein: 0.8, carbs: 8.2, fat: 0.2, baseServing: 100, unit: 'g' },
-  { id: 'ubi-jalar', name: 'Ubi Jalar (panggang)', category: 'sayuran', categoryLabelId: 'Sayuran', calories: 90, protein: 2, carbs: 20.7, fat: 0.2, baseServing: 100, unit: 'g' },
-  { id: 'tomat', name: 'Tomat (mentah)', category: 'sayuran', categoryLabelId: 'Sayuran', calories: 18, protein: 0.9, carbs: 3.9, fat: 0.2, baseServing: 100, unit: 'g' },
-  { id: 'paprika', name: 'Paprika (mentah)', category: 'sayuran', categoryLabelId: 'Sayuran', calories: 31, protein: 1, carbs: 6, fat: 0.3, baseServing: 100, unit: 'g' },
-  { id: 'apel', name: 'Apel (dengan kulit)', category: 'buah-buahan', categoryLabelId: 'Buah-buahan', calories: 52, protein: 0.3, carbs: 13.8, fat: 0.2, baseServing: 100, unit: 'g' },
-  { id: 'pisang', name: 'Pisang', category: 'buah-buahan', categoryLabelId: 'Buah-buahan', calories: 89, protein: 1.1, carbs: 22.8, fat: 0.3, baseServing: 100, unit: 'g' },
-  { id: 'jeruk', name: 'Jeruk', category: 'buah-buahan', categoryLabelId: 'Buah-buahan', calories: 47, protein: 0.9, carbs: 11.8, fat: 0.1, baseServing: 100, unit: 'g' },
-  { id: 'berries', name: 'Campuran Berries', category: 'buah-buahan', categoryLabelId: 'Buah-buahan', calories: 57, protein: 0.7, carbs: 13.8, fat: 0.3, baseServing: 100, unit: 'g' },
-  { id: 'alpukat', name: 'Alpukat', category: 'buah-buahan', categoryLabelId: 'Buah-buahan', calories: 160, protein: 2, carbs: 8.5, fat: 14.7, baseServing: 100, unit: 'g' },
-  { id: 'susu', name: 'Susu (utuh)', category: 'produk-susu', categoryLabelId: 'Produk Susu', calories: 61, protein: 3.2, carbs: 4.8, fat: 3.3, baseServing: 100, unit: 'ml' },
-  { id: 'keju', name: 'Keju Cheddar', category: 'produk-susu', categoryLabelId: 'Produk Susu', calories: 403, protein: 24.9, carbs: 1.3, fat: 33.1, baseServing: 100, unit: 'g' },
-  { id: 'yogurt', name: 'Yogurt Yunani (plain)', category: 'produk-susu', categoryLabelId: 'Produk Susu', calories: 59, protein: 10.2, carbs: 3.6, fat: 0.4, baseServing: 100, unit: 'g' },
-  { id: 'minyak-zaitun', name: 'Minyak Zaitun', category: 'lemak-minyak', categoryLabelId: 'Lemak & Minyak', calories: 884, protein: 0, carbs: 0, fat: 100, baseServing: 100, unit: 'ml' },
-  { id: 'mentega', name: 'Mentega', category: 'lemak-minyak', categoryLabelId: 'Lemak & Minyak', calories: 717, protein: 0.9, carbs: 0.1, fat: 81.1, baseServing: 100, unit: 'g' },
-  { id: 'almond', name: 'Almond', category: 'lemak-minyak', categoryLabelId: 'Lemak & Minyak', calories: 579, protein: 21.2, carbs: 21.7, fat: 49.9, baseServing: 100, unit: 'g' },
-  { id: 'air', name: 'Air', category: 'minuman', categoryLabelId: 'Minuman', calories: 0, protein: 0, carbs: 0, fat: 0, baseServing: 100, unit: 'ml' },
-  { id: 'jus-jeruk', name: 'Jus Jeruk', category: 'minuman', categoryLabelId: 'Minuman', calories: 45, protein: 0.7, carbs: 10.4, fat: 0.2, baseServing: 100, unit: 'ml' },
-  { id: 'kopi', name: 'Kopi (hitam)', category: 'minuman', categoryLabelId: 'Minuman', calories: 1, protein: 0.1, carbs: 0, fat: 0, baseServing: 100, unit: 'ml' }
-];
+import { categoryService } from '../services/categoryService';
 
 const getMealTypes = (language) => [
   { value: 'breakfast', label: language === 'id' ? 'Sarapan' : 'Breakfast' },
@@ -81,8 +47,10 @@ const FoodForm = ({ onAddFood }) => {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
 
-  // Nutrition Calculator (Mockup Manual) States
-  const [foodDatabaseState, setFoodDatabaseState] = useState(FOOD_DATABASE);
+  // Nutrition Calculator (Database Integration!) States
+  const [dbCategories, setDbCategories] = useState([]);
+  const [dbFoods, setDbFoods] = useState([]);
+  const [customFoodsList, setCustomFoodsList] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('semua');
   const [foodPortions, setFoodPortions] = useState({});
@@ -90,9 +58,10 @@ const FoodForm = ({ onAddFood }) => {
   const [selectedMealType, setSelectedMealType] = useState('breakfast');
   const [isCustomOpen, setIsCustomOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  
   const [customFood, setCustomFood] = useState({
     name: '',
-    category: 'protein',
+    category: '',
     calories: 100,
     protein: 10,
     carbs: 10,
@@ -102,6 +71,60 @@ const FoodForm = ({ onAddFood }) => {
   });
 
   const { predictNutrition, predictNutritionImage } = useNutrition();
+
+  // 1. Fetch Categories from Backend Dataset on Mount
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const cats = await categoryService.getAllCategories();
+        setDbCategories(cats || []);
+        // Set default category for custom foods form
+        if (cats && cats.length > 0) {
+          setCustomFood(prev => ({ ...prev, category: cats[0].id }));
+        }
+      } catch (err) {
+        console.error("Failed to fetch database categories:", err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // 2. Fetch Foods from Backend Dataset Dynamically when Query/Filter changes (Debounced)
+  useEffect(() => {
+    const fetchFoods = async () => {
+      try {
+        if (selectedCategory !== 'semua') {
+          // Fetch foods inside selected category from DB
+          const foods = await categoryService.getFoodsByCategory(selectedCategory);
+          if (searchQuery.trim()) {
+            const queryLower = searchQuery.toLowerCase();
+            const filtered = foods.filter(f => 
+              (f.food_name_id && f.food_name_id.toLowerCase().includes(queryLower)) ||
+              (f.food_name_en && f.food_name_en.toLowerCase().includes(queryLower))
+            );
+            setDbFoods(filtered || []);
+          } else {
+            setDbFoods(foods || []);
+          }
+        } else {
+          // If 'semua' (All) is selected, perform a search query directly
+          const query = searchQuery.trim();
+          const foods = await categoryService.searchFoods(query);
+          setDbFoods(foods || []);
+        }
+      } catch (err) {
+        console.error("Failed to query foods database:", err);
+      }
+    };
+
+    const delayDebounce = setTimeout(() => {
+      if (activeTab === 'manual') {
+        fetchFoods();
+      }
+    }, 300);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery, selectedCategory, activeTab]);
 
   useEffect(() => {
     return () => {
@@ -378,7 +401,24 @@ const FoodForm = ({ onAddFood }) => {
     setLoading(false);
   };
 
-  // --- MANUAL CALCULATOR HANDLERS ---
+  // --- DATABASE-DRIVEN NUTRITION CALCULATOR HELPERS ---
+  const getFoodDisplayName = (food) => {
+    return language === 'id' ? (food.food_name_id || food.food_name_en) : (food.food_name_en || food.food_name_id);
+  };
+
+  const getFoodCategoryName = (food) => {
+    const cat = dbCategories.find(c => c.id === food.category_id);
+    return cat ? cat.name : (language === 'id' ? 'Umum' : 'General');
+  };
+
+  const getFoodUnit = (food) => {
+    const nameLower = (food.food_name_id || food.food_name_en || '').toLowerCase();
+    const cat = dbCategories.find(c => c.id === food.category_id);
+    const catName = cat ? cat.name.toLowerCase() : '';
+    const isLiquid = nameLower.match(/(susu|jus|kopi|teh|air|minuman|sirup|kuah|soda)/) || catName.includes('kafe') || catName.includes('minuman');
+    return isLiquid ? 'ml' : 'g';
+  };
+
   const handlePortionChange = (foodId, val) => {
     setFoodPortions({
       ...foodPortions,
@@ -387,34 +427,36 @@ const FoodForm = ({ onAddFood }) => {
   };
 
   const handleAddLoggedFood = (food, portion) => {
-    const scale = portion / food.baseServing;
+    const scale = portion / 100; // Database dataset values are standardized per 100g/ml
+    const displayName = getFoodDisplayName(food);
+    const unit = getFoodUnit(food);
     const newEntry = {
       id: food.id,
-      name: food.name,
+      name: displayName,
       quantity: portion,
-      unit: food.unit,
-      calories: food.calories * scale,
-      protein: food.protein * scale,
-      carbs: food.carbs * scale,
-      fat: food.fat * scale,
+      unit: unit,
+      calories: (food.calories || 0) * scale,
+      protein: (food.protein || 0) * scale,
+      carbs: (food.carbohydrates || 0) * scale,
+      fat: (food.total_fat || 0) * scale,
       mealType: selectedMealType,
       baseFood: food
     };
     setLoggedFoods([...loggedFoods, newEntry]);
-    showToast(language === 'id' ? `${food.name} ditambahkan!` : `${food.name} added!`);
+    showToast(language === 'id' ? `${displayName} ditambahkan!` : `${displayName} added!`);
   };
 
   const handleUpdateLoggedQuantity = (idx, newQty) => {
     if (newQty < 1) return;
     const updated = [...loggedFoods];
     const item = updated[idx];
-    const scale = newQty / item.baseFood.baseServing;
+    const scale = newQty / 100;
 
     item.quantity = newQty;
-    item.calories = item.baseFood.calories * scale;
-    item.protein = item.baseFood.protein * scale;
-    item.carbs = item.baseFood.carbs * scale;
-    item.fat = item.baseFood.fat * scale;
+    item.calories = (item.baseFood.calories || 0) * scale;
+    item.protein = (item.baseFood.protein || 0) * scale;
+    item.carbs = (item.baseFood.carbohydrates || 0) * scale;
+    item.fat = (item.baseFood.total_fat || 0) * scale;
 
     setLoggedFoods(updated);
   };
@@ -429,31 +471,30 @@ const FoodForm = ({ onAddFood }) => {
     e.preventDefault();
     if (!customFood.name.trim()) return;
 
+    // Local custom item structure following DB dataset schema
     const newFood = {
       id: `custom-${Date.now()}`,
-      name: customFood.name,
-      category: customFood.category,
-      categoryLabelId: customFood.category.charAt(0).toUpperCase() + customFood.category.slice(1),
+      food_name_id: customFood.name,
+      food_name_en: customFood.name,
+      category_id: customFood.category,
       calories: Number(customFood.calories),
       protein: Number(customFood.protein),
-      carbs: Number(customFood.carbs),
-      fat: Number(customFood.fat),
-      baseServing: Number(customFood.baseServing),
-      unit: customFood.unit
+      carbohydrates: Number(customFood.carbs),
+      total_fat: Number(customFood.fat)
     };
 
-    setFoodDatabaseState([newFood, ...foodDatabaseState]);
+    setCustomFoodsList([newFood, ...customFoodsList]);
     setIsCustomOpen(false);
-    setCustomFood({
+    setCustomFood(prev => ({
       name: '',
-      category: 'protein',
+      category: dbCategories[0]?.id || '',
       calories: 100,
       protein: 10,
       carbs: 10,
       fat: 5,
       baseServing: 100,
       unit: 'g'
-    });
+    }));
     showToast(language === 'id' ? 'Makanan khusus ditambahkan!' : 'Custom food added!');
   };
 
@@ -511,12 +552,8 @@ const FoodForm = ({ onAddFood }) => {
     fat: acc.fat + curr.fat
   }), { calories: 0, protein: 0, carbs: 0, fat: 0 });
 
-  // Filtering for pre-defined foods list
-  const filteredFoods = foodDatabaseState.filter(food => {
-    const matchesSearch = food.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'semua' || food.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  // Merge runtime custom foods list with queried DB foods
+  const displayedFoods = [...customFoodsList, ...dbFoods];
 
   const foods = predictionResult?.foods ?? [];
   const totalQuantity = predictionResult?.parsed_data?.total_nutrition?.quantity_grams ?? 0;
@@ -527,7 +564,7 @@ const FoodForm = ({ onAddFood }) => {
   return (
     <div className="space-y-8 relative">
       
-      {/* Toast notification inside FoodForm */}
+      {/* Toast notification */}
       {toastMessage && (
         <div className="fixed bottom-10 right-6 md:right-10 z-[200] bg-[var(--text-main)] text-[var(--bg-primary)] px-6 py-4 rounded-2xl font-black text-xs shadow-2xl flex items-center gap-3 animate-in slide-in-from-bottom-5 duration-300">
           <CheckCircle2 className="text-[var(--primary-green)]" size={16} />
@@ -901,14 +938,14 @@ const FoodForm = ({ onAddFood }) => {
           </div>
         )}
 
-        {/* TAB 3: RICH MANUAL NUTRITION CALCULATOR (MATCHING USER MOCKUP!) */}
+        {/* TAB 3: RICH MANUAL NUTRITION CALCULATOR (DATABASE DRIVEN SEEDED DATASET!) */}
         {activeTab === 'manual' && (
           <div className="space-y-8 animate-in slide-in-from-bottom duration-500 text-left">
             
             {/* Header Text */}
             <div className="border-b border-[var(--border-card)]/40 pb-4">
               <h3 className="text-lg font-black text-[var(--text-main)] uppercase tracking-wider">{language === 'id' ? 'Tambahkan Makanan Anda' : 'Add Your Foods'}</h3>
-              <p className="text-xs font-semibold text-[var(--text-muted)] mt-1">{language === 'id' ? 'Pilih porsi makanan dari katalog kami atau tambahkan makanan khusus.' : 'Select food portion from our catalog or define custom foods.'}</p>
+              <p className="text-xs font-semibold text-[var(--text-muted)] mt-1">{language === 'id' ? 'Cari dan saring makanan langsung dari database gizi terverifikasi Anda.' : 'Search and filter foods directly from your verified nutrition database.'}</p>
             </div>
 
             {/* Search and Category Filter Section */}
@@ -919,7 +956,7 @@ const FoodForm = ({ onAddFood }) => {
                   type="text" 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={language === 'id' ? 'Cari makanan (nasi, ayam, apel...)' : 'Search food (rice, chicken, apple...)'}
+                  placeholder={language === 'id' ? 'Cari makanan dalam dataset (nasi, ayam, bayam...)' : 'Search foods in dataset (rice, chicken, spinach...)'}
                   className="flex-grow bg-[var(--bg-primary)] border border-[var(--border-card)] rounded-2xl px-6 py-4 text-[var(--text-main)] outline-none focus:border-[var(--primary-green)] shadow-inner font-semibold text-sm"
                 />
                 <button 
@@ -934,27 +971,29 @@ const FoodForm = ({ onAddFood }) => {
               <div className="space-y-2">
                 <p className="text-[10px] font-black uppercase tracking-wider text-[var(--text-muted)]">{language === 'id' ? 'Filter berdasarkan:' : 'Filter by:'}</p>
                 <div className="flex flex-wrap gap-2">
-                  {[
-                    { id: 'semua', label: language === 'id' ? 'Semua' : 'All' },
-                    { id: 'protein', label: 'Protein' },
-                    { id: 'biji-bijian', label: language === 'id' ? 'Biji-bijian' : 'Grains' },
-                    { id: 'sayuran', label: language === 'id' ? 'Sayuran' : 'Vegetables' },
-                    { id: 'buah-buahan', label: language === 'id' ? 'Buah-buahan' : 'Fruits' },
-                    { id: 'produk-susu', label: language === 'id' ? 'Produk Susu' : 'Dairy' },
-                    { id: 'lemak-minyak', label: language === 'id' ? 'Lemak & Minyak' : 'Fats & Oils' },
-                    { id: 'minuman', label: language === 'id' ? 'Minuman' : 'Drinks' }
-                  ].map(cat => (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCategory('semua')}
+                    className={`px-4 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all border ${
+                      selectedCategory === 'semua' 
+                        ? 'bg-[var(--primary-green)] text-white border-transparent shadow-md' 
+                        : 'bg-[var(--bg-card)] text-[var(--text-muted)] border-[var(--border-card)] hover:text-[var(--text-main)] hover:border-[var(--primary-green)]/30'
+                    }`}
+                  >
+                    {language === 'id' ? 'Semua' : 'All'}
+                  </button>
+                  {dbCategories.map(cat => (
                     <button
                       key={cat.id}
                       type="button"
                       onClick={() => setSelectedCategory(cat.id)}
-                      className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all border ${
+                      className={`px-4 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all border ${
                         selectedCategory === cat.id 
                           ? 'bg-[var(--primary-green)] text-white border-transparent shadow-md' 
                           : 'bg-[var(--bg-card)] text-[var(--text-muted)] border-[var(--border-card)] hover:text-[var(--text-main)] hover:border-[var(--primary-green)]/30'
                       }`}
                     >
-                      {cat.label}
+                      {cat.name}
                     </button>
                   ))}
                 </div>
@@ -963,58 +1002,67 @@ const FoodForm = ({ onAddFood }) => {
 
             {/* Catalog Grid View with Portions input (Scrollbar style) */}
             <div className="max-h-[420px] overflow-y-auto pr-2 grid grid-cols-1 md:grid-cols-2 gap-4 border border-[var(--border-card)]/30 rounded-[2rem] p-4 bg-[var(--bg-primary)] shadow-inner">
-              {filteredFoods.map(food => {
-                const portion = foodPortions[food.id] || food.baseServing;
-                return (
-                  <div key={food.id} className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-2xl p-5 shadow-sm space-y-4 hover:border-[var(--primary-green)]/35 transition-all flex flex-col justify-between">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h4 className="font-extrabold text-sm text-[var(--text-main)]">{food.name}</h4>
-                        <span className="inline-block mt-1.5 text-[8px] font-black uppercase tracking-widest text-[var(--text-muted)] bg-[var(--bg-secondary)] px-2.5 py-1 rounded-md border border-[var(--border-card)]">{food.categoryLabelId}</span>
+              {displayedFoods.length === 0 ? (
+                <div className="col-span-full py-16 text-center text-xs font-bold text-[var(--text-muted)]">
+                  {language === 'id' ? 'Tidak ada makanan yang cocok ditemukan di dalam database.' : 'No matching foods found in the database.'}
+                </div>
+              ) : (
+                displayedFoods.map(food => {
+                  const portion = foodPortions[food.id] || 100;
+                  const displayName = getFoodDisplayName(food);
+                  const catName = getFoodCategoryName(food);
+                  const unit = getFoodUnit(food);
+                  return (
+                    <div key={food.id} className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-2xl p-5 shadow-sm space-y-4 hover:border-[var(--primary-green)]/35 transition-all flex flex-col justify-between">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="font-extrabold text-sm text-[var(--text-main)] line-clamp-1">{displayName}</h4>
+                          <span className="inline-block mt-1.5 text-[8px] font-black uppercase tracking-widest text-[var(--text-muted)] bg-[var(--bg-secondary)] px-2.5 py-1 rounded-md border border-[var(--border-card)]">{catName}</span>
+                        </div>
                       </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-4 gap-2 text-center bg-[var(--bg-secondary)]/40 rounded-xl py-3 px-2">
-                      <div>
-                        <p className="text-[11px] font-black text-[var(--primary-green)]">{food.calories}</p>
-                        <p className="text-[8px] font-bold text-[var(--text-muted)] uppercase tracking-wider">kalori</p>
+                      
+                      <div className="grid grid-cols-4 gap-2 text-center bg-[var(--bg-secondary)]/40 rounded-xl py-3 px-2">
+                        <div>
+                          <p className="text-xs font-black text-[var(--primary-green)]">{Math.round(food.calories)}</p>
+                          <p className="text-[8px] font-bold text-[var(--text-muted)] uppercase tracking-wider">kalori</p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-black text-[var(--accent-blue)]">{food.protein.toFixed(1)}g</p>
+                          <p className="text-[8px] font-bold text-[var(--text-muted)] uppercase tracking-wider">protein</p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-black text-[var(--warning)]">{(food.carbohydrates || food.carbs || 0).toFixed(1)}g</p>
+                          <p className="text-[8px] font-bold text-[var(--text-muted)] uppercase tracking-wider">karbo</p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-black text-[var(--danger)]">{(food.total_fat || food.fat || 0).toFixed(1)}g</p>
+                          <p className="text-[8px] font-bold text-[var(--text-muted)] uppercase tracking-wider">lemak</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-[11px] font-black text-[var(--accent-blue)]">{food.protein}g</p>
-                        <p className="text-[8px] font-bold text-[var(--text-muted)] uppercase tracking-wider">protein</p>
-                      </div>
-                      <div>
-                        <p className="text-[11px] font-black text-[var(--warning)]">{food.carbs}g</p>
-                        <p className="text-[8px] font-bold text-[var(--text-muted)] uppercase tracking-wider">karbo</p>
-                      </div>
-                      <div>
-                        <p className="text-[11px] font-black text-[var(--danger)]">{food.fat}g</p>
-                        <p className="text-[8px] font-bold text-[var(--text-muted)] uppercase tracking-wider">lemak</p>
-                      </div>
-                    </div>
 
-                    <div className="flex items-center justify-between pt-2 border-t border-[var(--border-card)]/30">
-                      <div className="flex items-center gap-2">
-                        <input 
-                          type="number"
-                          value={portion}
-                          onChange={(e) => handlePortionChange(food.id, Number(e.target.value))}
-                          className="w-16 bg-[var(--bg-primary)] border border-[var(--border-card)] rounded-xl px-3 py-2 text-xs text-center font-bold outline-none focus:border-[var(--primary-green)]"
-                          min="1"
-                        />
-                        <span className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-wider">{food.unit}</span>
+                      <div className="flex items-center justify-between pt-2 border-t border-[var(--border-card)]/30">
+                        <div className="flex items-center gap-2">
+                          <input 
+                            type="number"
+                            value={portion}
+                            onChange={(e) => handlePortionChange(food.id, Number(e.target.value))}
+                            className="w-16 bg-[var(--bg-primary)] border border-[var(--border-card)] rounded-xl px-3 py-2 text-xs text-center font-bold outline-none focus:border-[var(--primary-green)]"
+                            min="1"
+                          />
+                          <span className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-wider">{unit}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleAddLoggedFood(food, portion)}
+                          className="bg-[var(--primary-green)] text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-md shadow-emerald-500/10"
+                        >
+                          {language === 'id' ? 'Tambah' : 'Add'}
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => handleAddLoggedFood(food, portion)}
-                        className="bg-[var(--primary-green)] text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-md shadow-emerald-500/10"
-                      >
-                        {language === 'id' ? 'Tambah' : 'Add'}
-                      </button>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
 
             {/* Custom Food Addition Toggle Drawer */}
@@ -1037,19 +1085,20 @@ const FoodForm = ({ onAddFood }) => {
                         type="text" 
                         value={customFood.name}
                         onChange={(e) => setCustomFood({...customFood, name: e.target.value})}
-                        placeholder="Contoh: Sayur Sop"
+                        placeholder="Contoh: Sayur Sop Ceker"
                         className="w-full bg-[var(--bg-primary)] border border-[var(--border-card)] rounded-xl px-4 py-3 text-xs font-semibold text-[var(--text-main)] outline-none focus:border-[var(--primary-green)]"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="text-[9px] font-black uppercase tracking-widest text-[var(--text-muted)]">{language === 'id' ? 'Porsi Takaran' : 'Serving Size'}</label>
-                        <input 
-                          type="number" 
-                          value={customFood.baseServing}
-                          onChange={(e) => setCustomFood({...customFood, baseServing: Number(e.target.value)})}
-                          className="w-full bg-[var(--bg-primary)] border border-[var(--border-card)] rounded-xl px-4 py-3 text-xs font-semibold text-[var(--text-main)] outline-none focus:border-[var(--primary-green)]"
-                        />
+                        <label className="text-[9px] font-black uppercase tracking-widest text-[var(--text-muted)]">{language === 'id' ? 'Pilih Kategori' : 'Select Category'}</label>
+                        <select 
+                          value={customFood.category}
+                          onChange={(e) => setCustomFood({...customFood, category: e.target.value})}
+                          className="w-full bg-[var(--bg-primary)] border border-[var(--border-card)] rounded-xl px-4 py-3 text-xs font-semibold text-[var(--text-main)] outline-none focus:border-[var(--primary-green)] cursor-pointer"
+                        >
+                          {dbCategories.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
+                        </select>
                       </div>
                       <div className="space-y-1">
                         <label className="text-[9px] font-black uppercase tracking-widest text-[var(--text-muted)]">{language === 'id' ? 'Satuan' : 'Unit'}</label>
@@ -1060,7 +1109,6 @@ const FoodForm = ({ onAddFood }) => {
                         >
                           <option value="g">g</option>
                           <option value="ml">ml</option>
-                          <option value="serving">serving</option>
                         </select>
                       </div>
                     </div>
