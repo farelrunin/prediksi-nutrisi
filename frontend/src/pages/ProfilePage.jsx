@@ -61,6 +61,29 @@ const ProfilePage = () => {
     }
   };
 
+  const [cleanupLoading, setCleanupLoading] = useState(false);
+
+  const handleCleanup = async () => {
+    if (!window.confirm(language === 'id' ? "Apakah Anda yakin ingin menghapus semua akun tester dummy dari database secara permanen?" : "Are you sure you want to permanently delete all dummy tester accounts from the database?")) return;
+    setCleanupLoading(true);
+    try {
+      const res = await authService.cleanSystemStats();
+      notify({ type: 'success', title: language === 'id' ? 'Database Dibersihkan' : 'Database Cleaned', message: res.detail });
+      // Reload stats
+      const stats = await authService.getSystemStats();
+      setAdminStats(stats);
+    } catch (err) {
+      console.error(err);
+      notify({ 
+        type: 'error', 
+        title: language === 'id' ? 'Pembersihan Gagal' : 'Cleanup Failed', 
+        message: err.message || 'Gagal membersihkan database.' 
+      });
+    } finally {
+      setCleanupLoading(false);
+    }
+  };
+
   // Custom Cropper states
   const [isCropping, setIsCropping] = useState(false);
   const [tempImage, setTempImage] = useState(null);
@@ -932,10 +955,9 @@ const ProfilePage = () => {
         itemName={t.resetItem}
       />
 
-      {/* Admin / Owner Dashboard Modal */}
       {isAdminModalOpen && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-300">
-          <div className="relative w-full max-w-4xl bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[3rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="relative w-full max-w-4xl bg-[var(--bg-card)]/95 backdrop-blur-xl border border-[var(--border-card)] rounded-[3rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
             
             {/* Modal Header */}
             <div className="p-8 md:p-10 border-b border-[var(--border-card)] flex justify-between items-center bg-[var(--bg-secondary)]/50">
@@ -967,28 +989,63 @@ const ProfilePage = () => {
               ) : adminStats ? (
                 <>
                   {/* Stats Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     <div className="bg-[var(--bg-secondary)] rounded-3xl p-6 border border-[var(--border-card)]/50 relative overflow-hidden group">
-                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">Total Registered Users</div>
-                      <div className="text-4xl font-black text-[var(--text-main)]">{adminStats.totalUsers}</div>
-                      <div className="text-[10px] text-emerald-500 font-bold mt-2 flex items-center gap-1">🟢 Active Accounts</div>
+                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">Total Accounts</div>
+                      <div className="text-3xl font-black text-[var(--text-main)]">{adminStats.totalUsers}</div>
+                      <div className="text-[10px] text-[var(--text-muted)] font-bold mt-2">
+                        👥 Real: <span className="text-[var(--primary-green)] font-extrabold">{adminStats.totalRealUsers}</span> | 🧪 Test: <span className="text-rose-400 font-extrabold">{adminStats.totalTestUsers}</span>
+                      </div>
                     </div>
                     <div className="bg-[var(--bg-secondary)] rounded-3xl p-6 border border-[var(--border-card)]/50 relative overflow-hidden group">
                       <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">Total Food Journals</div>
-                      <div className="text-4xl font-black text-[var(--text-main)]">{adminStats.totalEntries}</div>
-                      <div className="text-[10px] text-[var(--primary-green)] font-bold mt-2 flex items-center gap-1">⚡ AI & Manual Analyzed</div>
+                      <div className="text-3xl font-black text-[var(--text-main)]">{adminStats.totalEntries}</div>
+                      <div className="text-[10px] text-[var(--primary-green)] font-bold mt-2 flex items-center gap-1">⚡ AI & Manual Logs</div>
                     </div>
                     <div className="bg-[var(--bg-secondary)] rounded-3xl p-6 border border-[var(--border-card)]/50 relative overflow-hidden group">
-                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">Database Status</div>
-                      <div className="text-md font-extrabold text-emerald-500 mt-2">🟢 CONNECTED</div>
+                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">Search Library Items</div>
+                      <div className="text-3xl font-black text-[var(--text-main)]">{adminStats.totalFoodLibrary}</div>
+                      <div className="text-[10px] text-[var(--text-muted)] font-bold mt-2">📂 Seeded USDA & Local</div>
+                    </div>
+                    <div className="bg-[var(--bg-secondary)] rounded-3xl p-6 border border-[var(--border-card)]/50 relative overflow-hidden group">
+                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">Database Engine</div>
+                      <div className="text-lg font-black text-emerald-500 mt-2">🟢 CONNECTED</div>
                       <div className="text-[10px] text-[var(--text-muted)] font-bold mt-1">Sequelize ORM Sync: OK</div>
                     </div>
+                    <div className="bg-[var(--bg-secondary)] rounded-3xl p-6 border border-[var(--border-card)]/50 relative overflow-hidden group">
+                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">Gemini AI Status</div>
+                      <div className="text-lg font-black text-[var(--primary-green)] mt-2">🟢 ACTIVE</div>
+                      <div className="text-[10px] text-[var(--text-muted)] font-bold mt-1">🌿 Prompt Optimization Enabled</div>
+                    </div>
                   </div>
+
+                  {/* Administrative Actions Panel */}
+                  {adminStats.totalTestUsers > 0 && (
+                    <div className="bg-rose-500/10 border border-rose-500/20 rounded-3xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 animate-in slide-in-from-bottom duration-300">
+                      <div>
+                        <h4 className="text-sm font-black text-[var(--text-main)]">Database Optimization Alert 🧹</h4>
+                        <p className="text-xs text-[var(--text-muted)] font-medium mt-1">
+                          {language === 'id' 
+                            ? `Terdeteksi ${adminStats.totalTestUsers} akun tester sampah hasil uji coba otomatis. Bersihkan sekarang untuk meningkatkan kecepatan query database Anda.`
+                            : `Detected ${adminStats.totalTestUsers} garbage test accounts from automated testing. Clean them up now to boost database query response times.`}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleCleanup}
+                        disabled={cleanupLoading}
+                        className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs uppercase tracking-widest px-6 py-3.5 rounded-2xl shadow-lg shadow-rose-500/20 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2 whitespace-nowrap self-start md:self-auto"
+                      >
+                        {cleanupLoading ? <RefreshCw size={14} className="animate-spin" /> : <Shield size={14} />}
+                        <span>{language === 'id' ? 'Bersihkan Akun Tester' : 'Purge Dummy Accounts'}</span>
+                      </button>
+                    </div>
+                  )}
 
                   {/* Registered Users List */}
                   <div className="space-y-4">
                     <div className="flex justify-between items-center px-2">
-                      <h4 className="text-sm font-black uppercase tracking-wider text-[var(--text-muted)]">User Registry ({adminStats.users.length})</h4>
+                      <h4 className="text-sm font-black uppercase tracking-wider text-[var(--text-muted)]">User Registry</h4>
                       <span className="text-[10px] font-bold text-[var(--primary-green)] uppercase">Sorted by newest</span>
                     </div>
 

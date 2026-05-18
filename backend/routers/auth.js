@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { User, FoodEntry } = require("../models-express");
+const { User, FoodEntry, Food } = require("../models-express");
+const { Op } = require("sequelize");
 const authenticateToken = require("../middleware/auth");
 
 const SECRET_KEY = process.env.SECRET_KEY;
@@ -132,7 +133,20 @@ router.get("/system-stats", authenticateToken, async (req, res) => {
 
     const totalUsers = await User.count();
     const totalEntries = await FoodEntry.count();
+    const totalFoodLibrary = await Food.count();
     
+    // Hitung real vs test users secara dinamis
+    const totalRealUsers = await User.count({
+      where: {
+        [Op.and]: [
+          { email: { [Op.notLike]: "%example.test" } },
+          { email: { [Op.notLike]: "ratelimit_%" } }
+        ]
+      }
+    });
+
+    const totalTestUsers = totalUsers - totalRealUsers;
+
     // Ambil list semua user terdaftar
     const users = await User.findAll({
       attributes: ["id", "name", "email", "gender", "created_at"],
@@ -142,8 +156,39 @@ router.get("/system-stats", authenticateToken, async (req, res) => {
     res.json({
       totalUsers,
       totalEntries,
+      totalFoodLibrary,
+      totalRealUsers,
+      totalTestUsers,
       users
     });
+  } catch (error) {
+    res.status(500).json({ detail: error.message });
+  }
+});
+
+// System Owner Action: Clean Up rate-limit test accounts
+router.post("/system-cleanup", authenticateToken, async (req, res) => {
+  try {
+    const allowedEmails = [
+      'farelrunin@gmail.com',
+      process.env.ADMIN_EMAIL
+    ].filter(Boolean);
+
+    if (!allowedEmails.includes(req.user.email)) {
+      return res.status(403).json({ detail: "Akses ditolak. Anda bukan pemilik sistem." });
+    }
+
+    // Hapus semua user tester rate-limit
+    const deletedCount = await User.destroy({
+      where: {
+        [Op.or]: [
+          { email: { [Op.like]: "%example.test" } },
+          { email: { [Op.like]: "ratelimit_%" } }
+        ]
+      }
+    });
+
+    res.json({ detail: `Sukses! Berhasil membersihkan ${deletedCount} akun tester palsu dari database.` });
   } catch (error) {
     res.status(500).json({ detail: error.message });
   }

@@ -112,6 +112,20 @@ export const authService = {
     }
   },
 
+  async cleanSystemStats() {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${API_BASE_URL}/auth/system-cleanup`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(this.parseError(error, 'Failed to clean test accounts'));
+    }
+  },
+
   parseError(error, defaultMsg = 'Terjadi kesalahan') {
     const detail = error.response?.data?.detail;
     if (Array.isArray(detail)) {
