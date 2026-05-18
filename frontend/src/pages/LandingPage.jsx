@@ -125,7 +125,7 @@ const LandingPage = () => {
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-to-tr from-[var(--primary-green)]/20 to-[var(--accent-blue)]/20 rounded-[3rem] blur-2xl" />
               <div className="relative rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-[var(--border-card)] shadow-2xl">
-                <img src="/bg-food.jpg" alt="Makanan sehat untuk hidup berkualitas" loading="lazy" width="800" height="600" className="w-full h-full object-cover" />
+                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80" alt="Makanan sehat untuk hidup berkualitas" loading="lazy" width="800" height="600" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-8 md:p-12">
                   <p className="text-white text-xl font-bold italic">"Health starts with what you eat."</p>
                 </div>

@@ -23,11 +23,11 @@ const ForgotPasswordPage = () => {
       {/* Background with user image */}
       <div className="absolute inset-0 z-0">
         <img 
-          src="/bg-food.jpg" 
+          src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=80" 
           alt="Healthy Food" 
-          className="w-full h-full object-cover" 
+          className="w-full h-full object-cover opacity-20" 
         />
-        <div className="absolute inset-0 bg-black/10" />
+        <div className="absolute inset-0 bg-black/45" />
       </div>
 
       <div className="relative z-10 w-full max-w-md">
