@@ -222,6 +222,7 @@ const Navbar = () => {
               </Link>
               <button
                 onClick={() => setShowLogoutModal(true)}
+                aria-label={t.logout}
                 className="p-3.5 rounded-2xl bg-rose-50 text-[var(--danger)] hover:bg-[var(--danger)] hover:text-white transition-all shadow-sm active:scale-95"
               >
                 <LogOut size={16} />

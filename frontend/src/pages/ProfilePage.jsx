@@ -972,6 +972,7 @@ const ProfilePage = () => {
               </div>
               <button 
                 type="button"
+                aria-label={t.close}
                 onClick={() => setIsAdminModalOpen(false)} 
                 className="p-3.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-card)] text-[var(--text-muted)] hover:text-rose-500 transition-colors shadow-sm active:scale-95"
               >

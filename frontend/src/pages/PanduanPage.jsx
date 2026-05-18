@@ -62,6 +62,7 @@ const PanduanPage = () => {
           {filteredConditions.map((condition) => (
             <button 
               key={condition.id}
+              aria-label={`${language === 'id' ? 'Lihat panduan' : 'View guide for'} ${condition.title}`}
               onClick={() => {
                 setSelectedCondition(condition);
                 setActiveTab('nutrisi');
@@ -139,6 +140,7 @@ const PanduanPage = () => {
                   </div>
                   <button 
                     onClick={() => setSelectedCondition(null)}
+                    aria-label={language === 'id' ? 'Tutup panduan' : 'Close guide'}
                     className="p-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-card)] text-[var(--text-muted)] hover:text-red-500 transition-colors"
                   >
                     <ChevronDown className="rotate-180 md:rotate-0" size={24} />

@@ -189,6 +189,7 @@ const HistoryPage = () => {
                                 
                                 <button 
                                   onClick={() => handleDeleteClick(entry)}
+                                  aria-label={`${t.delete} ${entry.foodName}`}
                                   className="p-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-card)] text-[var(--danger)] hover:bg-[var(--danger)] hover:text-white transition-all shadow-md active:scale-95 ml-4"
                                 >
                                   <Trash2 size={18} />
@@ -228,7 +229,7 @@ const HistoryPage = () => {
                   <h3 className="text-3xl font-black text-[var(--text-main)]">{selectedEntry.foodName}</h3>
                   <p className="text-sm font-bold text-[var(--text-muted)] uppercase tracking-widest mt-2">{selectedEntry.mealType} • {selectedEntry.quantity} {selectedEntry.unit}</p>
                 </div>
-                <button onClick={() => setSelectedEntry(null)} className="p-3 rounded-2xl bg-[var(--bg-secondary)] text-[var(--text-muted)] hover:text-rose-500 transition-colors">
+                <button onClick={() => setSelectedEntry(null)} aria-label={t.close} className="p-3 rounded-2xl bg-[var(--bg-secondary)] text-[var(--text-muted)] hover:text-rose-500 transition-colors">
                   <X size={20} />
                 </button>
               </div>
