@@ -14,8 +14,8 @@ const PanduanPage = () => {
   const healthConditions = getHealthConditions(language);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCondition, setSelectedCondition] = useState(null);
-  const [activeTab, setActiveTab] = useState('nutrisi'); // 'nutrisi', 'gejala', 'faq'
   const [toastMessage, setToastMessage] = useState('');
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
   const filteredConditions = healthConditions.filter(c => 
     c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -29,6 +29,43 @@ const PanduanPage = () => {
       return { name: match[1].trim(), desc: match[2].trim() };
     }
     return { name: str, desc: '' };
+  };
+
+  // Helper to dynamically build target fields matching the reference's look & feel
+  const getNutritionalTargetsList = (cond) => {
+    if (cond.id === 'anemia') {
+      return [
+        { label: language === 'id' ? 'Porsi Makan' : 'Meal Portion', value: language === 'id' ? 'Kecil tapi sering' : 'Small but frequent' },
+        { label: language === 'id' ? 'Zat Besi Pria' : 'Iron Men', value: '9 mg' },
+        { label: language === 'id' ? 'Zat Besi Wanita' : 'Iron Women', value: '18 mg' },
+        { label: language === 'id' ? 'Vitamin C' : 'Vitamin C', value: '75 mg' },
+        { label: language === 'id' ? 'Kafein Jeda' : 'Caffeine Gap', value: '1 - 2 Jam' }
+      ];
+    } else if (cond.id === 'asam-urat') {
+      return [
+        { label: language === 'id' ? 'Purin Harian' : 'Daily Purine', value: '< 150 mg' },
+        { label: language === 'id' ? 'Hidrasi Harian' : 'Daily Hydration', value: 'Min. 2 - 3 Liter' },
+        { label: language === 'id' ? 'Porsi Makan' : 'Meal Portion', value: language === 'id' ? 'Normal / Seimbang' : 'Normal / Balanced' },
+        { label: language === 'id' ? 'Protein Utama' : 'Primary Protein', value: 'Nabati / Low Fat' }
+      ];
+    } else if (cond.id === 'batu-empedu') {
+      return [
+        { label: language === 'id' ? 'Porsi Makan' : 'Meal Portion', value: language === 'id' ? 'Kecil tapi sering' : 'Small but frequent' },
+        { label: language === 'id' ? 'Tekstur Makanan' : 'Food Texture', value: language === 'id' ? 'Normal / Lunak saat nyeri' : 'Normal / Soft when in pain' },
+        { label: language === 'id' ? 'Serat' : 'Fiber Target', value: '30-35 g/hari' },
+        { label: language === 'id' ? 'Lemak' : 'Fat Target', value: '30-40 g/hari' },
+        { label: language === 'id' ? 'Air Liter' : 'Water Liters', value: '2.5 L' }
+      ];
+    } else {
+      const parts = cond.nutritionalTargets.split(',');
+      return parts.map((part, index) => {
+        const sub = part.split('(');
+        if (sub.length > 1) {
+          return { label: sub[1].replace(')', '').trim(), value: sub[0].trim() };
+        }
+        return { label: language === 'id' ? 'Target' : 'Target', value: part.trim() };
+      });
+    }
   };
 
   const handleShare = () => {
@@ -56,6 +93,7 @@ const PanduanPage = () => {
   // If a condition is selected, show the rich full-page detail view (feels like a new page)
   if (selectedCondition) {
     const otherConditions = healthConditions.filter(c => c.id !== selectedCondition.id);
+    const targetsList = getNutritionalTargetsList(selectedCondition);
 
     return (
       <div className="min-h-screen bg-[var(--bg-primary)] pt-44 pb-20 px-6 animate-in fade-in duration-500">
@@ -108,229 +146,270 @@ const PanduanPage = () => {
             </div>
           </div>
 
-          {/* Condition Header Details (The "Anemia" Showcase Card with gorgeous food image!) */}
+          {/* Condition Header Details (Premium Showcase matching the high-fidelity layout!) */}
           <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative overflow-hidden mb-12">
             <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--primary-green)]/5 rounded-full blur-3xl pointer-events-none" />
             
-            <div className="flex flex-col lg:flex-row items-stretch gap-8 relative z-10">
-              {/* Gorgeous Food Hero Image */}
-              <div className="w-full lg:w-[380px] h-64 lg:h-72 rounded-[2rem] overflow-hidden border border-[var(--border-card)] shadow-xl relative shrink-0 group">
-                <img 
-                  src={selectedCondition.image} 
-                  alt={selectedCondition.title} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
-                {/* Floating Icon Badge Over Image */}
-                <div className="absolute bottom-4 left-6 w-12 h-12 rounded-2xl bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg text-[var(--primary-green)]">
-                  {React.cloneElement(selectedCondition.icon, { size: 22 })}
-                </div>
-              </div>
-
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10">
               {/* Title, Alias, Description */}
-              <div className="flex flex-col justify-center flex-grow space-y-3">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[var(--primary-green)]/10 text-[var(--primary-green)] rounded-full text-[9px] font-black uppercase tracking-wider w-fit">
-                  {language === 'id' ? 'Kondisi Medis' : 'Medical Condition'}
+              <div className="flex-grow space-y-4 max-w-2xl">
+                <div className="flex gap-2">
+                  <span className="px-3 py-1 bg-[var(--primary-green)]/10 text-[var(--primary-green)] rounded-full text-[9px] font-black uppercase tracking-wider">{selectedCondition.title}</span>
+                  <span className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-[var(--text-muted)] rounded-full text-[9px] font-black uppercase tracking-wider">{selectedCondition.scientificName}</span>
                 </div>
                 <h1 className="text-3xl md:text-4xl font-black text-[var(--text-main)] tracking-tight leading-tight">
-                  {selectedCondition.title}
+                  {language === 'id' ? `Panduan Nutrisi untuk ${selectedCondition.title}` : `Nutrition Guide for ${selectedCondition.title}`}
                 </h1>
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary-green)]">
-                  {selectedCondition.scientificName}
-                </p>
-                <p className="text-[var(--text-muted)] text-sm md:text-base leading-relaxed font-medium pt-2">
+                <p className="text-[var(--text-muted)] text-sm md:text-base leading-relaxed font-medium">
                   {selectedCondition.description}
                 </p>
               </div>
+
+              {/* Cover Image */}
+              <div className="w-full lg:w-[280px] h-48 lg:h-44 rounded-2xl overflow-hidden border border-[var(--border-card)] shadow-lg relative shrink-0">
+                <img 
+                  src={selectedCondition.image} 
+                  alt={selectedCondition.title} 
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
 
-            {/* Overview / Quick Statistics */}
-            <div className="grid grid-cols-3 gap-4 mt-10 pt-8 border-t border-[var(--border-card)]/30 text-center">
-              <div className="space-y-1">
-                <p className="text-[9px] font-black uppercase tracking-widest text-[var(--text-muted)]">{language === 'id' ? 'Rekomendasi' : 'Recommended'}</p>
-                <p className="text-lg font-black text-emerald-500">{selectedCondition.recommended.length} {language === 'id' ? 'Item' : 'Items'}</p>
+            {/* Quick Metrics Bar */}
+            <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-[var(--border-card)]/30 text-left">
+              <div>
+                <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{language === 'id' ? 'Alias / Nama Lain' : 'Scientific Name'}</p>
+                <p className="text-xs font-black text-[var(--text-main)] mt-1">{selectedCondition.scientificName}</p>
               </div>
-              <div className="space-y-1 border-x border-[var(--border-card)]/30">
-                <p className="text-[9px] font-black uppercase tracking-widest text-[var(--text-muted)]">{language === 'id' ? 'Pantangan' : 'Avoided'}</p>
-                <p className="text-lg font-black text-rose-500">{selectedCondition.avoided.length} {language === 'id' ? 'Item' : 'Items'}</p>
+              <div>
+                <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{language === 'id' ? 'Rekomendasi Makanan' : 'Recommended Foods'}</p>
+                <p className="text-xs font-black text-[var(--text-main)] mt-1">{selectedCondition.recommended.length} Item</p>
               </div>
-              <div className="space-y-1">
-                <p className="text-[9px] font-black uppercase tracking-widest text-[var(--text-muted)]">{language === 'id' ? 'Gejala' : 'Symptoms'}</p>
-                <p className="text-lg font-black text-orange-500">{selectedCondition.symptoms.length} {language === 'id' ? 'Tanda' : 'Signs'}</p>
+              <div>
+                <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{language === 'id' ? 'Pantangan' : 'Avoided Foods'}</p>
+                <p className="text-xs font-black text-[var(--text-main)] mt-1">{selectedCondition.avoided.length} Item</p>
               </div>
             </div>
           </div>
 
-          {/* Sticky-like Premium Tab Switcher */}
-          <div className="flex bg-[var(--bg-card)] border border-[var(--border-card)] rounded-2xl p-1.5 mb-12 shadow-inner">
-            {[
-              { id: 'nutrisi', label: language === 'id' ? 'Rekomendasi & Pantangan' : 'Food Recommendations', icon: <Apple size={14} /> },
-              { id: 'gejala', label: language === 'id' ? 'Gejala & Strategi' : 'Symptoms & Targets', icon: <Activity size={14} /> },
-              { id: 'faq', label: language === 'id' ? 'Tanya Jawab (FAQ)' : 'FAQ & Help', icon: <HelpCircle size={14} /> },
-            ].map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center gap-2 py-4 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
-                  activeTab === tab.id 
-                    ? 'bg-[var(--primary-green)] text-white shadow-lg shadow-emerald-500/10' 
-                    : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
-                }`}
-              >
-                {tab.icon}
-                <span className="hidden sm:inline">{tab.label}</span>
-              </button>
-            ))}
-          </div>
+          {/* Unified Two Columns Responsive Layout (Gejala, Makanan, Tips, Targets) */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            
+            {/* LEFT COLUMN: Main content (Gejala, Makanan, Tips) - Takes 2/3 on Desktop */}
+            <div className="lg:col-span-2 space-y-8">
+              
+              {/* Gejala & Tanda Grid */}
+              <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2rem] p-8 shadow-sm">
+                <div className="flex items-center gap-3 mb-6">
+                  <AlertTriangle className="text-orange-500" size={20} />
+                  <h3 className="text-base font-black uppercase tracking-widest text-[var(--text-main)]">
+                    {language === 'id' ? 'Gejala & Tanda' : 'Symptoms & Signs'}
+                  </h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {selectedCondition.symptoms.map((symptom, i) => (
+                    <div key={i} className="flex items-center gap-4 bg-[var(--bg-secondary)]/50 p-4 rounded-2xl border border-[var(--border-card)]">
+                      <div className="w-2.5 h-2.5 rounded-full bg-slate-400 shrink-0" />
+                      <span className="text-xs font-semibold text-[var(--text-main)]">{symptom}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-          {/* Switchable Sections */}
-          <div className="space-y-12 mb-20">
-            {activeTab === 'nutrisi' && (
-              <div className="space-y-12 animate-in fade-in duration-500">
-                {/* Recommended Section */}
+              {/* Side-by-side Food Lists */}
+              <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2rem] p-8 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Recommended Column */}
                 <div className="space-y-6">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500"><CheckCircle2 size={16} /></div>
-                    <h3 className="text-xs font-black uppercase tracking-widest text-[var(--text-main)]">{language === 'id' ? 'Makanan Yang Direkomendasikan' : 'Highly Recommended Foods'}</h3>
+                  <div className="flex items-center gap-3 pb-3 border-b border-[var(--border-card)]/50">
+                    <CheckCircle2 className="text-emerald-500" size={18} />
+                    <h3 className="text-sm font-black uppercase tracking-widest text-[var(--text-main)]">
+                      {language === 'id' ? 'Makanan Direkomendasikan' : 'Recommended Foods'}
+                    </h3>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <ul className="space-y-4">
                     {selectedCondition.recommended.map((item, i) => {
                       const parsed = parseItem(item);
                       return (
-                        <div key={i} className="bg-[var(--bg-card)] border border-[var(--border-card)] p-6 rounded-3xl hover:border-emerald-500/30 transition-all flex flex-col justify-center shadow-sm">
-                          <h4 className="font-extrabold text-[var(--text-main)] text-base mb-1.5 flex items-center gap-2">
-                            <span className="text-emerald-500">🟢</span>
-                            <span>{parsed.name}</span>
-                          </h4>
-                          {parsed.desc && <p className="text-xs font-medium text-[var(--text-muted)] leading-relaxed pl-5">{parsed.desc}</p>}
-                        </div>
+                        <li key={i} className="flex items-start gap-3">
+                          <span className="text-emerald-500 mt-0.5">▪</span>
+                          <div>
+                            <span className="font-extrabold text-sm text-[var(--text-main)]">{parsed.name}</span>
+                            {parsed.desc && <p className="text-xs font-medium text-[var(--text-muted)] leading-relaxed mt-0.5">{parsed.desc}</p>}
+                          </div>
+                        </li>
                       );
                     })}
-                  </div>
+                  </ul>
                 </div>
 
-                {/* Avoided Section */}
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-rose-500/10 text-rose-500"><XCircle size={16} /></div>
-                    <h3 className="text-xs font-black uppercase tracking-widest text-[var(--text-main)]">{language === 'id' ? 'Makanan Yang Harus Dihindari / Batasi' : 'Foods to Avoid / Restrict'}</h3>
+                {/* Avoided Column */}
+                <div className="space-y-6 border-t md:border-t-0 md:border-l border-[var(--border-card)]/50 pt-6 md:pt-0 md:pl-8">
+                  <div className="flex items-center gap-3 pb-3 border-b border-[var(--border-card)]/50">
+                    <XCircle className="text-rose-500" size={18} />
+                    <h3 className="text-sm font-black uppercase tracking-widest text-[var(--text-main)]">
+                      {language === 'id' ? 'Batasi / Hindari' : 'Avoid / Limit'}
+                    </h3>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <ul className="space-y-4">
                     {selectedCondition.avoided.map((item, i) => {
                       const parsed = parseItem(item);
                       return (
-                        <div key={i} className="bg-[var(--bg-card)] border border-[var(--border-card)] p-6 rounded-3xl hover:border-rose-500/30 transition-all flex flex-col justify-center shadow-sm">
-                          <h4 className="font-extrabold text-[var(--text-main)] text-base mb-1.5 flex items-center gap-2">
-                            <span className="text-rose-500">🔴</span>
-                            <span>{parsed.name}</span>
-                          </h4>
-                          {parsed.desc && <p className="text-xs font-medium text-[var(--text-muted)] leading-relaxed pl-5">{parsed.desc}</p>}
-                        </div>
+                        <li key={i} className="flex items-start gap-3">
+                          <span className="text-rose-500 mt-0.5">▪</span>
+                          <div>
+                            <span className="font-extrabold text-sm text-[var(--text-main)]">{parsed.name}</span>
+                            {parsed.desc && <p className="text-xs font-medium text-[var(--text-muted)] leading-relaxed mt-0.5">{parsed.desc}</p>}
+                          </div>
+                        </li>
                       );
                     })}
-                  </div>
+                  </ul>
                 </div>
               </div>
-            )}
 
-            {activeTab === 'gejala' && (
-              <div className="space-y-12 animate-in fade-in duration-500">
-                {/* Symptoms Tag Clouds */}
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3">
-                    <AlertTriangle className="text-orange-500" size={16} />
-                    <h3 className="text-xs font-black uppercase tracking-widest text-[var(--text-main)]">{language === 'id' ? 'Gejala & Tanda Umum' : 'Common Symptoms & Signs'}</h3>
-                  </div>
-                  <div className="flex flex-wrap gap-3">
-                    {selectedCondition.symptoms.map((symptom, i) => (
-                      <span key={i} className="px-5 py-3.5 bg-[var(--bg-card)] border border-[var(--border-card)] rounded-2xl text-xs font-bold text-[var(--text-main)] shadow-sm hover:border-[var(--primary-green)]/35 transition-all">
-                        ⚠️ {symptom}
-                      </span>
-                    ))}
-                  </div>
+              {/* Tips Pengelolaan & Strategi Block */}
+              <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2rem] p-8 shadow-sm space-y-6">
+                <div className="flex items-center gap-3">
+                  <Lightbulb className="text-[var(--primary-green)]" size={20} />
+                  <h3 className="text-base font-black uppercase tracking-widest text-[var(--text-main)]">
+                    {language === 'id' ? 'Tips Pengelolaan & Strategi' : 'Management Tips & Strategies'}
+                  </h3>
                 </div>
-
-                {/* Daily Nutritional Target Card */}
-                <div className="rounded-[2rem] bg-[var(--bg-card)] border border-[var(--border-card)] p-8 md:p-10 shadow-lg relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--primary-green)]/5 rounded-full blur-2xl pointer-events-none" />
-                  <div className="flex items-center gap-3 mb-6 relative z-10">
-                    <Target className="text-[var(--primary-green)]" size={20} />
-                    <h3 className="text-xs font-black uppercase tracking-widest text-[var(--text-main)]">{language === 'id' ? 'Target Nutrisi Harian' : 'Daily Nutritional Target'}</h3>
-                  </div>
-                  <p className="text-base font-extrabold text-[var(--text-main)] leading-relaxed relative z-10 max-w-4xl">
-                    {selectedCondition.nutritionalTargets}
-                  </p>
-                </div>
-
-                {/* Management Tips / Strategies */}
-                <div className="rounded-[2rem] bg-gradient-to-br from-[var(--bg-card)] to-[var(--bg-secondary)] border border-[var(--border-card)] p-8 md:p-10 shadow-lg">
-                  <div className="flex items-center gap-3 mb-8">
-                    <Lightbulb className="text-[var(--primary-green)]" size={20} />
-                    <h3 className="text-xs font-black uppercase tracking-widest text-[var(--text-main)]">{language === 'id' ? 'Tips Pengelolaan & Strategi' : 'Management Tips & Strategies'}</h3>
-                  </div>
-                  <div className="grid gap-4">
-                    {selectedCondition.strategies.map((tip, i) => (
-                      <div key={i} className="flex items-start gap-4">
-                        <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[var(--primary-green)] shrink-0" />
-                        <p className="text-sm font-semibold leading-relaxed text-[var(--text-main)]">{tip}</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-[var(--border-card)]/30">
+                  {selectedCondition.strategies.map((tip, i) => {
+                    const icons = [<Lightbulb size={20} className="text-[var(--primary-green)]" />, <HeartPulse size={20} className="text-[var(--primary-green)]" />, <Apple size={20} className="text-[var(--primary-green)]" />];
+                    return (
+                      <div key={i} className="space-y-3">
+                        <div className="w-10 h-10 rounded-xl bg-[var(--primary-green)]/10 flex items-center justify-center">
+                          {icons[i % 3]}
+                        </div>
+                        <p className="text-xs font-semibold leading-relaxed text-[var(--text-muted)]">{tip}</p>
                       </div>
-                    ))}
+                    );
+                  })}
+                </div>
+              </div>
+
+            </div>
+
+            {/* RIGHT COLUMN: Sidebar (Target, Aksi Cepat, Referensi) - Takes 1/3 on Desktop */}
+            <div className="space-y-8">
+              
+              {/* Target Nutrisi Harian Widget */}
+              <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2rem] p-6 shadow-sm space-y-4">
+                <h3 className="text-xs font-black uppercase tracking-widest text-[var(--text-main)] mb-2 flex items-center gap-2">
+                  <Target size={14} className="text-[var(--primary-green)]" />
+                  <span>{language === 'id' ? 'Target Nutrisi Harian' : 'Daily Nutrition Targets'}</span>
+                </h3>
+                <div className="space-y-3 pt-3 border-t border-[var(--border-card)]/30">
+                  {targetsList.map((target, idx) => (
+                    <div key={idx} className="bg-[var(--bg-secondary)]/50 border border-[var(--border-card)] rounded-xl p-3 flex justify-between items-center">
+                      <div className="space-y-0.5">
+                        <p className="text-[8px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{target.label}</p>
+                        <p className="text-xs font-black text-[var(--text-main)]">{target.value}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Aksi Cepat Widget */}
+              <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2rem] p-6 shadow-sm space-y-4">
+                <h3 className="text-xs font-black uppercase tracking-widest text-[var(--text-main)] mb-2 flex items-center gap-2">
+                  <span>⚡</span> {language === 'id' ? 'Aksi Cepat' : 'Quick Actions'}
+                </h3>
+                <div className="space-y-3 pt-3 border-t border-[var(--border-card)]/30">
+                  <button 
+                    onClick={() => { setSelectedCondition(null); window.scrollTo(0, 0); }}
+                    className="w-full text-left px-5 py-3.5 rounded-xl bg-[var(--bg-secondary)]/50 border border-[var(--border-card)] hover:border-[var(--primary-green)]/35 text-xs font-bold text-[var(--text-main)] transition-all flex items-center justify-between"
+                  >
+                    <span>🔍 {language === 'id' ? 'Cari Makanan Sesuai' : 'Find Matching Food'}</span>
+                    <span>→</span>
+                  </button>
+                  <button 
+                    onClick={handleSave}
+                    className="w-full text-left px-5 py-3.5 rounded-xl bg-[var(--bg-secondary)]/50 border border-[var(--border-card)] hover:border-[var(--primary-green)]/35 text-xs font-bold text-[var(--text-main)] transition-all flex items-center justify-between"
+                  >
+                    <span>📋 {language === 'id' ? 'Program Diri' : 'Self Program'}</span>
+                    <span>→</span>
+                  </button>
+                  <button 
+                    onClick={handleSave}
+                    className="w-full py-3.5 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-card)] hover:bg-[var(--primary-green)] hover:text-white hover:border-transparent text-xs font-black uppercase tracking-wider text-[var(--text-muted)] transition-all"
+                  >
+                    {language === 'id' ? 'Simpan Panduan' : 'Save Guide'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Referensi & Validasi Widget */}
+              <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2rem] p-6 shadow-sm space-y-5">
+                <h3 className="text-xs font-black uppercase tracking-widest text-[var(--text-main)] flex items-center gap-2">
+                  <BookOpen size={14} className="text-[var(--text-muted)]" />
+                  <span>{language === 'id' ? 'Referensi & Validasi' : 'References & Validation'}</span>
+                </h3>
+                <div className="space-y-4 pt-3 border-t border-[var(--border-card)]/30">
+                  <div>
+                    <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 rounded-full text-[9px] font-black uppercase tracking-wider">✓ Data Terverifikasi</span>
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{language === 'id' ? 'Terakhir Diperbarui' : 'Last Updated'}</p>
+                    <p className="text-xs font-extrabold text-[var(--text-main)] mt-0.5">19 Mei 2026</p>
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{language === 'id' ? 'Sumber Data' : 'Data Sources'}</p>
+                    <div className="flex flex-wrap gap-2 mt-1.5">
+                      {selectedCondition.references.map((ref, idx) => (
+                        <span key={idx} className="px-2.5 py-1 bg-[var(--bg-secondary)] border border-[var(--border-card)] rounded-lg text-[9px] font-extrabold text-[var(--text-main)]">{ref}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{language === 'id' ? 'Diverifikasi Oleh' : 'Verified By'}</p>
+                    <p className="text-xs font-black text-[var(--primary-green)] uppercase tracking-wider mt-0.5">Tim NutriNusa</p>
                   </div>
                 </div>
               </div>
-            )}
 
-            {activeTab === 'faq' && (
-              <div className="space-y-6 animate-in fade-in duration-500">
-                {selectedCondition.faq.map((item, i) => (
-                  <div key={i} className="bg-[var(--bg-card)] rounded-[2rem] border border-[var(--border-card)] overflow-hidden shadow-sm hover:border-[var(--primary-green)]/30 transition-all">
-                    <div className="p-6 bg-[var(--bg-secondary)]/50 border-b border-[var(--border-card)]/50 flex items-start gap-4">
-                      <HelpCircle className="text-[var(--primary-green)] mt-0.5 shrink-0" size={18} />
-                      <h4 className="font-extrabold text-[var(--text-main)] text-sm">{item.q}</h4>
-                    </div>
-                    <div className="p-6 md:p-8">
-                      <p className="text-xs font-semibold leading-relaxed text-[var(--text-muted)]">{item.a}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            </div>
           </div>
 
-          {/* Medical References Footer block */}
-          <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2rem] p-8 md:p-10 mb-16 shadow-md">
-            <div className="flex items-center gap-3 mb-6">
-              <BookOpen className="text-[var(--text-muted)]" size={16} />
-              <h3 className="text-[9px] font-black uppercase tracking-widest text-[var(--text-muted)]">{language === 'id' ? 'Referensi Medis & Validasi' : 'Medical References & Validation'}</h3>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-left pt-6 border-t border-[var(--border-card)]/30">
-              <div>
-                <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{language === 'id' ? 'Status Data' : 'Data Status'}</p>
-                <p className="text-xs font-black text-emerald-500 uppercase tracking-tight mt-1">✓ Terverifikasi</p>
-              </div>
-              <div>
-                <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{language === 'id' ? 'Terakhir Diperbarui' : 'Last Updated'}</p>
-                <p className="text-xs font-extrabold text-[var(--text-main)] mt-1">19 Mei 2026</p>
-              </div>
-              <div>
-                <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{language === 'id' ? 'Sumber Medis' : 'Medical Sources'}</p>
-                <p className="text-xs font-extrabold text-[var(--text-main)] mt-1">{selectedCondition.references.join(', ')}</p>
-              </div>
-              <div>
-                <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{language === 'id' ? 'Diverifikasi Oleh' : 'Verified By'}</p>
-                <p className="text-xs font-black text-[var(--primary-green)] uppercase tracking-tight mt-1">Tim NutriAI</p>
-              </div>
+          {/* Collapsible FAQ Accordion */}
+          <div className="space-y-6 mb-16 pt-8 border-t border-[var(--border-card)]/30">
+            <h3 className="text-lg font-black uppercase tracking-widest text-[var(--text-main)]">
+              {language === 'id' ? 'Pertanyaan Umum' : 'Frequently Asked Questions'}
+            </h3>
+            <div className="space-y-3">
+              {selectedCondition.faq.map((item, i) => {
+                const isOpen = openFaqIndex === i;
+                return (
+                  <div key={i} className="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-card)] overflow-hidden shadow-sm transition-all duration-300">
+                    <button 
+                      onClick={() => setOpenFaqIndex(isOpen ? null : i)}
+                      className="w-full p-6 text-left flex justify-between items-center font-extrabold text-[var(--text-main)] text-sm hover:text-[var(--primary-green)] transition-colors"
+                    >
+                      <span>{item.q}</span>
+                      <ChevronDown className={`transition-transform duration-300 ${isOpen ? 'rotate-180 text-[var(--primary-green)]' : 'text-[var(--text-muted)]'}`} size={16} />
+                    </button>
+                    {isOpen && (
+                      <div className="px-6 pb-6 pt-2 border-t border-[var(--border-card)]/30 animate-in fade-in duration-300">
+                        <p className="text-xs font-semibold leading-relaxed text-[var(--text-muted)]">{item.a}</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
           {/* Explore Other Conditions (Interactive footer cards with image backgrounds!) */}
-          <div className="space-y-6">
+          <div className="space-y-6 pt-8 border-t border-[var(--border-card)]/30">
             <h3 className="text-base font-black uppercase tracking-widest text-[var(--text-main)]">{language === 'id' ? 'Jelajahi Kondisi Kesehatan Lainnya' : 'Explore Other Health Conditions'}</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {otherConditions.slice(0, 3).map((condition) => (
                 <button
                   key={condition.id}
-                  onClick={() => { setSelectedCondition(condition); setActiveTab('nutrisi'); window.scrollTo(0, 0); }}
+                  onClick={() => { setSelectedCondition(condition); setOpenFaqIndex(null); window.scrollTo(0, 0); }}
                   className="group text-left bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2rem] overflow-hidden hover:border-[var(--primary-green)]/35 hover:scale-[1.02] transition-all flex flex-col shadow-sm h-full"
                 >
                   <div className="h-28 w-full overflow-hidden relative shrink-0">
@@ -402,7 +481,7 @@ const PanduanPage = () => {
               aria-label={`${language === 'id' ? 'Lihat panduan' : 'View guide for'} ${condition.title}`}
               onClick={() => {
                 setSelectedCondition(condition);
-                setActiveTab('nutrisi');
+                setOpenFaqIndex(null);
                 window.scrollTo(0, 0);
               }}
               className="group text-left bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] overflow-hidden transition-all hover:scale-[1.02] hover:border-[var(--primary-green)]/30 hover:shadow-2xl hover:shadow-[var(--primary-green)]/10 flex flex-col h-full"
