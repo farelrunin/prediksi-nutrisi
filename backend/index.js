@@ -28,6 +28,40 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.use(express.json());
+
+// ── Security Headers (improves Lighthouse Best Practices score) ─────────────
+app.use((req, res, next) => {
+  // Prevent clickjacking (XFO)
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  // Block MIME sniffing
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  // Referrer policy
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  // Permissions policy — disable unnecessary browser features
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  // Cross-Origin Opener Policy (COOP) — required for SharedArrayBuffer / isolation
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  // Cross-Origin Resource Policy
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  // HSTS — force HTTPS for 1 year (Railway always serves HTTPS)
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  // Content Security Policy — allow Railway frontend origins + Unsplash images
+  res.setHeader(
+    'Content-Security-Policy',
+    [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://accounts.google.com https://*.googleapis.com",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com",
+      "img-src 'self' data: blob: https://images.unsplash.com https://*.up.railway.app https://lh3.googleusercontent.com",
+      "connect-src 'self' https://*.up.railway.app https://accounts.google.com https://oauth2.googleapis.com https://generativelanguage.googleapis.com",
+      "frame-src https://accounts.google.com",
+      "object-src 'none'",
+      "base-uri 'self'"
+    ].join('; ')
+  );
+  next();
+});
 app.use("/static", express.static("static"));
 
 // Use Routers
