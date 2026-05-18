@@ -2,7 +2,7 @@
   "name": "prediksi-nutrisi-all-in-one",
   "private": true,
   "scripts": {
-    "start": "if [ \"$SERVICE_TYPE\" = \"frontend\" ]; then cd frontend && npm install && npm run dev; else cd backend && node index.js; fi"
+    "start": "if [ \"$SERVICE_TYPE\" = \"frontend\" ]; then cd frontend && npm install && npm run build && npx serve -s dist -l ${PORT:-3000}; else cd backend && node index.js; fi"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
