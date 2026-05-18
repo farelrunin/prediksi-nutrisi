@@ -174,6 +174,14 @@ export default function SoftAurora({
       () => {
         if (!container || !container.isConnected) return;
 
+        // Bypass heavy WebGL shaders on mobile viewports to secure peak mobile performance
+        if (window.innerWidth < 768) {
+          container.style.background = `linear-gradient(135deg, ${color1}25 0%, ${color2}25 100%)`;
+          container.style.filter = 'blur(60px)';
+          container.style.opacity = '0.8';
+          return;
+        }
+
         const renderer = new Renderer({ alpha: true, premultipliedAlpha: false });
         const gl = renderer.gl;
         gl.clearColor(0, 0, 0, 0);
