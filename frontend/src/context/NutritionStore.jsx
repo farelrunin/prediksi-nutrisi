@@ -210,6 +210,15 @@ export const NutritionProvider = ({ children }) => {
     }
   };
 
+  const predictNutritionImage = async (formData) => {
+    try {
+      return await nutritionService.predictNutritionImage(formData);
+    } catch (error) {
+      console.error("Failed to predict image:", error);
+      throw error;
+    }
+  };
+
   const refreshHistory = async () => {
     if (!localStorage.getItem('token')) {
       return;
@@ -407,6 +416,7 @@ export const NutritionProvider = ({ children }) => {
         addFoodEntry,
         deleteFoodEntry,
         predictNutrition,
+        predictNutritionImage,
         getRiskScore,
         refreshHistory,
         updateProfile

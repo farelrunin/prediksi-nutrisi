@@ -69,21 +69,28 @@ const FoodForm = ({ onAddFood, submitLabel = 'Add Food' }) => {
     };
   }, []);
 
-  const startCamera = async () => {
+  const startCamera = async (currentFacing = facingMode) => {
     stopCamera();
+    setIsCameraActive(true);
+    
     try {
       const constraints = {
-        video: { facingMode: facingMode }
+        video: { facingMode: currentFacing }
       };
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
-      }
-      setIsCameraActive(true);
+      
+      // Wait a short tick for React to render the video element and bind the ref
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.setAttribute("playsinline", "true");
+          videoRef.current.play().catch(e => console.error("Error playing video:", e));
+        }
+      }, 100);
     } catch (err) {
       console.error("Camera access failed:", err);
+      setIsCameraActive(false);
       notify({
         type: 'error',
         title: language === 'id' ? 'Kamera Gagal' : 'Camera Failed',
@@ -108,7 +115,7 @@ const FoodForm = ({ onAddFood, submitLabel = 'Add Food' }) => {
     setFacingMode(nextFacing);
     if (isCameraActive) {
       setTimeout(() => {
-        startCamera();
+        startCamera(nextFacing);
       }, 100);
     }
   };
