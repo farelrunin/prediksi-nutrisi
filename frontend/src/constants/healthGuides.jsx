@@ -233,7 +233,7 @@ export const getHealthConditions = (language) => [
     title: 'GERD',
     scientificName: 'Gastroesophageal Reflux Disease (Penyakit Refluks Asam Lambung)',
     icon: <Wind className="text-emerald-500" />,
-    image: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1517686469429-8faf88b9f7af?auto=format&fit=crop&w=600&q=80',
     description: language === 'id' ? 'Penyakit kronis di mana isi lambung mengalir kembali ke kerongkongan, menyebabkan gejala yang tidak nyaman seperti heartburn.' : 'A condition where stomach contents flow back into the esophagus, causing a burning sensation (heartburn).',
     symptoms: language === 'id' ? 
       ['Sensasi terbakar di dada (heartburn)', 'Rasa asam di mulut', 'Suara serak', 'Batuk kering kronis', 'Kesulitan menelan'] : 
@@ -307,7 +307,7 @@ export const getHealthConditions = (language) => [
     title: 'Hipotensi (Darah Rendah)',
     scientificName: 'Hipotensi',
     icon: <Droplets className="text-pink-400" />,
-    image: 'https://images.unsplash.com/photo-1529822641104-e12afc55861b?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=600&q=80',
     description: language === 'id' ? 'Kondisi tekanan darah di bawah 90/60 mmHg. Berbeda dengan hipertensi yang butuh pantang garam, penderita hipotensi memerlukan asupan cairan dan garam terukur.' : 'A condition where blood pressure is below normal (90/60 mmHg), which can cause dizziness or fainting.',
     symptoms: language === 'id' ? 
       ['Pusing atau kliyengan', 'Pandangan kabur', 'Mual', 'Pingsan (sinkop)', 'Kurang konsentrasi'] : 
