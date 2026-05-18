@@ -18,6 +18,7 @@ import {
   Shield,
   ChevronRight,
   Moon,
+  X,
 } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
 import { useTheme } from '../context/ThemeContext';
@@ -40,6 +41,25 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+
+  // Admin Owner Control states
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+  const [adminStats, setAdminStats] = useState(null);
+  const [adminLoading, setAdminLoading] = useState(false);
+
+  const openAdminModal = async () => {
+    setIsAdminModalOpen(true);
+    setAdminLoading(true);
+    try {
+      const stats = await authService.getSystemStats();
+      setAdminStats(stats);
+    } catch (err) {
+      console.error(err);
+      notify({ type: 'error', title: 'Akses Gagal', message: 'Tidak dapat memuat statistik sistem.' });
+    } finally {
+      setAdminLoading(false);
+    }
+  };
 
   // Custom Cropper states
   const [isCropping, setIsCropping] = useState(false);
@@ -679,6 +699,33 @@ const ProfilePage = () => {
                 </div>
               )}
             </div>
+
+            {/* System Owner / Admin Panel */}
+            <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-10 shadow-xl relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-[4px] h-full bg-[var(--primary-green)]" />
+              <div className="flex items-center gap-4 mb-6">
+                <div className="p-3 bg-[var(--primary-green)]/10 rounded-2xl text-[var(--primary-green)]">
+                  <Shield size={24} />
+                </div>
+                <div>
+                  <h4 className="text-lg font-black text-[var(--text-main)]">Owner Dashboard</h4>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)]">Control Panel</p>
+                </div>
+              </div>
+              <p className="text-xs text-[var(--text-muted)] font-semibold mb-6 leading-relaxed">
+                {language === 'id' 
+                  ? 'Sebagai pemilik sistem, Anda dapat memantau total pengguna terdaftar, riwayat jurnal makanan, dan aktivitas database secara live.' 
+                  : 'As the system owner, you can monitor total registered users, food journal entries, and view live database activity.'}
+              </p>
+              <button
+                type="button"
+                onClick={openAdminModal}
+                className="w-full flex items-center justify-center gap-3 bg-[var(--primary-green)] hover:scale-[1.02] active:scale-100 text-white font-black py-4 px-6 rounded-2xl shadow-lg shadow-emerald-500/10 transition-all text-xs uppercase tracking-widest"
+              >
+                <Zap size={16} />
+                <span>{language === 'id' ? 'Buka Panel Aktivitas' : 'Open Admin Center'}</span>
+              </button>
+            </div>
           </div>
 
           {/* RIGHT: Form */}
@@ -882,6 +929,118 @@ const ProfilePage = () => {
         message={t.resetMessage}
         itemName={t.resetItem}
       />
+
+      {/* Admin / Owner Dashboard Modal */}
+      {isAdminModalOpen && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-300">
+          <div className="relative w-full max-w-4xl bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[3rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+            
+            {/* Modal Header */}
+            <div className="p-8 md:p-10 border-b border-[var(--border-card)] flex justify-between items-center bg-[var(--bg-secondary)]/50">
+              <div className="flex items-center gap-4">
+                <div className="p-3.5 bg-[var(--primary-green)] text-white rounded-2xl shadow-lg shadow-emerald-500/20">
+                  <Shield size={24} />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-black text-[var(--text-main)]">System Owner Control Center</h3>
+                  <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mt-1">Live Database Overview & Activity</p>
+                </div>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setIsAdminModalOpen(false)} 
+                className="p-3.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-card)] text-[var(--text-muted)] hover:text-rose-500 transition-colors shadow-sm active:scale-95"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-8 md:p-10 max-h-[60vh] overflow-y-auto space-y-8 custom-scrollbar">
+              {adminLoading ? (
+                <div className="py-20 flex flex-col items-center justify-center gap-4">
+                  <RefreshCw size={40} className="animate-spin text-[var(--primary-green)]" />
+                  <p className="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Fetching Live Stats...</p>
+                </div>
+              ) : adminStats ? (
+                <>
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div className="bg-[var(--bg-secondary)] rounded-3xl p-6 border border-[var(--border-card)]/50 relative overflow-hidden group">
+                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">Total Registered Users</div>
+                      <div className="text-4xl font-black text-[var(--text-main)]">{adminStats.totalUsers}</div>
+                      <div className="text-[10px] text-emerald-500 font-bold mt-2 flex items-center gap-1">🟢 Active Accounts</div>
+                    </div>
+                    <div className="bg-[var(--bg-secondary)] rounded-3xl p-6 border border-[var(--border-card)]/50 relative overflow-hidden group">
+                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">Total Food Journals</div>
+                      <div className="text-4xl font-black text-[var(--text-main)]">{adminStats.totalEntries}</div>
+                      <div className="text-[10px] text-[var(--primary-green)] font-bold mt-2 flex items-center gap-1">⚡ AI & Manual Analyzed</div>
+                    </div>
+                    <div className="bg-[var(--bg-secondary)] rounded-3xl p-6 border border-[var(--border-card)]/50 relative overflow-hidden group">
+                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">Database Status</div>
+                      <div className="text-md font-extrabold text-emerald-500 mt-2">🟢 CONNECTED</div>
+                      <div className="text-[10px] text-[var(--text-muted)] font-bold mt-1">Sequelize ORM Sync: OK</div>
+                    </div>
+                  </div>
+
+                  {/* Registered Users List */}
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center px-2">
+                      <h4 className="text-sm font-black uppercase tracking-wider text-[var(--text-muted)]">User Registry ({adminStats.users.length})</h4>
+                      <span className="text-[10px] font-bold text-[var(--primary-green)] uppercase">Sorted by newest</span>
+                    </div>
+
+                    <div className="border border-[var(--border-card)] rounded-3xl overflow-hidden bg-[var(--bg-secondary)]/30">
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                          <thead>
+                            <tr className="bg-[var(--bg-secondary)] text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] border-b border-[var(--border-card)]">
+                              <th className="py-4 px-6">Name</th>
+                              <th className="py-4 px-6">Email</th>
+                              <th className="py-4 px-6">Gender</th>
+                              <th className="py-4 px-6">Joined Date</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-[var(--border-card)]/30 text-xs font-semibold text-[var(--text-main)] bg-[var(--bg-card)]">
+                            {adminStats.users.map((u) => (
+                              <tr key={u.id} className="hover:bg-[var(--primary-green)]/5 transition-colors">
+                                <td className="py-4 px-6 font-bold">{u.name}</td>
+                                <td className="py-4 px-6 text-[var(--text-muted)]">{u.email}</td>
+                                <td className="py-4 px-6 capitalize">{u.gender || '-'}</td>
+                                <td className="py-4 px-6 text-[var(--text-muted)]">
+                                  {new Date(u.created_at || Date.now()).toLocaleDateString('id-ID', {
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric'
+                                  })}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <p className="text-center text-rose-500 font-bold">Failed to load statistics.</p>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="p-8 border-t border-[var(--border-card)] bg-[var(--bg-secondary)]/20 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setIsAdminModalOpen(false)}
+                className="px-8 py-3.5 rounded-2xl font-bold bg-[var(--bg-card)] border border-[var(--border-card)] text-[var(--text-muted)] hover:text-rose-500 transition-all text-xs uppercase tracking-widest active:scale-95"
+              >
+                Close
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 };

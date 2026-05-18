@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { User } = require("../models-express");
+const { User, FoodEntry } = require("../models-express");
 const authenticateToken = require("../middleware/auth");
 
 const SECRET_KEY = process.env.SECRET_KEY;
@@ -115,6 +115,28 @@ router.get("/akg", authenticateToken, async (req, res) => {
     calcium: 1000,
     vitamin_c: 90
   });
+});
+
+// System Owner Stats (Total Users & Total Food Entries)
+router.get("/system-stats", authenticateToken, async (req, res) => {
+  try {
+    const totalUsers = await User.count();
+    const totalEntries = await FoodEntry.count();
+    
+    // Ambil list semua user terdaftar
+    const users = await User.findAll({
+      attributes: ["id", "name", "email", "gender", "created_at"],
+      order: [["created_at", "DESC"]]
+    });
+
+    res.json({
+      totalUsers,
+      totalEntries,
+      users
+    });
+  } catch (error) {
+    res.status(500).json({ detail: error.message });
+  }
 });
 
 module.exports = router;

@@ -98,6 +98,20 @@ export const authService = {
     }
   },
 
+  async getSystemStats() {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API_BASE_URL}/auth/system-stats`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(this.parseError(error, 'Failed to load system statistics'));
+    }
+  },
+
   parseError(error, defaultMsg = 'Terjadi kesalahan') {
     const detail = error.response?.data?.detail;
     if (Array.isArray(detail)) {
