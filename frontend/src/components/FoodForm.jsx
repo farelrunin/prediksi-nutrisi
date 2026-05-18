@@ -132,7 +132,7 @@ const FoodForm = ({ onAddFood }) => {
     };
   };
 
-  const { predictNutrition, predictNutritionImage } = useNutrition();
+  const { predictNutrition, predictNutritionImage, refreshHistory } = useNutrition();
 
   // 1. Fetch Categories from Backend Dataset on Mount
   useEffect(() => {
@@ -593,6 +593,12 @@ const FoodForm = ({ onAddFood }) => {
         };
         await onAddFood(payload);
       }
+      
+      // Trigger a full history refresh from backend to ensure all batched items are loaded
+      if (refreshHistory) {
+        await refreshHistory();
+      }
+      
       setLoggedFoods([]);
       notify({
         type: 'success',
