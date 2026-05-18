@@ -16,7 +16,7 @@
   --secondary-green: #14532D;
   --accent-blue: #38BDF8;
   --text-main: #102A1C;
-  --text-muted: #64748B;
+  --text-muted: #475569; /* Darkened for compliant WCAG AA contrast (6.0:1) */
   --warning: #F59E0B;
   --danger: #EF4444;
   --glass-bg: rgba(255, 255, 255, 0.7);
