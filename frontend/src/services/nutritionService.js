@@ -13,8 +13,9 @@ export const nutritionService = {
         }
       });
       return response.data;
-    } catch {
-      throw new Error('Failed to add food entry');
+    } catch (error) {
+      const msg = error.response?.data?.detail || error.message || 'Failed to add food entry';
+      throw new Error(msg);
     }
   },
 
