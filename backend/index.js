@@ -37,8 +37,8 @@ app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   // Referrer policy
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  // Permissions policy — disable unnecessary browser features
-  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  // Permissions policy — allow camera for photo scanning feature
+  res.setHeader('Permissions-Policy', 'camera=*, microphone=(), geolocation=()');
   // Cross-Origin Opener Policy (COOP) — required for SharedArrayBuffer / isolation
   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
   // Cross-Origin Resource Policy
@@ -81,6 +81,14 @@ require("./models-express");
     await connectDB();
     await sequelize.sync({ alter: true });
     console.log("✅ Database synchronized (Production)");
+    
+    // Jalankan ALTER TABLE jika kolom image_url belum ada di MySQL database
+    try {
+      await sequelize.query("ALTER TABLE food_entries ADD COLUMN image_url LONGTEXT NULL;");
+      console.log("✅ Column 'image_url' added successfully to food_entries");
+    } catch (alterErr) {
+      console.log("ℹ️ Column 'image_url' might already exist, skipping: " + alterErr.message);
+    }
     
     // ISI DATA OTOMATIS (SEEDING)
     await seedData();
