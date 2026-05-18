@@ -189,7 +189,7 @@ const Navbar = () => {
                     }
                   }}
                   className={() => {
-                    return `relative z-10 px-6 py-2.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-500 block ${isActive || hoveredIndex === index ? 'text-black' : 'text-[var(--text-main)]'}`;
+                    return `relative z-10 px-6 py-2.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-500 block ${isActive || hoveredIndex === index ? (theme === 'dark' ? 'text-black' : 'text-white') : 'text-[var(--text-main)]'}`;
                   }}
                 >
                   {item.label}
