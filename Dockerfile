@@ -13,8 +13,6 @@ ENV SERVICE_TYPE=$SERVICE_TYPE
 RUN cd frontend && npm install && npm run build
 RUN cd backend && npm install
 
-# Buka port yang dibutuhkan
-EXPOSE 8000 5173 3000
 
 # Jalankan aplikasi sesuai tipe service
 CMD if [ "$SERVICE_TYPE" = "frontend" ]; then \
