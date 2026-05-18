@@ -9,8 +9,8 @@ import ConfirmModal from '../shared/ConfirmModal';
 
 const getPublicMenuItems = (t) => [
   { label: t.home, to: '/', scrollTop: true },
-  { label: 'Features', to: '/#features', hash: '#features' },
-  { label: 'How it Works', to: '/#how-it-works', hash: '#how-it-works' },
+  { label: t.features, to: '/#features', hash: '#features' },
+  { label: t.howItWorks, to: '/#how-it-works', hash: '#how-it-works' },
   { label: t.categories, to: '/categories' },
   { label: t.guide, to: '/guide' },
 ];
@@ -233,7 +233,7 @@ const Navbar = () => {
                 onClick={() => setIsGuestMenuOpen(!isGuestMenuOpen)}
                 className="bg-[var(--text-main)] text-[var(--bg-primary)] px-4 md:px-6 py-2.5 md:py-3 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg flex items-center gap-2"
               >
-                <span>Get Started</span>
+                <span>{t.getStarted}</span>
               </button>
 
               {/* Guest Dropdown for Mobile/Desktop */}
@@ -243,13 +243,13 @@ const Navbar = () => {
                     to="/login"
                     className="flex items-center gap-3 px-4 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest text-[var(--text-main)] hover:bg-[var(--primary-green)]/10 hover:text-[var(--primary-green)] transition-all"
                   >
-                    Login
+                    {t.login}
                   </Link>
                   <Link 
                     to="/register"
                     className="flex items-center gap-3 px-4 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest text-[var(--text-main)] hover:bg-[var(--primary-green)]/10 hover:text-[var(--primary-green)] transition-all"
                   >
-                    Sign Up
+                    {t.signUp}
                   </Link>
                 </div>
               )}

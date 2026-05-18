@@ -966,8 +966,8 @@ const ProfilePage = () => {
                   <Shield size={24} />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-black text-[var(--text-main)]">System Owner Control Center</h3>
-                  <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mt-1">Live Database Overview & Activity</p>
+                  <h3 className="text-2xl font-black text-[var(--text-main)]">{t.ownerControlCenter}</h3>
+                  <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mt-1">{t.liveDatabaseOverview}</p>
                 </div>
               </div>
               <button 
@@ -984,38 +984,38 @@ const ProfilePage = () => {
               {adminLoading ? (
                 <div className="py-20 flex flex-col items-center justify-center gap-4">
                   <RefreshCw size={40} className="animate-spin text-[var(--primary-green)]" />
-                  <p className="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Fetching Live Stats...</p>
+                  <p className="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">{t.fetchingLiveStats}</p>
                 </div>
               ) : adminStats ? (
                 <>
                   {/* Stats Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     <div className="bg-[var(--bg-secondary)] rounded-3xl p-6 border border-[var(--border-card)]/50 relative overflow-hidden group">
-                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">Total Accounts</div>
+                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">{t.totalAccounts}</div>
                       <div className="text-3xl font-black text-[var(--text-main)]">{adminStats.totalUsers}</div>
                       <div className="text-[10px] text-[var(--text-muted)] font-bold mt-2">
-                        👥 Real: <span className="text-[var(--primary-green)] font-extrabold">{adminStats.totalRealUsers}</span> | 🧪 Test: <span className="text-rose-400 font-extrabold">{adminStats.totalTestUsers}</span>
+                        👥 {t.real}: <span className="text-[var(--primary-green)] font-extrabold">{adminStats.totalRealUsers}</span> | 🧪 {t.test}: <span className="text-rose-400 font-extrabold">{adminStats.totalTestUsers}</span>
                       </div>
                     </div>
                     <div className="bg-[var(--bg-secondary)] rounded-3xl p-6 border border-[var(--border-card)]/50 relative overflow-hidden group">
-                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">Total Food Journals</div>
+                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">{t.totalFoodJournals}</div>
                       <div className="text-3xl font-black text-[var(--text-main)]">{adminStats.totalEntries}</div>
-                      <div className="text-[10px] text-[var(--primary-green)] font-bold mt-2 flex items-center gap-1">⚡ AI & Manual Logs</div>
+                      <div className="text-[10px] text-[var(--primary-green)] font-bold mt-2 flex items-center gap-1">{t.aiManualLogs}</div>
                     </div>
                     <div className="bg-[var(--bg-secondary)] rounded-3xl p-6 border border-[var(--border-card)]/50 relative overflow-hidden group">
-                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">Search Library Items</div>
+                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">{t.searchLibraryItems}</div>
                       <div className="text-3xl font-black text-[var(--text-main)]">{adminStats.totalFoodLibrary}</div>
-                      <div className="text-[10px] text-[var(--text-muted)] font-bold mt-2">📂 Seeded USDA & Local</div>
+                      <div className="text-[10px] text-[var(--text-muted)] font-bold mt-2">{t.seededUdaLocal}</div>
                     </div>
                     <div className="bg-[var(--bg-secondary)] rounded-3xl p-6 border border-[var(--border-card)]/50 relative overflow-hidden group">
-                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">Database Engine</div>
-                      <div className="text-lg font-black text-emerald-500 mt-2">🟢 CONNECTED</div>
-                      <div className="text-[10px] text-[var(--text-muted)] font-bold mt-1">Sequelize ORM Sync: OK</div>
+                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">{t.databaseEngine}</div>
+                      <div className="text-lg font-black text-emerald-500 mt-2">🟢 {t.connected}</div>
+                      <div className="text-[10px] text-[var(--text-muted)] font-bold mt-1">{t.sequelizeSyncOk}</div>
                     </div>
                     <div className="bg-[var(--bg-secondary)] rounded-3xl p-6 border border-[var(--border-card)]/50 relative overflow-hidden group">
-                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">Gemini AI Status</div>
-                      <div className="text-lg font-black text-[var(--primary-green)] mt-2">🟢 ACTIVE</div>
-                      <div className="text-[10px] text-[var(--text-muted)] font-bold mt-1">🌿 Prompt Optimization Enabled</div>
+                      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-muted)] mb-2">{t.geminiStatus}</div>
+                      <div className="text-lg font-black text-[var(--primary-green)] mt-2">🟢 {t.active}</div>
+                      <div className="text-[10px] text-[var(--text-muted)] font-bold mt-1">{t.promptOptimizationEnabled}</div>
                     </div>
                   </div>
 
@@ -1023,11 +1023,9 @@ const ProfilePage = () => {
                   {adminStats.totalTestUsers > 0 && (
                     <div className="bg-rose-500/10 border border-rose-500/20 rounded-3xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 animate-in slide-in-from-bottom duration-300">
                       <div>
-                        <h4 className="text-sm font-black text-[var(--text-main)]">Database Optimization Alert 🧹</h4>
+                        <h4 className="text-sm font-black text-[var(--text-main)]">{t.databaseOptimizationAlert}</h4>
                         <p className="text-xs text-[var(--text-muted)] font-medium mt-1">
-                          {language === 'id' 
-                            ? `Terdeteksi ${adminStats.totalTestUsers} akun tester sampah hasil uji coba otomatis. Bersihkan sekarang untuk meningkatkan kecepatan query database Anda.`
-                            : `Detected ${adminStats.totalTestUsers} garbage test accounts from automated testing. Clean them up now to boost database query response times.`}
+                          {t.detectedGarbageAccounts.replace('{count}', adminStats.totalTestUsers)}
                         </p>
                       </div>
                       <button
@@ -1037,7 +1035,7 @@ const ProfilePage = () => {
                         className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs uppercase tracking-widest px-6 py-3.5 rounded-2xl shadow-lg shadow-rose-500/20 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2 whitespace-nowrap self-start md:self-auto"
                       >
                         {cleanupLoading ? <RefreshCw size={14} className="animate-spin" /> : <Shield size={14} />}
-                        <span>{language === 'id' ? 'Bersihkan Akun Tester' : 'Purge Dummy Accounts'}</span>
+                        <span>{t.purgeDummyAccounts}</span>
                       </button>
                     </div>
                   )}
@@ -1045,8 +1043,8 @@ const ProfilePage = () => {
                   {/* Registered Users List */}
                   <div className="space-y-4">
                     <div className="flex justify-between items-center px-2">
-                      <h4 className="text-sm font-black uppercase tracking-wider text-[var(--text-muted)]">User Registry</h4>
-                      <span className="text-[10px] font-bold text-[var(--primary-green)] uppercase">Sorted by newest</span>
+                      <h4 className="text-sm font-black uppercase tracking-wider text-[var(--text-muted)]">{t.userRegistry}</h4>
+                      <span className="text-[10px] font-bold text-[var(--primary-green)] uppercase">{t.sortedByNewest}</span>
                     </div>
 
                     <div className="border border-[var(--border-card)] rounded-3xl overflow-hidden bg-[var(--bg-secondary)]/30">
@@ -1054,11 +1052,11 @@ const ProfilePage = () => {
                         <table className="w-full text-left border-collapse">
                           <thead>
                             <tr className="bg-[var(--bg-secondary)] text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] border-b border-[var(--border-card)]">
-                              <th className="py-4 px-6">Name</th>
-                              <th className="py-4 px-6">Email</th>
-                              <th className="py-4 px-6">Gender</th>
-                              <th className="py-4 px-6">Gemini AI Usage</th>
-                              <th className="py-4 px-6">Joined Date</th>
+                              <th className="py-4 px-6">{t.tableHeaderName}</th>
+                              <th className="py-4 px-6">{t.tableHeaderEmail}</th>
+                              <th className="py-4 px-6">{t.tableHeaderGender}</th>
+                              <th className="py-4 px-6">{t.tableHeaderAiUsage}</th>
+                              <th className="py-4 px-6">{t.tableHeaderJoinedDate}</th>
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-[var(--border-card)]/30 text-xs font-semibold text-[var(--text-main)] bg-[var(--bg-card)]">
@@ -1073,9 +1071,9 @@ const ProfilePage = () => {
                                   <td className="py-4 px-6 font-black text-emerald-500">
                                     {estTokens > 0 ? (
                                       <span>
-                                        {estTokens.toLocaleString('id-ID')} <span className="text-[9px] font-bold text-[var(--text-muted)]">Tokens</span>
+                                        {estTokens.toLocaleString(language === 'id' ? 'id-ID' : 'en-US')} <span className="text-[9px] font-bold text-[var(--text-muted)]">{t.tokens}</span>
                                         <span className="text-[10px] text-[var(--text-muted)] block font-bold uppercase tracking-tight">
-                                          ({foodCount} {foodCount === 1 ? 'call' : 'calls'})
+                                          ({foodCount} {foodCount === 1 ? t.call : t.calls})
                                         </span>
                                       </span>
                                     ) : (
@@ -1083,7 +1081,7 @@ const ProfilePage = () => {
                                     )}
                                   </td>
                                   <td className="py-4 px-6 text-[var(--text-muted)]">
-                                    {new Date(u.created_at || Date.now()).toLocaleDateString('id-ID', {
+                                    {new Date(u.created_at || Date.now()).toLocaleDateString(language === 'id' ? 'id-ID' : 'en-US', {
                                       year: 'numeric',
                                       month: 'short',
                                       day: 'numeric'
@@ -1099,7 +1097,7 @@ const ProfilePage = () => {
                   </div>
                 </>
               ) : (
-                <p className="text-center text-rose-500 font-bold">Failed to load statistics.</p>
+                <p className="text-center text-rose-500 font-bold">{t.failedToLoadStats}</p>
               )}
             </div>
 
@@ -1110,7 +1108,7 @@ const ProfilePage = () => {
                 onClick={() => setIsAdminModalOpen(false)}
                 className="px-8 py-3.5 rounded-2xl font-bold bg-[var(--bg-card)] border border-[var(--border-card)] text-[var(--text-muted)] hover:text-rose-500 transition-all text-xs uppercase tracking-widest active:scale-95"
               >
-                Close
+                {t.close}
               </button>
             </div>
 

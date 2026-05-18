@@ -59,9 +59,17 @@ const HistoryPage = () => {
       setIsDeleting(true);
       try {
         await deleteFoodEntry(deleteModal.item.id);
-        notify({ type: 'success', title: language === 'id' ? 'Berhasil' : 'Success', message: language === 'id' ? 'Data nutrisi berhasil dihapus.' : 'Nutrition data deleted successfully.' });
+        notify({ 
+          type: 'success', 
+          title: t.successDelete, 
+          message: t.successDeleteMsg 
+        });
       } catch (error) {
-        notify({ type: 'error', title: language === 'id' ? 'Gagal Menghapus' : 'Delete Failed', message: error.message });
+        notify({ 
+          type: 'error', 
+          title: t.deleteFailed, 
+          message: error.message 
+        });
       } finally {
         setIsDeleting(false);
       }
@@ -77,13 +85,17 @@ const HistoryPage = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
             <h1 className="text-4xl font-black tracking-tight text-[var(--text-main)]">
-              {language === 'id' ? 'Jurnal' : 'Nutrition'} <span className="text-[var(--primary-green)]">{language === 'id' ? 'Nutrisi' : 'Journal'}</span>
+              {language === 'id' ? (
+                <>Jurnal <span className="text-[var(--primary-green)]">Nutrisi</span></>
+              ) : (
+                <>Nutrition <span className="text-[var(--primary-green)]">Journal</span></>
+              )}
             </h1>
-            <p className="mt-2 text-[var(--text-muted)] font-medium">{language === 'id' ? 'Riwayat lengkap perjalanan nutrisi harian Anda.' : 'Complete history of your daily nutrition journey.'}</p>
+            <p className="mt-2 text-[var(--text-muted)] font-medium">{t.historySubtitle}</p>
           </div>
           <div className="bg-[var(--bg-card)] border border-[var(--border-card)] px-8 py-4 rounded-3xl shadow-xl flex items-center gap-4">
             <div className="text-center">
-              <div className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">{language === 'id' ? 'Total Entri' : 'Total Entries'}</div>
+              <div className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">{t.totalEntries}</div>
               <div className="text-xl font-black text-[var(--text-main)]">{nutritionData.history.length}</div>
             </div>
           </div>
@@ -92,16 +104,16 @@ const HistoryPage = () => {
         {historyLoading ? (
           <div className="flex h-96 flex-col items-center justify-center space-y-4">
             <div className="h-12 w-12 rounded-full border-4 border-[var(--primary-green)]/20 border-t-[var(--primary-green)] animate-spin" />
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary-green)]">{language === 'id' ? 'Memuat Jurnal...' : 'Loading Journal...'}</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary-green)]">{t.loadingJournal}</p>
           </div>
         ) : sortedDays.length === 0 ? (
           <div className="rounded-[3rem] border-2 border-dashed border-[var(--border-card)] p-32 text-center bg-[var(--bg-card)]/30">
             <div className="w-20 h-20 bg-[var(--bg-card)] rounded-3xl flex items-center justify-center mx-auto mb-8 border border-[var(--border-card)]">
               <UtensilsCrossed className="text-[var(--primary-green)]/30" size={40} />
             </div>
-            <h2 className="text-2xl font-black text-[var(--text-main)]">{language === 'id' ? 'Jurnal Anda Kosong' : 'Your Journal is Empty'}</h2>
+            <h2 className="text-2xl font-black text-[var(--text-main)]">{t.journalEmpty}</h2>
             <p className="mt-4 text-[var(--text-muted)] max-w-md mx-auto font-medium">
-              {language === 'id' ? 'Mari catat makanan Anda hari ini untuk mulai memantau nutrisi Anda!' : "Let's record your food today to start monitoring your nutrition!"}
+              {t.journalEmptySubtitle}
             </p>
           </div>
         ) : (
@@ -126,8 +138,8 @@ const HistoryPage = () => {
                   <div className="h-[1px] flex-1 bg-[var(--border-card)]"></div>
                   <div className="hidden md:flex gap-8 text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
                     <span className="text-[var(--primary-green)]">{Math.round(dayTotals.calories)} {t.kcal}</span>
-                    <span>{Math.round(dayTotals.protein)}g {language === 'id' ? 'Prot' : 'Prot'}</span>
-                    <span>{Math.round(dayTotals.carbs)}g {language === 'id' ? 'Karbo' : 'Carbs'}</span>
+                    <span>{Math.round(dayTotals.protein)}g {t.proteinLabel.substring(0, 4)}</span>
+                    <span>{Math.round(dayTotals.carbs)}g {t.carbsLabel.substring(0, 5)}</span>
                   </div>
                 </div>
 
@@ -143,7 +155,7 @@ const HistoryPage = () => {
                           <div className="flex items-center gap-3">
                             <Clock3 size={16} className="text-[var(--primary-green)]" />
                             <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
-                              {mealType === 'mixed' ? 'MEAL SESSION' : mealType.toUpperCase()} • {time}
+                              {mealType === 'mixed' ? t.mealSession : mealType.toUpperCase()} • {time}
                             </span>
                           </div>
                         </div>
@@ -158,7 +170,7 @@ const HistoryPage = () => {
                               >
                                 <p className="text-lg font-bold text-[var(--text-main)] truncate group-hover/item:text-[var(--primary-green)] transition-colors">{entry.foodName}</p>
                                 <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mt-1">
-                                  {entry.quantity} {entry.unit} • <span className="text-[var(--primary-green)]">{language === 'id' ? 'Klik untuk detail' : 'Click for details'}</span>
+                                  {entry.quantity} {entry.unit} • <span className="text-[var(--primary-green)]">{t.clickForDetails}</span>
                                 </p>
                               </div>
                               
@@ -199,8 +211,8 @@ const HistoryPage = () => {
         isOpen={deleteModal.isOpen}
         onClose={() => setDeleteModal({ isOpen: false, item: null })}
         onConfirm={handleConfirmDelete}
-        title={language === 'id' ? 'Hapus Data?' : 'Delete Data?'}
-        message={language === 'id' ? 'Data nutrisi untuk item ini akan dihapus secara permanen.' : 'Nutrition data for this item will be permanently deleted.'}
+        title={t.deleteData}
+        message={t.deleteConfirmMsg}
         itemName={deleteModal.item?.foodName}
         isLoading={isDeleting}
       />
@@ -233,10 +245,10 @@ const HistoryPage = () => {
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
                 {[
-                  { label: 'Calories', val: selectedEntry.calories, unit: 'kcal', color: 'bg-emerald-50 text-emerald-600', icon: '🔥' },
-                  { label: 'Protein', val: selectedEntry.protein, unit: 'g', color: 'bg-blue-50 text-blue-600', icon: '🍗' },
-                  { label: 'Carbs', val: selectedEntry.carbs, unit: 'g', color: 'bg-amber-50 text-amber-600', icon: '🍞' },
-                  { label: 'Fat', val: selectedEntry.fat, unit: 'g', color: 'bg-rose-50 text-rose-600', icon: '🥑' }
+                  { label: t.caloriesLabel, val: selectedEntry.calories, unit: 'kcal', color: 'bg-emerald-50 text-emerald-600', icon: '🔥' },
+                  { label: t.proteinLabel, val: selectedEntry.protein, unit: 'g', color: 'bg-blue-50 text-blue-600', icon: '🍗' },
+                  { label: t.carbsLabel, val: selectedEntry.carbs, unit: 'g', color: 'bg-amber-50 text-amber-600', icon: '🍞' },
+                  { label: t.fatLabel, val: selectedEntry.fat, unit: 'g', color: 'bg-rose-50 text-rose-600', icon: '🥑' }
                 ].map((n) => (
                   <div key={n.label} className={`p-6 rounded-[2rem] ${n.color} border border-transparent hover:border-current/10 transition-all`}>
                     <div className="text-2xl mb-2">{n.icon}</div>
@@ -247,15 +259,15 @@ const HistoryPage = () => {
               </div>
 
               <div className="space-y-6">
-                <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 pb-4">Micronutrients & Others</h4>
+                <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-muted)] border-b border-[var(--border-card)]/30 pb-4">{t.micronutrientsOthers}</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                   {[
-                    { label: language === 'id' ? 'Kalsium' : 'Calcium', val: selectedEntry.calcium || '—', unit: 'mg' },
-                    { label: language === 'id' ? 'Zat Besi' : 'Iron', val: selectedEntry.iron || '—', unit: 'mg' },
+                    { label: t.calcium, val: selectedEntry.calcium || '—', unit: 'mg' },
+                    { label: t.iron, val: selectedEntry.iron || '—', unit: 'mg' },
                     { label: 'Vitamin A', val: selectedEntry.vitamin_a || '—', unit: 'IU' },
                     { label: 'Vitamin C', val: selectedEntry.vitamin_c || '—', unit: 'mg' },
-                    { label: language === 'id' ? 'Serat' : 'Fiber', val: selectedEntry.fiber || '—', unit: 'g' },
-                    { label: language === 'id' ? 'Gula' : 'Sugar', val: selectedEntry.sugar || '—', unit: 'g' }
+                    { label: t.fiber, val: selectedEntry.fiber || '—', unit: 'g' },
+                    { label: t.sugar, val: selectedEntry.sugar || '—', unit: 'g' }
                   ].map((m) => (
                     <div key={m.label} className="flex justify-between items-center py-1">
                       <span className="text-sm font-bold text-[var(--text-muted)]">{m.label}</span>
@@ -270,7 +282,7 @@ const HistoryPage = () => {
                   onClick={() => setSelectedEntry(null)}
                   className="px-8 py-4 rounded-2xl bg-[var(--text-main)] text-[var(--bg-card)] font-bold text-sm hover:scale-105 active:scale-100 transition-all"
                 >
-                  {language === 'id' ? 'Tutup' : 'Close'}
+                  {t.close}
                 </button>
               </div>
             </div>
