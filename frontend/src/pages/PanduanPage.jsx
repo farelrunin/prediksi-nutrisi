@@ -32,7 +32,6 @@ const PanduanPage = () => {
   };
 
   const handleShare = () => {
-    // Attempt modern sharing if supported, else clipboard copy
     if (navigator.share) {
       navigator.share({
         title: selectedCondition.title,
@@ -109,28 +108,44 @@ const PanduanPage = () => {
             </div>
           </div>
 
-          {/* Condition Header Details (The "Anemia" Showcase Card) */}
-          <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden mb-12">
+          {/* Condition Header Details (The "Anemia" Showcase Card with gorgeous food image!) */}
+          <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative overflow-hidden mb-12">
             <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--primary-green)]/5 rounded-full blur-3xl pointer-events-none" />
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-8 relative z-10">
-              <div className="w-24 h-24 rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-card)] flex items-center justify-center text-5xl shadow-xl shrink-0">
-                {selectedCondition.icon}
+            
+            <div className="flex flex-col lg:flex-row items-stretch gap-8 relative z-10">
+              {/* Gorgeous Food Hero Image */}
+              <div className="w-full lg:w-[380px] h-64 lg:h-72 rounded-[2rem] overflow-hidden border border-[var(--border-card)] shadow-xl relative shrink-0 group">
+                <img 
+                  src={selectedCondition.image} 
+                  alt={selectedCondition.title} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+                {/* Floating Icon Badge Over Image */}
+                <div className="absolute bottom-4 left-6 w-12 h-12 rounded-2xl bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg text-[var(--primary-green)]">
+                  {React.cloneElement(selectedCondition.icon, { size: 22 })}
+                </div>
               </div>
-              <div className="space-y-2">
-                <h1 className="text-3xl md:text-4xl font-black text-[var(--text-main)] tracking-tight leading-none">
+
+              {/* Title, Alias, Description */}
+              <div className="flex flex-col justify-center flex-grow space-y-3">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[var(--primary-green)]/10 text-[var(--primary-green)] rounded-full text-[9px] font-black uppercase tracking-wider w-fit">
+                  {language === 'id' ? 'Kondisi Medis' : 'Medical Condition'}
+                </div>
+                <h1 className="text-3xl md:text-4xl font-black text-[var(--text-main)] tracking-tight leading-tight">
                   {selectedCondition.title}
                 </h1>
                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary-green)]">
                   {selectedCondition.scientificName}
                 </p>
-                <p className="text-[var(--text-muted)] text-sm md:text-base leading-relaxed font-medium pt-3 max-w-3xl">
+                <p className="text-[var(--text-muted)] text-sm md:text-base leading-relaxed font-medium pt-2">
                   {selectedCondition.description}
                 </p>
               </div>
             </div>
 
             {/* Overview / Quick Statistics */}
-            <div className="grid grid-cols-3 gap-4 mt-12 pt-8 border-t border-[var(--border-card)]/30 text-center">
+            <div className="grid grid-cols-3 gap-4 mt-10 pt-8 border-t border-[var(--border-card)]/30 text-center">
               <div className="space-y-1">
                 <p className="text-[9px] font-black uppercase tracking-widest text-[var(--text-muted)]">{language === 'id' ? 'Rekomendasi' : 'Recommended'}</p>
                 <p className="text-lg font-black text-emerald-500">{selectedCondition.recommended.length} {language === 'id' ? 'Item' : 'Items'}</p>
@@ -308,7 +323,7 @@ const PanduanPage = () => {
             </div>
           </div>
 
-          {/* Explore Other Conditions (Interactive footer cards) */}
+          {/* Explore Other Conditions (Interactive footer cards with image backgrounds!) */}
           <div className="space-y-6">
             <h3 className="text-base font-black uppercase tracking-widest text-[var(--text-main)]">{language === 'id' ? 'Jelajahi Kondisi Kesehatan Lainnya' : 'Explore Other Health Conditions'}</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -316,14 +331,22 @@ const PanduanPage = () => {
                 <button
                   key={condition.id}
                   onClick={() => { setSelectedCondition(condition); setActiveTab('nutrisi'); window.scrollTo(0, 0); }}
-                  className="group text-left bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2rem] p-6 hover:border-[var(--primary-green)]/30 hover:scale-[1.02] transition-all flex items-center gap-4 shadow-sm"
+                  className="group text-left bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2rem] overflow-hidden hover:border-[var(--primary-green)]/35 hover:scale-[1.02] transition-all flex flex-col shadow-sm h-full"
                 >
-                  <div className="w-12 h-12 rounded-2xl bg-[var(--bg-secondary)] flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
-                    {condition.icon}
+                  <div className="h-28 w-full overflow-hidden relative shrink-0">
+                    <img 
+                      src={condition.image} 
+                      alt={condition.title} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    <div className="absolute bottom-3 left-4 w-8 h-8 rounded-xl bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg text-[var(--primary-green)]">
+                      {React.cloneElement(condition.icon, { size: 14 })}
+                    </div>
                   </div>
-                  <div>
+                  <div className="p-5 flex-grow flex flex-col justify-center">
                     <h4 className="font-extrabold text-[var(--text-main)] group-hover:text-[var(--primary-green)] transition-colors text-sm line-clamp-1">{condition.title}</h4>
-                    <p className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider line-clamp-1">{condition.scientificName}</p>
+                    <p className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider line-clamp-1 mt-0.5">{condition.scientificName}</p>
                   </div>
                 </button>
               ))}
