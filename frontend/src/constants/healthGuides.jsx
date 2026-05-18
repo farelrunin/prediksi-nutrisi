@@ -5,11 +5,160 @@ import React from 'react';
 
 export const getHealthConditions = (language) => [
   {
+    id: 'anemia',
+    title: language === 'id' ? 'Anemia (Kurang Darah)' : 'Anemia',
+    scientificName: 'Anemia Defisiensi Besi',
+    icon: <Droplets className="text-red-500" />,
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80',
+    description: language === 'id' ? 'Kondisi di mana tubuh kekurangan sel darah merah sehat untuk membawa oksigen ke seluruh jaringan tubuh akibat kekurangan zat besi.' : 'A condition in which the body lacks healthy red blood cells to carry sufficient oxygen to the body\'s tissues due to iron deficiency.',
+    symptoms: language === 'id' ? 
+      ['Kelelahan ekstrem', 'Kulit pucat', 'Tangan & kaki dingin', 'Pusing atau kliyengan', 'Sesak napas saat aktivitas ringan'] : 
+      ['Extreme fatigue', 'Pale skin', 'Cold hands & feet', 'Dizziness or lightheadedness', 'Shortness of breath during mild activity'],
+    recommended: language === 'id' ? 
+      ['Daging merah (Sapi/Hati Sapi)', 'Bayam & Brokoli', 'Kerang & Tiram', 'Kuning Telur', 'Kacang Merah/Polong', 'Buah Kaya Vit C (Jeruk/Kiwi untuk penyerapan)'] : 
+      ['Red meat (Beef/Beef Liver)', 'Spinach & Broccoli', 'Clams & Oysters', 'Egg Yolks', 'Kidney/Pea Beans', 'Vit C Rich Fruits (Orange/Kiwi for absorption)'],
+    avoided: language === 'id' ? 
+      ['Teh pekat (Mengikat Zat Besi)', 'Kopi berlebih', 'Susu Kalsium Tinggi saat makan zat besi', 'Makanan tinggi serat kasar berlebih'] : 
+      ['Strong tea (binds iron)', 'Excessive coffee', 'High-calcium milk when eating iron', 'Excessive coarse fiber foods'],
+    nutritionalTargets: language === 'id' ? 
+      'Zat Besi Harian (18mg wanita, 9mg pria), kombinasikan dengan Vitamin C untuk melipatgandakan penyerapan zat besi hewani.' : 
+      'Daily Iron (18mg women, 9mg men), combine with Vitamin C to double absorption of non-heme iron.',
+    strategies: language === 'id' ? [
+      'Hindari minum teh atau kopi setidaknya 1-2 jam setelah makan makanan kaya zat besi.',
+      'Sajikan daging merah bersamaan dengan perasan jeruk nipis atau buah segar kaya Vitamin C.',
+      'Gunakan wajan zat besi (cast iron) saat memasak makanan berkuah.'
+    ] : [
+      'Avoid drinking tea or coffee for at least 1-2 hours after eating iron-rich foods.',
+      'Serve red meat alongside lime juice or fresh fruits rich in Vitamin C.',
+      'Use a cast iron skillet when cooking liquid-based foods.'
+    ],
+    faq: language === 'id' ? [
+      { q: 'Mengapa teh dilarang setelah makan?', a: 'Teh mengandung tanin yang mengikat zat besi di usus sehingga menghalangi penyerapannya oleh tubuh.' },
+      { q: 'Apakah anemia hanya bisa diobati dengan daging?', a: 'Tidak, sumber nabati seperti bayam dan kacang-kacangan juga kaya zat besi, namun penyerapannya lebih optimal jika ditemani Vitamin C.' }
+    ] : [
+      { q: 'Why is tea prohibited after eating?', a: 'Tea contains tannins which bind iron in the intestines, blocking its absorption by the body.' },
+      { q: 'Can anemia only be treated with meat?', a: 'No, plant sources like spinach and beans are also iron-rich, but absorption is optimized when paired with Vitamin C.' }
+    ],
+    references: ['PDS PatKLIn', 'WHO', 'Kemenkes RI']
+  },
+  {
+    id: 'asam-urat',
+    title: language === 'id' ? 'Asam Urat' : 'Gout',
+    scientificName: 'Gouty Arthritis (Hyperuricemia)',
+    icon: <HeartPulse className="text-purple-500" />,
+    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80',
+    description: language === 'id' ? 'Peradangan sendi yang menyakitkan yang disebabkan oleh penumpukan kristal monosodium urat di sendi.' : 'A painful inflammatory arthritis caused by the buildup of monosodium urate crystals in the joints.',
+    symptoms: language === 'id' ? 
+      ['Nyeri sendi mendadak dan parah', 'Sendi bengkak dan merah', 'Sensasi panas di area sendi', 'Kekakuan sendi di pagi hari'] : 
+      ['Sudden and severe joint pain', 'Swollen and red joints', 'Heat sensation in the joint area', 'Joint stiffness in the morning'],
+    recommended: language === 'id' ? 
+      ['Air putih (min. 2L/hari)', 'Ceri & beri', 'Sayuran hijau (non-bayam)', 'Susu rendah lemak', 'Karbohidrat kompleks'] : 
+      ['Water (min. 2L/day)', 'Cherries & berries', 'Green vegetables (non-spinach)', 'Low-fat milk', 'Complex carbohydrates'],
+    avoided: language === 'id' ? 
+      ['Jeroan (hati, ginjal)', 'Daging merah (kambing/sapi)', 'Seafood (udang, kerang)', 'Minuman manis/fruktosa', 'Emping melinjo'] : 
+      ['Organ meats (liver, kidney)', 'Red meat (lamb/beef)', 'Seafood (shrimp, shellfish)', 'Sweet drinks/fructose', 'Melinjo chips'],
+    nutritionalTargets: language === 'id' ? 
+      'Diet Rendah Purin (<150mg purin/hari), hidrasi tinggi untuk membuang kristal urat.' : 
+      'Low Purine Diet (<150mg purine/day), high hydration to flush out urate crystals.',
+    strategies: language === 'id' ? [
+      'Minum segelas air setiap 2 jam.',
+      'Pilih sumber protein dari nabati (tempe/tahu) atau susu rendah lemak.',
+      'Hindari penggunaan kaldu daging kental dalam masakan.'
+    ] : [
+      'Drink a glass of water every 2 hours.',
+      'Choose protein sources from plants (tempeh/tofu) or low-fat milk.',
+      'Avoid using thick meat broth in cooking.'
+    ],
+    faq: language === 'id' ? [
+      { q: 'Bolehkah penderita asam urat makan kangkung?', a: 'Boleh, namun dalam porsi moderat karena kangkung mengandung purin sedang.' },
+      { q: 'Mengapa ceri baik untuk asam urat?', a: 'Ceri mengandung antosianin yang bersifat anti-inflamasi dan membantu menurunkan kadar asam urat.' }
+    ] : [
+      { q: 'Can gout sufferers eat water spinach?', a: 'Yes, but in moderate portions because water spinach contains moderate purine.' },
+      { q: 'Why are cherries good for gout?', a: 'Cherries contain anthocyanins which are anti-inflammatory and help lower uric acid levels.' }
+    ],
+    references: ['IRA', 'Arthritis Foundation']
+  },
+  {
+    id: 'batu-empedu',
+    title: language === 'id' ? 'Batu Empedu (Kolelitiasis)' : 'Gallstones',
+    scientificName: 'Cholelithiasis',
+    icon: <Activity className="text-yellow-600" />,
+    image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600&q=80',
+    description: language === 'id' ? 'Kondisi terbentuknya endapan cairan pencernaan yang mengeras di kantong empedu Anda akibat penumpukan kolesterol atau bilirubin.' : 'Hardened deposits of digestive fluid that can form in your gallbladder due to cholesterol or bilirubin buildup.',
+    symptoms: language === 'id' ? 
+      ['Nyeri hebat di perut kanan atas', 'Mual dan muntah setelah makan berlemak', 'Nyeri punggung di antara tulang belikat', 'Nyeri di bahu kanan'] : 
+      ['Severe pain in the upper right abdomen', 'Nausea and vomiting after eating fatty meals', 'Back pain between the shoulder blades', 'Pain in the right shoulder'],
+    recommended: language === 'id' ? 
+      ['Makanan tinggi serat (Gandum/Oat)', 'Buah & sayur segar', 'Biji-bijian utuh', 'Ikan Salmon', 'Minyak Zaitun'] : 
+      ['High fiber foods (Wheat/Oat)', 'Fresh fruits & vegetables', 'Whole grains', 'Salmon', 'Olive Oil'],
+    avoided: language === 'id' ? 
+      ['Gorengan & lemak jenuh', 'Daging berlemak', 'Susu full cream', 'Mentega/Margarin', 'Kuning telur berlebih'] : 
+      ['Fried & saturated fats', 'Fatty meats', 'Full cream milk', 'Butter/Margarine', 'Excessive egg yolks'],
+    nutritionalTargets: language === 'id' ? 
+      'Diet Rendah Lemak (<30% total kalori), Serat Larut Tinggi (>20g/hari).' : 
+      'Low Fat Diet (<30% total calories), High Soluble Fiber (>20g/day).',
+    strategies: language === 'id' ? [
+      'Gunakan metode masak rebus, kukus, atau panggang.',
+      'Kurangi asupan kolesterol hewani.',
+      'Jangan melewatkan sarapan untuk mencegah pengentalan empedu.'
+    ] : [
+      'Use boiling, steaming, or grilling cooking methods.',
+      'Reduce animal cholesterol intake.',
+      'Do not skip breakfast to prevent thickening of bile.'
+    ],
+    faq: language === 'id' ? [
+      { q: 'Apakah diet Keto aman untuk batu empedu?', a: 'Sangat tidak disarankan, karena lemak tinggi dapat memicu kolik bilier (serangan nyeri).' },
+      { q: 'Apakah kopi membantu?', a: 'Beberapa studi menunjukkan kopi dapat merangsang kontraksi kantong empedu, namun konsultasikan dulu dengan dokter.' }
+    ] : [
+      { q: 'Is Keto diet okay for gallstones?', a: 'Highly not recommended, because high fat can trigger biliary colic (pain attacks).' },
+      { q: 'Does coffee help?', a: 'Some studies show coffee can stimulate gallbladder contractions, but consult your doctor first.' }
+    ],
+    references: ['PGI', 'Mayo Clinic']
+  },
+  {
+    id: 'batu-ginjal',
+    title: language === 'id' ? 'Batu Ginjal (Nefrolitiasis)' : 'Kidney Stones',
+    scientificName: 'Nephrolitiasis',
+    icon: <Stethoscope className="text-blue-600" />,
+    image: 'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=600&q=80',
+    description: language === 'id' ? 'Terbentuknya materi keras menyerupai batu di dalam ginjal akibat limbah zat dalam darah yang menumpuk dan mengkristal.' : 'Hard deposits made of minerals and salts that form inside your kidneys when urine becomes highly concentrated.',
+    symptoms: language === 'id' ? 
+      ['Nyeri tajam di sisi atau punggung', 'Nyeri saat buang air kecil', 'Urine keruh atau kemerahan', 'Mual dan muntah'] : 
+      ['Sharp pain in the side or back', 'Pain during urination', 'Cloudy or reddish urine', 'Nausea and vomiting'],
+    recommended: language === 'id' ? 
+      ['Air Putih (Sangat Penting)', 'Lemon/Sitrus', 'Kalsium dari makanan alami', 'Buah dengan kandungan air tinggi'] : 
+      ['Water (Crucial)', 'Lemon/Citrus', 'Calcium from natural foods', 'High water content fruits'],
+    avoided: language === 'id' ? 
+      ['Garam tinggi (natrium)', 'Bayam & Bit (Tinggi oksalat)', 'Kacang tanah', 'Teh pekat', 'Protein hewani berlebih'] : 
+      ['High salt (sodium)', 'Spinach & Beets (High oxalate)', 'Peanuts', 'Strong tea', 'Excessive animal protein'],
+    nutritionalTargets: language === 'id' ? 
+      'Hidrasi urine > 2,5 liter per hari, Batasi Oksalat dan Natrium.' : 
+      'Urine hydration > 2.5 liters per day, Limit Oxalate and Sodium.',
+    strategies: language === 'id' ? [
+      'Pastikan warna urine kuning muda jernih sebagai tanda hidrasi cukup.',
+      'Kurangi konsumsi daging merah yang dapat meningkatkan asam urat di ginjal.',
+      'Konsumsi makanan kalsium bersamaan dengan makanan oksalat agar mengikat di usus (bukan di ginjal).'
+    ] : [
+      'Ensure urine is clear light yellow as a sign of sufficient hydration.',
+      'Reduce consumption of red meat which can increase uric acid in the kidneys.',
+      'Consume calcium foods along with oxalate foods to bind them in the gut (not in the kidneys).'
+    ],
+    faq: language === 'id' ? [
+      { q: 'Mengapa lemon baik untuk batu ginjal?', a: 'Lemon mengandung sitrat yang mencegah pembentukan kristal kalsium menjadi batu.' },
+      { q: 'Apakah air putih saja cukup?', a: 'Ya, air putih adalah pengobatan dan pencegahan nomor satu.' }
+    ] : [
+      { q: 'Why is lemon good for kidney stones?', a: 'Lemon contains citrate which prevents the formation of calcium crystals into stones.' },
+      { q: 'Is water alone enough?', a: 'Yes, water is the number one treatment and prevention.' }
+    ],
+    references: ['IAUI', 'National Kidney Foundation']
+  },
+  {
     id: 'diabetes',
     title: language === 'id' ? 'Diabetes' : 'Diabetes',
     scientificName: 'Diabetes Mellitus',
     icon: <Droplets className="text-orange-500" />,
-    description: language === 'id' ? 'Penyakit metabolik kronis yang ditandai dengan kadar gula darah tinggi akibat kegagalan produksi insulin atau penggunaan yang tidak efektif.' : 'A chronic metabolic disease characterized by high blood sugar due to failure in insulin production or effective use.',
+    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80',
+    description: language === 'id' ? 'Diabetes Mellitus adalah penyakit metabolik kronis yang ditandai dengan hiperglikemia (gula darah tinggi) akibat gangguan produksi/penggunaan insulin.' : 'A chronic metabolic disease characterized by high blood sugar due to failure in insulin production or effective use.',
     symptoms: language === 'id' ? 
       ['Sering haus (polidipsia)', 'Sering buang air kecil, terutama malam hari', 'Pandangan kabur', 'Luka sulit sembuh', 'Penurunan berat badan drastis tanpa sebab'] : 
       ['Frequent thirst (polydipsia)', 'Frequent urination, especially at night', 'Blurred vision', 'Slow-healing wounds', 'Drastic unexplained weight loss'],
@@ -43,191 +192,12 @@ export const getHealthConditions = (language) => [
     references: ['PERKENI', 'American Diabetes Association (ADA)', 'Kemenkes RI']
   },
   {
-    id: 'hipertensi',
-    title: language === 'id' ? 'Hipertensi' : 'Hypertension',
-    scientificName: language === 'id' ? 'Tekanan Darah Tinggi' : 'High Blood Pressure',
-    icon: <HeartPulse className="text-red-600" />,
-    description: language === 'id' ? 'Kondisi kronis di mana tekanan darah pada arteri meningkat secara persisten (>130/80 mmHg).' : 'A chronic condition where the arterial blood pressure is persistently elevated (>130/80 mmHg).',
-    symptoms: language === 'id' ? 
-      ['Sakit kepala parah', 'Kelelahan atau kebingungan', 'Masalah penglihatan', 'Nyeri dada', 'Detak jantung tidak teratur'] : 
-      ['Severe headache', 'Fatigue or confusion', 'Vision problems', 'Chest pain', 'Irregular heartbeat'],
-    recommended: language === 'id' ? 
-      ['Sayuran hijau (Bayam/Brokoli)', 'Buah beri (Stroberi/Blueberry)', 'Yogurt rendah lemak', 'Oatmeal', 'Pisang (Kaya Kalium)', 'Bawang putih'] : 
-      ['Green vegetables (Spinach/Broccoli)', 'Berries (Strawberry/Blueberry)', 'Low-fat yogurt', 'Oatmeal', 'Bananas (Rich in Potassium)', 'Garlic'],
-    avoided: language === 'id' ? 
-      ['Garam berlebih', 'Daging olahan (Sosis/Ham)', 'Acar asin', 'Mie instan', 'Kulit ayam & lemak jenuh'] : 
-      ['Excessive salt', 'Processed meats (Sausage/Ham)', 'Salty pickles', 'Instant noodles', 'Chicken skin & saturated fats'],
-    nutritionalTargets: language === 'id' ? 
-      'Diet DASH (Dietary Approaches to Stop Hypertension), Natrium < 2000mg/hari (setara 1 sdt garam).' : 
-      'DASH Diet (Dietary Approaches to Stop Hypertension), Sodium < 2000mg/day (equivalent to 1 tsp salt).',
-    strategies: language === 'id' ? [
-      'Gunakan rempah alami sebagai pengganti garam (jeruk nipis, lada).',
-      'Selalu cek label nutrisi pada kemasan (pilih rendah natrium).',
-      'Tingkatkan asupan kalium dari buah untuk membantu membuang kelebihan garam.'
-    ] : [
-      'Use natural spices instead of salt (lime, pepper).',
-      'Always check nutrition labels on packaging (choose low sodium).',
-      'Increase potassium intake from fruit to help flush out excess salt.'
-    ],
-    faq: language === 'id' ? [
-      { q: 'Mengapa garam menyebabkan darah tinggi?', a: 'Garam mengikat air dalam pembuluh darah, meningkatkan volume darah yang membuat jantung bekerja lebih keras.' },
-      { q: 'Apakah kopi diperbolehkan untuk hipertensi?', a: 'Kafein dapat meningkatkan tekanan darah sementara; batasi 1-2 cangkir sehari.' }
-    ] : [
-      { q: 'Why does salt cause high blood pressure?', a: 'Salt binds water in the blood vessels, increasing blood volume which makes the heart work harder.' },
-      { q: 'Is coffee allowed for hypertension?', a: 'Caffeine can temporarily increase blood pressure; limit to 1-2 cups a day.' }
-    ],
-    references: ['PERHI', 'AHA (American Heart Association)']
-  },
-  {
-    id: 'gerd',
-    title: 'GERD',
-    scientificName: language === 'id' ? 'Asam Lambung' : 'Acid Reflux',
-    icon: <Wind className="text-emerald-500" />,
-    description: language === 'id' ? 'Kondisi di mana isi lambung mengalir kembali ke kerongkongan, menyebabkan sensasi terbakar (heartburn).' : 'A condition where stomach contents flow back into the esophagus, causing a burning sensation (heartburn).',
-    symptoms: language === 'id' ? 
-      ['Sensasi terbakar di dada (heartburn)', 'Rasa asam di mulut', 'Suara serak', 'Batuk kering kronis', 'Kesulitan menelan'] : 
-      ['Burning sensation in the chest (heartburn)', 'Acid taste in the mouth', 'Hoarseness', 'Chronic dry cough', 'Difficulty swallowing'],
-    recommended: language === 'id' ? 
-      ['Jahe (anti-inflamasi)', 'Oatmeal', 'Pisang & Melon', 'Putih telur', 'Daging tanpa lemak (rebus)', 'Lidah buaya'] : 
-      ['Ginger (anti-inflammatory)', 'Oatmeal', 'Bananas & Melons', 'Egg whites', 'Lean meat (boiled)', 'Aloe vera'],
-    avoided: language === 'id' ? 
-      ['Cokelat & Mint', 'Makanan pedas & asam', 'Gorengan/lemak tinggi', 'Kopi & Alkohol', 'Minuman berkarbonasi'] : 
-      ['Chocolate & Mint', 'Spicy & acidic foods', 'Fried/high-fat foods', 'Coffee & Alcohol', 'Carbonated drinks'],
-    nutritionalTargets: language === 'id' ? 
-      'Fokus pada makanan pH Alkali (Netral), protein tanpa lemak, dan porsi kecil.' : 
-      'Focus on Alkaline (Neutral) pH foods, lean protein, and small portions.',
-    strategies: language === 'id' ? [
-      'Jangan langsung berbaring setelah makan (tunggu minimal 3 jam).',
-      'Makan secara perlahan dan kunyah hingga halus.',
-      'Hindari pakaian ketat di area perut saat makan.'
-    ] : [
-      'Do not lie down immediately after eating (wait at least 3 hours).',
-      'Eat slowly and chew thoroughly.',
-      'Avoid tight clothing in the abdominal area while eating.'
-    ],
-    faq: language === 'id' ? [
-      { q: 'Bolehkah minum air hangat saat kumat?', a: 'Air hangat membantu menenangkan, namun hindari campuran lemon atau jeruk.' },
-      { q: 'Mengapa cokelat dilarang?', a: 'Cokelat mengandung methylxanthine yang melemaskan katup bawah kerongkongan, sehingga asam mudah naik.' }
-    ] : [
-      { q: 'Can I drink warm water during a flare-up?', a: 'Warm water helps soothe, but avoid mixing it with lemon or orange.' },
-      { q: 'Why is chocolate prohibited?', a: 'Chocolate contains methylxanthine which relaxes the lower esophageal valve, allowing acid to rise easily.' }
-    ],
-    references: ['PGI', 'Mayo Clinic']
-  },
-  {
-    id: 'asam-urat',
-    title: language === 'id' ? 'Asam Urat' : 'Gout',
-    scientificName: 'Gouty Arthritis (Hyperuricemia)',
-    icon: <HeartPulse className="text-purple-500" />,
-    description: language === 'id' ? 'Peradangan sendi yang menyakitkan yang disebabkan oleh penumpukan kristal monosodium urat di sendi.' : 'A painful inflammatory arthritis caused by the buildup of monosodium urate crystals in the joints.',
-    symptoms: language === 'id' ? 
-      ['Nyeri sendi mendadak dan parah', 'Sendi bengkak dan merah', 'Sensasi panas di area sendi', 'Kekakuan sendi di pagi hari'] : 
-      ['Sudden and severe joint pain', 'Swollen and red joints', 'Heat sensation in the joint area', 'Joint stiffness in the morning'],
-    recommended: language === 'id' ? 
-      ['Air putih (min. 2L/hari)', 'Ceri & beri', 'Sayuran hijau (non-bayam)', 'Susu rendah lemak', 'Karbohidrat kompleks'] : 
-      ['Water (min. 2L/day)', 'Cherries & berries', 'Green vegetables (non-spinach)', 'Low-fat milk', 'Complex carbohydrates'],
-    avoided: language === 'id' ? 
-      ['Jeroan (hati, ginjal)', 'Daging merah (kambing/sapi)', 'Seafood (udang, kerang)', 'Minuman manis/fruktosa', 'Emping melinjo'] : 
-      ['Organ meats (liver, kidney)', 'Red meat (lamb/beef)', 'Seafood (shrimp, shellfish)', 'Sweet drinks/fructose', 'Melinjo chips'],
-    nutritionalTargets: language === 'id' ? 
-      'Diet Rendah Purin (<150mg purin/hari), hidrasi tinggi untuk membuang kristal urat.' : 
-      'Low Purine Diet (<150mg purine/day), high hydration to flush out urate crystals.',
-    strategies: language === 'id' ? [
-      'Minum segelas air setiap 2 jam.',
-      'Pilih sumber protein dari nabati (tempe/tahu) atau susu rendah lemak.',
-      'Hindari penggunaan kaldu daging kental dalam masakan.'
-    ] : [
-      'Drink a glass of water every 2 hours.',
-      'Choose protein sources from plants (tempeh/tofu) or low-fat milk.',
-      'Avoid using thick meat broth in cooking.'
-    ],
-    faq: language === 'id' ? [
-      { q: 'Bolehkah penderita asam urat makan kangkung?', a: 'Boleh, namun dalam porsi moderat karena kangkung mengandung purin sedang.' },
-      { q: 'Mengapa ceri baik untuk asam urat?', a: 'Ceri mengandung antosianin yang bersifat anti-inflamasi dan membantu menurunkan kadar asam urat.' }
-    ] : [
-      { q: 'Can gout sufferers eat water spinach?', a: 'Yes, but in moderate portions because water spinach contains moderate purines.' },
-      { q: 'Why are cherries good for gout?', a: 'Cherries contain anthocyanins which are anti-inflammatory and help lower uric acid levels.' }
-    ],
-    references: ['IRA', 'Arthritis Foundation']
-  },
-  {
-    id: 'batu-empedu',
-    title: language === 'id' ? 'Batu Empedu' : 'Gallstones',
-    scientificName: 'Cholelithiasis',
-    icon: <Activity className="text-yellow-600" />,
-    description: language === 'id' ? 'Endapan cairan empedu yang mengeras yang dapat terbentuk di kantong empedu Anda.' : 'Hardened deposits of digestive fluid that can form in your gallbladder.',
-    symptoms: language === 'id' ? 
-      ['Nyeri hebat di perut kanan atas', 'Mual dan muntah setelah makan berlemak', 'Nyeri punggung di antara tulang belikat', 'Nyeri di bahu kanan'] : 
-      ['Severe pain in the upper right abdomen', 'Nausea and vomiting after eating fatty meals', 'Back pain between the shoulder blades', 'Pain in the right shoulder'],
-    recommended: language === 'id' ? 
-      ['Makanan tinggi serat (Gandum/Oat)', 'Buah & sayur segar', 'Biji-bijian utuh', 'Ikan Salmon', 'Minyak Zaitun'] : 
-      ['High fiber foods (Wheat/Oat)', 'Fresh fruits & vegetables', 'Whole grains', 'Salmon', 'Olive Oil'],
-    avoided: language === 'id' ? 
-      ['Gorengan & lemak jenuh', 'Daging berlemak', 'Susu full cream', 'Mentega/Margarin', 'Kuning telur berlebih'] : 
-      ['Fried & saturated fats', 'Fatty meats', 'Full cream milk', 'Butter/Margarine', 'Excessive egg yolks'],
-    nutritionalTargets: language === 'id' ? 
-      'Diet Rendah Lemak (<30% total kalori), Serat Larut Tinggi (>20g/hari).' : 
-      'Low Fat Diet (<30% total calories), High Soluble Fiber (>20g/day).',
-    strategies: language === 'id' ? [
-      'Gunakan metode masak rebus, kukus, atau panggang.',
-      'Kurangi asupan kolesterol hewani.',
-      'Jangan melewatkan sarapan untuk mencegah pengentalan empedu.'
-    ] : [
-      'Use boiling, steaming, or grilling cooking methods.',
-      'Reduce animal cholesterol intake.',
-      'Do not skip breakfast to prevent thickening of bile.'
-    ],
-    faq: language === 'id' ? [
-      { q: 'Apakah diet Keto aman untuk batu empedu?', a: 'Sangat tidak disarankan, karena lemak tinggi dapat memicu kolik bilier (serangan nyeri).' },
-      { q: 'Apakah kopi membantu?', a: 'Beberapa studi menunjukkan kopi dapat merangsang kontraksi kantong empedu, namun konsultasikan dulu dengan dokter.' }
-    ] : [
-      { q: 'Is Keto diet okay for gallstones?', a: 'Highly not recommended, because high fat can trigger biliary colic (pain attacks).' },
-      { q: 'Does coffee help?', a: 'Some studies show coffee can stimulate gallbladder contractions, but consult your doctor first.' }
-    ],
-    references: ['PGI', 'Mayo Clinic']
-  },
-  {
-    id: 'batu-ginjal',
-    title: language === 'id' ? 'Batu Ginjal' : 'Kidney Stones',
-    scientificName: 'Nephrolitiasis',
-    icon: <Stethoscope className="text-blue-600" />,
-    description: language === 'id' ? 'Endapan keras yang terbuat dari mineral dan garam yang terbentuk di dalam ginjal Anda.' : 'Hard deposits made of minerals and salts that form inside your kidneys.',
-    symptoms: language === 'id' ? 
-      ['Nyeri tajam di sisi atau punggung', 'Nyeri saat buang air kecil', 'Urine keruh atau kemerahan', 'Mual dan muntah'] : 
-      ['Sharp pain in the side or back', 'Pain during urination', 'Cloudy or reddish urine', 'Nausea and vomiting'],
-    recommended: language === 'id' ? 
-      ['Air Putih (Sangat Penting)', 'Lemon/Sitrus', 'Kalsium dari makanan alami', 'Buah dengan kandungan air tinggi'] : 
-      ['Water (Crucial)', 'Lemon/Citrus', 'Calcium from natural foods', 'High water content fruits'],
-    avoided: language === 'id' ? 
-      ['Garam tinggi (natrium)', 'Bayam & Bit (Tinggi oksalat)', 'Kacang tanah', 'Teh pekat', 'Protein hewani berlebih'] : 
-      ['High salt (sodium)', 'Spinach & Beets (High oxalate)', 'Peanuts', 'Strong tea', 'Excessive animal protein'],
-    nutritionalTargets: language === 'id' ? 
-      'Hidrasi urine > 2,5 liter per hari, Batasi Oksalat dan Natrium.' : 
-      'Urine hydration > 2.5 liters per day, Limit Oxalate and Sodium.',
-    strategies: language === 'id' ? [
-      'Pastikan warna urine kuning muda jernih sebagai tanda hidrasi cukup.',
-      'Kurangi konsumsi daging merah yang dapat meningkatkan asam urat di ginjal.',
-      'Konsumsi makanan kalsium bersamaan dengan makanan oksalat agar mengikat di usus (bukan di ginjal).'
-    ] : [
-      'Ensure urine is clear light yellow as a sign of sufficient hydration.',
-      'Reduce consumption of red meat which can increase uric acid in the kidneys.',
-      'Consume calcium foods along with oxalate foods to bind them in the gut (not in the kidneys).'
-    ],
-    faq: language === 'id' ? [
-      { q: 'Mengapa lemon baik untuk batu ginjal?', a: 'Lemon mengandung sitrat yang mencegah pembentukan kristal kalsium menjadi batu.' },
-      { q: 'Apakah air putih saja cukup?', a: 'Ya, air putih adalah pengobatan dan pencegahan nomor satu.' }
-    ] : [
-      { q: 'Why is lemon good for kidney stones?', a: 'Lemon contains citrate which prevents the formation of calcium crystals into stones.' },
-      { q: 'Is water alone enough?', a: 'Yes, water is the number one treatment and prevention.' }
-    ],
-    references: ['IAUI', 'National Kidney Foundation']
-  },
-  {
     id: 'chronic-kidney-disease',
-    title: language === 'id' ? 'Penyakit Ginjal Kronis' : 'Chronic Kidney Disease',
-    scientificName: 'CKD',
+    title: language === 'id' ? 'Gagal Ginjal Kronis' : 'Chronic Kidney Disease',
+    scientificName: 'Chronic Kidney Disease (CKD)',
     icon: <Activity className="text-blue-800" />,
-    description: language === 'id' ? 'Kehilangan fungsi ginjal secara bertahap seiring waktu, mempengaruhi kemampuan tubuh untuk menyaring limbah dari darah.' : "A gradual loss of kidney function over time, affecting the body's ability to filter waste from the blood.",
+    image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80',
+    description: language === 'id' ? 'Kondisi penurunan fungsi ginjal secara bertahap dalam menyaring limbah dan cairan dari darah. Diet ginjal ketat sangat dibutuhkan untuk mencegah uremia.' : "A gradual loss of kidney function over time, affecting the body's ability to filter waste from the blood.",
     symptoms: language === 'id' ? 
       ['Pembengkakan di tangan/kaki (edema)', 'Sesak napas', 'Gatal-gatal kronis', 'Urine berbusa', 'Nafsu makan menurun'] : 
       ['Swelling in hands/feet (edema)', 'Shortness of breath', 'Chronic itching', 'Foamy urine', 'Decreased appetite'],
@@ -259,11 +229,86 @@ export const getHealthConditions = (language) => [
     references: ['PERNEFRI', 'NKF']
   },
   {
+    id: 'gerd',
+    title: 'GERD',
+    scientificName: 'Gastroesophageal Reflux Disease (Penyakit Refluks Asam Lambung)',
+    icon: <Wind className="text-emerald-500" />,
+    image: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=600&q=80',
+    description: language === 'id' ? 'Penyakit kronis di mana isi lambung mengalir kembali ke kerongkongan, menyebabkan gejala yang tidak nyaman seperti heartburn.' : 'A condition where stomach contents flow back into the esophagus, causing a burning sensation (heartburn).',
+    symptoms: language === 'id' ? 
+      ['Sensasi terbakar di dada (heartburn)', 'Rasa asam di mulut', 'Suara serak', 'Batuk kering kronis', 'Kesulitan menelan'] : 
+      ['Burning sensation in the chest (heartburn)', 'Acid taste in the mouth', 'Hoarseness', 'Chronic dry cough', 'Difficulty swallowing'],
+    recommended: language === 'id' ? 
+      ['Jahe (anti-inflamasi)', 'Oatmeal', 'Pisang & Melon', 'Putih telur', 'Daging tanpa lemak (rebus)', 'Lidah buaya'] : 
+      ['Ginger (anti-inflammatory)', 'Oatmeal', 'Bananas & Melons', 'Egg whites', 'Lean meat (boiled)', 'Aloe vera'],
+    avoided: language === 'id' ? 
+      ['Cokelat & Mint', 'Makanan pedas & asam', 'Gorengan/lemak tinggi', 'Kopi & Alkohol', 'Minuman berkarbonasi'] : 
+      ['Chocolate & Mint', 'Spicy & acidic foods', 'Fried/high-fat foods', 'Coffee & Alcohol', 'Carbonated drinks'],
+    nutritionalTargets: language === 'id' ? 
+      'Fokus pada makanan pH Alkali (Netral), protein tanpa lemak, dan porsi kecil.' : 
+      'Focus on Alkaline (Neutral) pH foods, lean protein, and small portions.',
+    strategies: language === 'id' ? [
+      'Jangan langsung berbaring setelah makan (tunggu minimal 3 jam).',
+      'Makan secara perlahan dan kunyah hingga halus.',
+      'Hindari pakaian ketat di area perut saat makan.'
+    ] : [
+      'Do not lie down immediately after eating (wait at least 3 hours).',
+      'Eat slowly and chew thoroughly.',
+      'Avoid tight clothing in the abdominal area while eating.'
+    ],
+    faq: language === 'id' ? [
+      { q: 'Bolehkah minum air hangat saat kumat?', a: 'Air hangat membantu menenangkan, namun hindari campuran lemon atau jeruk.' },
+      { q: 'Mengapa cokelat dilarang?', a: 'Cokelat mengandung methylxanthine yang melemaskan katup bawah kerongkongan, sehingga asam mudah naik.' }
+    ] : [
+      { q: 'Can I drink warm water during a flare-up?', a: 'Warm water helps soothe, but avoid mixing it with lemon or orange.' },
+      { q: 'Why is chocolate prohibited?', a: 'Chocolate contains methylxanthine which relaxes the lower esophageal valve, allowing acid to rise easily.' }
+    ],
+    references: ['PGI', 'Mayo Clinic']
+  },
+  {
+    id: 'hipertensi',
+    title: 'Hipertensi',
+    scientificName: 'Hipertensi (Tekanan Darah Tinggi)',
+    icon: <HeartPulse className="text-red-600" />,
+    image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80',
+    description: language === 'id' ? 'Hipertensi adalah kondisi medis kronis di mana tekanan darah arteri meningkat secara persisten (>130/80 mmHg). Batasi natrium untuk menjaga stabilitas jantung.' : 'A chronic condition where the arterial blood pressure is persistently elevated (>130/80 mmHg).',
+    symptoms: language === 'id' ? 
+      ['Sakit kepala parah', 'Kelelahan atau kebingungan', 'Masalah penglihatan', 'Nyeri dada', 'Detak jantung tidak teratur'] : 
+      ['Severe headache', 'Fatigue or confusion', 'Vision problems', 'Chest pain', 'Irregular heartbeat'],
+    recommended: language === 'id' ? 
+      ['Sayuran hijau (Bayam/Brokoli)', 'Buah beri (Stroberi/Blueberry)', 'Yogurt rendah lemak', 'Oatmeal', 'Pisang (Kaya Kalium)', 'Bawang putih'] : 
+      ['Green vegetables (Spinach/Broccoli)', 'Berries (Strawberry/Blueberry)', 'Low-fat yogurt', 'Oatmeal', 'Bananas (Rich in Potassium)', 'Garlic'],
+    avoided: language === 'id' ? 
+      ['Garam berlebih', 'Daging olahan (Sosis/Ham)', 'Acar asin', 'Mie instan', 'Kulit ayam & lemak jenuh'] : 
+      ['Excessive salt', 'Processed meats (Sausage/Ham)', 'Salty pickles', 'Instant noodles', 'Chicken skin & saturated fats'],
+    nutritionalTargets: language === 'id' ? 
+      'Diet DASH (Dietary Approaches to Stop Hypertension), Natrium < 2000mg/hari (setara 1 sdt garam).' : 
+      'DASH Diet (Dietary Approaches to Stop Hypertension), Sodium < 2000mg/day (equivalent to 1 tsp salt).',
+    strategies: language === 'id' ? [
+      'Gunakan rempah alami sebagai pengganti garam (jeruk nipis, lada).',
+      'Selalu cek label nutrisi pada kemasan (pilih rendah natrium).',
+      'Tingkatkan asupan kalium dari buah untuk membantu membuang kelebihan garam.'
+    ] : [
+      'Use natural spices instead of salt (lime, pepper).',
+      'Always check nutrition labels on packaging (choose low sodium).',
+      'Increase potassium intake from fruit to help flush out excess salt.'
+    ],
+    faq: language === 'id' ? [
+      { q: 'Mengapa garam menyebabkan darah tinggi?', a: 'Garam mengikat air dalam pembuluh darah, meningkatkan volume darah yang membuat jantung bekerja lebih keras.' },
+      { q: 'Apakah kopi diperbolehkan untuk hipertensi?', a: 'Kafein dapat meningkatkan tekanan darah sementara; batasi 1-2 cangkir sehari.' }
+    ] : [
+      { q: 'Why does salt cause high blood pressure?', a: 'Salt binds water in the blood vessels, increasing blood volume which makes the heart work harder.' },
+      { q: 'Is coffee allowed for hypertension?', a: 'Caffeine can temporarily increase blood pressure; limit to 1-2 cups a day.' }
+    ],
+    references: ['PERHI', 'AHA (American Heart Association)']
+  },
+  {
     id: 'hipotensi',
-    title: language === 'id' ? 'Hipotensi' : 'Hypotension',
-    scientificName: language === 'id' ? 'Tekanan Darah Rendah' : 'Low Blood Pressure',
+    title: 'Hipotensi (Darah Rendah)',
+    scientificName: 'Hipotensi',
     icon: <Droplets className="text-pink-400" />,
-    description: language === 'id' ? 'Kondisi di mana tekanan darah berada di bawah normal (90/60 mmHg), yang dapat menyebabkan pusing atau pingsan.' : 'A condition where blood pressure is below normal (90/60 mmHg), which can cause dizziness or fainting.',
+    image: 'https://images.unsplash.com/photo-1529822641104-e12afc55861b?auto=format&fit=crop&w=600&q=80',
+    description: language === 'id' ? 'Kondisi tekanan darah di bawah 90/60 mmHg. Berbeda dengan hipertensi yang butuh pantang garam, penderita hipotensi memerlukan asupan cairan dan garam terukur.' : 'A condition where blood pressure is below normal (90/60 mmHg), which can cause dizziness or fainting.',
     symptoms: language === 'id' ? 
       ['Pusing atau kliyengan', 'Pandangan kabur', 'Mual', 'Pingsan (sinkop)', 'Kurang konsentrasi'] : 
       ['Dizziness or lightheadedness', 'Blurred vision', 'Nausea', 'Fainting (syncope)', 'Lack of concentration'],
@@ -296,10 +341,11 @@ export const getHealthConditions = (language) => [
   },
   {
     id: 'bumil',
-    title: language === 'id' ? 'Kehamilan' : 'Pregnancy',
-    scientificName: 'Maternal Health',
+    title: 'Ibu Hamil',
+    scientificName: 'Kehamilan (Pregnancy)',
     icon: <Baby className="text-pink-500" />,
-    description: language === 'id' ? 'Kehamilan memerlukan nutrisi spesifik untuk mendukung pertumbuhan janin dan kesehatan ibu.' : 'Pregnancy requires specific nutrients to support fetal growth and maternal health.',
+    image: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=600&q=80',
+    description: language === 'id' ? 'Masa kehamilan membutuhkan peningkatan nutrisi spesifik untuk mendukung pertumbuhan janin dan mencegah anemia defisiensi besi pada ibu.' : 'Pregnancy requires specific nutrients to support fetal growth and maternal health.',
     symptoms: language === 'id' ? 
       ['Morning sickness', 'Kelelahan', 'Sering buang air kecil', 'Perubahan nafsu makan', 'Kram perut'] : 
       ['Morning sickness', 'Fatigue', 'Frequent urination', 'Appetite changes', 'Abdominal cramps'],
@@ -332,10 +378,11 @@ export const getHealthConditions = (language) => [
   },
   {
     id: 'busui',
-    title: language === 'id' ? 'Menyusui' : 'Breastfeeding',
-    scientificName: 'Lactation',
+    title: 'Ibu Menyusui',
+    scientificName: 'Masa Menyusui (Laktasi)',
     icon: <Baby className="text-blue-400" />,
-    description: language === 'id' ? 'Fase menyusui membutuhkan lebih banyak kalori dan cairan untuk produksi ASI yang berkualitas.' : 'The breastfeeding phase requires more calories and fluids for quality milk production.',
+    image: 'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=600&q=80',
+    description: language === 'id' ? 'Fase menyusui membutuhkan kalori dan cairan lebih banyak daripada masa kehamilan untuk memproduksi air susu ibu yang bernutrisi lengkap.' : 'The breastfeeding phase requires more calories and fluids for quality milk production.',
     symptoms: language === 'id' ? 
       ['Rasa haus berlebih', 'Sering lapar', 'Payudara terasa penuh', 'Kelelahan'] : 
       ['Excessive thirst', 'Frequent hunger', 'Full-feeling breasts', 'Fatigue'],
@@ -368,10 +415,11 @@ export const getHealthConditions = (language) => [
   },
   {
     id: 'laktosa',
-    title: language === 'id' ? 'Intoleransi Laktosa' : 'Lactose Intolerance',
-    scientificName: 'Lactose Intolerance',
+    title: 'Intoleransi Laktosa',
+    scientificName: 'Intoleransi Laktosa (Lactose Intolerance)',
     icon: <AlertCircle className="text-orange-400" />,
-    description: language === 'id' ? 'Ketidakmampuan tubuh untuk mencerna laktosa (gula dalam susu) sepenuhnya karena kekurangan enzim laktase.' : 'The inability to fully digest lactose (the sugar in milk) due to a deficiency of the lactase enzyme.',
+    image: 'https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=600&q=80',
+    description: language === 'id' ? 'Ketidakmampuan tubuh mencerna laktosa (gula alami dalam susu) karena kekurangan enzim laktase di usus halus. Konsumsi alternatif susu non-diary.' : 'The inability to fully digest lactose (the sugar in milk) due to a deficiency of the lactase enzyme.',
     symptoms: language === 'id' ? 
       ['Perut kembung & gas', 'Diare setelah minum susu', 'Sering buang angin', 'Kram perut'] : 
       ['Bloating & gas', 'Diarrhea after drinking milk', 'Flatulence', 'Abdominal cramps'],
@@ -403,16 +451,54 @@ export const getHealthConditions = (language) => [
     references: ['IDAI', 'Mayo Clinic']
   },
   {
+    id: 'kolesterol',
+    title: 'Kolesterol Tinggi',
+    scientificName: 'Hiperkolesterolemia (Dislipidemia)',
+    icon: <HeartPulse className="text-emerald-600" />,
+    image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=600&q=80',
+    description: language === 'id' ? 'Kondisi gangguan metabolisme lipid di mana kadar LDL (kolesterol jahat) dan trigliserida dalam darah melebihi batas aman, meningkatkan risiko penyakit jantung.' : 'A lipid metabolic disorder characterized by elevated levels of LDL (bad cholesterol) and triglycerides in the blood, increasing the risk of cardiovascular disease.',
+    symptoms: language === 'id' ? 
+      ['Sering pegal di pundak atau leher', 'Mudah mengantuk', 'Kesemutan di kaki & tangan', 'Nyeri dada ringan (jika pembuluh menyempit)'] : 
+      ['Frequent stiffness in shoulders or neck', 'Easy drowsiness', 'Tingling in feet & hands', 'Mild chest pain (if blood vessels narrow)'],
+    recommended: language === 'id' ? 
+      ['Oatmeal & Gandum utuh', 'Alpukat (Lemak Baik)', 'Minyak Zaitun', 'Ikan Salmon/Tuna (Omega 3)', 'Kacang Almond/Walnut', 'Sayuran hijau serat larut'] : 
+      ['Oatmeal & Whole Grains', 'Avocado (Good Fats)', 'Olive Oil', 'Salmon/Tuna (Omega 3)', 'Almonds/Walnuts', 'Soluble fiber leafy greens'],
+    avoided: language === 'id' ? 
+      ['Gorengan & Junk Food', 'Daging berlemak & kulit ayam', 'Mentega & Keju tinggi lemak', 'Santan kental', 'Kuning telur berlebih'] : 
+      ['Fried foods & Junk Food', 'Fatty meats & chicken skin', 'Butter & High-fat cheese', 'Thick coconut milk', 'Excessive egg yolks'],
+    nutritionalTargets: language === 'id' ? 
+      'Kolesterol LDL < 100 mg/dL, tingkatkan serat larut (>10g/hari), batasi lemak jenuh < 7% total kalori harian.' : 
+      'LDL Cholesterol < 100 mg/dL, increase soluble fiber (>10g/day), limit saturated fat < 7% of daily calories.',
+    strategies: language === 'id' ? [
+      'Ganti minyak goreng sawit dengan minyak zaitun atau minyak kanola saat memasak.',
+      'Konsumsi oatmeal di pagi hari untuk membantu mengikat kolesterol di saluran cerna dan membuangnya.',
+      'Batasi makanan bersantan kental dan gorengan maksimal 1-2 kali seminggu.'
+    ] : [
+      'Replace palm oil with olive or canola oil when cooking.',
+      'Consume oatmeal in the morning to help bind cholesterol in the digestive tract and eliminate it.',
+      'Limit thick coconut milk and fried foods to maximum 1-2 times a week.'
+    ],
+    faq: language === 'id' ? [
+      { q: 'Apakah semua lemak dilarang?', a: 'Tidak. Lemak tidak jenuh (seperti pada alpukat, zaitun, dan ikan salmon) justru sangat disarankan karena membantu menaikkan kolesterol baik (HDL).' },
+      { q: 'Mengapa olahraga penting untuk kolesterol?', a: 'Olahraga teratur merangsang enzim yang membantu memindahkan kolesterol LDL jahat dari darah ke hati untuk dibuang.' }
+    ] : [
+      { q: 'Are all fats forbidden?', a: 'No. Unsaturated fats (like in avocados, olives, and salmon) are highly recommended because they help raise good cholesterol (HDL).' },
+      { q: 'Why is exercise important for cholesterol?', a: 'Regular exercise stimulates enzymes that help move bad LDL cholesterol from the blood to the liver for disposal.' }
+    ],
+    references: ['PERKENI', 'AHA', 'Kemenkes RI']
+  },
+  {
     id: 'maag',
-    title: language === 'id' ? 'Maag' : 'Gastritis',
-    scientificName: 'Dyspepsia',
+    title: 'Maag (Gastritis)',
+    scientificName: 'Gastritis / Dispepsia',
     icon: <Thermometer className="text-red-400" />,
-    description: language === 'id' ? 'Peradangan pada lapisan lambung yang menyebabkan nyeri ulu hati dan sakit perut.' : 'Inflammation of the lining of the stomach causing heartburn and abdominal pain.',
+    image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=600&q=80',
+    description: language === 'id' ? 'Peradangan, iritasi, atau pengikisan pada lapisan dinding lambung. Berbeda dengan GERD (asam naik ke kerongkongan), maag berfokus pada lambung.' : 'Inflammation of the lining of the stomach causing heartburn and abdominal pain.',
     symptoms: language === 'id' ? 
       ['Nyeri ulu hati atau perih', 'Perut kembung', 'Mual & muntah', 'Cepat merasa kenyang saat makan'] : 
       ['Heartburn or stinging in the upper abdomen', 'Bloating', 'Nausea & vomiting', 'Feeling full quickly when eating'],
     recommended: language === 'id' ? 
-      ['Bubur nasi/nasi lembek', 'Kentang rebus', 'Buah non-asam (Melon)', 'Ikan panggang', 'Labu siam', 'Madu'] : 
+      ['Bubur nasi/nasi lembek', 'Kentang rebus', 'Buah non-asam (Melon)', 'Ikan pemanggang', 'Labu siam', 'Madu'] : 
       ['Rice porridge/soft rice', 'Boiled potatoes', 'Non-acidic fruits (Melon)', 'Grilled fish', 'Chayote', 'Honey'],
     avoided: language === 'id' ? 
       ['Makanan pedas & asam', 'Ketan & tape', 'Soda/minuman berkarbonasi', 'Gorengan keras', 'Santan kental'] : 
@@ -440,10 +526,11 @@ export const getHealthConditions = (language) => [
   },
   {
     id: 'tipes',
-    title: language === 'id' ? 'Tipes' : 'Typhoid Fever',
-    scientificName: 'Enteric Fever',
+    title: 'Tipes (Demam Tifoid)',
+    scientificName: 'Demam Tifoid (Typhoid Fever)',
     icon: <AlertCircle className="text-red-700" />,
-    description: language === 'id' ? 'Infeksi saluran pencernaan oleh bakteri Salmonella typhi yang menyerang usus halus.' : 'An infection of the digestive tract by Salmonella typhi bacteria attacking the small intestine.',
+    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80',
+    description: language === 'id' ? 'Penyakit infeksi akut pada saluran pencernaan (usus halus) yang disebabkan oleh bakteri Salmonella typhi. Butuh makanan lunak rendah serat.' : 'An infection of the digestive tract by Salmonella typhi bacteria attacking the small intestine.',
     symptoms: language === 'id' ? 
       ['Demam tinggi (meningkat di malam hari)', 'Sakit perut parah', 'Diare atau sembelit', 'Lidah kotor (selaput putih)', 'Mual & lemas'] : 
       ['High fever (increasing at night)', 'Severe abdominal pain', 'Diarrhea or constipation', 'Dirty tongue (white coating)', 'Nausea & weakness'],

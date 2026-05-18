@@ -66,25 +66,52 @@ const PanduanPage = () => {
                 setSelectedCondition(condition);
                 setActiveTab('nutrisi');
               }}
-              className="group text-left bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-8 transition-all hover:scale-[1.02] hover:border-[var(--primary-green)]/30 hover:shadow-2xl hover:shadow-[var(--primary-green)]/10"
+              className="group text-left bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] overflow-hidden transition-all hover:scale-[1.02] hover:border-[var(--primary-green)]/30 hover:shadow-2xl hover:shadow-[var(--primary-green)]/10 flex flex-col h-full"
             >
-              <div className="flex items-start justify-between mb-8">
-                <div className="w-16 h-16 rounded-2xl bg-[var(--bg-primary)] flex items-center justify-center text-3xl shadow-inner group-hover:scale-110 transition-transform duration-500">
-                  {condition.icon}
-                </div>
-                <div className="bg-[var(--primary-green)]/10 text-[var(--primary-green)] px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest">
-                  {language === 'id' ? 'Detail Medis' : 'Medical Detail'}
+              {/* Card Image Header with Icon Overlay */}
+              <div className="relative h-52 w-full overflow-hidden shrink-0">
+                <img 
+                  src={condition.image} 
+                  alt={condition.title} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                {/* Floating Icon Badge */}
+                <div className="absolute bottom-4 left-6 w-11 h-11 rounded-2xl bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg text-[var(--primary-green)]">
+                  {React.cloneElement(condition.icon, { size: 20 })}
                 </div>
               </div>
-              <h3 className="text-2xl font-black text-[var(--text-main)] mb-2 group-hover:text-[var(--primary-green)] transition-colors">
-                {condition.title}
-              </h3>
-              <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-6">
-                {condition.scientificName}
-              </p>
-              <p className="text-[var(--text-muted)] text-sm leading-relaxed font-medium line-clamp-3">
-                {condition.description}
-              </p>
+
+              {/* Card Body */}
+              <div className="p-8 flex flex-col flex-grow justify-between">
+                <div>
+                  <h3 className="text-xl font-black text-[var(--text-main)] mb-1 group-hover:text-[var(--primary-green)] transition-colors line-clamp-1">
+                    {condition.title}
+                  </h3>
+                  <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-4 line-clamp-1">
+                    {condition.scientificName}
+                  </p>
+                  <p className="text-[var(--text-muted)] text-xs leading-relaxed font-medium mb-6 line-clamp-2">
+                    {condition.description}
+                  </p>
+                </div>
+
+                {/* Card Pills & Link Button */}
+                <div className="flex items-center justify-between pt-4 border-t border-[var(--border-card)]/30 mt-auto shrink-0">
+                  <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-wider">
+                    <span className="flex items-center gap-1 text-emerald-500">
+                      🟢 {condition.recommended.length} {language === 'id' ? 'direkomendasikan' : 'recommended'}
+                    </span>
+                    <span className="flex items-center gap-1 text-rose-500">
+                      🔴 {condition.avoided.length} {language === 'id' ? 'dihindari' : 'avoided'}
+                    </span>
+                  </div>
+                  <div className="w-8 h-8 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-card)] flex items-center justify-center text-[var(--text-muted)] group-hover:bg-[var(--primary-green)] group-hover:text-white transition-all duration-300">
+                    <span className="text-sm font-black">→</span>
+                  </div>
+                </div>
+              </div>
             </button>
           ))}
         </div>
