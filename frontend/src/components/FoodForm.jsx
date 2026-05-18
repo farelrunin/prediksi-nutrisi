@@ -58,6 +58,7 @@ const FoodForm = ({ onAddFood }) => {
   const [selectedMealType, setSelectedMealType] = useState('breakfast');
   const [isCustomOpen, setIsCustomOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const [showAnalysisReport, setShowAnalysisReport] = useState(false);
   
   const [customFood, setCustomFood] = useState({
     name: '',
@@ -69,6 +70,67 @@ const FoodForm = ({ onAddFood }) => {
     baseServing: 100,
     unit: 'g'
   });
+
+  const calculateAnalysisReport = () => {
+    const tValues = loggedFoods.reduce((acc, curr) => ({
+      protein: acc.protein + (curr.protein || 0),
+      carbs: acc.carbs + (curr.carbs || 0),
+      fat: acc.fat + (curr.fat || 0)
+    }), { protein: 0, carbs: 0, fat: 0 });
+
+    const proteinG = tValues.protein;
+    const carbsG = tValues.carbs;
+    const fatG = tValues.fat;
+
+    const calProtein = proteinG * 4;
+    const calCarbs = carbsG * 4;
+    const calFat = fatG * 9;
+
+    const calculatedTotalCalories = calProtein + calCarbs + calFat;
+
+    const proteinPct = calculatedTotalCalories > 0 ? (calProtein / calculatedTotalCalories) * 100 : 0;
+    const carbsPct = calculatedTotalCalories > 0 ? (calCarbs / calculatedTotalCalories) * 100 : 0;
+    const fatPct = calculatedTotalCalories > 0 ? (calFat / calculatedTotalCalories) * 100 : 0;
+
+    let adviceTitle = language === 'id' ? 'Pola Makan Seimbang' : 'Balanced Diet Pattern';
+    let adviceText = language === 'id' 
+      ? 'Kombinasi makanan Anda sangat baik dan seimbang antara protein, karbohidrat, dan lemak sehat!' 
+      : 'Your food combination is excellent and balanced between protein, carbs, and healthy fats!';
+    let badgeColor = 'text-emerald-500 bg-emerald-500/10 border-emerald-500/30';
+
+    if (proteinPct < 15 && calculatedTotalCalories > 0) {
+      adviceTitle = language === 'id' ? 'Kekurangan Asupan Protein' : 'Low Protein Intake';
+      adviceText = language === 'id'
+        ? 'Persentase energi dari protein Anda kurang dari 15%. Disarankan untuk menambahkan bahan kaya protein seperti Dada Ayam, Salmon, Tahu, atau Telur untuk mendukung regenerasi otot dan metabolisme tubuh.'
+        : 'Your energy percentage from protein is less than 15%. It is recommended to add protein-rich ingredients like Chicken Breast, Salmon, Tofu, or Eggs to support muscle recovery and metabolism.';
+      badgeColor = 'text-[var(--warning)] bg-amber-500/10 border-amber-500/30';
+    } else if (fatPct > 35 && calculatedTotalCalories > 0) {
+      adviceTitle = language === 'id' ? 'Kandungan Lemak Tinggi' : 'High Fat Content';
+      adviceText = language === 'id'
+        ? 'Persentase energi dari lemak Anda melebihi 35%. Cobalah untuk mengurangi minyak jenuh, mentega, atau gorengan, dan ganti dengan sumber lemak baik seperti Alpukat atau Minyak Zaitun dalam porsi sedang.'
+        : 'Your energy percentage from fat exceeds 35%. Try reducing saturated oils, butter, or deep-fried foods, and replace them with good fat sources like Avocado or Olive Oil in moderate portions.';
+      badgeColor = 'text-[var(--danger)] bg-rose-500/10 border-rose-500/30';
+    } else if (carbsPct > 65 && calculatedTotalCalories > 0) {
+      adviceTitle = language === 'id' ? 'Karbohidrat Mendominasi' : 'High Carbohydrates';
+      adviceText = language === 'id'
+        ? 'Persentase energi dari karbohidrat Anda melebihi 65%. Untuk mencegah lonjakan gula darah dan rasa cepat lapar, kurangi porsi karbohidrat sederhana dan seimbangkan dengan sayur berserat tinggi dan protein.'
+        : 'Your energy percentage from carbohydrates exceeds 65%. To prevent blood sugar spikes and quick hunger, reduce simple carbs and balance with high-fiber veggies and protein.';
+      badgeColor = 'text-blue-500 bg-blue-500/10 border-blue-500/30';
+    }
+
+    return {
+      calProtein,
+      calCarbs,
+      calFat,
+      calculatedTotalCalories,
+      proteinPct,
+      carbsPct,
+      fatPct,
+      adviceTitle,
+      adviceText,
+      badgeColor
+    };
+  };
 
   const { predictNutrition, predictNutritionImage } = useNutrition();
 
@@ -1259,7 +1321,7 @@ const FoodForm = ({ onAddFood }) => {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <button
                       type="button"
-                      onClick={handleAnalyzeLoggedAI}
+                      onClick={() => setShowAnalysisReport(true)}
                       className="bg-[var(--bg-card)] border border-[var(--primary-green)] text-[var(--primary-green)] py-4 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-[var(--primary-green)] hover:text-white transition-all shadow-sm flex items-center justify-center gap-2 group"
                     >
                       <Sparkles size={14} className="group-hover:rotate-12 transition-transform" />
@@ -1317,6 +1379,146 @@ const FoodForm = ({ onAddFood }) => {
           </button>
         )}
       </form>
+
+      {/* STUNNING VISUAL MATHEMATICAL ANALYSIS REPORT MODAL (USER FORMULAS!) */}
+      {showAnalysisReport && (
+        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="bg-[var(--bg-card)] border border-[var(--border-card)] w-full max-w-2xl rounded-[2.5rem] overflow-hidden shadow-2xl p-6 md:p-8 space-y-6 relative max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-300">
+            
+            {/* Close Button */}
+            <button 
+              type="button"
+              onClick={() => setShowAnalysisReport(false)}
+              className="absolute top-6 right-6 p-2 rounded-full hover:bg-[var(--bg-secondary)] text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors"
+            >
+              <XCircle size={24} />
+            </button>
+
+            {/* Header */}
+            <div className="flex items-center gap-3 pr-8 text-left">
+              <div className="p-3 bg-[var(--primary-green)] text-white rounded-2xl shadow-lg shadow-emerald-500/20">
+                <Brain size={24} />
+              </div>
+              <div>
+                <h3 className="text-lg font-black uppercase tracking-wider text-[var(--text-main)]">
+                  {language === 'id' ? 'Laporan Analisis Gizi Mandiri' : 'Self-Nutrition Analysis Report'}
+                </h3>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] mt-1">
+                  {language === 'id' ? 'Kalkulator Energi & Makronutrisi Makanan' : 'Food Energy & Macronutrient Calculator'}
+                </p>
+              </div>
+            </div>
+
+            {/* Formula Explanation Banner */}
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-card)] rounded-2xl p-4 text-xs font-semibold text-[var(--text-muted)] space-y-1 text-left">
+              <p className="font-extrabold text-[var(--text-main)] uppercase tracking-wider text-[10px] text-[var(--primary-green)] mb-1">
+                ⚙️ {language === 'id' ? 'Metode Rumus Perhitungan Gizi' : 'Nutrition Formula Calculation Method'}
+              </p>
+              <p>• <strong>Protein (1g = 4 kcal)</strong> • <strong>Karbohidrat (1g = 4 kcal)</strong> • <strong>Lemak (1g = 9 kcal)</strong></p>
+              <p>• <strong>Persentase Energi Makro</strong> = (Kalori Makronutrisi ÷ Total Kalori Hasil Hitung) × 100%</p>
+            </div>
+
+            {/* Calculated Values Dashboard */}
+            {(() => {
+              const r = calculateAnalysisReport();
+              return (
+                <div className="space-y-6 text-left">
+                  {/* Energy Breakdown Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Protein */}
+                    <div className="bg-[var(--bg-secondary)]/50 border border-[var(--border-card)] rounded-2xl p-4 text-center">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Protein ({totals.protein.toFixed(1)}g)</p>
+                      <h4 className="text-xl font-black text-[var(--accent-blue)] mt-1">{Math.round(r.calProtein)} <span className="text-[10px] font-bold text-[var(--text-muted)]">kcal</span></h4>
+                      <div className="mt-2 text-xs font-black text-[var(--accent-blue)] bg-[var(--accent-blue)]/10 py-1 px-3 rounded-lg border border-[var(--accent-blue)]/20 w-fit mx-auto">
+                        {r.proteinPct.toFixed(1)}% {language === 'id' ? 'Energi' : 'Energy'}
+                      </div>
+                    </div>
+                    {/* Carbs */}
+                    <div className="bg-[var(--bg-secondary)]/50 border border-[var(--border-card)] rounded-2xl p-4 text-center">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Karbohidrat ({totals.carbs.toFixed(1)}g)</p>
+                      <h4 className="text-xl font-black text-[var(--warning)] mt-1">{Math.round(r.calCarbs)} <span className="text-[10px] font-bold text-[var(--text-muted)]">kcal</span></h4>
+                      <div className="mt-2 text-xs font-black text-[var(--warning)] bg-[var(--warning)]/10 py-1 px-3 rounded-lg border border-[var(--warning)]/20 w-fit mx-auto">
+                        {r.carbsPct.toFixed(1)}% {language === 'id' ? 'Energi' : 'Energy'}
+                      </div>
+                    </div>
+                    {/* Fat */}
+                    <div className="bg-[var(--bg-secondary)]/50 border border-[var(--border-card)] rounded-2xl p-4 text-center">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Lemak ({totals.fat.toFixed(1)}g)</p>
+                      <h4 className="text-xl font-black text-[var(--danger)] mt-1">{Math.round(r.calFat)} <span className="text-[10px] font-bold text-[var(--text-muted)]">kcal</span></h4>
+                      <div className="mt-2 text-xs font-black text-[var(--danger)] bg-[var(--danger)]/10 py-1 px-3 rounded-lg border border-[var(--danger)]/20 w-fit mx-auto">
+                        {r.fatPct.toFixed(1)}% {language === 'id' ? 'Energi' : 'Energy'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Total Calories Box */}
+                  <div className="bg-[var(--bg-secondary)] border border-[var(--border-card)] rounded-3xl p-6 text-center space-y-1">
+                    <p className="text-xs font-black uppercase tracking-widest text-[var(--text-muted)]">{language === 'id' ? 'Total Kalori Hasil Rumus Makro' : 'Total Calories via Macro Formula'}</p>
+                    <h2 className="text-3xl font-black text-[var(--primary-green)]">{Math.round(r.calculatedTotalCalories)} <span className="text-sm font-bold text-[var(--text-muted)]">kcal / Kalori</span></h2>
+                    <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">
+                      {language === 'id' ? `(Jumlah dari: ${Math.round(r.calProtein)} Protein + ${Math.round(r.calCarbs)} Karbo + ${Math.round(r.calFat)} Lemak)` : `(Sum of: ${Math.round(r.calProtein)} Protein + ${Math.round(r.calCarbs)} Carbs + ${Math.round(r.calFat)} Fat)`}
+                    </p>
+                  </div>
+
+                  {/* Visual Energy Stacked Progress Bar */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-[10px] font-black uppercase tracking-wider text-[var(--text-muted)]">
+                      <span>{language === 'id' ? 'Distribusi Kontribusi Energi' : 'Energy Contribution Distribution'}</span>
+                      <span>Total 100%</span>
+                    </div>
+                    <div className="h-6 w-full rounded-full overflow-hidden flex border border-[var(--border-card)] shadow-inner">
+                      <div style={{ width: `${r.proteinPct}%` }} className="bg-[var(--accent-blue)] h-full transition-all duration-500" title={`Protein: ${r.proteinPct.toFixed(1)}%`} />
+                      <div style={{ width: `${r.carbsPct}%` }} className="bg-[var(--warning)] h-full transition-all duration-500" title={`Karbohidrat: ${r.carbsPct.toFixed(1)}%`} />
+                      <div style={{ width: `${r.fatPct}%` }} className="bg-[var(--danger)] h-full transition-all duration-500" title={`Lemak: ${r.fatPct.toFixed(1)}%`} />
+                    </div>
+                    <div className="flex justify-center gap-6 text-[10px] font-bold text-[var(--text-muted)]">
+                      <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded bg-[var(--accent-blue)]" /> Protein ({r.proteinPct.toFixed(1)}%)</span>
+                      <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded bg-[var(--warning)]" /> Karbo ({r.carbsPct.toFixed(1)}%)</span>
+                      <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded bg-[var(--danger)]" /> Lemak ({r.fatPct.toFixed(1)}%)</span>
+                    </div>
+                  </div>
+
+                  {/* AI Evaluation / Recommendation Card */}
+                  <div className={`border rounded-3xl p-6 relative overflow-hidden group border-current bg-current/5 ${r.badgeColor}`}>
+                    <div className="flex items-center gap-2 mb-2 font-black text-[10px] uppercase tracking-[0.2em]">
+                      <Sparkles size={12} className="animate-pulse" />
+                      <span>{language === 'id' ? 'Rekomendasi Diet Personal' : 'Personal Diet Recommendation'}</span>
+                    </div>
+                    <h4 className="font-extrabold text-sm uppercase tracking-wide">{r.adviceTitle}</h4>
+                    <p className="text-xs leading-relaxed font-semibold mt-1.5 text-[var(--text-muted)]">
+                      {r.adviceText}
+                    </p>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        await handleSaveAllLoggedFoods();
+                        setShowAnalysisReport(false);
+                      }}
+                      className="flex-grow bg-[var(--primary-green)] text-white py-4 rounded-2xl text-xs font-black uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-md flex items-center justify-center gap-2"
+                    >
+                      <CheckCircle2 size={14} />
+                      <span>{language === 'id' ? 'Simpan & Tutup' : 'Save & Close'}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowAnalysisReport(false)}
+                      className="flex-grow bg-[var(--bg-secondary)] border border-[var(--border-card)] text-[var(--text-main)] py-4 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-[var(--bg-primary)] transition-all flex items-center justify-center gap-2"
+                    >
+                      {language === 'id' ? 'Kembali Edit Makanan' : 'Back to Editing'}
+                    </button>
+                  </div>
+
+                </div>
+              );
+            })()}
+
+          </div>
+        </div>
+      )}
     </div>
   );
 };
