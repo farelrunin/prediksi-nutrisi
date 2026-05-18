@@ -111,45 +111,44 @@ const NutritionInfoPage = () => {
                   </div>
                 </div>
 
-                {/* Right: Detailed Info */}
-                <div className="lg:col-span-8 grid md:grid-cols-2 gap-10">
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2 text-[var(--primary-green)]">
-                      <Info size={16} />
-                      <h4 className="text-xs font-black uppercase tracking-widest">What is it?</h4>
-                    </div>
-                    <p className="text-[var(--text-muted)] font-medium leading-relaxed">{n.description}</p>
-                    
-                    <div className="pt-6 space-y-4">
-                      <div className="flex items-center gap-2 text-blue-500">
-                        <CheckCircle2 size={16} />
-                        <h4 className="text-xs font-black uppercase tracking-widest">Why it matters</h4>
+                {/* Right: Detailed Info */}                  <div className="lg:col-span-8 grid md:grid-cols-2 gap-10">
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2 text-[var(--primary-green)]">
+                        <Info size={16} />
+                        <h3 className="text-xs font-black uppercase tracking-widest">What is it?</h3>
                       </div>
-                      <p className="text-[var(--text-muted)] font-medium leading-relaxed italic border-l-2 border-blue-500/20 pl-4">{n.importance}</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-8">
-                    <div className="bg-[var(--bg-secondary)] rounded-3xl p-8 border border-[var(--border-card)]">
-                      <h4 className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-6">Excellent Sources</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {n.sources.map((source, i) => (
-                          <span key={i} className="px-4 py-2 bg-[var(--bg-card)] border border-[var(--border-card)] rounded-xl text-xs font-bold text-[var(--text-main)]">
-                            {source}
-                          </span>
-                        ))}
+                      <p className="text-[var(--text-muted)] font-medium leading-relaxed">{n.description}</p>
+                      
+                      <div className="pt-6 space-y-4">
+                        <div className="flex items-center gap-2 text-blue-500">
+                          <CheckCircle2 size={16} />
+                          <h3 className="text-xs font-black uppercase tracking-widest">Why it matters</h3>
+                        </div>
+                        <p className="text-[var(--text-muted)] font-medium leading-relaxed italic border-l-2 border-blue-500/20 pl-4">{n.importance}</p>
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-4 p-6 rounded-3xl bg-amber-500/5 border border-amber-500/10">
-                      <AlertCircle className="text-amber-500 shrink-0" size={20} />
-                      <div>
-                        <h5 className="text-[10px] font-black uppercase tracking-widest text-amber-600 mb-1">Quick Tip</h5>
-                        <p className="text-sm font-bold text-amber-700/80 leading-relaxed">{n.tips}</p>
+                    <div className="space-y-8">
+                      <div className="bg-[var(--bg-secondary)] rounded-3xl p-8 border border-[var(--border-card)]">
+                        <h3 className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-6">Excellent Sources</h3>
+                        <div className="flex flex-wrap gap-2">
+                          {n.sources.map((source, i) => (
+                            <span key={i} className="px-4 py-2 bg-[var(--bg-card)] border border-[var(--border-card)] rounded-xl text-xs font-bold text-[var(--text-main)]">
+                              {source}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-4 p-6 rounded-3xl bg-amber-500/5 border border-amber-500/10">
+                        <AlertCircle className="text-amber-500 shrink-0" size={20} />
+                        <div>
+                          <h4 className="text-[10px] font-black uppercase tracking-widest text-amber-600 mb-1">Quick Tip</h4>
+                          <p className="text-sm font-bold text-amber-700/80 leading-relaxed">{n.tips}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
               </div>
             </div>
           ))}

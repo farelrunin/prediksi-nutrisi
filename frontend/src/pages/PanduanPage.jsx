@@ -181,7 +181,7 @@ const PanduanPage = () => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-3">
                           <div className="p-2 rounded-lg bg-[var(--primary-green)]/10 text-[var(--primary-green)]"><CheckCircle2 size={18} /></div>
-                          <h4 className="text-sm font-black uppercase tracking-widest">{language === 'id' ? 'Sangat Direkomendasikan' : 'Highly Recommended'}</h4>
+                          <h3 className="text-sm font-black uppercase tracking-widest">{language === 'id' ? 'Sangat Direkomendasikan' : 'Highly Recommended'}</h3>
                         </div>
                         <div className="space-y-3">
                           {selectedCondition.recommended.map((item, i) => (
@@ -194,7 +194,7 @@ const PanduanPage = () => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-3">
                           <div className="p-2 rounded-lg bg-red-500/10 text-red-500"><XCircle size={18} /></div>
-                          <h4 className="text-sm font-black uppercase tracking-widest">{language === 'id' ? 'Wajib Dihindari' : 'Must Avoid'}</h4>
+                          <h3 className="text-sm font-black uppercase tracking-widest">{language === 'id' ? 'Wajib Dihindari' : 'Must Avoid'}</h3>
                         </div>
                         <div className="space-y-3">
                           {selectedCondition.avoided.map((item, i) => (
@@ -210,7 +210,7 @@ const PanduanPage = () => {
                     <div className="rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-card)] p-8">
                       <div className="flex items-center gap-3 mb-8">
                         <Lightbulb className="text-[var(--primary-green)]" size={20} />
-                        <h4 className="text-sm font-black uppercase tracking-widest">{language === 'id' ? 'Tips & Strategi Pengelolaan' : 'Management Tips & Strategies'}</h4>
+                        <h3 className="text-sm font-black uppercase tracking-widest">{language === 'id' ? 'Tips & Strategi Pengelolaan' : 'Management Tips & Strategies'}</h3>
                       </div>
                       <div className="grid gap-4">
                         {selectedCondition.strategies.map((tip, i) => (
@@ -230,7 +230,7 @@ const PanduanPage = () => {
                     <div className="space-y-6">
                       <div className="flex items-center gap-3">
                         <AlertTriangle className="text-orange-500" size={20} />
-                        <h4 className="text-sm font-black uppercase tracking-widest">{language === 'id' ? 'Gejala & Tanda Umum' : 'Common Symptoms & Signs'}</h4>
+                        <h3 className="text-sm font-black uppercase tracking-widest">{language === 'id' ? 'Gejala & Tanda Umum' : 'Common Symptoms & Signs'}</h3>
                       </div>
                       <div className="flex flex-wrap gap-3">
                         {selectedCondition.symptoms.map((symptom, i) => (
@@ -245,7 +245,7 @@ const PanduanPage = () => {
                     <div className="rounded-3xl bg-gradient-to-r from-[var(--primary-green)]/10 to-[var(--accent-blue)]/10 border border-[var(--primary-green)]/20 p-8">
                       <div className="flex items-center gap-3 mb-6">
                         <Target className="text-[var(--primary-green)]" size={20} />
-                        <h4 className="text-sm font-black uppercase tracking-widest">{language === 'id' ? 'Target Nutrisi Harian' : 'Daily Nutritional Target'}</h4>
+                        <h3 className="text-sm font-black uppercase tracking-widest">{language === 'id' ? 'Target Nutrisi Harian' : 'Daily Nutritional Target'}</h3>
                       </div>
                       <p className="text-lg font-bold text-[var(--text-main)] leading-relaxed">
                         {selectedCondition.nutritionalTargets}
@@ -256,7 +256,7 @@ const PanduanPage = () => {
                     <div className="space-y-4 pt-12 border-t border-[var(--border-card)]">
                       <div className="flex items-center gap-3 mb-2">
                         <BookOpen className="text-[var(--text-muted)]" size={16} />
-                        <h4 className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">{language === 'id' ? 'Referensi Medis & Validasi' : 'Medical References & Validation'}</h4>
+                        <h3 className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">{language === 'id' ? 'Referensi Medis & Validasi' : 'Medical References & Validation'}</h3>
                       </div>
                       <div className="flex flex-wrap gap-6">
                         {selectedCondition.references.map((ref, i) => (
@@ -273,7 +273,7 @@ const PanduanPage = () => {
                       <div key={i} className="bg-[var(--bg-primary)] rounded-[2rem] border border-[var(--border-card)] overflow-hidden">
                         <div className="p-6 bg-[var(--bg-secondary)] border-b border-[var(--border-card)] flex items-start gap-4">
                           <HelpCircle className="text-[var(--primary-green)] mt-1 shrink-0" size={18} />
-                          <h5 className="font-black text-[var(--text-main)]">{item.q}</h5>
+                          <h4 className="font-black text-[var(--text-main)]">{item.q}</h4>
                         </div>
                         <div className="p-8">
                           <p className="text-sm font-medium leading-relaxed text-[var(--text-muted)]">{item.a}</p>
