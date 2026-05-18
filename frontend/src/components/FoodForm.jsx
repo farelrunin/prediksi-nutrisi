@@ -607,6 +607,11 @@ const FoodForm = ({ onAddFood }) => {
       });
     } catch (err) {
       console.error("Save logged foods failed:", err);
+      notify({
+        type: 'error',
+        title: language === 'id' ? 'Gagal Menyimpan' : 'Failed to Save',
+        message: err.message || (language === 'id' ? 'Terjadi kesalahan saat menyimpan makanan Anda.' : 'An error occurred while saving your foods.')
+      });
     } finally {
       setLoading(false);
     }
