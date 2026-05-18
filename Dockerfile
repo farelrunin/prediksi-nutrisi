@@ -9,12 +9,9 @@ COPY . .
 ARG SERVICE_TYPE
 ENV SERVICE_TYPE=$SERVICE_TYPE
 
-# Jalankan instalasi sesuai tipe service
-RUN if [ "$SERVICE_TYPE" = "frontend" ]; then \
-      cd frontend && npm install && npm run build; \
-    else \
-      cd backend && npm install; \
-    fi
+# Instal dan bangun frontend & backend (menghindari limitasi build-arg di Railway)
+RUN cd frontend && npm install && npm run build
+RUN cd backend && npm install
 
 # Buka port yang dibutuhkan
 EXPOSE 8000 5173 3000
