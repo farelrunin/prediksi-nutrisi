@@ -85,7 +85,7 @@ const LandingPage = () => {
             ].map((f, i) => (
               <div key={i} className="glow-card group p-12 rounded-[2.5rem] bg-[var(--bg-card)] border border-[var(--border-card)] duration-500">
                 <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-[var(--bg-primary)] text-[var(--primary-green)] mb-8 group-hover:scale-110 transition-transform">
-                  <f.icon size={32} />
+                  <f.icon size={32} aria-hidden="true" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4">{f.title}</h3>
                 <p className="text-[var(--text-muted)] text-base leading-relaxed font-medium">{f.desc}</p>
@@ -110,15 +110,15 @@ const LandingPage = () => {
                   { step: '01', title: 'User Story', desc: 'Type what you ate today.' },
                   { step: '02', title: 'AI Analysis', desc: 'Our AI engine will instantly calculate calories, protein, carbs, and fat.' },
                   { step: '03', title: 'Get Recommendations', desc: 'Receive personal advice to maintain your daily nutrition balance.' }
-                ].map((s) => (
-                  <div key={s.step} className="flex gap-8 group">
-                    <span className="text-4xl font-black text-[var(--primary-green)]/20 group-hover:text-[var(--primary-green)] transition-colors duration-300">{s.step}</span>
-                    <div className="space-y-2">
-                      <h4 className="text-xl font-bold">{s.title}</h4>
-                      <p className="text-[var(--text-muted)] font-medium leading-relaxed">{s.desc}</p>
+                  ].map((s) => (
+                    <div key={s.step} className="flex gap-8 group">
+                      <span className="text-4xl font-black text-[var(--primary-green)]/20 group-hover:text-[var(--primary-green)] transition-colors duration-300">{s.step}</span>
+                      <div className="space-y-2">
+                        <h3 className="text-xl font-bold">{s.title}</h3>
+                        <p className="text-[var(--text-muted)] font-medium leading-relaxed">{s.desc}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
 

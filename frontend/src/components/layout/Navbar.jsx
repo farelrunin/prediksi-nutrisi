@@ -204,16 +204,20 @@ const Navbar = () => {
 
           {user ? (
             <div className="flex items-center gap-4">
-              <Link to="/profile" className="hidden md:flex items-center gap-3 bg-[var(--bg-card)] border border-[var(--border-card)] px-5 py-2.5 rounded-2xl hover:border-[var(--primary-green)]/30 transition-all shadow-sm">
+              <Link
+                to="/profile"
+                aria-label={`${language === 'id' ? 'Profil' : 'Profile'}: ${user.name?.split(' ')[0] || 'User'}`}
+                className="hidden md:flex items-center gap-3 bg-[var(--bg-card)] border border-[var(--border-card)] px-5 py-2.5 rounded-2xl hover:border-[var(--primary-green)]/30 transition-all shadow-sm"
+              >
                 <div className="w-8 h-8 rounded-full overflow-hidden bg-[var(--primary-green)]/10 flex items-center justify-center text-[var(--primary-green)] border border-slate-100">
                   {user?.avatar_url || user?.avatar ? (
                     <img
                       src={user.avatar_url?.startsWith('http') || user.avatar_url?.startsWith('data:') ? user.avatar_url : `https://nutriai-backend-production-2987.up.railway.app${user.avatar_url}`}
-                      alt="Profile"
+                      alt={`${user.name?.split(' ')[0] || 'User'} avatar`}
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <User size={18} />
+                    <User size={18} aria-hidden="true" />
                   )}
                 </div>
                 <span className="text-xs font-bold text-[var(--text-main)] truncate max-w-[100px]">
