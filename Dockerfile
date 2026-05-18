@@ -11,17 +11,17 @@ ENV SERVICE_TYPE=$SERVICE_TYPE
 
 # Jalankan instalasi sesuai tipe service
 RUN if [ "$SERVICE_TYPE" = "frontend" ]; then \
-      cd frontend && npm install; \
+      cd frontend && npm install && npm run build; \
     else \
       cd backend && npm install; \
     fi
 
 # Buka port yang dibutuhkan
-EXPOSE 8000 5173
+EXPOSE 8000 5173 3000
 
 # Jalankan aplikasi sesuai tipe service
 CMD if [ "$SERVICE_TYPE" = "frontend" ]; then \
-      cd frontend && npm run dev -- --host 0.0.0.0; \
+      cd frontend && node server.cjs; \
     else \
       cd backend && node index.js; \
     fi
