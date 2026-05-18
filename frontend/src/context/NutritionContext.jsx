@@ -206,6 +206,11 @@ export const NutritionProvider = ({ children }) => {
     return result;
   };
 
+  const predictNutritionImage = async (formData) => {
+    const result = await nutritionService.predictNutritionImage(formData);
+    return result;
+  };
+
   const value = {
     nutritionData,
     historyLoading,
@@ -215,6 +220,7 @@ export const NutritionProvider = ({ children }) => {
     deleteFoodEntry,
     updateFoodEntry,
     predictNutrition,
+    predictNutritionImage,
     getRiskScore,
     updateProfile
   };

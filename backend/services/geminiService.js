@@ -133,4 +133,70 @@ const parseNaturalLanguageFood = async (text) => {
   }
 };
 
-module.exports = { getAiAdvice, getAiRecommendations, parseNaturalLanguageFood };
+const analyzeFoodImage = async (imageBuffer, mimeType, userProfile = {}) => {
+  const imagePart = {
+    inlineData: {
+      data: imageBuffer.toString("base64"),
+      mimeType: mimeType
+    }
+  };
+
+  const prompt = `
+    TUGAS: Analisis gambar makanan ini dan berikan data nutrisi serta saran kesehatan dalam bahasa Indonesia.
+    INSTRUKSI KHUSUS:
+    - Identifikasi makanan yang ada di gambar.
+    - Estimasi porsi dan hitung kandungan nutrisinya (kalori dalam kkal, protein, karbohidrat, dan lemak dalam gram).
+    - Berikan asupan gizi secara total dari seluruh makanan yang terdeteksi di gambar.
+    - Anda harus mengembalikan JSON murni dengan format persis di bawah ini. JANGAN berikan markdown, penjelas, atau teks pembuka/penutup.
+    
+    Profil User:
+    - Jenis Kelamin: ${userProfile.gender || 'Tidak disebutkan'}
+    - Tinggi: ${userProfile.height || '-'} cm
+    - Berat: ${userProfile.weight || '-'} kg
+    - Catatan Kesehatan: ${userProfile.healthNotes || 'Tidak ada'}
+    - Tujuan: ${userProfile.nutritionGoal || 'Menjaga kesehatan'}
+
+    FORMAT JSON YANG WAJIB DIIKUTI:
+    {
+        "parsed_foods": [
+            { "name": "Nama Makanan", "quantity": 1.0, "unit": "porsi", "nutrition": { "calories": 150.0, "protein": 5.0, "carbs": 20.0, "fat": 4.0 } }
+        ],
+        "total_nutrition": { "calories": 150.0, "protein": 5.0, "carbs": 20.0, "fat": 4.0 },
+        "ai_advice": "Analisis gizi makanan ini dan hubungannya dengan tujuan kesehatan user (maksimal 3 kalimat)."
+    }
+  `;
+
+  try {
+    const result = await model.generateContent([prompt, imagePart]);
+    const response = await result.response;
+    const rawText = response.text().trim();
+    
+    console.log("--- RAW GEMINI IMAGE RESPONSE ---");
+    console.log(rawText);
+    console.log("---------------------------------");
+
+    // Cari bagian yang berbentuk JSON (di antara kurung kurawal)
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      console.error("Gemini tidak mengembalikan format JSON untuk analisis gambar!");
+      return null;
+    }
+    
+    const cleanedJson = jsonMatch[0];
+    const parsed = JSON.parse(cleanedJson);
+    
+    // Pastikan struktur dasar ada
+    if (!parsed.total_nutrition) {
+      console.error("Struktur JSON tidak lengkap untuk analisis gambar!");
+      return null;
+    }
+
+    return parsed;
+  } catch (error) {
+    console.error("Error Detail Gemini Image Service:", error);
+    return null;
+  }
+};
+
+module.exports = { getAiAdvice, getAiRecommendations, parseNaturalLanguageFood, analyzeFoodImage };
+

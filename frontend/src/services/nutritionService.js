@@ -33,6 +33,22 @@ export const nutritionService = {
     }
   },
 
+  async predictNutritionImage(formData) {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${API_BASE_URL}/predict/predict-image`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      const msg = error.response?.data?.detail || error.message || 'Failed to analyze food image';
+      throw new Error(msg);
+    }
+  },
+
   async getNutritionHistory() {
     try {
       const token = localStorage.getItem('token');

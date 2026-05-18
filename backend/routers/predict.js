@@ -4,6 +4,14 @@ const jwt = require("jsonwebtoken");
 const { User, Food } = require("../models-express");
 const { Op } = require("sequelize");
 const geminiService = require("../services/geminiService");
+const multer = require("multer");
+
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+});
+
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
@@ -127,6 +135,76 @@ router.post("/recommendations", async (req, res) => {
   const { history, profile } = req.body;
   const recommendations = await geminiService.getAiRecommendations(history, profile);
   res.json(recommendations);
+});
+
+// Analisis Gambar Makanan
+router.post("/predict-image", upload.single("image"), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ detail: "File gambar tidak ditemukan." });
+  }
+
+  const authHeader = req.headers["authorization"];
+  let userProfile = {};
+
+  if (authHeader) {
+    try {
+      const token = authHeader.split(" ")[1];
+      const decoded = jwt.verify(token, SECRET_KEY);
+      const user = await User.findByPk(decoded.sub);
+      if (user) {
+        userProfile = {
+          name: user.name,
+          gender: user.gender,
+          height: user.height,
+          weight: user.weight,
+          nutritionGoal: user.nutrition_goal
+        };
+      }
+    } catch (e) {}
+  }
+
+  try {
+    const parsedData = await geminiService.analyzeFoodImage(
+      req.file.buffer,
+      req.file.mimetype,
+      userProfile
+    );
+
+    if (!parsedData) {
+      return res.status(500).json({ detail: "Gagal menganalisis gambar makanan. Silakan coba lagi atau gunakan teks manual." });
+    }
+
+    const foodInfo = {
+      food_name: parsedData.parsed_foods.map(f => f.name).join(", "),
+      calories: parsedData.total_nutrition.calories,
+      protein: parsedData.total_nutrition.protein,
+      carbs: parsedData.total_nutrition.carbs,
+      fat: parsedData.total_nutrition.fat
+    };
+
+    let riskLevel = "Low";
+    const dangerKeywords = ["PERINGATAN", "BAHAYA", "FATAL", "EKSTREM", "DARURAT"];
+    const aiAdvice = parsedData.ai_advice || "";
+    if (dangerKeywords.some(keyword => aiAdvice.toUpperCase().includes(keyword)) || parsedData.total_nutrition.calories > 2500) {
+      riskLevel = "High";
+    }
+
+    res.json({
+      risk_level: riskLevel,
+      score: riskLevel === "High" ? 0.9 : 0.2,
+      suggestion: riskLevel === "High" ? "Segera perbaiki pola makan Anda!" : "Pola makan cukup seimbang",
+      ai_advice: aiAdvice,
+      food_name: foodInfo.food_name,
+      ...parsedData.total_nutrition,
+      quantity_grams: parsedData.total_nutrition.quantity_grams || 100,
+      foods: parsedData.parsed_foods,
+      parsed_data: parsedData,
+      is_fallback: false
+    });
+  } catch (error) {
+    console.error("Error in /predict-image:", error);
+    res.status(500).json({ detail: "Terjadi kesalahan internal saat memproses gambar." });
+  }
 });
 
 module.exports = router;
