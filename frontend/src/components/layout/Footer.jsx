@@ -46,7 +46,7 @@ const Footer = () => {
           </div>
 
           <div className="space-y-6">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-main)]">Navigation</h4>
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-main)]">Navigation</h2>
             <ul className="space-y-4">
               <li><Link to="/" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Home</Link></li>
               <li><Link to="/categories" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Categories</Link></li>
@@ -55,7 +55,7 @@ const Footer = () => {
           </div>
 
           <div className="space-y-6">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-main)]">Support</h4>
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-main)]">Support</h2>
             <ul className="space-y-4">
               <li><Link to="/privacy" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Privacy Policy</Link></li>
               <li><Link to="/terms" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Terms of Service</Link></li>
@@ -72,7 +72,7 @@ const Footer = () => {
           <div className="space-y-6">
             {!user ? (
               <div className="bg-gradient-to-br from-[var(--primary-green)]/10 to-[var(--accent-blue)]/10 border border-[var(--primary-green)]/20 p-8 rounded-[2.5rem]">
-                <h4 className="text-lg font-black text-[var(--text-main)] mb-2">Join Us</h4>
+                <h2 className="text-lg font-black text-[var(--text-main)] mb-2">Join Us</h2>
                 <Link to="/register" className="block w-full bg-[var(--primary-green)] text-[var(--bg-primary)] text-center py-4 rounded-2xl text-xs font-black uppercase tracking-widest shadow-lg">Sign Up</Link>
               </div>
             ) : (
