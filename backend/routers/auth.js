@@ -102,20 +102,33 @@ router.post("/avatar", authenticateToken, async (req, res) => {
   }
 });
 
-// AKG Indonesia
+// AKG Indonesia (Resilient: includes null checks and fallback on db sync/clears)
 router.get("/akg", authenticateToken, async (req, res) => {
-  const user = await User.findByPk(req.user.sub);
-  const isFemale = user.gender === 'female';
-  
-  res.json({
-    calories: user.target_calories || 2150,
-    protein: user.target_protein || 60,
-    carbohydrates: user.target_carbs || 320,
-    total_fat: user.target_fat || 70,
-    iron: isFemale ? 18 : 9,
-    calcium: 1000,
-    vitamin_c: 90
-  });
+  try {
+    const user = await User.findByPk(req.user.sub);
+    const isFemale = user ? user.gender === 'female' : false;
+    
+    res.json({
+      calories: user?.target_calories || 2150,
+      protein: user?.target_protein || 60,
+      carbohydrates: user?.target_carbs || 320,
+      total_fat: user?.target_fat || 70,
+      iron: isFemale ? 18 : 9,
+      calcium: 1000,
+      vitamin_c: 90
+    });
+  } catch (error) {
+    console.error("❌ Error in AKG calculation:", error.message);
+    res.json({
+      calories: 2150,
+      protein: 60,
+      carbohydrates: 320,
+      total_fat: 70,
+      iron: 9,
+      calcium: 1000,
+      vitamin_c: 90
+    });
+  }
 });
 
 // System Owner Stats (Total Users & Total Food Entries)

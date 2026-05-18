@@ -3,16 +3,17 @@ const router = express.Router();
 const { FoodEntry } = require("../models-express");
 const authenticateToken = require("../middleware/auth");
 
-// List History
+// List History (Resilient: returns [] on error instead of 500 to prevent frontend crashes)
 router.get("/", authenticateToken, async (req, res) => {
   try {
     const entries = await FoodEntry.findAll({ 
       where: { user_id: req.user.sub },
       order: [['created_at', 'DESC']]
     });
-    res.json(entries);
+    res.json(entries || []);
   } catch (error) {
-    res.status(500).json({ detail: error.message });
+    console.error("❌ Error fetching food entries:", error.message);
+    res.json([]); // Return empty list instead of crashing with 500
   }
 });
 
