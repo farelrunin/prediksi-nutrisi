@@ -701,31 +701,33 @@ const ProfilePage = () => {
             </div>
 
             {/* System Owner / Admin Panel */}
-            <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-10 shadow-xl relative overflow-hidden group">
-              <div className="absolute top-0 left-0 w-[4px] h-full bg-[var(--primary-green)]" />
-              <div className="flex items-center gap-4 mb-6">
-                <div className="p-3 bg-[var(--primary-green)]/10 rounded-2xl text-[var(--primary-green)]">
-                  <Shield size={24} />
+            {user && user.email === 'farelrunin@gmail.com' && (
+              <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-[2.5rem] p-10 shadow-xl relative overflow-hidden group">
+                <div className="absolute top-0 left-0 w-[4px] h-full bg-[var(--primary-green)]" />
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="p-3 bg-[var(--primary-green)]/10 rounded-2xl text-[var(--primary-green)]">
+                    <Shield size={24} />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-black text-[var(--text-main)]">Owner Dashboard</h4>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)]">Control Panel</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-lg font-black text-[var(--text-main)]">Owner Dashboard</h4>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)]">Control Panel</p>
-                </div>
+                <p className="text-xs text-[var(--text-muted)] font-semibold mb-6 leading-relaxed">
+                  {language === 'id' 
+                    ? 'Sebagai pemilik sistem, Anda dapat memantau total pengguna terdaftar, riwayat jurnal makanan, dan aktivitas database secara live.' 
+                    : 'As the system owner, you can monitor total registered users, food journal entries, and view live database activity.'}
+                </p>
+                <button
+                  type="button"
+                  onClick={openAdminModal}
+                  className="w-full flex items-center justify-center gap-3 bg-[var(--primary-green)] hover:scale-[1.02] active:scale-100 text-white font-black py-4 px-6 rounded-2xl shadow-lg shadow-emerald-500/10 transition-all text-xs uppercase tracking-widest"
+                >
+                  <Zap size={16} />
+                  <span>{language === 'id' ? 'Buka Panel Aktivitas' : 'Open Admin Center'}</span>
+                </button>
               </div>
-              <p className="text-xs text-[var(--text-muted)] font-semibold mb-6 leading-relaxed">
-                {language === 'id' 
-                  ? 'Sebagai pemilik sistem, Anda dapat memantau total pengguna terdaftar, riwayat jurnal makanan, dan aktivitas database secara live.' 
-                  : 'As the system owner, you can monitor total registered users, food journal entries, and view live database activity.'}
-              </p>
-              <button
-                type="button"
-                onClick={openAdminModal}
-                className="w-full flex items-center justify-center gap-3 bg-[var(--primary-green)] hover:scale-[1.02] active:scale-100 text-white font-black py-4 px-6 rounded-2xl shadow-lg shadow-emerald-500/10 transition-all text-xs uppercase tracking-widest"
-              >
-                <Zap size={16} />
-                <span>{language === 'id' ? 'Buka Panel Aktivitas' : 'Open Admin Center'}</span>
-              </button>
-            </div>
+            )}
           </div>
 
           {/* RIGHT: Form */}

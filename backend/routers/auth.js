@@ -120,6 +120,16 @@ router.get("/akg", authenticateToken, async (req, res) => {
 // System Owner Stats (Total Users & Total Food Entries)
 router.get("/system-stats", authenticateToken, async (req, res) => {
   try {
+    // Kunci keamanan: Hanya pemilik (farelrunin@gmail.com) yang diizinkan mengakses data ini secara kriptografis!
+    const allowedEmails = [
+      'farelrunin@gmail.com',
+      process.env.ADMIN_EMAIL
+    ].filter(Boolean);
+
+    if (!allowedEmails.includes(req.user.email)) {
+      return res.status(403).json({ detail: "Akses ditolak. Anda bukan pemilik sistem." });
+    }
+
     const totalUsers = await User.count();
     const totalEntries = await FoodEntry.count();
     
