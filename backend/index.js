@@ -79,10 +79,16 @@ require("./models-express");
 (async () => {
   try {
     await connectDB();
-    await sequelize.sync({ alter: true });
-    console.log("✅ Database synchronized (Production)");
     
-    // Jalankan ALTER TABLE jika kolom image_url belum ada di MySQL database
+    // 1. Jalankan Sync Model (Resilient)
+    try {
+      await sequelize.sync({ alter: true });
+      console.log("✅ Database synchronized (Production)");
+    } catch (syncErr) {
+      console.error("⚠️ Database sync failed, attempting to continue:", syncErr.message);
+    }
+    
+    // 2. Jalankan ALTER TABLE jika kolom image_url belum ada di MySQL database
     try {
       await sequelize.query("ALTER TABLE food_entries ADD COLUMN image_url LONGTEXT NULL;");
       console.log("✅ Column 'image_url' added successfully to food_entries");
@@ -90,8 +96,13 @@ require("./models-express");
       console.log("ℹ️ Column 'image_url' might already exist, skipping: " + alterErr.message);
     }
     
-    // ISI DATA OTOMATIS (SEEDING)
-    await seedData();
+    // 3. ISI DATA OTOMATIS (SEEDING)
+    try {
+      await seedData();
+      console.log("✅ Seeding completed or skipped.");
+    } catch (seedErr) {
+      console.error("⚠️ Seeding failed:", seedErr.message);
+    }
   } catch (err) {
     console.error("❌ DB Initialization failed:", err.message);
   }
