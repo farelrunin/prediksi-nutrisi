@@ -38,7 +38,7 @@ app.use((req, res, next) => {
   // Referrer policy
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   // Permissions policy — allow camera for photo scanning feature
-  res.setHeader('Permissions-Policy', 'camera=*, microphone=(), geolocation=()');
+  res.setHeader('Permissions-Policy', 'camera=(self), microphone=(), geolocation=()');
   // Cross-Origin Opener Policy (COOP) — required for SharedArrayBuffer / isolation
   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
   // Cross-Origin Resource Policy

@@ -271,7 +271,13 @@ const analyzeFoodImage = async (imageBuffer, mimeType, userProfile = {}) => {
       }
     });
     const response = await result.response;
-    const parsed = JSON.parse(response.text().trim());
+    let textStr = response.text().trim();
+    if (textStr.startsWith('```json')) {
+      textStr = textStr.replace(/^```json/, '').replace(/```$/, '').trim();
+    } else if (textStr.startsWith('```')) {
+      textStr = textStr.replace(/^```/, '').replace(/```$/, '').trim();
+    }
+    const parsed = JSON.parse(textStr);
     
     if (!parsed.total_nutrition || !parsed.parsed_foods) {
       console.error("Struktur JSON tidak lengkap untuk analisis gambar!");
