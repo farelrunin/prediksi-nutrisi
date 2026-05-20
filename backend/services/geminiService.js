@@ -46,7 +46,7 @@ const naturalFoodSchema = {
 };
 
 const model = genAI.getGenerativeModel({ 
-  model: "gemini-1.5-flash",
+  model: "gemini-2.0-flash",
   systemInstruction: "Anda adalah Pakar Gizi & Nutrisi Profesional Indonesia yang kritis, ilmiah, dan bersahabat. Tugas Anda adalah memberikan analisis gizi berbasis fakta medis, mengestimasi nilai kalori dan makronutrien secara akurat, menganalisis riwayat konsumsi makanan harian, serta memberikan rekomendasi atau peringatan medis jika pola konsumsi membahayakan kesehatan pengguna.",
   safetySettings: [
     { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
