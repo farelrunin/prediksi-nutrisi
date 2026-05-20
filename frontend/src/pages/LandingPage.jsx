@@ -4,7 +4,8 @@ import { ShieldCheck, Sparkles, TrendingUp, Apple, Globe, Camera, Briefcase } fr
 import { useAuth } from '../context/useAuth';
 import { useLanguage } from '../context/LanguageContext';
 import { translations } from '../constants/translations';
-import SoftAurora from '../components/shared/SoftAurora';
+// ── Lazy-load the heavy WebGL SoftAurora component ─────────────────────────
+const SoftAurora = React.lazy(() => import('../components/shared/SoftAurora'));
 
 const LandingPage = () => {
   const { user } = useAuth();
@@ -17,19 +18,21 @@ const LandingPage = () => {
     <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-main)] overflow-x-hidden">
       {/* Background - Animated Soft Aurora */}
       <div className="fixed inset-0 z-0 bg-[var(--bg-primary)]">
-        <SoftAurora
-          speed={0.4}
-          scale={1.4}
-          brightness={1.2}
-          color1="#10B981" // More vibrant emerald
-          color2="#3B82F6" // More vibrant blue
-          noiseFrequency={1.8}
-          noiseAmplitude={0.7}
-          bandHeight={0.3}
-          bandSpread={1.5}
-          enableMouseInteraction={true}
-          mouseInfluence={0.1}
-        />
+        <React.Suspense fallback={<div className="fixed inset-0 bg-[var(--bg-primary)]" />}>
+          <SoftAurora
+            speed={0.4}
+            scale={1.4}
+            brightness={1.2}
+            color1="#10B981" // More vibrant emerald
+            color2="#3B82F6" // More vibrant blue
+            noiseFrequency={1.8}
+            noiseAmplitude={0.7}
+            bandHeight={0.3}
+            bandSpread={1.5}
+            enableMouseInteraction={true}
+            mouseInfluence={0.1}
+          />
+        </React.Suspense>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-primary)]/20 to-[var(--bg-primary)]" />
       </div>
 

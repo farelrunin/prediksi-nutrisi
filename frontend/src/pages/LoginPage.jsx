@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogIn, Mail, Lock, Apple, Eye, EyeOff } from 'lucide-react';
-import { useGoogleLogin } from '@react-oauth/google';
+import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../context/useAuth';
 import { useNotification } from '../context/useNotification';
 import SoftAurora from '../components/shared/SoftAurora';
@@ -194,4 +194,10 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+const LoginPageWithOAuth = () => (
+  <GoogleOAuthProvider clientId="245976729078-q7rsrksm6e8lifc045f18f5mbjq2ecf5.apps.googleusercontent.com">
+    <LoginPage />
+  </GoogleOAuthProvider>
+);
+
+export default LoginPageWithOAuth;
