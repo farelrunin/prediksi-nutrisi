@@ -35,7 +35,7 @@
   --glass-bg: rgba(24, 24, 27, 0.7);
   --glass-border: rgba(39, 39, 42, 0.5);
   --glass-text: #FAFAFA;
-  --primary-green: #22C55E; /* Aksen hijau cerah (tetap dipertahankan) */
+  --primary-green: #15803D; /* Aksen hijau dengan kontras lebih baik untuk teks putih */
   --secondary-green: #4ADE80;
 }
 

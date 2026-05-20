@@ -2,11 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShieldCheck, Sparkles, TrendingUp, Apple, Globe, Camera, Briefcase } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
+import { useLanguage } from '../context/LanguageContext';
+import { translations } from '../constants/translations';
 import SoftAurora from '../components/shared/SoftAurora';
 
 const LandingPage = () => {
   const { user } = useAuth();
-  const ctaLabel = user ? 'Check Nutrition' : 'Join Now';
+  const { language } = useLanguage();
+  const t = translations[language];
+  const ctaLabel = user ? t.nutriCheck : t.joinUs;
   const ctaLink = user ? '/nutri-check' : '/register';
 
   return (
@@ -38,14 +42,14 @@ const LandingPage = () => {
               <div className="relative z-10">
                 <div className="inline-flex items-center gap-2 mb-6 ml-1">
                   <Sparkles size={16} className="text-[var(--primary-green)]" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">AI-Powered Nutrition Assistant</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">{t.aiPowered}</span>
                 </div>
                 <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight mb-8 text-[var(--text-main)]">
-                  Eat Well, <br />
-                  <span className="text-[var(--primary-green)]">Stay Healthy.</span>
+                  {t.eatWell} <br />
+                  <span className="text-[var(--primary-green)]">{t.stayHealthy}</span>
                 </h1>
                 <p className="text-lg text-[var(--text-main)] leading-relaxed mb-10 max-w-lg font-medium opacity-90">
-                  NutriAI helps you monitor your daily intake intelligently. Get in-depth analysis and personalized menu recommendations in just seconds.
+                  {t.landingDesc}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-5">
                   <Link
@@ -58,7 +62,7 @@ const LandingPage = () => {
                     href="#features"
                     className="flex items-center justify-center rounded-2xl border border-[var(--border-card)] bg-[var(--bg-card)]/40 backdrop-blur-sm px-10 py-5 text-base font-bold text-[var(--text-main)] transition-all hover:bg-[var(--bg-card)]/60 shadow-xl"
                   >
-                    View Features
+                    {t.viewFeatures}
                   </a>
                 </div>
               </div>
@@ -71,17 +75,17 @@ const LandingPage = () => {
       <section id="features" className="py-32 relative z-10 bg-[var(--bg-secondary)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-20">
-            <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-[var(--primary-green)] mb-4">Core Features</h2>
+            <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-[var(--primary-green)] mb-4">{t.coreFeatures}</h2>
             <p className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-6">
-              Smart, Fast, <br /> and Measured.</p>
-            <p className="text-[var(--text-muted)] text-lg font-medium">Our AI technology is designed to simplify your healthy life.</p>
+              {t.smartFast} <br /> {t.andMeasured}</p>
+            <p className="text-[var(--text-muted)] text-lg font-medium">{t.coreDesc}</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-10">
             {[
-              { icon: ShieldCheck, title: 'Secure Data', desc: 'Your entire food history is stored securely and neatly organized.' },
-              { icon: TrendingUp, title: 'Deep Analysis', desc: 'Monitor your nutrition progress charts automatically every day.' },
-              { icon: Sparkles, title: 'AI Recommendations', desc: 'Get food advice from Gemini AI based on your body\'s needs.' }
+              { icon: ShieldCheck, title: t.secureData, desc: t.secureDataDesc },
+              { icon: TrendingUp, title: t.deepAnalysis, desc: t.deepAnalysisDesc },
+              { icon: Sparkles, title: t.aiRecs, desc: t.aiRecsDesc }
             ].map((f, i) => (
               <div key={i} className="glow-card group p-12 rounded-[2.5rem] bg-[var(--bg-card)] border border-[var(--border-card)] duration-500">
                 <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-[var(--bg-primary)] text-[var(--primary-green)] mb-8 group-hover:scale-110 transition-transform">
@@ -101,15 +105,15 @@ const LandingPage = () => {
           <div className="grid lg:grid-cols-2 gap-20 items-center">
             <div className="space-y-12">
               <div className="space-y-4">
-                <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-[var(--primary-green)]">How it Works</h2>
-                <p className="text-4xl lg:text-5xl font-extrabold tracking-tight">Just 3 Steps <br /> to a Healthy Life.</p>
+                <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-[var(--primary-green)]">{t.howItWorksTitle}</h2>
+                <p className="text-4xl lg:text-5xl font-extrabold tracking-tight">{t.just3Steps} <br /> {t.toHealthyLife}</p>
               </div>
 
               <div className="space-y-10">
                 {[
-                  { step: '01', title: 'User Story', desc: 'Type what you ate today.' },
-                  { step: '02', title: 'AI Analysis', desc: 'Our AI engine will instantly calculate calories, protein, carbs, and fat.' },
-                  { step: '03', title: 'Get Recommendations', desc: 'Receive personal advice to maintain your daily nutrition balance.' }
+                  { step: '01', title: t.userStory, desc: t.userStoryDesc },
+                  { step: '02', title: t.aiAnalysisStep, desc: t.aiAnalysisDesc },
+                  { step: '03', title: t.getRecs, desc: t.getRecsDesc }
                   ].map((s) => (
                     <div key={s.step} className="flex gap-8 group">
                       <span className="text-4xl font-black text-[var(--primary-green)]/20 group-hover:text-[var(--primary-green)] transition-colors duration-300">{s.step}</span>
@@ -127,7 +131,7 @@ const LandingPage = () => {
               <div className="relative rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-[var(--border-card)] shadow-2xl">
                 <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=75" alt="Makanan sehat untuk hidup berkualitas" loading="lazy" width="800" height="600" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-8 md:p-12">
-                  <p className="text-white text-xl font-bold italic">"Health starts with what you eat."</p>
+                  <p className="text-white text-xl font-bold italic">{t.healthStarts}</p>
                 </div>
               </div>
             </div>

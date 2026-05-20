@@ -2,11 +2,15 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Apple, Mail, ArrowRight, Sparkles, Globe, MessageSquare, Share2 } from 'lucide-react';
 import { useAuth } from '../../context/useAuth';
+import { useLanguage } from '../../context/LanguageContext';
+import { translations } from '../../constants/translations';
 
 const Footer = () => {
   const auth = useAuth() || {};
   const { user } = auth;
   const location = useLocation();
+  const { language } = useLanguage();
+  const t = translations[language];
   
   const hideOnPaths = ['/login', '/register', '/profile', '/forgot-password'];
   if (hideOnPaths.includes(location.pathname)) {
@@ -29,7 +33,7 @@ const Footer = () => {
               </span>
             </Link>
             <p className="text-[var(--text-muted)] text-sm leading-relaxed font-medium">
-              Building a healthier future through artificial intelligence technology.
+              {t.footerDesc}
             </p>
             <div className="flex items-center gap-4">
               {/* Gunakan ikon yang pasti ada di semua versi Lucide */}
@@ -46,20 +50,20 @@ const Footer = () => {
           </div>
 
           <div className="space-y-6">
-            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-main)]">Navigation</h2>
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-main)]">{t.navigationTitle}</h2>
             <ul className="space-y-4">
-              <li><Link to="/" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Home</Link></li>
-              <li><Link to="/categories" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Categories</Link></li>
-              <li><Link to="/guide" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Nutrition Guide</Link></li>
+              <li><Link to="/" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">{t.home}</Link></li>
+              <li><Link to="/categories" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">{t.categories}</Link></li>
+              <li><Link to="/guide" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">{t.nutritionGuide}</Link></li>
             </ul>
           </div>
 
           <div className="space-y-6">
-            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-main)]">Support</h2>
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-main)]">{t.supportTitle}</h2>
             <ul className="space-y-4">
-              <li><Link to="/privacy" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Privacy Policy</Link></li>
-              <li><Link to="/terms" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Terms of Service</Link></li>
-              <li><Link to="/nutrition-info" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">Nutrition Basics</Link></li>
+              <li><Link to="/privacy" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">{t.privacyPolicy}</Link></li>
+              <li><Link to="/terms" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">{t.termsOfService}</Link></li>
+              <li><Link to="/nutrition-info" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--primary-green)] transition-all">{t.nutritionBasics}</Link></li>
             </ul>
             <div className="pt-4">
               <a href="mailto:farelrunin@gmail.com" className="flex items-center gap-2 text-sm font-black text-[var(--primary-green)]">
@@ -72,13 +76,13 @@ const Footer = () => {
           <div className="space-y-6">
             {!user ? (
               <div className="bg-gradient-to-br from-[var(--primary-green)]/10 to-[var(--accent-blue)]/10 border border-[var(--primary-green)]/20 p-8 rounded-[2.5rem]">
-                <h2 className="text-lg font-black text-[var(--text-main)] mb-2">Join Us</h2>
-                <Link to="/register" className="block w-full bg-[var(--primary-green)] text-[var(--bg-primary)] text-center py-4 rounded-2xl text-xs font-black uppercase tracking-widest shadow-lg">Sign Up</Link>
+                <h2 className="text-lg font-black text-[var(--text-main)] mb-2">{t.joinUs}</h2>
+                <Link to="/register" className="block w-full bg-[var(--primary-green)] text-[var(--bg-primary)] text-center py-4 rounded-2xl text-xs font-black uppercase tracking-widest shadow-lg">{t.signUp}</Link>
               </div>
             ) : (
               <div className="bg-[var(--bg-primary)] border border-[var(--border-card)] p-8 rounded-[2.5rem] flex flex-col items-center text-center justify-center space-y-4">
                 <Sparkles className="text-[var(--primary-green)]" size={24} />
-                <p className="text-[10px] font-black italic text-[var(--text-muted)] uppercase tracking-widest">Keep Healthy with NutriAI</p>
+                <p className="text-[10px] font-black italic text-[var(--text-muted)] uppercase tracking-widest">{t.keepHealthy}</p>
               </div>
             )}
           </div>
@@ -87,9 +91,9 @@ const Footer = () => {
         <div className="pt-10 border-t border-[var(--border-card)] flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">
           <p>© 2026 NutriAI</p>
           <div className="flex gap-6">
-            <Link to="/nutrition-info">Basics</Link>
-            <Link to="/privacy">Privacy</Link>
-            <Link to="/terms">Terms</Link>
+            <Link to="/nutrition-info">{t.basicsLink}</Link>
+            <Link to="/privacy">{t.privacyLink}</Link>
+            <Link to="/terms">{t.termsLink}</Link>
           </div>
         </div>
       </div>
