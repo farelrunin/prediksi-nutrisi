@@ -234,6 +234,18 @@ Silakan unduh model melalui tautan berikut:
 link model(asna)
 ```
 
+---
+
+## 📓 Notebook Machine Learning
+
+Proses pengembangan model Machine Learning pada aplikasi ini didokumentasikan secara terpisah dalam repository berikut:
+
+```text
+https://github.com/asnalaia/NutriAi-ML.git
+```
+
+---
+
 ## 📥 Cara Menyimpan Model ML
 
 Setelah model diunduh, simpan file model ke folder berikut:
