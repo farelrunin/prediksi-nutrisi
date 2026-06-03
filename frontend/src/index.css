@@ -1,0 +1,170 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  
+  /* Natural/Light Theme Colors - Improved Contrast */
+  --bg-primary: #F8FAFC; /* Slate 50: Clean, light background screen */
+  --bg-secondary: #F1F5F9; /* Slate 100: Secondary containers */
+  --bg-card: #FFFFFF; /* Pure White for elevated cards */
+  --border-card: #E2E8F0; /* Slate 200: Elegant, clear borders */
+  --primary-green: #166534; /* High Contrast Emerald Green (WCAG AA Compliant) */
+  --secondary-green: #14532D;
+  --accent-blue: #0284C7; /* Sky 600: Safe contrast on white background */
+  --text-main: #0F172A; /* Slate 900: High-contrast rich dark color for maximum legibility */
+  --text-muted: #475569; /* Slate 600: Compliant readable gray */
+  --warning: #D97706; /* Amber 600: Enhanced contrast for warnings */
+  --danger: #DC2626; /* Red 600: Enhanced contrast for delete/danger */
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(226, 232, 240, 0.6);
+  --glass-text: #0F172A;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg-primary: #09090B; /* Zinc 950 */
+  --bg-secondary: #18181B; /* Zinc 900 */
+  --bg-card: #141415;
+  --border-card: #27272A; /* Zinc 800 */
+  --text-main: #FAFAFA;
+  --text-muted: #A1A1AA;
+  --glass-bg: rgba(24, 24, 27, 0.7);
+  --glass-border: rgba(39, 39, 42, 0.5);
+  --glass-text: #FAFAFA;
+  --primary-green: #22C55E;
+  --secondary-green: #15803D;
+  --accent-blue: #38BDF8;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Aggressive Mobile Scaling */
+@media (max-width: 640px) {
+  html {
+    font-size: 14px; /* Shrink everything globally */
+  }
+  
+  .glow-card::before {
+    border-radius: 1.5rem !important;
+  }
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: rgba(34, 197, 94, 0.2);
+  color: #102A1C;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Glassmorphism utility */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-card);
+}
+/* Border Glow Effect - Sharp & Green themed */
+.glow-card {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+.glow-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px; /* Border thickness */
+  border-radius: 2.5rem;
+  @media (max-width: 640px) {
+    border-radius: 1.5rem;
+  }
+  background: linear-gradient(90deg, transparent, var(--primary-green), var(--secondary-green), transparent);
+  background-size: 200% 100%;
+  -webkit-mask: 
+     linear-gradient(#fff 0 0) content-box, 
+     linear-gradient(#fff 0 0);
+  mask: 
+     linear-gradient(#fff 0 0) content-box, 
+     linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.glow-card:hover::before {
+  opacity: 1;
+  animation: border-flow 2s linear infinite;
+}
+
+.glow-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(34, 197, 94, 0.1);
+}
+
+@keyframes border-flow {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.animate-spin-slow {
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+

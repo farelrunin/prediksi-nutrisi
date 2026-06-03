@@ -1,0 +1,130 @@
+import React from 'react';
+import { AlertTriangle, CheckCircle, AlertCircle, TrendingUp } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
+import { translations } from '../../constants/translations';
+
+const RiskScoreCard = ({ riskScore, aiAdvice, insufficientData }) => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
+  if (riskScore === null) {
+    return (
+      <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[1.5rem] md:rounded-[2.5rem] shadow-xl border border-[var(--border-card)] p-6 md:p-10 text-[var(--text-muted)] group hover:shadow-emerald-500/5 transition-all">
+        <h3 className="text-base md:text-lg font-bold text-[var(--text-main)] mb-3">{t.riskScore}</h3>
+        <p className="text-sm">{language === 'id' ? 'Belum ada data — mulai masukkan makanan untuk melihat analisis risiko' : 'No data yet — start inputting food to see risk analysis'}</p>
+      </div>
+    );
+  }
+
+  if (insufficientData) {
+    return (
+      <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[1.5rem] md:rounded-[2.5rem] shadow-xl border border-[var(--border-card)] p-6 md:p-10 text-[var(--text-muted)] group hover:shadow-emerald-500/5 transition-all space-y-4">
+        <h3 className="text-base md:text-lg font-bold text-[var(--text-main)] mb-3">{t.riskScore}</h3>
+        <div className="flex items-start gap-4 bg-emerald-500/10 border border-emerald-500/20 p-5 rounded-[1.8rem] text-[var(--text-main)] animate-in fade-in zoom-in-95 duration-500">
+          <div className="p-3 bg-emerald-500 text-white rounded-2xl shadow-lg shadow-emerald-500/10 mt-0.5 shrink-0">
+            <AlertCircle size={22} />
+          </div>
+          <div>
+            <p className="text-sm font-bold text-emerald-500 mb-1.5">
+              {language === 'id' ? 'Data Belum Cukup' : 'Insufficient Data'}
+            </p>
+            <p className="text-xs text-[var(--text-muted)] leading-relaxed font-semibold">
+              {language === 'id' 
+                ? 'Tambahkan lebih banyak makanan hari ini agar AI dapat menganalisis skor nutrisi Anda (minimal mencapai 60% dari target kalori harian Anda).' 
+                : 'Add more food today so AI can analyze your nutrition score (requires at least 60% of your daily calorie target).'}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const getRiskLevel = (score) => {
+    if (score < 0.3) return {
+      level: t.lowRisk,
+      icon: CheckCircle,
+      bgColor: 'from-green-500 to-green-700',
+      textColor: 'text-green-400',
+      iconBgClass: 'bg-green-500/10',
+      iconTextClass: 'text-green-400',
+      description: language === 'id' ? 'Asupan gizi Anda dalam kondisi baik. Pertahankan pola makan sehat!' : 'Your nutritional intake is in good condition. Keep up the healthy eating!'
+    };
+    if (score < 0.7) return {
+      level: t.moderateRisk,
+      icon: AlertCircle,
+      bgColor: 'from-yellow-500 to-yellow-700',
+      textColor: 'text-yellow-400',
+      iconBgClass: 'bg-yellow-500/10',
+      iconTextClass: 'text-yellow-400',
+      description: language === 'id' ? 'Perhatikan asupan gizi Anda. Beberapa nutrisi perlu ditingkatkan.' : 'Pay attention to your nutritional intake. Some nutrients need to be increased.'
+    };
+    return {
+      level: t.highRisk,
+      icon: AlertTriangle,
+      bgColor: 'from-red-500 to-red-700',
+      textColor: 'text-red-400',
+      iconBgClass: 'bg-red-500/10',
+      iconTextClass: 'text-red-400',
+      description: language === 'id' ? 'Risiko tinggi malnutrisi. Segera konsultasikan dengan ahli gizi.' : 'High risk of malnutrition. Consult with a nutritionist immediately.'
+    };
+  };
+
+  const { level, icon: Icon, bgColor, textColor, description, iconBgClass, iconTextClass } = getRiskLevel(riskScore);
+
+  return (
+    <div className="bg-[var(--bg-card)] backdrop-blur-xl rounded-[1.5rem] md:rounded-[2.5rem] shadow-xl border border-[var(--border-card)] overflow-hidden group hover:shadow-emerald-500/5 transition-all">
+      <div className="bg-gradient-to-br from-emerald-500/10 to-blue-500/10 p-6 md:p-10">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h3 className="text-lg font-bold text-[var(--text-main)]">{t.riskScore}</h3>
+            <p className="text-[var(--text-muted)] text-sm">{t.basedOnAI}</p>
+          </div>
+          <Icon size={32} className="text-[var(--text-main)] opacity-90" />
+        </div>
+
+        <div className="text-center">
+          <div className="text-4xl md:text-5xl font-bold mb-1">
+            {(riskScore * 100).toFixed(1)}%
+          </div>
+          <div className="text-base md:text-xl font-semibold">
+            {level}
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-[var(--bg-secondary)] p-6">
+        {aiAdvice && (
+          <div className="mb-6 rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4">
+            <div className="flex items-center gap-2 mb-2 text-emerald-400 font-bold text-xs uppercase tracking-wider">
+              <TrendingUp size={14} />
+              <span>NutriAI Advice</span>
+            </div>
+            <p className="text-[var(--text-main)] text-sm italic leading-relaxed">
+              "{aiAdvice}"
+            </p>
+          </div>
+        )}
+        <div className="flex items-start space-x-3">
+          <div className={`${iconBgClass} p-2 rounded-lg mt-1`}>
+            <TrendingUp className={iconTextClass} size={16} />
+          </div>
+          <div>
+            <h4 className={`${textColor} font-semibold mb-2`}>{t.recommendation}</h4>
+            <p className="text-[var(--text-muted)] text-sm leading-relaxed">{description}</p>
+          </div>
+        </div>
+
+        <div className="mt-4 pt-4 border-t border-white/10">
+          <div className="flex justify-between text-sm">
+            <span className="text-[var(--text-muted)]">{t.lastUpdate}</span>
+            <span className="text-[var(--text-main)] font-medium">
+              {new Date().toLocaleTimeString(language === 'id' ? 'id-ID' : 'en-US', { hour: '2-digit', minute: '2-digit' })}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default RiskScoreCard;

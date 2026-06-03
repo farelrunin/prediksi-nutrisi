@@ -1,0 +1,165 @@
+// authService.js
+import axios from 'axios';
+
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+  ? 'http://localhost:5000' 
+  : 'https://nutriai-backend-production-2987.up.railway.app';
+console.log('🔗 NutriAI API Base URL:', API_BASE_URL);
+
+export const authService = {
+  async login(email, password) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+        email,
+        password
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(this.parseError(error));
+    }
+  },
+
+  async googleLogin(accessToken) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/auth/google`, {
+        access_token: accessToken
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(this.parseError(error, 'Google Login failed'));
+    }
+  },
+
+  async getAkg() {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API_BASE_URL}/auth/akg`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(this.parseError(error, 'Failed to fetch targets'));
+    }
+  },
+
+  async register(userData) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/auth/register`, userData);
+      return response.data;
+    } catch (error) {
+      throw new Error(this.parseError(error, 'Registration failed'));
+    }
+  },
+
+  async updateProfile(profileData) {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.put(`${API_BASE_URL}/auth/profile`, profileData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(this.parseError(error, 'Failed to update profile'));
+    }
+  },
+
+  async uploadAvatar(base64Data) {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${API_BASE_URL}/auth/avatar`, {
+        avatar_data: base64Data
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(this.parseError(error, 'Failed to upload profile photo'));
+    }
+  },
+
+  async getProfile() {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No token found');
+      }
+      const response = await axios.get(`${API_BASE_URL}/auth/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(this.parseError(error, 'Failed to load profile'));
+    }
+  },
+
+  async getSystemStats() {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API_BASE_URL}/auth/system-stats`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(this.parseError(error, 'Failed to load system statistics'));
+    }
+  },
+
+  async cleanSystemStats() {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${API_BASE_URL}/auth/system-cleanup`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(this.parseError(error, 'Failed to clean test accounts'));
+    }
+  },
+
+  async deleteUser(userId) {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.delete(`${API_BASE_URL}/api/admin/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(this.parseError(error, 'Failed to delete user'));
+    }
+  },
+
+  async requestPasswordReset(email) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/auth/forgot-password`, { email });
+      return response.data;
+    } catch (error) {
+      throw new Error(this.parseError(error, 'Failed to request password reset'));
+    }
+  },
+
+  parseError(error, defaultMsg = 'Terjadi kesalahan') {
+    const detail = error.response?.data?.detail;
+    if (Array.isArray(detail)) {
+      // Pydantic validation error array
+      return detail.map(err => {
+        const field = err.loc[err.loc.length - 1];
+        return `${field}: ${err.msg}`;
+      }).join(', ');
+    }
+    return detail || error.message || defaultMsg;
+  }
+};

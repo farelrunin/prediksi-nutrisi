@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="100%">
+  <defs>
+    <!-- Gradasi Warna Emerald ke Blue khas brand NutriAI -->
+    <linearGradient id="nutriai-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#3B82F6" />
+    </linearGradient>
+  </defs>
+
+  <!-- Latar Belakang Squircle Melengkung Halus -->
+  <rect width="256" height="256" rx="64" fill="url(#nutriai-gradient)" />
+
+  <!-- Ikon Apel Lucide Asli (Dikalibrasi Presisi: Skala 5.0x, Posisi Tengah) -->
+  <g transform="translate(68, 68) scale(5.0)" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Tangkai/Daun Apel -->
+    <path d="M12 6.528V3a1 1 0 0 1 1-1h0" />
+    <!-- Tubuh Apel -->
+    <path d="M18.237 21A15 15 0 0 0 22 11a6 6 0 0 0-10-4.472A6 6 0 0 0 2 11a15.1 15.1 0 0 0 3.763 10 3 3 0 0 0 3.648.648 5.5 5.5 0 0 1 5.178 0A3 3 0 0 0 18.237 21" />
+  </g>
+</svg>

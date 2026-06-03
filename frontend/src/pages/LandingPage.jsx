@@ -1,0 +1,159 @@
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ShieldCheck, Sparkles, TrendingUp, Apple, Globe, Camera, Briefcase } from 'lucide-react';
+import { useAuth } from '../context/useAuth';
+import { useLanguage } from '../context/LanguageContext';
+import { translations } from '../constants/translations';
+// ── Lazy-load the heavy WebGL SoftAurora component ─────────────────────────
+const SoftAurora = React.lazy(() => import('../components/shared/SoftAurora'));
+
+const LandingPage = () => {
+  const { user } = useAuth();
+  const { language } = useLanguage();
+  const navigate = useNavigate();
+  const t = translations[language];
+  const ctaLabel = user ? t.nutriCheck : t.joinUs;
+  const ctaLink = user ? '/nutri-check' : '/register';
+
+  useEffect(() => {
+    if (user) {
+      if (user.is_profile_completed) {
+        navigate('/dashboard', { replace: true });
+      } else {
+        navigate('/onboarding', { replace: true });
+      }
+    }
+  }, [user, navigate]);
+
+  return (
+    <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-main)] overflow-x-hidden">
+      {/* Background - Animated Soft Aurora */}
+      <div className="fixed inset-0 z-0 bg-[var(--bg-primary)]">
+        <React.Suspense fallback={<div className="fixed inset-0 bg-[var(--bg-primary)]" />}>
+          <SoftAurora
+            speed={0.4}
+            scale={1.4}
+            brightness={1.2}
+            color1="#10B981" // More vibrant emerald
+            color2="#3B82F6" // More vibrant blue
+            noiseFrequency={1.8}
+            noiseAmplitude={0.7}
+            bandHeight={0.3}
+            bandSpread={1.5}
+            enableMouseInteraction={true}
+            mouseInfluence={0.1}
+          />
+        </React.Suspense>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-primary)]/20 to-[var(--bg-primary)]" />
+      </div>
+
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center pt-24 px-6 lg:px-8">
+        <div className="relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-8 md:gap-16 items-center">
+          <div className="relative max-w-2xl animate-in fade-in slide-in-from-left duration-1000">
+            {/* Clean Container for Text */}
+            <div className="relative z-10 p-6 md:p-10 lg:p-14 rounded-[1.5rem] md:rounded-[3.5rem] bg-[var(--bg-card)]/80 border border-[var(--border-card)] shadow-2xl overflow-hidden group">
+              <div className="relative z-10">
+                <div className="inline-flex items-center gap-2 mb-6 ml-1">
+                  <Sparkles size={16} className="text-[var(--primary-green)]" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">{t.aiPowered}</span>
+                </div>
+                <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight mb-8 text-[var(--text-main)]">
+                  {t.eatWell} <br />
+                  <span className="text-[var(--primary-green)]">{t.stayHealthy}</span>
+                </h1>
+                <p className="text-lg text-[var(--text-main)] leading-relaxed mb-10 max-w-lg font-medium opacity-90">
+                  {t.landingDesc}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-5">
+                  <Link
+                    to={ctaLink}
+                    className="group relative flex items-center justify-center rounded-2xl bg-[var(--primary-green)] px-10 py-5 text-base font-bold text-white shadow-2xl shadow-emerald-500/40 transition-all hover:scale-105 active:scale-100"
+                  >
+                    {ctaLabel}
+                  </Link>
+                  <a
+                    href="#features"
+                    className="flex items-center justify-center rounded-2xl border border-[var(--border-card)] bg-[var(--bg-card)]/40 backdrop-blur-sm px-10 py-5 text-base font-bold text-[var(--text-main)] transition-all hover:bg-[var(--bg-card)]/60 shadow-xl"
+                  >
+                    {t.viewFeatures}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="py-32 relative z-10 bg-[var(--bg-secondary)]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-20">
+            <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-[var(--primary-green)] mb-4">{t.coreFeatures}</h2>
+            <p className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-6">
+              {t.smartFast} <br /> {t.andMeasured}</p>
+            <p className="text-[var(--text-muted)] text-lg font-medium">{t.coreDesc}</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-10">
+            {[
+              { icon: ShieldCheck, title: t.secureData, desc: t.secureDataDesc },
+              { icon: TrendingUp, title: t.deepAnalysis, desc: t.deepAnalysisDesc },
+              { icon: Sparkles, title: t.aiRecs, desc: t.aiRecsDesc }
+            ].map((f, i) => (
+              <div key={i} className="glow-card group p-12 rounded-[2.5rem] bg-[var(--bg-card)] border border-[var(--border-card)] duration-500">
+                <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-[var(--bg-primary)] text-[var(--primary-green)] mb-8 group-hover:scale-110 transition-transform">
+                  <f.icon size={32} aria-hidden="true" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4">{f.title}</h3>
+                <p className="text-[var(--text-muted)] text-base leading-relaxed font-medium">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How it Works Section */}
+      <section id="how-it-works" className="py-32 relative z-10 bg-[var(--bg-primary)]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            <div className="space-y-12">
+              <div className="space-y-4">
+                <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-[var(--primary-green)]">{t.howItWorksTitle}</h2>
+                <p className="text-4xl lg:text-5xl font-extrabold tracking-tight">{t.just3Steps} <br /> {t.toHealthyLife}</p>
+              </div>
+
+              <div className="space-y-10">
+                {[
+                  { step: '01', title: t.userStory, desc: t.userStoryDesc },
+                  { step: '02', title: t.aiAnalysisStep, desc: t.aiAnalysisDesc },
+                  { step: '03', title: t.getRecs, desc: t.getRecsDesc }
+                  ].map((s) => (
+                    <div key={s.step} className="flex gap-8 group">
+                      <span className="text-4xl font-black text-[var(--primary-green)]/20 group-hover:text-[var(--primary-green)] transition-colors duration-300">{s.step}</span>
+                      <div className="space-y-2">
+                        <h3 className="text-xl font-bold">{s.title}</h3>
+                        <p className="text-[var(--text-muted)] font-medium leading-relaxed">{s.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="absolute -inset-4 bg-gradient-to-tr from-[var(--primary-green)]/20 to-[var(--accent-blue)]/20 rounded-[3rem] blur-2xl" />
+              <div className="relative rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-[var(--border-card)] shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=75" alt="Makanan sehat untuk hidup berkualitas" loading="lazy" width="800" height="600" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-8 md:p-12">
+                  <p className="text-white text-xl font-bold italic">{t.healthStarts}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default LandingPage;
