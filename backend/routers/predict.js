@@ -10,7 +10,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 // Helper: Panggil Gemini dengan Rotasi API Key jika terkena limit kuota (429)
 async function callGeminiWithRotation(callback) {
   const keysInput = process.env.GEMINI_API_KEY || "";
-  const keys = keysInput.split(",").map(k => k.trim()).filter(k => k.length > 0);
+  const keys = keysInput.split(/[\r\n,]+/).map(k => k.trim()).filter(k => k.length > 0);
 
   if (keys.length === 0) {
     throw new Error("No Gemini API Keys configured.");
