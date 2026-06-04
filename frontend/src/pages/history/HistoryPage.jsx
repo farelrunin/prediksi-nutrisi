@@ -158,7 +158,8 @@ const HistoryPage = () => {
           fat: Math.round(selectedDateTotals.fat)
         },
         riskScore: calculatedRisk,
-        loggedMeals: selectedDateEntries.map(e => e.mealType || 'camilan')
+        loggedMeals: selectedDateEntries.map(e => e.mealType || 'camilan'),
+        language: language
       }, {
         headers: {
           Authorization: `Bearer ${token}`

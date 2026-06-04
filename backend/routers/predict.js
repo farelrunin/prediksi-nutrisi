@@ -473,8 +473,10 @@ function generateDynamicFallbackAdvice(totalNutrition, riskScore, loggedMeals = 
 // ROUTE: POST /predict/daily-insights (Generasi teks evaluasi harian berbasis data sistem)
 // ==============================================================================
 router.post("/daily-insights", async (req, res) => {
-  const { selectedDate, totalNutrition, riskScore, loggedMeals } = req.body;
+  const { selectedDate, totalNutrition, riskScore, loggedMeals, language } = req.body;
   const mealsArray = loggedMeals || [];
+  const lang = language === "en" ? "en" : "id";
+  const isEn = lang === "en";
   
   try {
     const modelInstance = genAI.getGenerativeModel({ 
@@ -482,7 +484,25 @@ router.post("/daily-insights", async (req, res) => {
       generationConfig: { responseMimeType: "application/json" }
     });
     
-    const prompt = `Kamu adalah asisten pakar kesehatan gizi untuk aplikasi NutriAI. Sistem kami menganalisis asupan user hari ini (${selectedDate}) dengan data berikut:
+    const prompt = isEn
+      ? `You are a professional nutrition expert assistant for the NutriAI application. Our system has analyzed the user's intake today (${selectedDate}) with the following data:
+- Calories: ${totalNutrition.calories} kcal
+- Protein: ${totalNutrition.protein}g
+- Carbohydrates: ${totalNutrition.carbs}g
+- Fat: ${totalNutrition.fat}g
+- Risk Score: ${riskScore}
+- Meals logged so far today: ${mealsArray.join(", ") || "none specified"}
+
+IMPORTANT TASK:
+Pay attention to the 'Meals logged so far today' variable. If the user has only logged a few meals (e.g., only Breakfast or only Lunch), DO NOT describe this analysis as a 'total daily intake' or claim they are 'deficient' for the whole day. Refer to it as intake 'so far' or 'for that specific meal'. Suggest healthy local Indonesian/common food variations.
+
+Respond ONLY with a valid JSON in this exact format:
+{
+  "advice": "1 paragraph of brief, polite, and smart nutrition evaluation so far and its impact on the body",
+  "actionableAdvice": "1-2 sentences of tactical/concrete advice for balancing their nutrition in their next meal"
+}
+DO NOT include any explanation or backticks outside the JSON.`
+      : `Kamu adalah asisten pakar kesehatan gizi untuk aplikasi NutriAI. Sistem kami menganalisis asupan user hari ini (${selectedDate}) dengan data berikut:
 - Kalori: ${totalNutrition.calories} kcal
 - Protein: ${totalNutrition.protein}g
 - Karbohidrat: ${totalNutrition.carbs}g
@@ -512,7 +532,7 @@ JANGAN ada penjelasan tambahan di luar JSON.`;
     });
   } catch (error) {
     console.error("[GEMINI] Gagal memproses evaluasi harian (atau quota terlampaui), menggunakan fallback cerdas:", error.message);
-    const fallback = generateDynamicFallbackAdvice(totalNutrition, riskScore, mealsArray);
+    const fallback = generateDynamicFallbackAdvice(totalNutrition, riskScore, mealsArray, lang);
     res.json(fallback);
   }
 });
