@@ -227,7 +227,7 @@ const AdvancedAnalyticsChart = ({ nutritionData }) => {
       </div>
 
       {/* Main Chart Area */}
-      <div className="h-80 md:h-[26rem] relative">
+      <div className="h-80 md:h-[26rem] relative" style={{ minHeight: '280px' }}>
         {isLoading ? (
           <div className="absolute inset-0 flex items-center justify-center bg-[var(--bg-secondary)]/10 rounded-[2rem] border border-dashed border-[var(--border-card)]">
             <div className="flex flex-col items-center gap-3">
