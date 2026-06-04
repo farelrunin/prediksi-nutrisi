@@ -30,7 +30,7 @@ const AIInsightsTab = ({
         </div>
         <div className="flex items-center gap-1.5 md:gap-2 bg-[var(--primary-green)]/10 text-[var(--primary-green)] px-3 py-1.5 md:px-4 md:py-2.5 border border-emerald-500/20 rounded-lg md:rounded-2xl text-[8px] md:text-[10px] font-black uppercase tracking-widest shrink-0 self-start md:self-auto shadow-sm">
           <Sparkles size={12} className="animate-pulse" />
-          <span>AI Engine</span>
+          <span>{language === 'id' ? 'Mesin AI' : 'AI Engine'}</span>
         </div>
       </div>
 
@@ -71,7 +71,7 @@ const AIInsightsTab = ({
           <MagicCard className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-xl md:rounded-[2.5rem] p-4 md:p-10 shadow-xl relative overflow-hidden group">
             <div className="flex items-center gap-2 mb-4 md:mb-6 text-[var(--primary-green)] font-black text-[8px] md:text-[10px] uppercase tracking-[0.3em]">
               <Sparkles size={10} className="animate-pulse" />
-              <span>Daily Insights report</span>
+              <span>{language === 'id' ? 'Laporan Analisis AI Harian' : 'Daily Insights report'}</span>
             </div>
             
             {isAdviceLoading ? (
@@ -131,7 +131,9 @@ const AIInsightsTab = ({
                     <TrendingUp size={14} />
                   </div>
                   <div>
-                    <h4 className="text-[10px] font-black uppercase tracking-wider text-amber-500 mb-0.5 md:mb-1">Actionable Advice</h4>
+                    <h4 className="text-[10px] font-black uppercase tracking-wider text-amber-500 mb-0.5 md:mb-1">
+                      {language === 'id' ? 'Saran Tindakan' : 'Actionable Advice'}
+                    </h4>
                     <p className="text-[10px] md:text-xs text-[var(--text-muted)] font-semibold leading-relaxed">
                       {actionableAdvice || (language === 'id' 
                         ? 'Konsumsi sumber protein hewani/nabati tambahan di cemilan sore dan kurangi asupan karbohidrat cepat serap menjelang istirahat tidur malam Anda.' 

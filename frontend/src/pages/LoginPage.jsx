@@ -30,8 +30,8 @@ const LoginPage = () => {
     if (user) {
       notify({ 
         type: 'success', 
-        title: 'Login Successful', 
-        message: `Welcome back, ${user.name || ''}!` 
+        title: language === 'id' ? 'Login Berhasil' : 'Login Successful', 
+        message: language === 'id' ? `Selamat datang kembali, ${user.name || ''}!` : `Welcome back, ${user.name || ''}!` 
       });
       
       if (user.is_profile_completed === true) {
@@ -52,8 +52,8 @@ const LoginPage = () => {
       console.error('Login error:', error);
       notify({ 
         type: 'error', 
-        title: 'Login Failed', 
-        message: error.message || 'Incorrect email or password' 
+        title: language === 'id' ? 'Login Gagal' : 'Login Failed', 
+        message: error.message || (language === 'id' ? 'Email atau kata sandi salah' : 'Incorrect email or password') 
       });
       setLoading(false); // Matikan loading hanya jika error. Jika sukses, biarkan loading menyala sampai pindah halaman.
     }
@@ -66,7 +66,11 @@ const LoginPage = () => {
         await googleLogin(tokenResponse.access_token);
       } catch (error) {
         console.error('Google Login error:', error);
-        notify({ type: 'error', title: 'Google Login Failed', message: error.message || 'An error occurred while logging in with Google.' });
+        notify({ 
+          type: 'error', 
+          title: language === 'id' ? 'Login Google Gagal' : 'Google Login Failed', 
+          message: error.message || (language === 'id' ? 'Terjadi kesalahan saat masuk menggunakan Google.' : 'An error occurred while logging in with Google.') 
+        });
         setLoading(false);
       }
     },

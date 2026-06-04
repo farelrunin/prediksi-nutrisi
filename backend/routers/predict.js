@@ -342,7 +342,7 @@ router.post("/report-incorrect", async (req, res) => {
 });
 
 // Helper: Generasi teks evaluasi harian berbasis data secara dinamis (Fallback Cerdas)
-function generateDynamicFallbackAdvice(totalNutrition, riskScore) {
+function generateDynamicFallbackAdvice(totalNutrition, riskScore, loggedMeals = []) {
   const cal = totalNutrition.calories || 0;
   const prot = totalNutrition.protein || 0;
   const carb = totalNutrition.carbs || 0;
@@ -356,26 +356,75 @@ function generateDynamicFallbackAdvice(totalNutrition, riskScore) {
     };
   }
 
-  let calStatus = "optimal dan seimbang";
-  let calDetail = "Asupan energi harian Anda berada pada kisaran yang baik untuk metabolisme.";
-  if (cal < 1200) {
-    calStatus = "cukup rendah";
-    calDetail = "Tubuh Anda kekurangan asupan kalori bersih untuk mendukung fungsi organ dan aktivitas harian dengan optimal.";
-  } else if (cal > 2200) {
-    calStatus = "cukup tinggi";
-    calDetail = "Konsumsi kalori Anda mendekati batas atas harian. Disarankan membatasi porsi makan berikutnya untuk menghindari surplus energi berlebih.";
+  // Identifikasi sesi makan unik yang dicatat
+  const uniqueMeals = Array.from(new Set(loggedMeals.map(m => m.toLowerCase())));
+  const mealCount = uniqueMeals.length;
+  
+  // Penamaan sesi makan bahasa Indonesia
+  const mealNamesMap = {
+    breakfast: "Sarapan",
+    sarapan: "Sarapan",
+    lunch: "Makan Siang",
+    siang: "Makan Siang",
+    "makan siang": "Makan Siang",
+    dinner: "Makan Malam",
+    malam: "Makan Malam",
+    "makan malam": "Makan Malam",
+    snack: "Camilan",
+    camilan: "Camilan"
+  };
+
+  const formattedMeals = uniqueMeals.map(m => {
+    for (const key in mealNamesMap) {
+      if (m.includes(key)) return mealNamesMap[key];
+    }
+    return "Sesi Makan";
+  });
+  
+  const uniqueFormattedMeals = Array.from(new Set(formattedMeals));
+  const mealsText = uniqueFormattedMeals.join(", ");
+
+  let contextText = "";
+  if (mealCount <= 1) {
+    contextText = `berdasarkan catatan ${mealsText || 'makanan'} Anda sejauh ini`;
+  } else {
+    contextText = `dari akumulasi ${mealCount} sesi makan yang Anda catat hari ini (${mealsText})`;
   }
 
-  let protStatus = "tercukupi dengan baik";
-  if (prot < 45) {
-    protStatus = "kurang optimal";
+  let calStatus = "optimal dan seimbang";
+  let calDetail = "Asupan energi ini sudah cukup ideal untuk mendukung metabolisme tubuh.";
+  
+  // Jika baru mencatat sedikit sesi makan, batas "rendah" disesuaikan agar tidak bias
+  if (mealCount <= 1) {
+    if (cal < 400) {
+      calStatus = "cukup ringan";
+      calDetail = "Porsi ini tergolong cukup ringan untuk satu sesi makan. Lengkapi porsi makan di sesi makan berikutnya agar stamina harian Anda tetap terjaga.";
+    } else if (cal > 1000) {
+      calStatus = "cukup padat";
+      calDetail = "Satu sesi makan ini mengandung energi yang cukup tinggi. Perhatikan porsi di sesi makan berikutnya agar asupan kalori tidak surplus berlebihan.";
+    }
+  } else {
+    if (cal < 1200) {
+      calStatus = "cukup rendah untuk ukuran harian";
+      calDetail = "Untuk total harian sejauh ini, asupan energi Anda masih kurang. Pastikan untuk mencukupi kebutuhan gizi harian pada menu makan malam atau camilan sehat.";
+    } else if (cal > 2200) {
+      calStatus = "cukup tinggi";
+      calDetail = "Akumulasi kalori Anda mendekati batas harian. Disarankan untuk membatasi camilan manis atau makanan tinggi lemak jenuh selanjutnya.";
+    }
+  }
+
+  let protStatus = "tercukupi";
+  if (prot < 15 && mealCount <= 1) {
+    protStatus = "sedikit kurang untuk satu sesi makan";
+  } else if (prot < 45 && mealCount > 1) {
+    protStatus = "kurang optimal untuk kebutuhan harian";
   }
 
   let carbStatus = "seimbang";
   if (carb > 250) {
     carbStatus = "cukup tinggi";
-  } else if (carb < 100) {
-    carbStatus = "cukup rendah";
+  } else if (carb < 100 && mealCount > 1) {
+    carbStatus = "cukup rendah untuk ukuran harian";
   }
 
   let fatStatus = "dalam batas normal";
@@ -383,25 +432,25 @@ function generateDynamicFallbackAdvice(totalNutrition, riskScore) {
     fatStatus = "cukup tinggi";
   }
 
-  const advice = `Sistem mendeteksi konsumsi energi harian Anda sebesar ${cal} kcal, yang tergolong ${calStatus}. ${calDetail} Kandungan protein Anda tercatat ${prot}g (${protStatus}), karbohidrat ${carb}g (${carbStatus}), dan lemak ${fat}g (${fatStatus}). Pola gizi harian ini sangat penting untuk dipantau demi kebugaran jangka panjang Anda.`;
+  const advice = `Sistem mendeteksi asupan energi Anda ${contextText} sebesar ${cal} kcal, yang tergolong ${calStatus}. ${calDetail} Kandungan protein Anda tercatat ${prot}g (${protStatus}), karbohidrat ${carb}g (${carbStatus}), dan lemak ${fat}g (${fatStatus}).`;
 
   // Rekomendasi Menu & Saran Taktis
   const suggestions = [];
   if (prot < 45) {
-    suggestions.push("Tambahkan sumber protein seperti dada ayam panggang, telur rebus, atau tempe bacem pada makan malam.");
+    suggestions.push("Cobalah tambahkan sumber protein seperti telur rebus, dada ayam panggang, tempe, atau tahu pada sesi makan Anda berikutnya.");
   }
   if (fat > 70) {
-    suggestions.push("Kurangi konsumsi makanan bersantan atau gorengan berlebih hari ini.");
+    suggestions.push("Batasi konsumsi gorengan atau makanan bersantan tebal untuk menjaga asupan lemak harian tetap seimbang.");
   }
   if (carb > 250) {
-    suggestions.push("Batasi porsi nasi putih atau camilan manis, ganti dengan sayuran berserat tinggi atau apel.");
+    suggestions.push("Kurangi porsi nasi putih atau camilan manis berlebih, ganti dengan sayuran hijau berkalori rendah atau buah-buahan tinggi serat.");
   } else if (carb < 100 && cal < 1200) {
-    suggestions.push("Tambahkan karbohidrat kompleks seperti kentang rebus atau roti gandum.");
+    suggestions.push("Tambahkan karbohidrat kompleks seperti nasi merah, ubi jalar, atau oatmeal untuk membantu mencukupi kebutuhan glukosa tubuh.");
   }
 
   if (suggestions.length === 0) {
-    suggestions.push("Pertahankan pola makan seimbang ini dengan perbanyak serat dari sayur dan buah.");
-    suggestions.push("Pastikan hidrasi tubuh optimal dengan minum minimal 8 gelas air putih.");
+    suggestions.push("Pertahankan pola makan seimbang ini dengan memperbanyak serat dari sayur dan buah segar.");
+    suggestions.push("Pastikan hidrasi tubuh optimal dengan minum minimal 8 gelas air putih hari ini.");
   }
 
   const actionableAdvice = suggestions.slice(0, 2).join(" ");
@@ -413,7 +462,8 @@ function generateDynamicFallbackAdvice(totalNutrition, riskScore) {
 // ROUTE: POST /predict/daily-insights (Generasi teks evaluasi harian berbasis data sistem)
 // ==============================================================================
 router.post("/daily-insights", async (req, res) => {
-  const { selectedDate, totalNutrition, riskScore } = req.body;
+  const { selectedDate, totalNutrition, riskScore, loggedMeals } = req.body;
+  const mealsArray = loggedMeals || [];
   
   try {
     const modelInstance = genAI.getGenerativeModel({ 
@@ -421,17 +471,21 @@ router.post("/daily-insights", async (req, res) => {
       generationConfig: { responseMimeType: "application/json" }
     });
     
-    const prompt = `Kamu adalah asisten penulis kesehatan gizi. Sistem kami menganalisis nutrisi hari ini (${selectedDate}):
+    const prompt = `Kamu adalah asisten pakar kesehatan gizi untuk aplikasi NutriAI. Sistem kami menganalisis asupan user hari ini (${selectedDate}) dengan data berikut:
 - Kalori: ${totalNutrition.calories} kcal
 - Protein: ${totalNutrition.protein}g
 - Karbohidrat: ${totalNutrition.carbs}g
 - Lemak: ${totalNutrition.fat}g
 - Skor Risiko: ${riskScore}
+- Sesi makan yang dicatat sejauh ini: ${mealsArray.join(", ") || "tidak ada keterangan"}
 
-Berdasarkan data di atas, tuliskan respons dalam bahasa Indonesia dengan format JSON persis seperti berikut:
+TUGAS PENTING:
+Perhatikan variabel 'Sesi makan yang dicatat sejauh ini'. Jika user baru mencatat sedikit sesi makan (misal baru Sarapan saja atau Makan Siang saja), JANGAN menyebut analisis ini sebagai 'konsumsi harian total' atau menjatuhkan vonis bahwa mereka 'kekurangan gizi harian'. Sebut saja sebagai asupan 'sejauh ini' atau 'untuk sesi makan tersebut'. Berikan rekomendasi variasi makanan lokal Indonesia yang sehat.
+
+Tanggapi HANYA dengan format JSON persis seperti berikut:
 {
-  "advice": "1 paragraf evaluasi ringkas dan ramah mengenai gizi mereka hari ini dan dampaknya bagi tubuh",
-  "actionableAdvice": "1-2 kalimat saran taktis/tindakan konkret langsung untuk menyeimbangkan gizi hari ini"
+  "advice": "1 paragraf evaluasi ringkas, santun, dan cerdas mengenai gizi yang tercatat sejauh ini dan dampaknya bagi tubuh",
+  "actionableAdvice": "1-2 kalimat saran taktis/tindakan konkret langsung untuk menyeimbangkan gizi mereka pada sesi makan berikutnya"
 }
 JANGAN ada penjelasan tambahan di luar JSON.`;
     
@@ -447,7 +501,7 @@ JANGAN ada penjelasan tambahan di luar JSON.`;
     });
   } catch (error) {
     console.error("[GEMINI] Gagal memproses evaluasi harian (atau quota terlampaui), menggunakan fallback cerdas:", error.message);
-    const fallback = generateDynamicFallbackAdvice(totalNutrition, riskScore);
+    const fallback = generateDynamicFallbackAdvice(totalNutrition, riskScore, mealsArray);
     res.json(fallback);
   }
 });

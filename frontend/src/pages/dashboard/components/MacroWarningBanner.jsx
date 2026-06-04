@@ -17,9 +17,9 @@ const MacroWarningBanner = ({
     const fatRatio = targets.fat > 0 ? fat / targets.fat : 1;
 
     const macros = [
-      { name: 'protein', ratio: proteinRatio, label: language === 'id' ? 'Protein' : 'Protein', foods: language === 'id' ? 'Dada Ayam Panggang, Telur Rebus, Tempe, Tahu, Salmon, atau Kacang-kacangan' : 'Grilled Chicken Breast, Boiled Eggs, Tempeh, Tofu, Salmon, or Nuts' },
-      { name: 'karbohidrat', ratio: carbsRatio, label: language === 'id' ? 'Karbohidrat' : 'Carbs', foods: language === 'id' ? 'Nasi Merah, Kentang Rebus, Oatmeal, Ubi Cilembu, atau Roti Gandum' : 'Brown Rice, Boiled Potatoes, Oatmeal, Sweet Potatoes, or Whole Wheat Bread' },
-      { name: 'lemak', ratio: fatRatio, label: language === 'id' ? 'Lemak Sehat' : 'Healthy Fats', foods: language === 'id' ? 'Alpukat segar, Kacang Almond, Minyak Zaitun (Olive Oil), atau Keju rendah lemak' : 'Fresh Avocados, Almonds, Olive Oil, or Low-fat Cheese' }
+      { name: language === 'id' ? 'protein' : 'protein', ratio: proteinRatio, label: language === 'id' ? 'Protein' : 'Protein', foods: language === 'id' ? 'Dada Ayam Panggang, Telur Rebus, Tempe, Tahu, Salmon, atau Kacang-kacangan' : 'Grilled Chicken Breast, Boiled Eggs, Tempeh, Tofu, Salmon, or Nuts' },
+      { name: language === 'id' ? 'karbohidrat' : 'carbohydrate', ratio: carbsRatio, label: language === 'id' ? 'Karbohidrat' : 'Carbs', foods: language === 'id' ? 'Nasi Merah, Kentang Rebus, Oatmeal, Ubi Cilembu, atau Roti Gandum' : 'Brown Rice, Boiled Potatoes, Oatmeal, Sweet Potatoes, or Whole Wheat Bread' },
+      { name: language === 'id' ? 'lemak' : 'fat', ratio: fatRatio, label: language === 'id' ? 'Lemak Sehat' : 'Healthy Fats', foods: language === 'id' ? 'Alpukat segar, Kacang Almond, Minyak Zaitun (Olive Oil), atau Keju rendah lemak' : 'Fresh Avocados, Almonds, Olive Oil, or Low-fat Cheese' }
     ];
 
     const lowMacros = macros.filter(m => m.ratio < 0.7).sort((a, b) => a.ratio - b.ratio);

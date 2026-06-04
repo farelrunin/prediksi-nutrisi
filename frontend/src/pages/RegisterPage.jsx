@@ -29,8 +29,10 @@ const RegisterPage = () => {
     if (registrationSuccess && mounted) {
       notify({
         type: 'success',
-        title: 'Registration Successful',
-        message: 'Your account has been successfully created. Please log in to continue.'
+        title: language === 'id' ? 'Registrasi Berhasil' : 'Registration Successful',
+        message: language === 'id' 
+          ? 'Akun Anda berhasil dibuat. Silakan masuk untuk melanjutkan.' 
+          : 'Your account has been successfully created. Please log in to continue.'
       });
       navigate('/login', { replace: true });
     }
@@ -50,9 +52,9 @@ const RegisterPage = () => {
     // Calculate password strength score (0 to 5)
     const score = Object.values(checks).filter(Boolean).length - (checks.isMatching ? 1 : 0);
     
-    let strength = "LEMAH";
-    if (score >= 5) strength = "SANGAT KUAT";
-    else if (score >= 3) strength = "SEDANG";
+    let strength = language === 'id' ? "LEMAH" : "WEAK";
+    if (score >= 5) strength = language === 'id' ? "SANGAT KUAT" : "VERY STRONG";
+    else if (score >= 3) strength = language === 'id' ? "SEDANG" : "MEDIUM";
 
     return {
       ...checks,
@@ -85,8 +87,10 @@ const RegisterPage = () => {
       if (!emailRegex.test(formData.email)) {
         notify({
           type: 'warning',
-          title: 'Invalid Email Domain',
-          message: 'Please use a common email domain (.com, .id, .net, or .org).'
+          title: language === 'id' ? 'Domain Email Tidak Valid' : 'Invalid Email Domain',
+          message: language === 'id' 
+            ? 'Silakan gunakan domain email umum (.com, .id, .net, atau .org).' 
+            : 'Please use a common email domain (.com, .id, .net, or .org).'
         });
         setLoading(false);
         return;
@@ -102,8 +106,8 @@ const RegisterPage = () => {
       console.error('Register error:', error);
       notify({
         type: 'error',
-        title: 'Registration Failed',
-        message: error.message || 'Could not register, please try again.'
+        title: language === 'id' ? 'Registrasi Gagal' : 'Registration Failed',
+        message: error.message || (language === 'id' ? 'Tidak dapat mendaftar, silakan coba lagi.' : 'Could not register, please try again.')
       });
     }
     setLoading(false);
