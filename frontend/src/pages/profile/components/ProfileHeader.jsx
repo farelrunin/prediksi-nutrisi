@@ -117,19 +117,7 @@ const ProfileHeader = ({
                   <ChevronRight size={12} className="md:w-[14px] md:h-[14px] text-[var(--text-muted)]" />
                 </button>
 
-                {/* Notifications - Coming Soon */}
-                <button
-                  className="w-full flex items-center justify-between px-3 py-2 md:px-4 md:py-3.5 rounded-xl md:rounded-2xl hover:bg-[var(--bg-secondary)] transition-all group opacity-60"
-                  onClick={() => notify({ type: 'info', title: t.soon, message: `${t.notifications} feature coming soon!` })}
-                >
-                  <div className="flex items-center gap-2 md:gap-3">
-                    <div className="p-1.5 md:p-2 rounded-lg md:rounded-xl bg-rose-100 text-rose-600 group-hover:scale-110 transition-transform">
-                      <Bell size={14} className="md:w-[18px] md:h-[18px]" />
-                    </div>
-                    <span className="text-[11px] md:text-xs font-bold text-[var(--text-main)]">{t.notifications}</span>
-                  </div>
-                  <ChevronRight size={12} className="md:w-[14px] md:h-[14px] text-[var(--text-muted)]" />
-                </button>
+
 
                 {/* Privacy & Security - Link to /privacy page */}
                 <Link
@@ -162,20 +150,6 @@ const ProfileHeader = ({
                   </div>
                   <ChevronRight size={12} className="md:w-[14px] md:h-[14px] text-[var(--text-muted)]" />
                 </a>
-
-                <Link 
-                  to="/privacy" 
-                  className="w-full flex items-center justify-between px-3 py-2 md:px-4 md:py-3.5 rounded-xl md:rounded-2xl hover:bg-[var(--bg-secondary)] transition-all group lg:hidden"
-                  onClick={() => setIsSettingsOpen(false)}
-                >
-                  <div className="flex items-center gap-2 md:gap-3">
-                    <div className="p-1.5 md:p-2 rounded-lg md:rounded-xl bg-emerald-100 text-emerald-600">
-                      <Shield size={14} className="md:w-[18px] md:h-[18px]" />
-                    </div>
-                    <span className="text-[11px] md:text-xs font-bold text-[var(--text-main)]">{t.privacyPolicy}</span>
-                  </div>
-                  <ChevronRight size={12} className="md:w-[14px] md:h-[14px] text-[var(--text-muted)]" />
-                </Link>
 
                 <Link 
                   to="/terms" 

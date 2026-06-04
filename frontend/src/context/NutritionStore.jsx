@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { NutritionContext } from './NutritionContextProvider';
 import { nutritionService } from '../services/nutritionService';
 import { useAuth } from './useAuth';
+import { useLanguage } from './LanguageContext';
 
 const DEFAULT_TARGETS = {
   calories: 2000,
@@ -184,6 +185,7 @@ const buildStoryEntryPayload = (food, mealType = 'mixed') => {
 
 export const NutritionProvider = ({ children }) => {
   const { user, loading: authLoading } = useAuth();
+  const { language } = useLanguage();
   const [nutritionData, setNutritionData] = useState({
     dailyIntake: { ...EMPTY_DAILY_INTAKE },
     targets: DEFAULT_TARGETS,
@@ -243,7 +245,7 @@ export const NutritionProvider = ({ children }) => {
     }
   };
 
-  const refreshRecommendations = async (currentHistory = null) => {
+  const refreshRecommendations = async (currentHistory = null, lang = language) => {
     const historyToUse = currentHistory || nutritionData.history;
     
     // Jika riwayat kosong, bersihkan rekomendasi
@@ -256,7 +258,8 @@ export const NutritionProvider = ({ children }) => {
       const recentHistory = historyToUse.slice(0, 5);
       const recommendations = await nutritionService.getAiRecommendations(
         recentHistory,
-        profile
+        profile,
+        lang
       );
       
       const finalRecommendations = recommendations.length > 0 ? recommendations : [
@@ -309,6 +312,12 @@ export const NutritionProvider = ({ children }) => {
       }
     });
   }, [authLoading, user]);
+
+  useEffect(() => {
+    if (user && nutritionData.history.length > 0) {
+      refreshRecommendations();
+    }
+  }, [language]);
 
   const addFoodEntry = async (foodData) => {
     if (foodData.story) {

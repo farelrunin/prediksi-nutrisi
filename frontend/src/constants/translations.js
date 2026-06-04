@@ -398,7 +398,7 @@ export const translations = {
     // Categories
     categoriesTitle: 'Food Categories',
     categoriesSubtitle: 'Explore various types of food based on nutrition groups and your preferences.',
-    searchPlaceholder: 'Search food nutrition (e.g., chicken, banana, noodles)...',
+    searchPlaceholder: 'Search food nutrition',
     searchResults: 'Search Results',
     itemsFound: 'Items Found',
     noFoodFound: 'No food found',

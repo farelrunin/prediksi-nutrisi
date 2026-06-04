@@ -144,15 +144,88 @@ router.post("/", async (req, res) => {
 router.post("/recommendations", async (req, res) => {
   const { history, profile, language } = req.body;
   const isEn = language === "en";
+  const userProfile = profile || {};
   
-  // Hitung total kalori hari ini dari riwayat makan
+  // Hitung total kalori hari ini dari riwayat makan untuk fallback atau data prompt
   let totalCalories = 0;
   if (history && history.length > 0) {
     totalCalories = history.reduce((sum, item) => sum + (item.calories || 0), 0);
   }
-  
-  // Hasilkan rekomendasi secara dinamis & logis berdasarkan data riwayat nyata
-  const recommendations = [
+
+  // --- COBA MEMANGGIL GEMINI AI UNTUK REKOMENDASI DINAMIS ---
+  try {
+    if (!GEMINI_API_KEY) {
+      throw new Error("Gemini API Key is not configured");
+    }
+
+    const modelInstance = genAI.getGenerativeModel({ 
+      model: "gemini-2.0-flash",
+      generationConfig: { responseMimeType: "application/json" }
+    });
+
+    const prompt = isEn
+      ? `You are a professional nutrition expert assistant for the NutriAI application. Your task is to generate 2 highly personalized nutritional and lifestyle recommendations for the user based on their physical profile and daily food history:
+Physical Profile:
+- Height: ${userProfile.height || "unknown"} cm
+- Weight: ${userProfile.weight || "unknown"} kg
+- Age: ${userProfile.age || "unknown"} years old
+- Gender: ${userProfile.gender || "unknown"}
+- Activity Level: ${userProfile.activityLevel || "unknown"}
+- Medical/Special Conditions: ${userProfile.conditions?.join(", ") || "None"}
+
+Food History Today (Max 5 recent meals):
+${JSON.stringify(history || [])}
+
+Respond ONLY with a valid JSON format of an array of 2 recommendation objects matching this schema:
+[
+  {
+    "priority": "high" | "medium" | "low",
+    "title": "Short and engaging recommendation title",
+    "message": "Detailed and actionable advice tailored to their physical condition and intake",
+    "foods": ["List of 3-4 supportive healthy foods/beverages"],
+    "type": "protein" | "fiber" | "iron" | "energy" | "calcium" | "health"
+  }
+]
+DO NOT include any explanation or markdown formatting outside the JSON.`
+      : `Kamu adalah pakar gizi profesional untuk aplikasi NutriAI. Tugasmu adalah memberikan 2 rekomendasi nutrisi dan gaya hidup yang sangat personal untuk pengguna berdasarkan data profil fisik dan riwayat makanan harian mereka:
+Profil Fisik:
+- Tinggi Badan: ${userProfile.height || "tidak diketahui"} cm
+- Berat Badan: ${userProfile.weight || "tidak diketahui"} kg
+- Umur: ${userProfile.age || "tidak diketahui"} tahun
+- Gender: ${userProfile.gender || "tidak diketahui"}
+- Tingkat Aktivitas: ${userProfile.activityLevel || "tidak diketahui"}
+- Kondisi Medis/Khusus: ${userProfile.conditions?.join(", ") || "Tidak ada"}
+
+Riwayat Makanan Hari Ini (Maksimal 5 terakhir):
+${JSON.stringify(history || [])}
+
+Tanggapi HANYA dengan format JSON berupa array dari 2 objek rekomendasi dengan skema berikut:
+[
+  {
+    "priority": "high" | "medium" | "low",
+    "title": "Judul rekomendasi singkat dan menarik",
+    "message": "Saran detail dan praktis berdasarkan kondisi fisik dan asupan mereka",
+    "foods": ["Daftar 3-4 makanan/minuman sehat pendukung (dalam bahasa Indonesia)"],
+    "type": "protein" | "fiber" | "iron" | "energy" | "calcium" | "health"
+  }
+]
+JANGAN ada penjelasan tambahan di luar JSON.`;
+
+    console.log("[GEMINI] Menghasilkan rekomendasi gizi kustom...");
+    const geminiResult = await modelInstance.generateContent(prompt);
+    const geminiResponse = await geminiResult.response;
+    const answer = geminiResponse.text().trim();
+    
+    const parsedRecommendations = JSON.parse(answer);
+    if (Array.isArray(parsedRecommendations) && parsedRecommendations.length > 0) {
+      return res.json(parsedRecommendations);
+    }
+  } catch (error) {
+    console.error("[GEMINI] Gagal memuat rekomendasi kustom, menggunakan fallback lokal:", error.message);
+  }
+
+  // --- FALLBACK LOKAL / DETERMINISTIK JIKA GEMINI GAGAL / TIDAK AKTIF ---
+  const fallbackRecommendations = [
     {
       priority: totalCalories > 2000 ? "high" : "normal",
       title: totalCalories > 2000 
@@ -181,7 +254,7 @@ router.post("/recommendations", async (req, res) => {
     }
   ];
   
-  res.json(recommendations);
+  res.json(fallbackRecommendations);
 });
 
 // ==============================================================================
