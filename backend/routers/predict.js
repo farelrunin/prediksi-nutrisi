@@ -7,8 +7,38 @@ const aiModelService = require("../services/aiModelService");
 const multer = require("multer");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+// Helper: Panggil Gemini dengan Rotasi API Key jika terkena limit kuota (429)
+async function callGeminiWithRotation(callback) {
+  const keysInput = process.env.GEMINI_API_KEY || "";
+  const keys = keysInput.split(",").map(k => k.trim()).filter(k => k.length > 0);
+
+  if (keys.length === 0) {
+    throw new Error("No Gemini API Keys configured.");
+  }
+
+  let lastError = null;
+
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    try {
+      const currentGenAI = new GoogleGenerativeAI(key);
+      return await callback(currentGenAI);
+    } catch (error) {
+      const errMsg = error.message || "";
+      console.warn(`[GEMINI ROTATION] Gagal menggunakan Key Index ${i} (${key.substring(0, 10)}...):`, errMsg);
+      
+      // Jika eror rate limit atau quota, atau masih ada key cadangan lainnya
+      if (errMsg.includes("429") || errMsg.includes("quota") || errMsg.includes("limit") || i < keys.length - 1) {
+        lastError = error;
+        console.log(`[GEMINI ROTATION] Mencoba beralih ke Key berikutnya...`);
+        continue;
+      }
+      throw error;
+    }
+  }
+
+  throw lastError || new Error("All Gemini API keys failed.");
+}
 
 function fileToGenerativePart(buffer, mimeType) {
   return {
@@ -154,15 +184,6 @@ router.post("/recommendations", async (req, res) => {
 
   // --- COBA MEMANGGIL GEMINI AI UNTUK REKOMENDASI DINAMIS ---
   try {
-    if (!GEMINI_API_KEY) {
-      throw new Error("Gemini API Key is not configured");
-    }
-
-    const modelInstance = genAI.getGenerativeModel({ 
-      model: "gemini-2.0-flash",
-      generationConfig: { responseMimeType: "application/json" }
-    });
-
     const prompt = isEn
       ? `You are a professional nutrition expert assistant for the NutriAI application. Your task is to generate 2 highly personalized nutritional and lifestyle recommendations for the user based on their physical profile and daily food history:
 Physical Profile:
@@ -212,9 +233,15 @@ Tanggapi HANYA dengan format JSON berupa array dari 2 objek rekomendasi dengan s
 JANGAN ada penjelasan tambahan di luar JSON.`;
 
     console.log("[GEMINI] Menghasilkan rekomendasi gizi kustom...");
-    const geminiResult = await modelInstance.generateContent(prompt);
-    const geminiResponse = await geminiResult.response;
-    const answer = geminiResponse.text().trim();
+    const answer = await callGeminiWithRotation(async (rotatedGenAI) => {
+      const modelInstance = rotatedGenAI.getGenerativeModel({ 
+        model: "gemini-2.0-flash",
+        generationConfig: { responseMimeType: "application/json" }
+      });
+      const geminiResult = await modelInstance.generateContent(prompt);
+      const response = await geminiResult.response;
+      return response.text().trim();
+    });
     
     const parsedRecommendations = JSON.parse(answer);
     if (Array.isArray(parsedRecommendations) && parsedRecommendations.length > 0) {
@@ -270,14 +297,17 @@ router.post("/predict-image", upload.single("image"), async (req, res) => {
     let isFood = true;
     try {
       const imagePart = fileToGenerativePart(req.file.buffer, req.file.mimetype || "image/jpeg");
-      const modelInstance = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-      
       const prompt = "Apakah gambar ini merupakan gambar makanan atau minuman? Jawab HANYA dengan kata YA atau TIDAK tanpa tanda baca tambahan.";
       
       console.log("[GUARDRAIL] Memverifikasi apakah gambar adalah makanan/minuman dengan Gemini...");
-      const geminiResult = await modelInstance.generateContent([prompt, imagePart]);
-      const geminiResponse = await geminiResult.response;
-      const answer = geminiResponse.text().trim().toUpperCase();
+      const geminiResponseText = await callGeminiWithRotation(async (rotatedGenAI) => {
+        const modelInstance = rotatedGenAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+        const geminiResult = await modelInstance.generateContent([prompt, imagePart]);
+        const response = await geminiResult.response;
+        return response.text();
+      });
+
+      const answer = geminiResponseText.trim().toUpperCase();
       console.log(`[GUARDRAIL] Respons dari Gemini: "${answer}"`);
 
       // Validasi super ketat: pastikan hanya jika mengandung kata "YA" dan bukan "TIDAK"
@@ -552,11 +582,6 @@ router.post("/daily-insights", async (req, res) => {
   const isEn = lang === "en";
   
   try {
-    const modelInstance = genAI.getGenerativeModel({ 
-      model: "gemini-2.0-flash",
-      generationConfig: { responseMimeType: "application/json" }
-    });
-    
     const prompt = isEn
       ? `You are a professional nutrition expert assistant for the NutriAI application. Our system has analyzed the user's intake today (${selectedDate}) with the following data:
 - Calories: ${totalNutrition.calories} kcal
@@ -594,9 +619,15 @@ Tanggapi HANYA dengan format JSON persis seperti berikut:
 JANGAN ada penjelasan tambahan di luar JSON.`;
     
     console.log("[GEMINI] Menghasilkan evaluasi harian...");
-    const geminiResult = await modelInstance.generateContent(prompt);
-    const geminiResponse = await geminiResult.response;
-    const answer = geminiResponse.text().trim();
+    const answer = await callGeminiWithRotation(async (rotatedGenAI) => {
+      const modelInstance = rotatedGenAI.getGenerativeModel({ 
+        model: "gemini-2.0-flash",
+        generationConfig: { responseMimeType: "application/json" }
+      });
+      const geminiResult = await modelInstance.generateContent(prompt);
+      const response = await geminiResult.response;
+      return response.text().trim();
+    });
     
     const parsed = JSON.parse(answer);
     res.json({
