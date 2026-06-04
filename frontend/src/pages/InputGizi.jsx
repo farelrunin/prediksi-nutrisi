@@ -3,7 +3,6 @@ import { useNutrition } from '../context/useNutrition';
 import FoodForm from '../components/FoodForm';
 import { useLanguage } from '../context/LanguageContext';
 import { translations } from '../constants/translations';
-import { colors } from '../styles/colors';
 
 const InputGizi = () => {
   const { addFoodEntry } = useNutrition();

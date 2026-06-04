@@ -3,10 +3,32 @@ import { Flame } from 'lucide-react';
 import AdvancedAnalyticsChart from './AdvancedAnalyticsChart';
 import MagicCard from '../../../components/shared/MagicCard';
 
+// Hitung streak dari riwayat: jumlah hari berturut-turut mundur dari hari ini
+const calculateStreak = (history) => {
+  if (!history || history.length === 0) return 0;
+  const uniqueDays = new Set(
+    history.map(e => new Date(e.timestamp).toISOString().split('T')[0])
+  );
+  let streak = 0;
+  const today = new Date();
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const key = d.toISOString().split('T')[0];
+    if (uniqueDays.has(key)) {
+      streak++;
+    } else {
+      break;
+    }
+  }
+  return streak;
+};
+
 const AnalyticsTrendsTab = ({
   nutritionData,
   language,
 }) => {
+  const streak = calculateStreak(nutritionData.history);
   return (
     <div className="space-y-4 md:space-y-8 animate-in fade-in duration-300">
       {/* Gamifikasi Streak */}
@@ -17,10 +39,9 @@ const AnalyticsTrendsTab = ({
           </div>
           <div>
             <div className="text-[8px] md:text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Konsistensi Pencatatan Nutrisi</div>
-            <div className="text-lg md:text-2xl font-black text-orange-500 mt-0.5 md:mt-1">{nutritionData.streak || 0} Hari Berturut-turut! 🔥</div>
+            <div className="text-lg md:text-2xl font-black text-orange-500 mt-0.5 md:mt-1">{streak} Hari Berturut-turut! 🔥</div>
             <p className="text-[10px] md:text-[11px] text-[var(--text-muted)] font-semibold mt-0.5 md:mt-1 max-w-[280px] leading-relaxed">
               {(() => {
-                const streak = nutritionData.streak || 0;
                 if (language === 'id') {
                   if (streak <= 1) return 'Langkah pertama yang hebat! Mari bangun kebiasaan sehatmu.';
                   if (streak === 2) return 'Kerja bagus! Hari kedua berturut-turut. Teruskan langkah sehatmu!';
@@ -46,7 +67,7 @@ const AnalyticsTrendsTab = ({
             <div className="flex items-center gap-1 bg-[var(--bg-secondary)]/50 p-2 rounded-xl md:rounded-2xl border border-[var(--border-card)]">
               {Array.from({ length: 7 }).map((_, index) => {
                 const dayNum = index + 1;
-                const isActive = (nutritionData.streak || 0) >= dayNum;
+                const isActive = streak >= dayNum;
                 return (
                   <div 
                     key={index} 
