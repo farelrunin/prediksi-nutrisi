@@ -122,10 +122,10 @@ export const nutritionService = {
     }
   },
   
-  async getAiRecommendations(history, profile) {
+  async getAiRecommendations(history, profile, language) {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(`${API_BASE_URL}/predict/recommendations`, { history, profile }, {
+      const response = await axios.post(`${API_BASE_URL}/predict/recommendations`, { history, profile, language }, {
         headers: {
           Authorization: `Bearer ${token}`
         }

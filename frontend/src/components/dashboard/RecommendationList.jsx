@@ -162,7 +162,7 @@ const RecommendationList = () => {
 
     try {
       const recentHistory = nutritionData.history.slice(0, 5);
-      const data = await nutritionService.getAiRecommendations(recentHistory, profile);
+      const data = await nutritionService.getAiRecommendations(recentHistory, profile, language);
       
       if (data && data.length > 0) {
         setAiRecommendations(data);

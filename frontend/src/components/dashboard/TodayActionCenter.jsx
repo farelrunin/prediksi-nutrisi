@@ -123,7 +123,7 @@ const TodayActionCenter = ({ nutritionData, t }) => {
               </span>
               
               <span className={`text-[10px] font-black mt-2 ${isOverLimit ? 'text-rose-500' : 'text-[var(--primary-green)]'}`}>
-                {isOverLimit ? `+${filledCal - targetCal} kkal` : `${isId ? 'Sisa' : 'Remaining'}: ${remainingCal} kkal`}
+                {isOverLimit ? `+${filledCal - targetCal} ${isId ? 'kkal' : 'kcal'}` : `${isId ? 'Sisa' : 'Remaining'}: ${remainingCal} ${isId ? 'kkal' : 'kcal'}`}
               </span>
             </div>
           </div>

@@ -142,7 +142,8 @@ router.post("/", async (req, res) => {
 // ROUTE: POST /predict/recommendations (Rekomendasi Menu berbasis AKG Harian)
 // ==============================================================================
 router.post("/recommendations", async (req, res) => {
-  const { history, profile } = req.body;
+  const { history, profile, language } = req.body;
+  const isEn = language === "en";
   
   // Hitung total kalori hari ini dari riwayat makan
   let totalCalories = 0;
@@ -154,18 +155,28 @@ router.post("/recommendations", async (req, res) => {
   const recommendations = [
     {
       priority: totalCalories > 2000 ? "high" : "normal",
-      title: totalCalories > 2000 ? "Batasi Asupan Kalori Tinggi" : "Kebutuhan Nutrisi Terjaga",
+      title: totalCalories > 2000 
+        ? (isEn ? "Limit High Calorie Intake" : "Batasi Asupan Kalori Tinggi") 
+        : (isEn ? "Nutritional Needs Met" : "Kebutuhan Nutrisi Terjaga"),
       message: totalCalories > 2000 
-        ? "Kalori Anda hari ini mendekati ambang batas harian. Disarankan untuk membatasi camilan manis/lemak jenuh dan perbanyak air putih."
-        : "Asupan kalori Anda berada di batas aman harian. Pertahankan konsumsi makanan tinggi serat dan protein rendah lemak.",
-      foods: totalCalories > 2000 ? ["Air Putih", "Apel Hijau", "Sayur Bayam Bening"] : ["Dada Ayam Panggang", "Tempe Bacem", "Pisang"],
+        ? (isEn 
+            ? "Your calories today are close to the daily limit. It is recommended to limit sweet snacks/saturated fat and drink plenty of water."
+            : "Kalori Anda hari ini mendekati ambang batas harian. Disarankan untuk membatasi camilan manis/lemak jenuh dan perbanyak air putih.")
+        : (isEn 
+            ? "Your calorie intake is within the safe daily limit. Maintain consumption of high-fiber foods and low-fat protein."
+            : "Asupan kalori Anda berada di batas aman harian. Pertahankan konsumsi makanan tinggi serat dan protein rendah lemak."),
+      foods: totalCalories > 2000 
+        ? (isEn ? ["Water", "Green Apple", "Clear Spinach Soup"] : ["Air Putih", "Apel Hijau", "Sayur Bayam Bening"]) 
+        : (isEn ? ["Grilled Chicken Breast", "Tempeh", "Banana"] : ["Dada Ayam Panggang", "Tempe Bacem", "Pisang"]),
       type: "energy"
     },
     {
       priority: "normal",
-      title: "Optimalkan Hidrasi Tubuh",
-      message: "Konsumsi minimal 2-3 liter air putih setiap hari untuk mengoptimalkan metabolisme pencernaan dan sirkulasi darah Anda.",
-      foods: ["Air Putih", "Air Kelapa Muda"],
+      title: isEn ? "Optimize Body Hydration" : "Optimalkan Hidrasi Tubuh",
+      message: isEn 
+        ? "Consume at least 2-3 liters of water daily to optimize digestion, metabolism, and blood circulation."
+        : "Konsumsi minimal 2-3 liter air putih setiap hari untuk mengoptimalkan metabolisme pencernaan dan sirkulasi darah Anda.",
+      foods: isEn ? ["Water", "Fresh Coconut Water"] : ["Air Putih", "Air Kelapa Muda"],
       type: "health"
     }
   ];
