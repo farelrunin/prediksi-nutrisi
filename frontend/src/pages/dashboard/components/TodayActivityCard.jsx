@@ -34,6 +34,7 @@ const TodayActivityCard = ({
         ) : (
           todayEntries.slice(0, 4).map((e, i) => (
             <div key={i} className="flex items-center justify-between p-2.5 md:p-4 bg-[var(--bg-secondary)]/55 border border-[var(--border-card)]/20 rounded-lg md:rounded-[1.5rem] transition-all hover:border-[var(--primary-green)]/30 group">
+              <div className="min-w-0">
                 <p className="truncate text-xs md:text-sm font-bold text-[var(--text-main)] group-hover:text-[var(--primary-green)] transition-colors">{e.foodName}</p>
                 <p className="text-[8px] md:text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider mt-0.5 md:mt-1">
                   {(() => {
