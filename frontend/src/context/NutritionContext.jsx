@@ -226,7 +226,7 @@ export const NutritionProvider = ({ children }) => {
     predictNutritionImage,
     getRiskScore,
     updateProfile,
-    reportIncorrectPrediction: nutritionService.reportIncorrectPrediction
+    reportIncorrectPrediction: (imageUrl, predictedClass) => nutritionService.reportIncorrectPrediction(imageUrl, predictedClass)
   };
 
   return <NutritionContext.Provider value={value}>{children}</NutritionContext.Provider>;
