@@ -10,6 +10,7 @@ const AIInsightsTab = ({
   selectedDateTotals,
   isAdviceLoading,
   dailyAdvice,
+  actionableAdvice,
   handleGenerateInsight,
   t,
 }) => {
@@ -132,9 +133,9 @@ const AIInsightsTab = ({
                   <div>
                     <h4 className="text-[10px] font-black uppercase tracking-wider text-amber-500 mb-0.5 md:mb-1">Actionable Advice</h4>
                     <p className="text-[10px] md:text-xs text-[var(--text-muted)] font-semibold leading-relaxed">
-                      {language === 'id' 
+                      {actionableAdvice || (language === 'id' 
                         ? 'Konsumsi sumber protein hewani/nabati tambahan di cemilan sore dan kurangi asupan karbohidrat cepat serap menjelang istirahat tidur malam Anda.' 
-                        : 'Include lean protein sources in your afternoon snacks and avoid simple carbohydrates prior to sleep.'}
+                        : 'Include lean protein sources in your afternoon snacks and avoid simple carbohydrates prior to sleep.')}
                     </p>
                   </div>
                 </div>

@@ -341,6 +341,74 @@ router.post("/report-incorrect", async (req, res) => {
   }
 });
 
+// Helper: Generasi teks evaluasi harian berbasis data secara dinamis (Fallback Cerdas)
+function generateDynamicFallbackAdvice(totalNutrition, riskScore) {
+  const cal = totalNutrition.calories || 0;
+  const prot = totalNutrition.protein || 0;
+  const carb = totalNutrition.carbs || 0;
+  const fat = totalNutrition.fat || 0;
+
+  // Jika belum ada data sama sekali
+  if (cal === 0) {
+    return {
+      advice: "Sistem belum mendeteksi adanya catatan asupan makanan Anda untuk hari ini. Silakan masukkan makanan/minuman yang Anda konsumsi pada menu Input Gizi untuk memulai analisis gizi harian otomatis.",
+      actionableAdvice: "Catat asupan makan pagi, siang, atau camilan Anda agar asisten gizi kami dapat memberikan rekomendasi yang personal."
+    };
+  }
+
+  let calStatus = "optimal dan seimbang";
+  let calDetail = "Asupan energi harian Anda berada pada kisaran yang baik untuk metabolisme.";
+  if (cal < 1200) {
+    calStatus = "cukup rendah";
+    calDetail = "Tubuh Anda kekurangan asupan kalori bersih untuk mendukung fungsi organ dan aktivitas harian dengan optimal.";
+  } else if (cal > 2200) {
+    calStatus = "cukup tinggi";
+    calDetail = "Konsumsi kalori Anda mendekati batas atas harian. Disarankan membatasi porsi makan berikutnya untuk menghindari surplus energi berlebih.";
+  }
+
+  let protStatus = "tercukupi dengan baik";
+  if (prot < 45) {
+    protStatus = "kurang optimal";
+  }
+
+  let carbStatus = "seimbang";
+  if (carb > 250) {
+    carbStatus = "cukup tinggi";
+  } else if (carb < 100) {
+    carbStatus = "cukup rendah";
+  }
+
+  let fatStatus = "dalam batas normal";
+  if (fat > 70) {
+    fatStatus = "cukup tinggi";
+  }
+
+  const advice = `Sistem mendeteksi konsumsi energi harian Anda sebesar ${cal} kcal, yang tergolong ${calStatus}. ${calDetail} Kandungan protein Anda tercatat ${prot}g (${protStatus}), karbohidrat ${carb}g (${carbStatus}), dan lemak ${fat}g (${fatStatus}). Pola gizi harian ini sangat penting untuk dipantau demi kebugaran jangka panjang Anda.`;
+
+  // Rekomendasi Menu & Saran Taktis
+  const suggestions = [];
+  if (prot < 45) {
+    suggestions.push("Tambahkan sumber protein seperti dada ayam panggang, telur rebus, atau tempe bacem pada makan malam.");
+  }
+  if (fat > 70) {
+    suggestions.push("Kurangi konsumsi makanan bersantan atau gorengan berlebih hari ini.");
+  }
+  if (carb > 250) {
+    suggestions.push("Batasi porsi nasi putih atau camilan manis, ganti dengan sayuran berserat tinggi atau apel.");
+  } else if (carb < 100 && cal < 1200) {
+    suggestions.push("Tambahkan karbohidrat kompleks seperti kentang rebus atau roti gandum.");
+  }
+
+  if (suggestions.length === 0) {
+    suggestions.push("Pertahankan pola makan seimbang ini dengan perbanyak serat dari sayur dan buah.");
+    suggestions.push("Pastikan hidrasi tubuh optimal dengan minum minimal 8 gelas air putih.");
+  }
+
+  const actionableAdvice = suggestions.slice(0, 2).join(" ");
+
+  return { advice, actionableAdvice };
+}
+
 // ==============================================================================
 // ROUTE: POST /predict/daily-insights (Generasi teks evaluasi harian berbasis data sistem)
 // ==============================================================================
@@ -348,21 +416,39 @@ router.post("/daily-insights", async (req, res) => {
   const { selectedDate, totalNutrition, riskScore } = req.body;
   
   try {
-    const modelInstance = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const modelInstance = genAI.getGenerativeModel({ 
+      model: "gemini-2.0-flash",
+      generationConfig: { responseMimeType: "application/json" }
+    });
     
-    const prompt = `Kamu adalah asisten penulis kesehatan. Sistem kami telah menganalisis nutrisi user hari ini (${selectedDate}) dengan hasil: Kalori ${totalNutrition.calories} kcal, Protein ${totalNutrition.protein}g, Karbohidrat ${totalNutrition.carbs}g, Lemak ${totalNutrition.fat}g dan skor risiko gizi: ${riskScore}. Berdasarkan hasil mutlak dari sistem kami ini, tuliskan 1 paragraf evaluasi singkat dan berikan 2 saran menu makanan praktis untuk menyeimbangkan gizi user hari ini.`;
+    const prompt = `Kamu adalah asisten penulis kesehatan gizi. Sistem kami menganalisis nutrisi hari ini (${selectedDate}):
+- Kalori: ${totalNutrition.calories} kcal
+- Protein: ${totalNutrition.protein}g
+- Karbohidrat: ${totalNutrition.carbs}g
+- Lemak: ${totalNutrition.fat}g
+- Skor Risiko: ${riskScore}
+
+Berdasarkan data di atas, tuliskan respons dalam bahasa Indonesia dengan format JSON persis seperti berikut:
+{
+  "advice": "1 paragraf evaluasi ringkas dan ramah mengenai gizi mereka hari ini dan dampaknya bagi tubuh",
+  "actionableAdvice": "1-2 kalimat saran taktis/tindakan konkret langsung untuk menyeimbangkan gizi hari ini"
+}
+JANGAN ada penjelasan tambahan di luar JSON.`;
     
     console.log("[GEMINI] Menghasilkan evaluasi harian...");
     const geminiResult = await modelInstance.generateContent(prompt);
     const geminiResponse = await geminiResult.response;
     const answer = geminiResponse.text().trim();
     
-    res.json({ advice: answer });
+    const parsed = JSON.parse(answer);
+    res.json({
+      advice: parsed.advice,
+      actionableAdvice: parsed.actionableAdvice
+    });
   } catch (error) {
-    console.error("[GEMINI] Gagal memproses evaluasi harian:", error);
-    // Fallback static text to prevent crash
-    const fallbackAdvice = `Sistem mendeteksi konsumsi energi Anda sebesar ${totalNutrition.calories} kcal. Pastikan porsi serat terpenuhi dengan baik dan hindari gorengan berlebih.`;
-    res.json({ advice: fallbackAdvice });
+    console.error("[GEMINI] Gagal memproses evaluasi harian (atau quota terlampaui), menggunakan fallback cerdas:", error.message);
+    const fallback = generateDynamicFallbackAdvice(totalNutrition, riskScore);
+    res.json(fallback);
   }
 });
 

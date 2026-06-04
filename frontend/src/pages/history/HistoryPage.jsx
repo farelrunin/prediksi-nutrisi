@@ -27,6 +27,7 @@ const HistoryPage = () => {
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [dailyAdvice, setDailyAdvice] = useState('');
+  const [actionableAdvice, setActionableAdvice] = useState('');
   const [isAdviceLoading, setIsAdviceLoading] = useState(false);
 
   // Helper: Get local date key YYYY-MM-DD
@@ -164,11 +165,15 @@ const HistoryPage = () => {
       });
 
       setDailyAdvice(response.data?.advice || '');
+      setActionableAdvice(response.data?.actionableAdvice || '');
     } catch (err) {
       console.error('Error fetching daily insights:', err);
       setDailyAdvice(language === 'id' 
         ? 'Gizi Anda hari ini tergolong seimbang! Tambahkan porsi serat dan minum air secukupnya untuk mempertahankan kebugaran optimal.' 
         : 'Your nutrition today is balanced! Add more fiber and keep hydrated to sustain optimal energy levels.');
+      setActionableAdvice(language === 'id'
+        ? 'Konsumsi sumber protein hewani/nabati tambahan di cemilan sore dan kurangi asupan karbohidrat cepat serap menjelang istirahat tidur malam Anda.'
+        : 'Include lean protein sources in your afternoon snacks and avoid simple carbohydrates prior to sleep.');
     } finally {
       setIsAdviceLoading(false);
     }
@@ -176,6 +181,7 @@ const HistoryPage = () => {
 
   useEffect(() => {
     setDailyAdvice('');
+    setActionableAdvice('');
   }, [selectedDate]);
 
   return (
@@ -250,6 +256,7 @@ const HistoryPage = () => {
                 selectedDateTotals={selectedDateTotals}
                 isAdviceLoading={isAdviceLoading}
                 dailyAdvice={dailyAdvice}
+                actionableAdvice={actionableAdvice}
                 handleGenerateInsight={handleGenerateInsight}
                 t={t}
               />
