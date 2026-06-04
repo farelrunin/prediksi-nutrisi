@@ -7,7 +7,7 @@ const aiModelService = require("../services/aiModelService");
 const multer = require("multer");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const GEMINI_API_KEY = "AIzaSyB48u3XybL87_QTNyq14FHFYsV5EeWr57I";
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 function fileToGenerativePart(buffer, mimeType) {
