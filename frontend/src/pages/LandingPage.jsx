@@ -31,20 +31,18 @@ const LandingPage = () => {
       <div className="fixed inset-0 z-0 bg-[var(--bg-primary)]">
         <React.Suspense fallback={<div className="fixed inset-0 bg-[var(--bg-primary)]" />}>
           <SoftAurora
-            speed={0.4}
-            scale={1.4}
-            brightness={1.2}
-            color1="#10B981" // More vibrant emerald
-            color2="#3B82F6" // More vibrant blue
-            noiseFrequency={1.8}
-            noiseAmplitude={0.7}
-            bandHeight={0.3}
-            bandSpread={1.5}
+            speed={0.3}
+            scale={1.5}
+            brightness={1.0}
+            color1="#10B981"
+            color2="#3B82F6"
+            noiseFrequency={2.5}
+            noiseAmplitude={1.0}
             enableMouseInteraction={true}
             mouseInfluence={0.1}
           />
         </React.Suspense>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-primary)]/20 to-[var(--bg-primary)]" />
+        <div className="absolute inset-0 bg-[var(--bg-primary)]/20" />
       </div>
 
       {/* Hero Section */}

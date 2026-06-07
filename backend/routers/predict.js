@@ -5,49 +5,7 @@ const { User, Food, AiFalsePrediction } = require("../models-express");
 const { Op } = require("sequelize");
 const aiModelService = require("../services/aiModelService");
 const multer = require("multer");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-
-// Helper: Panggil Gemini dengan Rotasi API Key jika terkena limit kuota (429)
-async function callGeminiWithRotation(callback) {
-  const keysInput = process.env.GEMINI_API_KEY || "";
-  const keys = keysInput.split(/[\r\n,]+/).map(k => k.trim()).filter(k => k.length > 0);
-
-  if (keys.length === 0) {
-    throw new Error("No Gemini API Keys configured.");
-  }
-
-  let lastError = null;
-
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i];
-    try {
-      const currentGenAI = new GoogleGenerativeAI(key);
-      return await callback(currentGenAI);
-    } catch (error) {
-      const errMsg = error.message || "";
-      console.warn(`[GEMINI ROTATION] Gagal menggunakan Key Index ${i} (${key.substring(0, 10)}...):`, errMsg);
-      
-      // Jika eror rate limit atau quota, atau masih ada key cadangan lainnya
-      if (errMsg.includes("429") || errMsg.includes("quota") || errMsg.includes("limit") || i < keys.length - 1) {
-        lastError = error;
-        console.log(`[GEMINI ROTATION] Mencoba beralih ke Key berikutnya...`);
-        continue;
-      }
-      throw error;
-    }
-  }
-
-  throw lastError || new Error("All Gemini API keys failed.");
-}
-
-function fileToGenerativePart(buffer, mimeType) {
-  return {
-    inlineData: {
-      data: buffer.toString("base64"),
-      mimeType
-    },
-  };
-}
+const geminiService = require("../services/geminiService");
 
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -233,7 +191,7 @@ Tanggapi HANYA dengan format JSON berupa array dari 2 objek rekomendasi dengan s
 JANGAN ada penjelasan tambahan di luar JSON.`;
 
     console.log("[GEMINI] Menghasilkan rekomendasi gizi kustom...");
-    const answer = await callGeminiWithRotation(async (rotatedGenAI) => {
+    const answer = await geminiService.callGeminiWithRotation(async (rotatedGenAI) => {
       const modelInstance = rotatedGenAI.getGenerativeModel({ 
         model: "gemini-2.0-flash",
         generationConfig: { responseMimeType: "application/json" }
@@ -296,11 +254,11 @@ router.post("/predict-image", upload.single("image"), async (req, res) => {
     // === Gemini AI Guardrail (Pre-processing Filter) ===
     let isFood = true;
     try {
-      const imagePart = fileToGenerativePart(req.file.buffer, req.file.mimetype || "image/jpeg");
+      const imagePart = geminiService.fileToGenerativePart(req.file.buffer, req.file.mimetype || "image/jpeg");
       const prompt = "Apakah gambar ini merupakan gambar makanan atau minuman? Jawab HANYA dengan kata YA atau TIDAK tanpa tanda baca tambahan.";
       
       console.log("[GUARDRAIL] Memverifikasi apakah gambar adalah makanan/minuman dengan Gemini...");
-      const geminiResponseText = await callGeminiWithRotation(async (rotatedGenAI) => {
+      const geminiResponseText = await geminiService.callGeminiWithRotation(async (rotatedGenAI) => {
         const modelInstance = rotatedGenAI.getGenerativeModel({ model: "gemini-2.0-flash" });
         const geminiResult = await modelInstance.generateContent([prompt, imagePart]);
         const response = await geminiResult.response;
@@ -619,7 +577,7 @@ Tanggapi HANYA dengan format JSON persis seperti berikut:
 JANGAN ada penjelasan tambahan di luar JSON.`;
     
     console.log("[GEMINI] Menghasilkan evaluasi harian...");
-    const answer = await callGeminiWithRotation(async (rotatedGenAI) => {
+    const answer = await geminiService.callGeminiWithRotation(async (rotatedGenAI) => {
       const modelInstance = rotatedGenAI.getGenerativeModel({ 
         model: "gemini-2.0-flash",
         generationConfig: { responseMimeType: "application/json" }
