@@ -126,6 +126,38 @@ router.post("/", async (req, res) => {
   });
 });
 
+function calculateTDEE(profile) {
+  const height = Number(profile.height) || 0;
+  const weight = Number(profile.weight) || 0;
+  const age = Number(profile.age) || 25;
+  const gender = String(profile.gender || 'male').toLowerCase();
+  const activity = String(profile.activityLevel || profile.activity_level || 'moderate').toLowerCase();
+
+  if (height === 0 || weight === 0) {
+    return 2000;
+  }
+
+  // BMR Mifflin-St Jeor
+  let bmr = 10 * weight + 6.25 * height - 5 * age;
+  if (gender === 'male' || gender === 'laki-laki' || gender === 'pria') {
+    bmr += 5;
+  } else {
+    bmr -= 161;
+  }
+
+  // Activity Multiplier
+  let multiplier = 1.2;
+  if (activity.includes('light') || activity.includes('ringan')) {
+    multiplier = 1.375;
+  } else if (activity.includes('moderate') || activity.includes('sedang') || (activity.includes('aktif') && !activity.includes('sangat'))) {
+    multiplier = 1.55;
+  } else if (activity.includes('very') || activity.includes('sangat')) {
+    multiplier = 1.9;
+  }
+
+  return Math.round(bmr * multiplier);
+}
+
 // ==============================================================================
 // ROUTE: POST /predict/recommendations (Rekomendasi Menu berbasis AKG Harian)
 // ==============================================================================
@@ -133,6 +165,7 @@ router.post("/recommendations", async (req, res) => {
   const { history, profile, language } = req.body;
   const isEn = language === "en";
   const userProfile = profile || {};
+  const calorieTarget = calculateTDEE(userProfile);
   
   // Hitung total kalori hari ini dari riwayat makan untuk fallback atau data prompt
   let totalCalories = 0;
@@ -212,18 +245,18 @@ JANGAN ada penjelasan tambahan di luar JSON.`;
   // --- FALLBACK LOKAL / DETERMINISTIK JIKA GEMINI GAGAL / TIDAK AKTIF ---
   const fallbackRecommendations = [
     {
-      priority: totalCalories > 2000 ? "high" : "normal",
-      title: totalCalories > 2000 
+      priority: totalCalories > calorieTarget ? "high" : "normal",
+      title: totalCalories > calorieTarget 
         ? (isEn ? "Limit High Calorie Intake" : "Batasi Asupan Kalori Tinggi") 
         : (isEn ? "Nutritional Needs Met" : "Kebutuhan Nutrisi Terjaga"),
-      message: totalCalories > 2000 
+      message: totalCalories > calorieTarget 
         ? (isEn 
-            ? "Your calories today are close to the daily limit. It is recommended to limit sweet snacks/saturated fat and drink plenty of water."
-            : "Kalori Anda hari ini mendekati ambang batas harian. Disarankan untuk membatasi camilan manis/lemak jenuh dan perbanyak air putih.")
+            ? `Your calories today are close to your target of ${calorieTarget} kcal. It is recommended to limit sweet snacks/saturated fat and drink plenty of water.`
+            : `Kalori Anda hari ini mendekati target harian Anda sebesar ${calorieTarget} kkal. Disarankan untuk membatasi camilan manis/lemak jenuh dan perbanyak air putih.`)
         : (isEn 
             ? "Your calorie intake is within the safe daily limit. Maintain consumption of high-fiber foods and low-fat protein."
             : "Asupan kalori Anda berada di batas aman harian. Pertahankan konsumsi makanan tinggi serat dan protein rendah lemak."),
-      foods: totalCalories > 2000 
+      foods: totalCalories > calorieTarget 
         ? (isEn ? ["Water", "Green Apple", "Clear Spinach Soup"] : ["Air Putih", "Apel Hijau", "Sayur Bayam Bening"]) 
         : (isEn ? ["Grilled Chicken Breast", "Tempeh", "Banana"] : ["Dada Ayam Panggang", "Tempe Bacem", "Pisang"]),
       type: "energy"
@@ -541,40 +574,42 @@ router.post("/daily-insights", async (req, res) => {
   
   try {
     const prompt = isEn
-      ? `You are a professional nutrition expert assistant for the NutriAI application. Our system has analyzed the user's intake today (${selectedDate}) with the following data:
+      ? `You are an empathetic, professional clinical nutritionist for the NutriAI app.
+Analyze the user's intake today (${selectedDate}):
 - Calories: ${totalNutrition.calories} kcal
 - Protein: ${totalNutrition.protein}g
-- Carbohydrates: ${totalNutrition.carbs}g
+- Carbs: ${totalNutrition.carbs}g
 - Fat: ${totalNutrition.fat}g
-- Risk Score: ${riskScore}
-- Meals logged so far today: ${mealsArray.join(", ") || "none specified"}
+- Logged Meals: ${mealsArray.join(", ") || "None"}
 
-IMPORTANT TASK:
-Pay attention to the 'Meals logged so far today' variable. If the user has only logged a few meals (e.g., only Breakfast or only Lunch), DO NOT describe this analysis as a 'total daily intake' or claim they are 'deficient' for the whole day. Refer to it as intake 'so far' or 'for that specific meal'. Suggest healthy local Indonesian/common food variations.
+CRITICAL RULES:
+1. Context Aware: If "Logged Meals" is only 1 or 2 items (e.g., only Breakfast), DO NOT judge their overall daily intake as deficient. Use phrases like "so far today" or "for this meal".
+2. Actionable: Suggest 1-2 specific local Indonesian foods to balance their next meal.
+3. Output: MUST be a strict JSON object with NO markdown wrapping, NO backticks, and NO extra text.
 
-Respond ONLY with a valid JSON in this exact format:
+Example Output:
 {
-  "advice": "1 paragraph of brief, polite, and smart nutrition evaluation so far and its impact on the body",
-  "actionableAdvice": "1-2 sentences of tactical/concrete advice for balancing their nutrition in their next meal"
-}
-DO NOT include any explanation or backticks outside the JSON.`
-      : `Kamu adalah asisten pakar kesehatan gizi untuk aplikasi NutriAI. Sistem kami menganalisis asupan user hari ini (${selectedDate}) dengan data berikut:
+  "advice": "Your energy intake from breakfast so far is 450 kcal, which is a great start to fuel your morning metabolism. Your protein is well-balanced, but your carbs are slightly low.",
+  "actionableAdvice": "For lunch, try adding complex carbohydrates like brown rice or boiled potatoes to sustain your energy."
+}`
+      : `Kamu adalah ahli gizi klinis yang empatik dan profesional untuk aplikasi NutriAI.
+Analisis asupan nutrisi pengguna hari ini (${selectedDate}):
 - Kalori: ${totalNutrition.calories} kcal
 - Protein: ${totalNutrition.protein}g
 - Karbohidrat: ${totalNutrition.carbs}g
 - Lemak: ${totalNutrition.fat}g
-- Skor Risiko: ${riskScore}
-- Sesi makan yang dicatat sejauh ini: ${mealsArray.join(", ") || "tidak ada keterangan"}
+- Sesi Makan Tercatat: ${mealsArray.join(", ") || "Belum ada"}
 
-TUGAS PENTING:
-Perhatikan variabel 'Sesi makan yang dicatat sejauh ini'. Jika user baru mencatat sedikit sesi makan (misal baru Sarapan saja atau Makan Siang saja), JANGAN menyebut analisis ini sebagai 'konsumsi harian total' atau menjatuhkan vonis bahwa mereka 'kekurangan gizi harian'. Sebut saja sebagai asupan 'sejauh ini' atau 'untuk sesi makan tersebut'. Berikan rekomendasi variasi makanan lokal Indonesia yang sehat.
+ATURAN KRITIS:
+1. Peka Konteks: Jika "Sesi Makan Tercatat" baru 1 atau 2 (misal baru Sarapan), JANGAN menghakimi bahwa gizi harian mereka kurang. Gunakan frasa "sejauh ini" atau "untuk awal hari".
+2. Taktis: Sarankan 1-2 variasi makanan lokal Indonesia yang spesifik untuk menyeimbangkan sesi makan berikutnya.
+3. Output: WAJIB berupa objek JSON murni TANPA markdown (\`\`\`), TANPA penjelasan tambahan.
 
-Tanggapi HANYA dengan format JSON persis seperti berikut:
+Contoh Output:
 {
-  "advice": "1 paragraf evaluasi ringkas, santun, dan cerdas mengenai gizi yang tercatat sejauh ini dan dampaknya bagi tubuh",
-  "actionableAdvice": "1-2 kalimat saran taktis/tindakan konkret langsung untuk menyeimbangkan gizi mereka pada sesi makan berikutnya"
-}
-JANGAN ada penjelasan tambahan di luar JSON.`;
+  "advice": "Asupan energimu dari sarapan sejauh ini mencapai 450 kkal, awal yang sangat baik untuk memulai hari. Kebutuhan proteinmu cukup ideal, namun karbohidrat masih tergolong rendah.",
+  "actionableAdvice": "Untuk makan siang nanti, coba tambahkan karbohidrat kompleks seperti nasi merah atau kentang rebus agar staminamu tetap stabil."
+}`;
     
     console.log("[GEMINI] Menghasilkan evaluasi harian...");
     const answer = await geminiService.callGeminiWithRotation(async (rotatedGenAI) => {
