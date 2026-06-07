@@ -148,6 +148,10 @@ const RecommendationList = () => {
     bmi = weight / ((height / 100) ** 2);
   }
 
+  const todayEntries = (nutritionData.history || []).filter((item) =>
+    new Date(item.timestamp).toDateString() === new Date().toDateString()
+  );
+
   const localRecs = getLocalRecommendations(bmi, language);
   const activeRecommendations = aiRecommendations || localRecs;
   const isUsingAiData = aiRecommendations !== null;
@@ -212,7 +216,7 @@ const RecommendationList = () => {
         {/* Tombol Pamer AI (Sparkles Trigger) */}
         <button
           onClick={handleGenerateAi}
-          disabled={isLoadingAi || !nutritionData.history || nutritionData.history.length === 0}
+          disabled={isLoadingAi || todayEntries.length === 0}
           className="relative overflow-hidden flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 text-white font-bold text-xs shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-95 disabled:scale-95 disabled:opacity-40 transition-all group duration-200"
         >
           {isLoadingAi ? (
@@ -251,7 +255,7 @@ const RecommendationList = () => {
             </div>
           ))}
         </div>
-      ) : !nutritionData.history || nutritionData.history.length === 0 ? (
+      ) : todayEntries.length === 0 ? (
         <div className="text-center py-12 px-6 rounded-[2rem] border border-[var(--border-card)] bg-[var(--bg-secondary)]/50">
           <div className="w-16 h-16 bg-[var(--primary-green)]/10 rounded-full flex items-center justify-center mx-auto mb-4 text-[var(--primary-green)]">
             <Zap size={28} />
