@@ -2,8 +2,10 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-// Path to Python executable in .venv
-const pythonPath = path.join(__dirname, '..', '..', '.venv', 'Scripts', 'python.exe');
+// Path to Python executable in .venv (cross-platform)
+const pythonPath = process.platform === 'win32'
+  ? path.join(__dirname, '..', '..', '.venv', 'Scripts', 'python.exe')
+  : path.join(__dirname, '..', '..', '.venv', 'bin', 'python');
 const scriptPath = path.join(__dirname, '..', 'predict.py');
 
 let pyProcess = null;
