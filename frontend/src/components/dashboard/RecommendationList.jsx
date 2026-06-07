@@ -212,8 +212,8 @@ const RecommendationList = () => {
         {/* Tombol Pamer AI (Sparkles Trigger) */}
         <button
           onClick={handleGenerateAi}
-          disabled={isLoadingAi}
-          className="relative overflow-hidden flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 text-white font-bold text-xs shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-95 disabled:scale-95 transition-all group duration-200"
+          disabled={isLoadingAi || !nutritionData.history || nutritionData.history.length === 0}
+          className="relative overflow-hidden flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 text-white font-bold text-xs shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-95 disabled:scale-95 disabled:opacity-40 transition-all group duration-200"
         >
           {isLoadingAi ? (
             <>
@@ -250,6 +250,20 @@ const RecommendationList = () => {
               </div>
             </div>
           ))}
+        </div>
+      ) : !nutritionData.history || nutritionData.history.length === 0 ? (
+        <div className="text-center py-12 px-6 rounded-[2rem] border border-[var(--border-card)] bg-[var(--bg-secondary)]/50">
+          <div className="w-16 h-16 bg-[var(--primary-green)]/10 rounded-full flex items-center justify-center mx-auto mb-4 text-[var(--primary-green)]">
+            <Zap size={28} />
+          </div>
+          <h4 className="font-bold text-[var(--text-main)] text-base md:text-lg mb-2">
+            {language === 'id' ? 'Belum Ada Makanan yang Dicatat' : 'No Food Logged Yet'}
+          </h4>
+          <p className="text-[var(--text-muted)] text-xs md:text-sm max-w-sm mx-auto leading-relaxed font-medium">
+            {language === 'id'
+              ? 'Silakan tambahkan makanan atau minuman Anda hari ini terlebih dahulu agar asisten AI dapat menganalisis gizi dan memberikan rekomendasi menu yang personal.'
+              : 'Please add your food or drink intake today first so that the AI assistant can analyze your nutrition and provide personalized menu recommendations.'}
+          </p>
         </div>
       ) : (
         /* Recommendations List with Smooth Transition */
