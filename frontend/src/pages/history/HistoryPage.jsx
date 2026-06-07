@@ -183,14 +183,26 @@ const HistoryPage = () => {
       setDailyAdvice(response.data?.advice || '');
       setActionableAdvice(response.data?.actionableAdvice || '');
       setIsAiAdvice(response.data?.is_ai ?? false);
+
+      // Save to cache
+      const cacheKey = `nutriai_insight_${user?.id || 'anon'}_${selectedDate}`;
+      const cacheData = {
+        advice: response.data?.advice || '',
+        actionableAdvice: response.data?.actionableAdvice || '',
+        isAiAdvice: response.data?.is_ai ?? false
+      };
+      localStorage.setItem(cacheKey, JSON.stringify(cacheData));
     } catch (err) {
       console.error('Error fetching daily insights:', err);
-      setDailyAdvice(language === 'id' 
+      const fallbackAdvice = language === 'id' 
         ? 'Gizi Anda hari ini tergolong seimbang! Tambahkan porsi serat dan minum air secukupnya untuk mempertahankan kebugaran optimal.' 
-        : 'Your nutrition today is balanced! Add more fiber and keep hydrated to sustain optimal energy levels.');
-      setActionableAdvice(language === 'id'
+        : 'Your nutrition today is balanced! Add more fiber and keep hydrated to sustain optimal energy levels.';
+      const fallbackActionable = language === 'id'
         ? 'Konsumsi sumber protein hewani/nabati tambahan di cemilan sore dan kurangi asupan karbohidrat cepat serap menjelang istirahat tidur malam Anda.'
-        : 'Include lean protein sources in your afternoon snacks and avoid simple carbohydrates prior to sleep.');
+        : 'Include lean protein sources in your afternoon snacks and avoid simple carbohydrates prior to sleep.';
+      
+      setDailyAdvice(fallbackAdvice);
+      setActionableAdvice(fallbackActionable);
       setIsAiAdvice(false);
     } finally {
       setIsAdviceLoading(false);
@@ -198,10 +210,23 @@ const HistoryPage = () => {
   };
 
   useEffect(() => {
+    const cacheKey = `nutriai_insight_${user?.id || 'anon'}_${selectedDate}`;
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        setDailyAdvice(parsed.advice || '');
+        setActionableAdvice(parsed.actionableAdvice || '');
+        setIsAiAdvice(parsed.isAiAdvice ?? false);
+        return;
+      } catch (e) {
+        console.error('Failed to parse cached insight:', e);
+      }
+    }
     setDailyAdvice('');
     setActionableAdvice('');
     setIsAiAdvice(null);
-  }, [selectedDate]);
+  }, [selectedDate, user?.id]);
 
   return (
     <div className="min-h-screen pb-28 md:pb-32 pt-32 px-3 md:px-6 lg:px-8 bg-[var(--bg-primary)]">

@@ -129,7 +129,8 @@ const AIInsightsTab = ({
                   <button
                     type="button"
                     onClick={handleGenerateInsight}
-                    className="flex items-center justify-center gap-1.5 border border-[var(--border-card)] hover:border-[var(--primary-green)]/40 hover:bg-[var(--bg-secondary)] px-3 py-2 rounded-lg text-[9px] md:text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] transition-all active:scale-95 self-start sm:self-auto"
+                    disabled={isAdviceLoading}
+                    className="flex items-center justify-center gap-1.5 border border-[var(--border-card)] hover:border-[var(--primary-green)]/40 hover:bg-[var(--bg-secondary)] px-3 py-2 rounded-lg text-[9px] md:text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none self-start sm:self-auto"
                   >
                     <span>🔄 {language === 'id' ? 'Perbarui Analisis' : 'Update Analysis'}</span>
                   </button>
