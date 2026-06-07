@@ -11,6 +11,7 @@ const AIInsightsTab = ({
   isAdviceLoading,
   dailyAdvice,
   actionableAdvice,
+  isAiAdvice,
   handleGenerateInsight,
   t,
 }) => {
@@ -110,8 +111,20 @@ const AIInsightsTab = ({
             ) : (
               <>
                 <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-4 md:mb-6">
-                  <h3 className="text-base md:text-xl font-bold text-[var(--text-main)]">
-                    {language === 'id' ? `Insight & Rekomendasi AI` : `AI Insights & Recommendations`}
+                  <h3 className="text-base md:text-xl font-bold text-[var(--text-main)] flex flex-wrap items-center gap-2">
+                    <span>{language === 'id' ? `Insight & Rekomendasi AI` : `AI Insights & Recommendations`}</span>
+                    {isAiAdvice !== null && (
+                      isAiAdvice ? (
+                        <span className="text-[9px] font-black uppercase tracking-wider bg-emerald-500/10 text-[var(--primary-green)] border border-emerald-500/20 px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                          <span className="h-1.5 w-1.5 rounded-full bg-[var(--primary-green)] animate-pulse"></span>
+                          ✨ NutriAI Engine
+                        </span>
+                      ) : (
+                        <span className="text-[9px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-500 border border-amber-500/20 px-2.5 py-0.5 rounded-full">
+                          ⚡ Smart Local Mode
+                        </span>
+                      )
+                    )}
                   </h3>
                   <button
                     type="button"

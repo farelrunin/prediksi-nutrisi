@@ -28,6 +28,7 @@ const HistoryPage = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [dailyAdvice, setDailyAdvice] = useState('');
   const [actionableAdvice, setActionableAdvice] = useState('');
+  const [isAiAdvice, setIsAiAdvice] = useState(null); // null, true, false
   const [isAdviceLoading, setIsAdviceLoading] = useState(false);
 
   // Helper: Get local date key YYYY-MM-DD
@@ -149,6 +150,16 @@ const HistoryPage = () => {
         ? 'http://localhost:5000' 
         : 'https://nutriai-backend-production-2987.up.railway.app';
 
+      const height = user?.height ? Number(user.height) : 0;
+      const weight = user?.weight ? Number(user.weight) : 0;
+      let calculatedBmi = "Normal";
+      if (height > 0 && weight > 0) {
+        const bmiVal = weight / ((height / 100) ** 2);
+        if (bmiVal < 18.5) calculatedBmi = `Kurang berat badan (BMI: ${bmiVal.toFixed(1)})`;
+        else if (bmiVal >= 25) calculatedBmi = `Kelebihan berat badan (BMI: ${bmiVal.toFixed(1)})`;
+        else calculatedBmi = `Ideal (BMI: ${bmiVal.toFixed(1)})`;
+      }
+
       const response = await axios.post(`${API_BASE_URL}/predict/daily-insights`, {
         selectedDate,
         totalNutrition: {
@@ -159,7 +170,10 @@ const HistoryPage = () => {
         },
         riskScore: calculatedRisk,
         loggedMeals: selectedDateEntries.map(e => e.mealType || 'camilan'),
-        language: language
+        language: language,
+        userProfile: {
+          bmi: calculatedBmi
+        }
       }, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -168,6 +182,7 @@ const HistoryPage = () => {
 
       setDailyAdvice(response.data?.advice || '');
       setActionableAdvice(response.data?.actionableAdvice || '');
+      setIsAiAdvice(response.data?.is_ai ?? false);
     } catch (err) {
       console.error('Error fetching daily insights:', err);
       setDailyAdvice(language === 'id' 
@@ -176,6 +191,7 @@ const HistoryPage = () => {
       setActionableAdvice(language === 'id'
         ? 'Konsumsi sumber protein hewani/nabati tambahan di cemilan sore dan kurangi asupan karbohidrat cepat serap menjelang istirahat tidur malam Anda.'
         : 'Include lean protein sources in your afternoon snacks and avoid simple carbohydrates prior to sleep.');
+      setIsAiAdvice(false);
     } finally {
       setIsAdviceLoading(false);
     }
@@ -184,6 +200,7 @@ const HistoryPage = () => {
   useEffect(() => {
     setDailyAdvice('');
     setActionableAdvice('');
+    setIsAiAdvice(null);
   }, [selectedDate]);
 
   return (
@@ -259,6 +276,7 @@ const HistoryPage = () => {
                 isAdviceLoading={isAdviceLoading}
                 dailyAdvice={dailyAdvice}
                 actionableAdvice={actionableAdvice}
+                isAiAdvice={isAiAdvice}
                 handleGenerateInsight={handleGenerateInsight}
                 t={t}
               />

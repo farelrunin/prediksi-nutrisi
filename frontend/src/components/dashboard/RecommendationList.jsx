@@ -200,9 +200,16 @@ const RecommendationList = () => {
             <Lightbulb className="text-emerald-400" size={24} />
             {language === 'id' ? 'Rekomendasi Nutrisi' : 'Nutrition Recommendations'}
             {isUsingAiData && (
-              <span className="text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full">
-                NutriAI System
-              </span>
+              activeRecommendations[0]?.is_ai ? (
+                <span className="text-[9px] font-black uppercase tracking-wider bg-emerald-500/10 text-[var(--primary-green)] border border-emerald-500/20 px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--primary-green)] animate-pulse"></span>
+                  ✨ NutriAI Engine
+                </span>
+              ) : (
+                <span className="text-[9px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-500 border border-amber-500/20 px-2.5 py-0.5 rounded-full">
+                  ⚡ Smart Local Mode
+                </span>
+              )
             )}
           </h3>
           <p className="text-[var(--text-muted)] text-sm mt-1 italic">
