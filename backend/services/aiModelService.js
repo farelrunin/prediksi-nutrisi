@@ -20,7 +20,7 @@ const predictFoodFromImage = async (imageBuffer, originalName = 'food.jpg') => {
       headers: {
         ...formData.getHeaders(),
       },
-      timeout: 10000 // 10 detik timeout
+      timeout: 60000 // 60 detik timeout untuk menangani cold start Render
     });
 
     return response.data;
